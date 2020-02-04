@@ -1,6 +1,6 @@
 # d2l-labs-consistent-evaluation
 
-[![Build status](https://travis-ci.com/@brightspace-ui-labs/consistent-evaluation.svg?branch=master)](https://travis-ci.com/@brightspace-ui-labs/consistent-evaluation)
+[![Build status](https://travis-ci.com/BrightspaceHypermediaComponents/consistent-evaluation.svg?branch=master)](https://travis-ci.com/BrightspaceHypermediaComponents/consistent-evaluation)
 
 A consistent evaluation page for all tools
 
