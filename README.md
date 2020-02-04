@@ -1,4 +1,4 @@
-# d2l-labs-consistent-evaluation
+# d2l-consistent-evaluation
 
 [![Build status](https://travis-ci.com/BrightspaceHypermediaComponents/consistent-evaluation.svg?branch=master)](https://travis-ci.com/BrightspaceHypermediaComponents/consistent-evaluation)
 
@@ -8,9 +8,9 @@ A consistent evaluation page for all tools
 
 ```html
 <script type="module">
-    import '@brightspace-ui-labs/consistent-evaluation/consistent-evaluation.js';
+    import '@brightspace-hypermedia-components/consistent-evaluation/consistent-evaluation.js';
 </script>
-<d2l-labs-consistent-evaluation>My element</d2l-labs-consistent-evaluation>
+<d2l-consistent-evaluation>My element</d2l-consistent-evaluation>
 ```
 
 ## Developing, Testing and Contributing
