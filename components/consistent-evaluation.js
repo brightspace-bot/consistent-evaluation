@@ -1,6 +1,6 @@
+import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
-import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 
 export default class ConsistentEvaluation extends LocalizeMixin(LitElement) {
 
