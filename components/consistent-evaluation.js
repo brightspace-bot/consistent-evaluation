@@ -1,5 +1,6 @@
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 
 export default class ConsistentEvaluation extends LocalizeMixin(LitElement) {
 
@@ -48,8 +49,16 @@ export default class ConsistentEvaluation extends LocalizeMixin(LitElement) {
 
 	render() {
 		return html`
-			<h2>Hello ${this.prop1}!</h2>
-			<div>Localization Example: ${this.localize('myLangTerm')}</div>
+			<d2l-template-primary-secondary>
+				<div slot="header"><h1>Hello ${this.prop1}!</h1></div>
+				<div slot="primary">
+					<div>Localization Example: ${this.localize('myLangTerm')}</div>
+				</div>
+				<div slot="secondary">
+					<div>Localization Example: ${this.localize('myLangTerm')}</div>
+				</div>
+				<div slot="footer">Copyright D2L Corporation.</div>
+			</d2l-template-primary-secondary>
 		`;
 	}
 }
