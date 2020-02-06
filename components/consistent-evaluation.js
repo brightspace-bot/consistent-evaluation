@@ -1,7 +1,7 @@
 import './consistent-evaluation-page.js';
-import RootStore from './stores/root.js';
 import { html } from 'lit-element';
 import { MobxLitElement } from '@adobe/lit-mobx';
+import RootStore from './stores/root.js';
 
 export class ConsistentEvaluation extends MobxLitElement {
 	constructor() {
