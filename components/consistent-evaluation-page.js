@@ -8,6 +8,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	static get properties() {
 		return {
 			overallScore: { type: Number },
+			overallScoreTwo: { type: Number },
 			scores: { type: Array }
 		};
 	}
@@ -50,6 +51,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		super();
 
 		this.overallScore = NaN;
+		this.overallScoreTwo = NaN;
 		this.scores = [];
 	}
 
@@ -82,6 +84,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				</div>
 				<div slot="secondary">
 					<div>${this.localize('overallAverage')}: ${this.overallScore}</div>
+					<div>${this.localize('overallAverage')}2: ${this.overallScoreTwo}</div>
 				</div>
 			</d2l-template-primary-secondary>
 		`;
