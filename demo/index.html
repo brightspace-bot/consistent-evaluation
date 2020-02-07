@@ -6,6 +6,7 @@
 		<script type="module">
 			import '@brightspace-ui/core/components/demo/demo-page.js';
 			import '../consistent-evaluation.js';
+			import "d2l-outcomes-level-of-achievements/d2l-outcomes-level-of-achievements.js"
 		</script>
 		<title>d2l-consistent-evaluation</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,29 @@
 			<h2>d2l-consistent-evaluation</h2>
 			<d2l-demo-snippet>
 				<d2l-consistent-evaluation></d2l-consistent-evaluation>
+			</d2l-demo-snippet>
+		</d2l-demo-page>
+
+		<d2l-demo-page page-title="d2l-outcomes-level-of-achievements">
+			<h2>d2l-outcomes-level-of-achievements</h2>
+			<d2l-demo-snippet>
+				<div style="margin: 10px">
+					<p>The text above the suggestion goes here</p>
+					<d2l-outcomes-level-of-achievements href="data/outcomes/suggested-level.json" token="abc123" />
+				</div>
+			</d2l-demo-snippet>
+			<d2l-demo-snippet>
+				<d2l-template-primary-secondary>
+					<p slot="header">header</p>
+					<p slot="primary">primary</p>
+					<div slot="secondary">
+						<div style="margin: 10px">
+						<p>The text above the suggestion goes here</p>
+						<d2l-outcomes-level-of-achievements href="data/outcomes/suggested-level.json" token="abc123"/>            
+					</div>
+					</div>
+					<p slot="footer">footer</p>
+				</d2l-template-primary-secondary>
 			</d2l-demo-snippet>
 		</d2l-demo-page>
 	</body>
