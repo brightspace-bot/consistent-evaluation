@@ -7,6 +7,9 @@ class OverallScoreStore {
 		this.root = root;
 	}
 
+	set overallScore(overallScore) {}
+	set overallScoreTwo(overallScoreTwo) {}
+
 	get overallScore() {
 		const scores = this.root.scoresStore.scores;
 

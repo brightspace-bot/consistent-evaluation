@@ -10,11 +10,16 @@
     "start": "es-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
     "test:headless": "karma start",
-    "test:sauce": "karma start karma.sauce.conf.js"
+    "test:sauce": "karma start karma.sauce.conf.js",
+    "test:store": "mocha test/store/index.test.js --require @babel/register"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/register": "^7.8.3",
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^3",
     "babel-eslint": "^10",
@@ -28,11 +33,13 @@
     "frau-ci": "^1",
     "karma-sauce-launcher": "^2",
     "lit-analyzer": "^1",
+    "mocha": "^7.0.1",
     "puppeteer": "^1"
   },
   "dependencies": {
     "@adobe/lit-mobx": "0.0.2",
     "@brightspace-ui/core": "^1",
+    "@hapi/joi": "^17.1.0",
     "@webcomponents/webcomponentsjs": "^2",
     "lit-element": "^2",
     "mobx": "^5.15.4"
