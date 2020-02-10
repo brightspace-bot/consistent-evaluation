@@ -1,6 +1,7 @@
 {
   "name": "@brightspace-ui-labs/consistent-evaluation",
   "description": "A consistent evaluation page for all tools",
+  "version": "0.0.1",
   "repository": "https://github.com/BrightspaceHypermediaComponents/consistent-evaluation.git",
   "private": true,
   "scripts": {
