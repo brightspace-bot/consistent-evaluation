@@ -7,9 +7,6 @@ class OverallScoreStore {
 		this.root = root;
 	}
 
-	set overallScore(overallScore) {}
-	set overallScoreTwo(overallScoreTwo) {}
-
 	get overallScore() {
 		const scores = this.root.scoresStore.scores;
 
@@ -18,11 +15,13 @@ class OverallScoreStore {
 
 		return sum / scores.length;
 	}
-
+	set overallScore(overallScore) {}
 	// Can have a computed property on another computed property
 	get overallScoreTwo() {
 		return this.overallScore * 2;
 	}
+	set overallScoreTwo(overallScoreTwo) {}
+
 }
 
 export default decorate(OverallScoreStore, {
