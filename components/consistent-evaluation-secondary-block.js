@@ -11,21 +11,21 @@ class ConsistentEvaluationSecondaryBlock extends LitElement {
 
 	static get styles() {
 		return css`
-            .container {
-                padding: 0px 1em;
-                width: 100%;
-            }
-        `;
+			.container {
+				padding: 0px 1em;
+				width: 100%;
+			}
+		`;
 	}
 
 	render() {
 		return html`
-            <div class="container">
-                <h3>${this.title}</h3>
-                <slot></slot>
-            </div>
-        `;
+			<div class="container">
+				<h3>${this.title}</h3>
+				<slot></slot>
+			</div>
+		`;
 	}
 }
 
-customElements.define('consistent-evaluation-secondary-block', ConsistentEvaluationSecondaryBlock);
+customElements.define('d2l-consistent-evaluation-secondary-block', ConsistentEvaluationSecondaryBlock);
