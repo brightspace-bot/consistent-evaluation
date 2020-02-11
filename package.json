@@ -1,7 +1,7 @@
 {
-  "name": "@brightspace-ui-labs/consistent-evaluation",
+  "name": "d2l-consistent-evaluation",
   "description": "A consistent evaluation page for all tools",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "repository": "https://github.com/BrightspaceHypermediaComponents/consistent-evaluation.git",
   "private": true,
   "scripts": {
@@ -34,7 +34,7 @@
   "dependencies": {
     "@brightspace-ui/core": "^1",
     "@webcomponents/webcomponentsjs": "^2",
-    "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:2",
+    "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2",
     "lit-element": "^2"
   }
 }
