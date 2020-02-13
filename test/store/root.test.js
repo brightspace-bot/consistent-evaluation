@@ -1,5 +1,4 @@
-import { describe, it } from 'mocha';
-import Joi from '@hapi/joi';
+import { Joi } from './joi-wrapper';
 import RootStore from '../../components/stores/root';
 
 export const createSchema = () => {
@@ -20,13 +19,11 @@ export const validate = (schema, store) => {
 	if (error) throw error;
 };
 
-export const rootTests = () => {
-	describe('Root tests', () => {
-		it('test initial schema', (done) => {
-			const rootStore = new RootStore();
-			const schema = createSchema();
-			validate(schema, rootStore);
-			done();
-		});
+describe('Root tests', () => {
+	it('test initial schema', (done) => {
+		const rootStore = new RootStore();
+		const schema = createSchema();
+		validate(schema, rootStore);
+		done();
 	});
-};
+});

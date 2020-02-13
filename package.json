@@ -11,8 +11,7 @@
     "start": "es-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
     "test:headless": "karma start",
-    "test:sauce": "karma start karma.sauce.conf.js",
-    "test:store": "mocha test/store/index.test.js --require @babel/register"
+    "test:sauce": "karma start karma.sauce.conf.js"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
@@ -42,8 +41,8 @@
     "@brightspace-ui/core": "^1",
     "@hapi/joi": "^17.1.0",
     "@webcomponents/webcomponentsjs": "^2",
+    "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2",
     "lit-element": "^2",
-    "mobx": "^5.15.4",
-    "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2"
+    "mobx": "^5.15.4"
   }
 }
