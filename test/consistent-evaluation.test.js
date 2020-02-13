@@ -1,5 +1,4 @@
 import '../consistent-evaluation.js';
-// import { describe, it } from 'mocha';
 import { expect, fixture, html } from '@open-wc/testing';
 
 describe('d2l-consistent-evaluation', () => {

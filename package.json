@@ -16,10 +16,6 @@
   "author": "D2L Corporation",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/register": "^7.8.3",
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^3",
     "babel-eslint": "^10",
