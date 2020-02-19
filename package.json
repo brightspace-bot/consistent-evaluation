@@ -19,6 +19,7 @@
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^3",
     "babel-eslint": "^10",
+    "chai": "^4.2.0",
     "deepmerge": "^3",
     "es-dev-server": "^1",
     "eslint": "^6",
