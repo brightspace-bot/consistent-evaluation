@@ -25,6 +25,4 @@ decorate(OverallScoreStore, {
 	overallScoreTwo: computed
 });
 
-['overallScore', 'overallScoreTwo'].forEach(getter => Object.defineProperty(OverallScoreStore, getter, { enumerable: true }));
-
 export { OverallScoreStore as default };

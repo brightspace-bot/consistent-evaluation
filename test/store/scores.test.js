@@ -1,4 +1,4 @@
-import { createSchema } from './root.test';
+import { createSchema } from './schema';
 import RootStore from '../../components/stores/root';
 import { validate } from './utils';
 
