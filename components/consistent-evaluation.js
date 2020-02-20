@@ -1,65 +1,27 @@
-import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
-import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import './consistent-evaluation-page.js';
+import { html } from 'lit-element';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import RootStore from './stores/root.js';
 
-export default class ConsistentEvaluation extends LocalizeMixin(LitElement) {
-
-	static get properties() {
-		return {
-			prop1: { type: String },
-		};
-	}
-
-	static get styles() {
-		return css`
-			:host {
-				display: inline-block;
-			}
-			:host([hidden]) {
-				display: none;
-			}
-		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		for await (const lang of langs) {
-			let translations;
-			switch (lang) {
-				case 'en':
-					translations = await import('../locales/en.js');
-					break;
-			}
-
-			if (translations && translations.val) {
-				return {
-					language: lang,
-					resources: translations.val
-				};
-			}
-		}
-
-		return null;
-	}
-
+export class ConsistentEvaluation extends MobxLitElement {
 	constructor() {
 		super();
+		this.store = new RootStore();
+	}
 
-		this.prop1 = 'consistent-evaluation';
+	handleScoreChanged(e) {
+		this.store.scoresStore.setScore(e.detail.i, e.detail.score);
 	}
 
 	render() {
 		return html`
-			<d2l-template-primary-secondary>
-				<div slot="header"><h1>Hello ${this.prop1}!</h1></div>
-				<div slot="primary">
-					<div>Localization Example: ${this.localize('myLangTerm')}</div>
-				</div>
-				<div slot="secondary">
-					<div>Localization Example: ${this.localize('myLangTerm')}</div>
-				</div>
-				<div slot="footer">Copyright D2L Corporation.</div>
-			</d2l-template-primary-secondary>
-		`;
+        <d2l-consistent-evaluation-page
+			.scores=${this.store.scoresStore.scores}
+			.overallScore=${this.store.overallScoreStore.overallScore}
+			.overallScoreTwo=${this.store.overallScoreStore.overallScoreTwo}
+			@d2l-score-changed=${this.handleScoreChanged}>
+		</d2l-consistent-evaluation-page>`;
 	}
 }
+
 customElements.define('d2l-consistent-evaluation', ConsistentEvaluation);
