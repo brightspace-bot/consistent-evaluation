@@ -19,6 +19,7 @@
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^3",
     "babel-eslint": "^10",
+    "chai": "^4.2.0",
     "deepmerge": "^3",
     "es-dev-server": "^1",
     "eslint": "^6",
@@ -29,14 +30,15 @@
     "frau-ci": "^1",
     "karma-sauce-launcher": "^2",
     "lit-analyzer": "^1",
+    "mocha": "^7.0.1",
     "puppeteer": "^1"
   },
   "dependencies": {
     "@adobe/lit-mobx": "0.0.2",
     "@brightspace-ui/core": "^1",
     "@webcomponents/webcomponentsjs": "^2",
+    "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2",
     "lit-element": "^2",
-    "mobx": "^5.15.4",
-    "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2"
+    "mobx": "^5.15.4"
   }
 }

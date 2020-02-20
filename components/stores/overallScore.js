@@ -1,7 +1,5 @@
 import { computed, decorate } from 'mobx';
 
-// This probably should be inside ScoreStore but let's do it this way just to
-// demonstrate inter-store dependencies
 class OverallScoreStore {
 	constructor(root) {
 		this.root = root;
@@ -16,13 +14,15 @@ class OverallScoreStore {
 		return sum / scores.length;
 	}
 
-	// Can have a computed property on another computed property
 	get overallScoreTwo() {
 		return this.overallScore * 2;
 	}
+
 }
 
-export default decorate(OverallScoreStore, {
+decorate(OverallScoreStore, {
 	overallScore: computed,
 	overallScoreTwo: computed
 });
+
+export { OverallScoreStore as default };
