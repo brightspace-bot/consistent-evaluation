@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-us">
 	<head>
 		<link rel="stylesheet" href="/node_modules/@brightspace-ui/core/components/demo/styles.css" type="text/css">
 		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -19,7 +19,12 @@
 		<d2l-demo-page page-title="d2l-consistent-evaluation">
 			<h2>d2l-consistent-evaluation</h2>
 			<d2l-demo-snippet>
-				<d2l-consistent-evaluation></d2l-consistent-evaluation>
+				<d2l-consistent-evaluation
+					rubricHref="data/rubric.json"
+					token="token"
+					rubricAssessmentHref="data/assessment.json"
+					outcomesHref="data/outcomes/suggested-level.json"
+				></d2l-consistent-evaluation>
 			</d2l-demo-snippet>
 		</d2l-demo-page>
 
