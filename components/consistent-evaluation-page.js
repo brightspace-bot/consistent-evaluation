@@ -1,11 +1,11 @@
-import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
-import '@brightspace-ui/core/components/inputs/input-text.js';
-import 'd2l-rubric/d2l-rubric.js';
-import 'd2l-outcomes-level-of-achievements/d2l-outcomes-level-of-achievements.js';
 import './consistent-evaluation-html-editor.js';
+import '@brightspace-ui/core/components/inputs/input-text.js';
+import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
+import 'd2l-outcomes-level-of-achievements/d2l-outcomes-level-of-achievements.js';
+import 'd2l-rubric/d2l-rubric.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
 export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
 

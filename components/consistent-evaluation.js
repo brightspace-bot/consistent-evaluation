@@ -4,10 +4,6 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import RootStore from './stores/root.js';
 
 export class ConsistentEvaluation extends MobxLitElement {
-	constructor() {
-		super();
-		this.store = new RootStore();
-	}
 
 	static get properties() {
 		return {
@@ -15,7 +11,12 @@ export class ConsistentEvaluation extends MobxLitElement {
 			token: { type: String },
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String }
-		}
+		};
+	}
+
+	constructor() {
+		super();
+		this.store = new RootStore();
 	}
 
 	handleScoreChanged(e) {
