@@ -1,4 +1,5 @@
 import './consistent-evaluation-html-editor.js';
+import './consistent-evaluation-secondary-block.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import 'd2l-outcomes-level-of-achievements/d2l-outcomes-level-of-achievements.js';
@@ -108,25 +109,35 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				<div slot="secondary">
 					<div>${this.localize('overallAverage')}: ${this.overallScore}</div>
 					<div>${this.localize('overallAverage')}2: ${this.overallScoreTwo}</div>
-					<d2l-consistent-evaluation-html-editor
-						@d2l-request-provider="${this._onRequestProvider}"
-						value="This is the value"
-						.richtextEditorConfig="${this._richTextEditorConfig}"
-						@html-editor-demo-change="${this._saveInstructionsOnChange}"
-						ariaLabel="aria label"
-						?disabled="${this.richTextEditorDisabled}"
-					></d2l-consistent-evaluation-html-editor>
-					<d2l-rubric 
-							href="${this.rubricHref}"
-							assessment-href="${this.rubricAssessmentHref}"
-							token="${this.token}"
-							?read-only="${this.rubricReadOnly}"
-							force-Compact
-							overall-score-flag
-							outcomes-title-text="test"
-						>
-					</d2l-rubric>
-					<d2l-outcomes-level-of-achievements href="${this.outcomesHref}" token="${this.token}"></d2l-outcomes-level-of-achievements>
+
+					<d2l-consistent-evaluation-secondary-block title="Overall Feedback">
+						<d2l-consistent-evaluation-html-editor
+							@d2l-request-provider="${this._onRequestProvider}"
+							value="This is the value"
+							.richtextEditorConfig="${this._richTextEditorConfig}"
+							@html-editor-demo-change="${this._saveInstructionsOnChange}"
+							ariaLabel="aria label"
+							?disabled="${this.richTextEditorDisabled}"
+						></d2l-consistent-evaluation-html-editor>
+					</d2l-consistent-evaluation-secondary-block>
+
+					<d2l-consistent-evaluation-secondary-block title="Rubrics">
+						<d2l-rubric 
+								href="${this.rubricHref}"
+								assessment-href="${this.rubricAssessmentHref}"
+								token="${this.token}"
+								?read-only="${this.rubricReadOnly}"
+								force-Compact
+								overall-score-flag
+								outcomes-title-text="test"
+							>
+						</d2l-rubric>
+					</d2l-consistent-evaluation-secondary-block>
+
+					<d2l-consistent-evaluation-secondary-block title="Outcomes">
+						<d2l-outcomes-level-of-achievements href="${this.outcomesHref}" token="${this.token}"></d2l-outcomes-level-of-achievements>
+					</d2l-consistent-evaluation-secondary-block>
+
 				</div>
 			</d2l-template-primary-secondary>
 		`;

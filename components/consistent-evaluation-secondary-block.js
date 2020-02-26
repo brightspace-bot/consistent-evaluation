@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit-element';
+import { html, LitElement } from 'lit-element';
 
 class ConsistentEvaluationSecondaryBlock extends LitElement {
 	static get properties() {
@@ -7,15 +7,6 @@ class ConsistentEvaluationSecondaryBlock extends LitElement {
 				type: String
 			}
 		};
-	}
-
-	static get styles() {
-		return css`
-			.container {
-				padding: 0px 1em;
-				width: 100%;
-			}
-		`;
 	}
 
 	render() {
