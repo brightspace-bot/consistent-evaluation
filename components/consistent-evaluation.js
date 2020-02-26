@@ -25,7 +25,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	render() {
 		return html`
-        <d2l-consistent-evaluation-page
+		<d2l-consistent-evaluation-page
 			.scores=${this.store.scoresStore.scores}
 			.overallScore=${this.store.overallScoreStore.overallScore}
 			.overallScoreTwo=${this.store.overallScoreStore.overallScoreTwo}
