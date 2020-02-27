@@ -3,6 +3,9 @@ import { html, LitElement } from 'lit-element';
 class ConsistentEvaluationRubric extends LitElement {
 	static get properties() {
 		return {
+			header: {
+				type: String
+			},
 			href: {
 				type: String
 			},
@@ -20,7 +23,7 @@ class ConsistentEvaluationRubric extends LitElement {
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-secondary-block title="Rubrics">
+			<d2l-consistent-evaluation-secondary-block title="${this.header}">
 				<d2l-rubric
 					href="${this.href}"
 					assessment-href="${this.assessmentHref}"

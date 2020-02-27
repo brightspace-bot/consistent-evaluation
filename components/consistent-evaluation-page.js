@@ -112,6 +112,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<div>${this.localize('overallAverage')}2: ${this.overallScoreTwo}</div>
 
 					<d2l-consistent-evaluation-html-editor
+						header="${this.localize('overallFeedback')}"
 						@d2l-request-provider="${this._onRequestProvider}"
 						value="This is the value"
 						.richtextEditorConfig="${this._richTextEditorConfig}"
@@ -121,6 +122,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-html-editor>
 
 					<d2l-consistent-evaluation-rubric
+						header="${this.localize('rubrics')}"
 						href="${this.rubricHref}"
 						assessment-href="${this.rubricAssessmentHref}"
 						token="${this.token}"
@@ -128,6 +130,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-rubric>
 
 					<d2l-consistent-evaluation-outcomes
+						header="${this.localize('outcomes')}"
 						href=${this.outcomesHref}
 						token=${this.token}
 					></d2l-consistent-evaluation-outcomes>

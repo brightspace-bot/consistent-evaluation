@@ -8,6 +8,7 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 
 	static get properties() {
 		return {
+			header: { type: String },
 			richtextEditorConfig: { type: Object },
 			value: { type: String },
 			ariaLabel: { type: String },
@@ -137,7 +138,7 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-secondary-block title="Overall Feedback">
+			<d2l-consistent-evaluation-secondary-block title="${this.header}">
 				<d2l-html-editor
 					editor-id="${this._htmlEditorUniqueId}"
 					app-root="${this._resolveUrl()}"

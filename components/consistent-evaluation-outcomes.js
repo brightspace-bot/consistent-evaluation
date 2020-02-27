@@ -6,6 +6,9 @@ import { bodySmallStyles } from '@brightspace-ui/core/components/typography/styl
 class ConsistentEvaluationOutcomes extends LitElement {
 	static get properties() {
 		return {
+			header: {
+				type: String
+			},
 			href: {
 				type: String
 			},
@@ -24,7 +27,7 @@ class ConsistentEvaluationOutcomes extends LitElement {
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-secondary-block title="Outcomes">
+			<d2l-consistent-evaluation-secondary-block title="${this.header}">
 				<div class="d2l-body-small">${this.description}</div>
 				<d2l-outcomes-level-of-achievements href="${this.href}" token="${this.token}"></d2l-outcomes-level-of-achievements>
 			</d2l-consistent-evaluation-secondary-block>
