@@ -8,6 +8,7 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 
 	static get properties() {
 		return {
+			header: { type: String },
 			richtextEditorConfig: { type: Object },
 			value: { type: String },
 			ariaLabel: { type: String },
@@ -137,27 +138,30 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 
 	render() {
 		return html`
-			<d2l-html-editor
-				editor-id="${this._htmlEditorUniqueId}"
-				app-root="${this._resolveUrl()}"
-				@change="${this._onContentChange}"
-				@input="${this._onContentChange}"
-				min-rows="3"
-				max-rows="1000"
-				toolbar="bold italic bullist d2l_isf"
-				plugins="lists paste d2l_isf">
+			<d2l-consistent-evaluation-secondary-block title="${this.header}">
+				<d2l-html-editor
+					editor-id="${this._htmlEditorUniqueId}"
+					app-root="${this._resolveUrl()}"
+					@change="${this._onContentChange}"
+					@input="${this._onContentChange}"
+					min-rows="3"
+					max-rows="1000"
+					toolbar="bold italic bullist d2l_isf"
+					plugins="lists paste d2l_isf">
 
-				<div role="toolbar" id="toolbar-shortcut-${this._htmlEditorUniqueId}" hidden>toolbar shortcut instructions</div>
-				<div
-					class="d2l-html-editor-container"
-					id="${this._htmlEditorUniqueId}"
-					aria-label="${this.ariaLabel}"
-					aria-describedby="toolbar-shortcut-${this._htmlEditorUniqueId}"
-					?disabled="${this.disabled}"
-					role="textbox"
-					prevent-submit>
-				</div>
-			</d2l-html-editor>`;
+					<div role="toolbar" id="toolbar-shortcut-${this._htmlEditorUniqueId}" hidden>toolbar shortcut instructions</div>
+					<div
+						class="d2l-html-editor-container"
+						id="${this._htmlEditorUniqueId}"
+						aria-label="${this.ariaLabel}"
+						aria-describedby="toolbar-shortcut-${this._htmlEditorUniqueId}"
+						?disabled="${this.disabled}"
+						role="textbox"
+						prevent-submit>
+					</div>
+				</d2l-html-editor>
+			</d2l-consistent-evaluation-secondary-block>
+		`;
 	}
 
 	updated(changedProperties) {
