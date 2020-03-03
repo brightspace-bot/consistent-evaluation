@@ -10,7 +10,7 @@ describe('d2l-consistent-evaluation', () => {
 	it('should pass all axe tests', async() => {
 		const el = await fixture(html`<d2l-consistent-evaluation></d2l-consistent-evaluation>`);
 		expect(el).to.be.accessible();
-		await timeout(500);
+		await timeout(1000);
 	});
 
 });
