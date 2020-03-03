@@ -12,5 +12,5 @@ describe('d2l-consistent-evaluation', () => {
 		expect(el).to.be.accessible();
 		await timeout(500);
 	});
-	
+
 });
