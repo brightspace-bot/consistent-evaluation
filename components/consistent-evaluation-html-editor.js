@@ -1,6 +1,5 @@
 import 'd2l-html-editor/d2l-html-editor.js';
 import 'd2l-html-editor/d2l-html-editor-client.js';
-import '@brightspace-ui/core/components/icons/icon.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 
@@ -27,6 +26,9 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 				display: none;
 			}
 
+			d2l-consistent-evaluation-secondary-block {
+				width: 100%;
+			}
 			d2l-html-editor {
 				word-wrap: break-word;
 				display: flex;
