@@ -124,7 +124,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-rubric
 						header="${this.localize('rubrics')}"
 						href="${this.rubricHref}"
-						assessment-href="${this.rubricAssessmentHref}"
+						assessmentHref="${this.rubricAssessmentHref}"
 						token="${this.token}"
 						?readonly="${this.rubricReadOnly}"
 					></d2l-consistent-evaluation-rubric>
