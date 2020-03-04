@@ -14,6 +14,11 @@ script:
   fi
 after_success:
 - frauci-update-version && export TRAVIS_TAG=$(frauci-get-version)
+deploy:
+  provider: releases
+  api_key: "$GITHUB_RELEASE_TOKEN"
+  on:
+    tags: true
 env:
   global:
   - SAUCE_USERNAME: Desire2Learn
