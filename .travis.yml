@@ -12,8 +12,18 @@ script:
     echo "Not a pull request and/or no secure environment variables, running headless tests...";
     npm run test:headless || travis_terminate 1;
   fi
+- |
+  if [ $TRAVIS_SECURE_ENV_VARS == true ]; then
+    echo "Running visual difference tests...";
+    npm run test:diff || travis_terminate 1;
+  fi
 after_success:
-- frauci-update-version -d=skip && export TRAVIS_TAG=$(frauci-get-version)
+- frauci-update-version && export TRAVIS_TAG=$(frauci-get-version)
+deploy:
+  provider: releases
+  api_key: "$GITHUB_RELEASE_TOKEN"
+  on:
+    tags: true
 env:
   global:
   - SAUCE_USERNAME: Desire2Learn

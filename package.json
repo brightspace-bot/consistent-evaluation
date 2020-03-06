@@ -1,7 +1,7 @@
 {
   "name": "d2l-consistent-evaluation",
   "description": "A consistent evaluation page for all tools",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "repository": "https://github.com/BrightspaceHypermediaComponents/consistent-evaluation.git",
   "private": true,
   "scripts": {
@@ -11,7 +11,10 @@
     "start": "es-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
     "test:headless": "karma start",
-    "test:sauce": "karma start karma.sauce.conf.js"
+    "test:sauce": "karma start karma.sauce.conf.js",
+    "test:diff": "mocha test/**/*.visual-diff.js -t 40000",
+    "test:diff:golden": "mocha test/**/*.visual-diff.js -t 40000 --golden",
+    "test:diff:golden:commit": "commit-goldens"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
