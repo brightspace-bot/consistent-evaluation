@@ -1,10 +1,8 @@
 import './consistent-evaluation-html-editor.js';
-import './consistent-evaluation-secondary-block.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
-import 'd2l-rubric/d2l-rubric.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';

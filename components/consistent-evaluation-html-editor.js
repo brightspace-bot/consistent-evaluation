@@ -1,3 +1,4 @@
+import './consistent-evaluation-secondary-block';
 import 'd2l-html-editor/d2l-html-editor.js';
 import 'd2l-html-editor/d2l-html-editor-client.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
