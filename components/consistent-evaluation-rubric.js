@@ -1,3 +1,5 @@
+import 'd2l-rubric/d2l-rubric.js';
+import './consistent-evaluation-secondary-block';
 import { html, LitElement } from 'lit-element';
 
 class ConsistentEvaluationRubric extends LitElement {
