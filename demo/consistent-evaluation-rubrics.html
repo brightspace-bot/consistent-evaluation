@@ -13,6 +13,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta charset="UTF-8">
+		<style>
+			.half-width {
+				width: 50vw;
+			}
+
+			.quarter-width {
+				width: 25vw;
+			}
+		</style>
 	</head>
 	<body class="d2l-typography">
 		<d2l-demo-page page-title="consistent-evaluation-rubric">
@@ -24,6 +33,28 @@
                     assessmentHref="data/assessment.json"
                     token="abcde"
 				></d2l-consistent-evaluation-rubric>
+			</d2l-demo-snippet>
+
+			<d2l-demo-snippet>
+				<div class="half-width">
+					<d2l-consistent-evaluation-rubric
+						header="Rubrics"
+						href="data/rubric.json"
+						assessmentHref="data/assessment.json"
+						token="abcde"
+					></d2l-consistent-evaluation-rubric>
+				</div>
+			</d2l-demo-snippet>
+
+			<d2l-demo-snippet>
+				<div class="quarter-width">
+					<d2l-consistent-evaluation-rubric
+						header="Rubrics"
+						href="data/rubric.json"
+						assessmentHref="data/assessment.json"
+						token="abcde"
+					></d2l-consistent-evaluation-rubric>
+				</div>
 			</d2l-demo-snippet>
 
 		</d2l-demo-page>
