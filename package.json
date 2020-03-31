@@ -24,7 +24,7 @@
     "@open-wc/testing-karma": "^3",
     "babel-eslint": "^10",
     "deepmerge": "^3",
-    "es-dev-server": "^1",
+    "es-dev-server": "^1.38.3",
     "eslint": "^6",
     "eslint-config-brightspace": "^0.6.6",
     "eslint-plugin-html": "^6",
@@ -38,9 +38,11 @@
   },
   "dependencies": {
     "@adobe/lit-mobx": "0.0.2",
-    "@brightspace-ui/core": "^1",
+    "@brightspace-ui/core": "^1.36.0",
     "@webcomponents/webcomponentsjs": "^2",
+    "d2l-html-editor": "github:brightspace/d2l-html-editor#semver:^2",
     "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2",
+    "d2l-rubric": "github:brightspace/d2l-rubric#semver:^3",
     "lit-element": "^2",
     "mobx": "^5.15.4"
   }

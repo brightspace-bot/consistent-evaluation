@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 	<head>
 		<link rel="stylesheet" href="/node_modules/@brightspace-ui/core/components/demo/styles.css" type="text/css">
 		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -7,26 +7,25 @@
 			import '@brightspace-ui/core/components/demo/demo-page.js';
 			import '@brightspace-ui/core/components/typography/styles.js';
 			import '@brightspace-ui/core/components/typography/typography.js';
-			import '../components/consistent-evaluation.js';
+			import '../components/consistent-evaluation-html-editor.js';
 		</script>
-		<title>d2l-consistent-evaluation</title>
+		<title>d2l-consistent-html-editor</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta charset="UTF-8">
 	</head>
 	<body class="d2l-typography">
+		<d2l-demo-page page-title="consistent-evaluation-html-editor">
 
-		<d2l-demo-page page-title="d2l-consistent-evaluation">
-			<h2>d2l-consistent-evaluation</h2>
 			<d2l-demo-snippet>
-				<d2l-consistent-evaluation
-					rubricHref="data/rubric.json"
-					token="token"
-					rubricAssessmentHref="data/assessment.json"
-					outcomesHref="data/outcomes/suggested-level.json"
-				></d2l-consistent-evaluation>
+                <d2l-consistent-evaluation-html-editor
+                    header="Feedback"
+                    value="This is the value"
+                    .richtextEditorConfig="{}"
+                    ariaLabel="aria label"
+            ></d2l-consistent-evaluation-html-editor>
 			</d2l-demo-snippet>
-		</d2l-demo-page>
 
+		</d2l-demo-page>
 	</body>
 </html>
