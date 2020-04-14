@@ -123,19 +123,21 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	render() {
 
-		console.log('on render right panel');
+		console.log('rendered right panel');
 
-		console.log('rubricHref', this.rubricHref);
-		console.log('rubricAssessmentHref', this.rubricAssessmentHref);
-		console.log('outcomesHref', this.outcomesHref);
-		console.log('gradeHref', this.gradeHref);
-		console.log('token', this.token);
-		console.log('rubricReadOnly', this.rubricReadOnly);
-		console.log('richTextEditorDisabled', this.richTextEditorDisabled);
-		console.log('hideRubric', this.hideRubric);
-		console.log('hideGrade', this.hideGrade);
-		console.log('hideFeedback', this.hideFeedback);
-		console.log('hideOutcomes', this.hideOutcomes);
+		// console.log('on render right panel');
+
+		// console.log('rubricHref', this.rubricHref);
+		// console.log('rubricAssessmentHref', this.rubricAssessmentHref);
+		// console.log('outcomesHref', this.outcomesHref);
+		// console.log('gradeHref', this.gradeHref);
+		// console.log('token', this.token);
+		// console.log('rubricReadOnly', this.rubricReadOnly);
+		// console.log('richTextEditorDisabled', this.richTextEditorDisabled);
+		// console.log('hideRubric', this.hideRubric);
+		// console.log('hideGrade', this.hideGrade);
+		// console.log('hideFeedback', this.hideFeedback);
+		// console.log('hideOutcomes', this.hideOutcomes);
 
 		return html`
 			${this._renderRubric()}
