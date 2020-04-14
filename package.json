@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@adobe/lit-mobx": "0.0.2",
+    "@brightspace-ui-labs/grade-result": "^1.0.3",
     "@brightspace-ui/core": "^1.36.0",
     "@webcomponents/webcomponentsjs": "^2",
     "d2l-html-editor": "github:Brightspace/d2l-html-editor#semver:^2",

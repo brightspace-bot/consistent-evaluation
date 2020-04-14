@@ -8,33 +8,47 @@ export class ConsistentEvaluation extends MobxLitElement {
 	static get properties() {
 		return {
 			rubricHref: { type: String },
-			token: { type: String },
 			rubricAssessmentHref: { type: String },
-			outcomesHref: { type: String }
+			outcomesHref: { type: String },
+			gradeHref: { type: String },
+			token: { type: String },
+			_rubricReadOnly: { type: Boolean },
+			_richTextEditorDisabled: { type: Boolean },
+			_hideRubric: { type: Boolean },
+			_hideGrade: { type: Boolean },
+			_hideFeedback: { type: Boolean },
+			_hideOutcomes: { type: Boolean },
 		};
 	}
 
 	constructor() {
 		super();
 		this.store = new RootStore();
-	}
 
-	handleScoreChanged(e) {
-		this.store.scoresStore.setScore(e.detail.i, e.detail.score);
+		this._rubricReadOnly = false;
+		this._richTextEditorDisabled = false;
+		this._hideRubric = false;
+		this._hideGrade = false;
+		this._hideFeedback = false;
+		this._hideOutcomes = false;
 	}
 
 	render() {
 		return html`
-		<d2l-consistent-evaluation-page
-			.scores=${this.store.scoresStore.scores}
-			.overallScore=${this.store.overallScoreStore.overallScore}
-			.overallScoreTwo=${this.store.overallScoreStore.overallScoreTwo}
-			.rubricHref=${this.rubricHref}
-			.token=${this.token}
-			.rubricAssessmentHref=${this.rubricAssessmentHref}
-			.outcomesHref=${this.outcomesHref}
-			@d2l-score-changed=${this.handleScoreChanged}>
-		</d2l-consistent-evaluation-page>`;
+			<d2l-consistent-evaluation-page
+				.rubricHref=${this.rubricHref}
+				.rubricAssessmentHref=${this.rubricAssessmentHref}
+				.outcomesHref=${this.outcomesHref}
+				.gradeHref=${this.gradeHref}
+				.token=${this.token}
+				?rubricReadOnly=${this._rubricReadOnly}
+				?richTextEditorDisabled=${this._richTextEditorDisabled}
+				?hideRubric=${this._hideRubric}
+				?hideGrade=${this._hideGrade}
+				?hideFeedback=${this._hideFeedback}
+				?hideOutcomes=${this._hideOutcomes}
+			></d2l-consistent-evaluation-page>
+		`;
 	}
 }
 
