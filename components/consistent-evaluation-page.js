@@ -30,14 +30,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 	}
 
 	render() {
-
-		console.log(
-			this.rubricHref,
-			this.rubricAssessmentHref,
-			this.outcomesHref,
-			this.gradeHref
-		);
-
 		return html`
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>

@@ -32,11 +32,9 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 		const controller = new ConsistentEvaluationHrefController(this.href, this.token);
 		this._childHrefs = await controller.getHrefs();
-		console.log('this._childHrefs', this._childHrefs);
 	}
 
 	render() {
-		console.log(this._childHrefs);
 		return html`
 			<d2l-consistent-evaluation-page
 				.rubricHref=${this._childHrefs && this._childHrefs.rubricHref}
