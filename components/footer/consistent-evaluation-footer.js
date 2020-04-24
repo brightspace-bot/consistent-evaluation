@@ -29,19 +29,42 @@ export class ConsistentEvaluationFooter extends LitElement {
 		this.showNextStudent = false;
 	}
 
-	getPublishOrRetractButton() {
+	_dispatchButtonClickEvent(eventName) {
+		this.dispatchEvent(new CustomEvent(eventName, {
+			composed: true,
+			bubbles: true
+		}));
+	}
+
+	_emitPublishEvent()     { this._dispatchButtonClickEvent('on-publish'); }
+	_emitRetractEvent()     { this._dispatchButtonClickEvent('on-retract'); }
+	_emitUpdateEvent()      { this._dispatchButtonClickEvent('on-update'); }
+	_emitSaveDraftEvent()   { this._dispatchButtonClickEvent('on-save-draft'); }
+	_emitNextStudentEvent() { this._dispatchButtonClickEvent('on-next-student'); }
+
+	_getPublishOrRetractButton() {
 		const text = this.published ? 'Retract' : 'Publish';
-		return html`<d2l-button primary>${text}</d2l-button>`;
+		const eventEmitter = this.published ? this._emitRetractEvent : this._emitPublishEvent;
+		const id = `consistent-evaluation-footer-${text.toLowerCase()}`;
+		return html`<d2l-button primary id=${id} @click=${eventEmitter} >${text}</d2l-button>`;
 	}
 
-	getSaveDraftOrUpdateButton() {
+	_getSaveDraftOrUpdateButton() {
 		const text = this.published ? 'Update' : 'Save Draft';
-		return html`<d2l-button>${text}</d2l-button>`;
+		const eventEmitter = this.published ? this._emitUpdateEvent : this._emitSaveDraftEvent;
+		const id = `consistent-evaluation-footer-${text.toLowerCase().split(' ').join('-')}`;
+		return html`<d2l-button id=${id} @click=${eventEmitter}>${text}</d2l-button>`;
 	}
 
-	getNextStudentButton() {
+	_getNextStudentButton() {
 		return this.showNextStudent ? html`
-			<d2l-button-subtle icon="tier1:chevron-right" icon-right text="Next Student"></d2l-button-subtle>
+			<d2l-button-subtle
+				icon="tier1:chevron-right"
+				icon-right
+				text="Next Student"
+				id="consistent-evaluation-footer-next-student"
+				@click=${this._emitNextStudentEvent}
+			></d2l-button-subtle>
 		` : html``;
 	}
 
@@ -49,13 +72,13 @@ export class ConsistentEvaluationFooter extends LitElement {
 		return html`
 			<div id="footer-container">
 				<div class="button-container">
-					${this.getPublishOrRetractButton()}
+					${this._getPublishOrRetractButton()}
 				</div>
 				<div class="button-container">
-					${this.getSaveDraftOrUpdateButton()}
+					${this._getSaveDraftOrUpdateButton()}
 				</div>
 				<div class="button-container">
-					${this.getNextStudentButton()}
+					${this._getNextStudentButton()}
 				</div>
 			</div>
 		`;
