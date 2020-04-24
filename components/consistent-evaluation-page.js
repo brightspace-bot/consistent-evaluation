@@ -1,7 +1,7 @@
 import './consistent-evaluation-html-editor.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
-import './footer/consistent-evaluation-footer.js';
+import './footer/consistent-evaluation-footer-presentational.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
@@ -136,6 +136,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 				</div>
 				<div slot="footer">
+					<!-- the hrefs need to be added here once main controller is merged -->
 					<d2l-consistent-evaluation-footer></d2l-consistent-evaluation-footer>
 				</div>
 			</d2l-template-primary-secondary>

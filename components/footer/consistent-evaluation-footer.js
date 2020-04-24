@@ -1,86 +1,78 @@
-import '@brightspace-ui/core/components/button/button.js';
-import '@brightspace-ui/core/components/button/button-subtle.js';
-import { css, html, LitElement } from 'lit-element';
+import './consistent-evaluation-footer-presentational.js';
+import { html, LitElement } from 'lit-element';
+import { ConsistentEvaluationFooterController } from '../controllers/FooterController.js';
 
 export class ConsistentEvaluationFooter extends LitElement {
+
 	static get properties() {
 		return {
-			published: { type: Boolean },
-			showNextStudent: { type: Boolean }
+			evaluationHref: { type: String },
+			nextStudentHref: { type: String },
+			token: { type: String },
+			_controller: { type: Object },
+			_evaluationEntity: { type: Object }
 		};
-	}
-
-	static get styles() {
-		return css`
-			#footer-container {
-				display: flex;
-				justify-content: flex-end;
-				align-items: center;
-			}
-			.button-container {
-				margin: 0 0.3rem
-			}
-		`;
 	}
 
 	constructor() {
 		super();
-		this.published = false;
-		this.showNextStudent = false;
+
+		this.evaluationHref = undefined;
+		this.nextStudentHref = undefined;
+		this.token = undefined;
+
+		this._controller = undefined;
+		this._evaluationEntity = undefined;
 	}
 
-	_dispatchButtonClickEvent(eventName) {
-		this.dispatchEvent(new CustomEvent(eventName, {
-			composed: true,
-			bubbles: true
-		}));
+	async updated(changedProperties) {
+		super.updated(changedProperties);
+
+		if (changedProperties.has('evaluationHref')) {
+			this._controller = new ConsistentEvaluationFooterController(this.evaluationHref, this.token);
+			this._evaluationEntity = await this._controller.getEvaluationEntity();
+		}
 	}
 
-	_emitPublishEvent()     { this._dispatchButtonClickEvent('on-publish'); }
-	_emitRetractEvent()     { this._dispatchButtonClickEvent('on-retract'); }
-	_emitUpdateEvent()      { this._dispatchButtonClickEvent('on-update'); }
-	_emitSaveDraftEvent()   { this._dispatchButtonClickEvent('on-save-draft'); }
-	_emitNextStudentEvent() { this._dispatchButtonClickEvent('on-next-student'); }
-
-	_getPublishOrRetractButton() {
-		const text = this.published ? 'Retract' : 'Publish';
-		const eventEmitter = this.published ? this._emitRetractEvent : this._emitPublishEvent;
-		const id = `consistent-evaluation-footer-${text.toLowerCase()}`;
-		return html`<d2l-button primary id=${id} @click=${eventEmitter} >${text}</d2l-button>`;
+	_onPublishClick() {
+		console.log('published');
 	}
 
-	_getSaveDraftOrUpdateButton() {
-		const text = this.published ? 'Update' : 'Save Draft';
-		const eventEmitter = this.published ? this._emitUpdateEvent : this._emitSaveDraftEvent;
-		const id = `consistent-evaluation-footer-${text.toLowerCase().split(' ').join('-')}`;
-		return html`<d2l-button id=${id} @click=${eventEmitter}>${text}</d2l-button>`;
+	_onSaveDraftClick() {
+		console.log('save draft');
 	}
 
-	_getNextStudentButton() {
-		return this.showNextStudent ? html`
-			<d2l-button-subtle
-				icon="tier1:chevron-right"
-				icon-right
-				text="Next Student"
-				id="consistent-evaluation-footer-next-student"
-				@click=${this._emitNextStudentEvent}
-			></d2l-button-subtle>
-		` : html``;
+	_onRetractClick() {
+		console.log('retract');
+	}
+
+	_onUpdateClick() {
+		console.log('update');
+	}
+
+	_onNextStudentClick() {
+		console.log('next student');
+	}
+
+	_isEntityPublished() {
+		if (!this._evaluationEntity || !this._controller) {
+			return false;
+		}
+
+		return this._controller.isPublished(this._evaluationEntity);
 	}
 
 	render() {
 		return html`
-			<div id="footer-container">
-				<div class="button-container">
-					${this._getPublishOrRetractButton()}
-				</div>
-				<div class="button-container">
-					${this._getSaveDraftOrUpdateButton()}
-				</div>
-				<div class="button-container">
-					${this._getNextStudentButton()}
-				</div>
-			</div>
+			<d2l-consistent-evaluation-footer-presentational
+				?published=${this._isEntityPublished()}
+				?showNextStudent=${this.nextStudentHref !== undefined}
+				@on-publish=${this._onPublishClick}				
+				@on-save-draft=${this._onSaveDraftClick}
+				@on-retract=${this._onRetractClick}
+				@on-update=${this._onUpdateClick}
+				@on-next-student=${this._onNextStudentClick}
+			></d2l-consistent-evaluation-footer-presentational>
 		`;
 	}
 }
