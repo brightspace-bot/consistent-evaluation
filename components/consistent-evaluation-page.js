@@ -11,13 +11,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
 			gradeHref: { type: String },
+			feedbackHref: { type: String },
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
-			hideRubric: { type: Boolean },
-			hideGrade: { type: Boolean },
-			hideFeedback: { type: Boolean },
-			hideOutcomes: { type: Boolean },
 		};
 	}
 
@@ -33,6 +30,14 @@ export default class ConsistentEvaluationPage extends LitElement {
 	}
 
 	render() {
+
+		console.log(
+			this.rubricHref,
+			this.rubricAssessmentHref,
+			this.outcomesHref,
+			this.gradeHref
+		);
+
 		return html`
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
@@ -50,10 +55,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 						token=${this.token}
 						?rubricReadOnly=${this.rubricReadOnly}
 						?richTextEditorDisabled=${this.richTextEditorDisabled}
-						?hideRubric=${this.hideRubric}
-						?hideGrade=${this.hideGrade}
-						?hideFeedback=${this.hideFeedback}
-						?hideOutcomes=${this.hideOutcomes}
+						?hideRubric=${this.rubricHref === undefined}
+						?hideGrade=${this.gradeHref === undefined}
+						?hideOutcomes=${this.outcomesHref === undefined}
+						?hideFeedback=${this.feedbackHref === undefined}
 					></consistent-evaluation-right-panel>
 				</div>
 			</d2l-template-primary-secondary>

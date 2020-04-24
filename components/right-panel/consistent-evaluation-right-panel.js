@@ -16,6 +16,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
 			gradeHref: { type: String },
+			feedbackHref: { type: String },
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },

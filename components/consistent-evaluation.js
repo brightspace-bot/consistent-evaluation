@@ -1,4 +1,5 @@
 import './consistent-evaluation-page.js';
+import { ConsistentEvaluationHrefController } from './controllers/ConsistentEvaluationHrefController.js';
 import { html } from 'lit-element';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import RootStore from './stores/root.js';
@@ -7,17 +8,11 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	static get properties() {
 		return {
-			rubricHref: { type: String },
-			rubricAssessmentHref: { type: String },
-			outcomesHref: { type: String },
-			gradeHref: { type: String },
+			href: { type: String },
 			token: { type: String },
 			_rubricReadOnly: { type: Boolean },
 			_richTextEditorDisabled: { type: Boolean },
-			_hideRubric: { type: Boolean },
-			_hideGrade: { type: Boolean },
-			_hideFeedback: { type: Boolean },
-			_hideOutcomes: { type: Boolean },
+			_childHrefs: { type: Object }
 		};
 	}
 
@@ -25,28 +20,32 @@ export class ConsistentEvaluation extends MobxLitElement {
 		super();
 		this.store = new RootStore();
 
+		this.href = undefined;
+		this.token = undefined;
 		this._rubricReadOnly = false;
 		this._richTextEditorDisabled = false;
-		this._hideRubric = false;
-		this._hideGrade = false;
-		this._hideFeedback = false;
-		this._hideOutcomes = false;
+		this._childHrefs = undefined;
+	}
+
+	async firstUpdated() {
+		super.firstUpdated();
+
+		const controller = new ConsistentEvaluationHrefController(this.href, this.token);
+		this._childHrefs = await controller.getHrefs();
+		console.log('this._childHrefs', this._childHrefs);
 	}
 
 	render() {
+		console.log(this._childHrefs);
 		return html`
 			<d2l-consistent-evaluation-page
-				.rubricHref=${this.rubricHref}
-				.rubricAssessmentHref=${this.rubricAssessmentHref}
-				.outcomesHref=${this.outcomesHref}
-				.gradeHref=${this.gradeHref}
+				.rubricHref=${this._childHrefs && this._childHrefs.rubricHref}
+				.rubricAssessmentHref=${this._childHrefs && this._childHrefs.rubricAssessmentHref}
+				.outcomesHref=${this._childHrefs && this._childHrefs.outcomesHref}
+				.gradeHref=${this._childHrefs && this._childHrefs.gradeHref}
 				.token=${this.token}
 				?rubricReadOnly=${this._rubricReadOnly}
 				?richTextEditorDisabled=${this._richTextEditorDisabled}
-				?hideRubric=${this._hideRubric}
-				?hideGrade=${this._hideGrade}
-				?hideFeedback=${this._hideFeedback}
-				?hideOutcomes=${this._hideOutcomes}
 			></d2l-consistent-evaluation-page>
 		`;
 	}
