@@ -1,9 +1,6 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
+import { publishActionName, retractActionName } from './constants.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
-
-// these will eventually be exported to a global configuration namespace
-const publishActionName = 'publish';
-const retractActionName = 'retract';
 
 export class ConsistentEvaluationFooterController {
 	constructor(evaluationHref, token) {
