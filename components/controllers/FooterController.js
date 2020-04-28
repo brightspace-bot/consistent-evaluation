@@ -14,7 +14,7 @@ export class ConsistentEvaluationFooterController {
 	async getEvaluationEntity(bypassCache = false) {
 		const evaluationResource = await window.D2L.Siren.EntityStore.fetch(this.evaluationHref, this.token, bypassCache);
 
-		if (!evaluationResource.entity) {
+		if (!evaluationResource || !evaluationResource.entity) {
 			throw new Error('Error while fetching evaluation entity.');
 		}
 
