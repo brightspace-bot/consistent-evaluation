@@ -1,0 +1,215 @@
+{
+	"properties": {
+		"outOf": 100,
+		"scoreType": "Numeric",
+		"score": 47,
+		"letterGrade": null,
+		"letterGradeOptions": null
+	},
+	"class": [
+		"grade"
+	],
+	"_actionsByName": {
+		"SaveGrade": {
+			"name": "SaveGrade",
+			"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178/grade",
+			"class": [
+				"update-grade"
+			],
+			"method": "PUT",
+			"type": "application/x-www-form-urlencoded",
+			"_fieldsByName": {
+				"score": {
+					"name": "score",
+					"type": "text"
+				}
+			},
+			"_fieldsByClass": {},
+			"_fieldsByType": {
+				"text": [
+					{
+						"name": "score",
+						"type": "text"
+					}
+				]
+			},
+			"fields": [
+				{
+					"type": "text",
+					"name": "score"
+				}
+			]
+		}
+	},
+	"_actionsByClass": {
+		"update-grade": [
+			{
+				"name": "SaveGrade",
+				"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178/grade",
+				"class": [
+					"update-grade"
+				],
+				"method": "PUT",
+				"type": "application/x-www-form-urlencoded",
+				"_fieldsByName": {
+					"score": {
+						"name": "score",
+						"type": "text"
+					}
+				},
+				"_fieldsByClass": {},
+				"_fieldsByType": {
+					"text": [
+						{
+							"name": "score",
+							"type": "text"
+						}
+					]
+				},
+				"fields": [
+					{
+						"type": "text",
+						"name": "score"
+					}
+				]
+			}
+		]
+	},
+	"_actionsByMethod": {
+		"PUT": [
+			{
+				"name": "SaveGrade",
+				"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178/grade",
+				"class": [
+					"update-grade"
+				],
+				"method": "PUT",
+				"type": "application/x-www-form-urlencoded",
+				"_fieldsByName": {
+					"score": {
+						"name": "score",
+						"type": "text"
+					}
+				},
+				"_fieldsByClass": {},
+				"_fieldsByType": {
+					"text": [
+						{
+							"name": "score",
+							"type": "text"
+						}
+					]
+				},
+				"fields": [
+					{
+						"type": "text",
+						"name": "score"
+					}
+				]
+			}
+		]
+	},
+	"_actionsByType": {
+		"application/x-www-form-urlencoded": [
+			{
+				"name": "SaveGrade",
+				"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178/grade",
+				"class": [
+					"update-grade"
+				],
+				"method": "PUT",
+				"type": "application/x-www-form-urlencoded",
+				"_fieldsByName": {
+					"score": {
+						"name": "score",
+						"type": "text"
+					}
+				},
+				"_fieldsByClass": {},
+				"_fieldsByType": {
+					"text": [
+						{
+							"name": "score",
+							"type": "text"
+						}
+					]
+				},
+				"fields": [
+					{
+						"type": "text",
+						"name": "score"
+					}
+				]
+			}
+		]
+	},
+	"actions": [
+		{
+			"name": "SaveGrade",
+			"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178/grade",
+			"class": [
+				"update-grade"
+			],
+			"method": "PUT",
+			"type": "application/x-www-form-urlencoded",
+			"_fieldsByName": {
+				"score": {
+					"name": "score",
+					"type": "text"
+				}
+			},
+			"_fieldsByClass": {},
+			"_fieldsByType": {
+				"text": [
+					{
+						"name": "score",
+						"type": "text"
+					}
+				]
+			},
+			"fields": [
+				{
+					"type": "text",
+					"name": "score"
+				}
+			]
+		}
+	],
+	"_linksByRel": {
+		"self": [
+			{
+				"rel": [
+					"self"
+				],
+				"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178/grade"
+			}
+		],
+		"https://activities.api.brightspace.com/rels/user-activity-usage": [
+			{
+				"rel": [
+					"https://activities.api.brightspace.com/rels/user-activity-usage"
+				],
+				"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178"
+			}
+		]
+	},
+	"_linksByClass": {},
+	"_linksByType": {},
+	"links": [
+		{
+			"rel": [
+				"self"
+			],
+			"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178/grade"
+		},
+		{
+			"rel": [
+				"https://activities.api.brightspace.com/rels/user-activity-usage"
+			],
+			"href": "https://648df3aa-e573-4c44-b34b-856c0523e9d5.activities.api.proddev.d2l/activities/6606_3000_2/usages/6609/users/178"
+		}
+	],
+	"_entitiesByRel": {},
+	"_entitiesByClass": {},
+	"_entitiesByType": {}
+}

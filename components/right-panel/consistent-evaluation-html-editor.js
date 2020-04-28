@@ -1,4 +1,4 @@
-import './consistent-evaluation-secondary-block';
+import './consistent-evaluation-right-panel-block';
 import 'd2l-html-editor/d2l-html-editor.js';
 import 'd2l-html-editor/d2l-html-editor-client.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
@@ -27,7 +27,7 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 				display: none;
 			}
 
-			d2l-consistent-evaluation-secondary-block {
+			d2l-consistent-evaluation-right-panel-block {
 				width: 100%;
 			}
 			d2l-html-editor {
@@ -141,7 +141,7 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-secondary-block title="${this.header}">
+			<d2l-consistent-evaluation-right-panel-block title="${this.header}">
 				<d2l-html-editor
 					editor-id="${this._htmlEditorUniqueId}"
 					app-root="${this._resolveUrl()}"
@@ -163,7 +163,7 @@ class ConsistentEvaluationHtmlEditor extends LitElement {
 						prevent-submit>
 					</div>
 				</d2l-html-editor>
-			</d2l-consistent-evaluation-secondary-block>
+			</d2l-consistent-evaluation-right-panel-block>
 		`;
 	}
 

@@ -1,5 +1,5 @@
 import 'd2l-rubric/d2l-rubric.js';
-import './consistent-evaluation-secondary-block';
+import './consistent-evaluation-right-panel-block';
 import { html, LitElement } from 'lit-element';
 
 class ConsistentEvaluationRubric extends LitElement {
@@ -25,18 +25,18 @@ class ConsistentEvaluationRubric extends LitElement {
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-secondary-block title="${this.header}">
+			<d2l-consistent-evaluation-right-panel-block title="${this.header}">
 				<d2l-rubric
-					href="${this.href}"
-					assessment-href="${this.assessmentHref}"
-					token="${this.token}"
-					?read-only="${this.readonly}"
+					href=${this.href}
+					assessment-href=${this.assessmentHref}
+					token=${this.token}
+					?read-only=${this.readonly}
 					force-Compact
 					overall-score-flag
 					outcomes-title-text="test"
 				>
 				</d2l-rubric>
-			</d2l-consistent-evaluation-secondary-block>
+			</d2l-consistent-evaluation-right-panel-block>
 		`;
 	}
 }
