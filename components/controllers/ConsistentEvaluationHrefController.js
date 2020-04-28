@@ -1,4 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
+import { assessmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel } from './constants.js';
 
 export class ConsistentEvaluationHrefController {
 	constructor(baseHref, token) {
@@ -24,14 +25,6 @@ export class ConsistentEvaluationHrefController {
 		let previousHref = undefined;
 		let rubricAssessmentHref = undefined;
 		let rubricHref = undefined;
-
-		const gradesRel = 'https://activities.api.brightspace.com/rels/grade';
-		const feedbackRel = 'https://activities.api.brightspace.com/rels/feedback';
-		const evaluationRel = 'https://activities.api.brightspace.com/rels/evaluation';
-		const assessmentRel = 'https://api.brightspace.com/rels/assessment';
-		const rubricRel = 'https://api.brightspace.com/rels/rubric';
-		const nextRel = 'next';
-		const previousRel = 'previous';
 
 		if (root.entity) {
 			root = root.entity;
