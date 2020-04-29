@@ -15,28 +15,32 @@ export class ConsistentEvaluationFooterController {
 			throw new Error('Error while fetching evaluation entity.');
 		}
 
-		return evaluationResource.entity;
+		const evaluationEntity = evaluationResource.entity;
+
+		evaluationEntity.published = false;
+
+		return evaluationEntity;
 	}
 
 	isPublished(evaluationEntity) {
-		return evaluationEntity.hasActionByName(retractActionName);
+		return evaluationEntity.published;
+	}
+
+	async _performAction(entity, actionName) {
+		if (entity.hasActionByName(actionName)) {
+			await performSirenAction(this.token, entity.getActionByName(actionName), null, true);
+		} else {
+			throw new Error(`Could not find the ${actionName} action from the evaluation entity.`);
+		}
 	}
 
 	async publish(evaluationEntity) {
-		if (evaluationEntity.hasActionByName(publishActionName)) {
-			const publishAction = evaluationEntity.getActionByName(publishActionName);
-			await performSirenAction(this.token, publishAction, null, true);
-		} else {
-			throw new Error('Could not find the publish action from the evaluation entity.');
-		}
+		await this._performAction(evaluationEntity, publishActionName);
+		evaluationEntity.published = true;
 	}
 
 	async retract(evaluationEntity) {
-		if (evaluationEntity.hasActionByName(retractActionName)) {
-			const retractAction = evaluationEntity.getActionByName(retractActionName);
-			await performSirenAction(this.token, retractAction, null, true);
-		} else {
-			throw new Error('Could not find the retract action from the evaluation entity.');
-		}
+		await this._performAction(evaluationEntity, retractActionName);
+		evaluationEntity.published = false;
 	}
 }
