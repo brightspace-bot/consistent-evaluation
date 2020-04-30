@@ -1,3 +1,4 @@
+import './footer/consistent-evaluation-footer.js';
 import './right-panel/consistent-evaluation-right-panel.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
@@ -52,6 +53,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 						?hideOutcomes=${this.outcomesHref === undefined}
 						?hideFeedback=${this.feedbackHref === undefined}
 					></consistent-evaluation-right-panel>
+				</div>
+				<div slot="footer">
+					<!-- the hrefs need to be added here once main controller is merged -->
+					<d2l-consistent-evaluation-footer></d2l-consistent-evaluation-footer>
 				</div>
 			</d2l-template-primary-secondary>
 		`;

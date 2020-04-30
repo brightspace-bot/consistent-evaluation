@@ -1,0 +1,88 @@
+import '@brightspace-ui/core/components/button/button.js';
+import '@brightspace-ui/core/components/button/button-subtle.js';
+import { css, html, LitElement } from 'lit-element';
+
+export class ConsistentEvaluationFooterPresentational extends LitElement {
+	static get properties() {
+		return {
+			published: { type: Boolean },
+			showNextStudent: { type: Boolean }
+		};
+	}
+
+	static get styles() {
+		return css`
+			#footer-container {
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+			}
+			.button-container {
+				margin: 0 0.3rem
+			}
+		`;
+	}
+
+	constructor() {
+		super();
+		this.published = false;
+		this.showNextStudent = false;
+	}
+
+	_dispatchButtonClickEvent(eventName) {
+		this.dispatchEvent(new CustomEvent(eventName, {
+			composed: true,
+			bubbles: true
+		}));
+	}
+
+	_emitPublishEvent()     { this._dispatchButtonClickEvent('on-publish'); }
+	_emitRetractEvent()     { this._dispatchButtonClickEvent('on-retract'); }
+	_emitUpdateEvent()      { this._dispatchButtonClickEvent('on-update'); }
+	_emitSaveDraftEvent()   { this._dispatchButtonClickEvent('on-save-draft'); }
+	_emitNextStudentEvent() { this._dispatchButtonClickEvent('on-next-student'); }
+
+	_getPublishOrRetractButton() {
+		const text = this.published ? 'Retract' : 'Publish';
+		const eventEmitter = this.published ? this._emitRetractEvent : this._emitPublishEvent;
+		const id = `consistent-evaluation-footer-${text.toLowerCase()}`;
+		return html`<d2l-button primary id=${id} @click=${eventEmitter} >${text}</d2l-button>`;
+	}
+
+	_getSaveDraftOrUpdateButton() {
+		const text = this.published ? 'Update' : 'Save Draft';
+		const eventEmitter = this.published ? this._emitUpdateEvent : this._emitSaveDraftEvent;
+		const id = `consistent-evaluation-footer-${text.toLowerCase().split(' ').join('-')}`;
+		return html`<d2l-button id=${id} @click=${eventEmitter}>${text}</d2l-button>`;
+	}
+
+	_getNextStudentButton() {
+		return this.showNextStudent ? html`
+			<d2l-button-subtle
+				icon="tier1:chevron-right"
+				icon-right
+				text="Next Student"
+				id="consistent-evaluation-footer-next-student"
+				@click=${this._emitNextStudentEvent}
+			></d2l-button-subtle>
+		` : html``;
+	}
+
+	render() {
+		return html`
+			<div id="footer-container">
+				<div class="button-container">
+					${this._getPublishOrRetractButton()}
+				</div>
+				<div class="button-container">
+					${this._getSaveDraftOrUpdateButton()}
+				</div>
+				<div class="button-container">
+					${this._getNextStudentButton()}
+				</div>
+			</div>
+		`;
+	}
+}
+
+customElements.define('d2l-consistent-evaluation-footer-presentational', ConsistentEvaluationFooterPresentational);
