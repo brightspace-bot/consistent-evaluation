@@ -8,7 +8,7 @@ export class ConsistentEvaluationFooterController {
 		this.token = token;
 	}
 
-	async getEvaluationEntity(bypassCache = false) {
+	async requestEvaluationEntity(bypassCache = false) {
 		const evaluationResource = await window.D2L.Siren.EntityStore.fetch(this.evaluationHref, this.token, bypassCache);
 
 		if (!evaluationResource || !evaluationResource.entity) {

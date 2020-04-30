@@ -30,7 +30,7 @@ export class ConsistentEvaluationFooter extends LitElement {
 
 		if (changedProperties.has('evaluationHref')) {
 			this._controller = new ConsistentEvaluationFooterController(this.evaluationHref, this.token);
-			this._evaluationEntity = await this._controller.getEvaluationEntity();
+			this._evaluationEntity = await this._controller.requestEvaluationEntity();
 		}
 	}
 
