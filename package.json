@@ -11,6 +11,7 @@
     "start": "es-dev-server --app-index demo/index.html --node-resolve --dedupe --open --watch",
     "test": "npm run lint && npm run test:headless",
     "test:headless": "karma start",
+    "test:headless:watch": "karma start --auto-watch=true --single-run=false",
     "test:sauce": "karma start karma.sauce.conf.js",
     "test:diff": "mocha test/**/*.visual-diff.js -t 40000",
     "test:diff:golden": "mocha test/**/*.visual-diff.js -t 40000 --golden",
@@ -45,6 +46,7 @@
     "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2",
     "d2l-rubric": "github:Brightspace/d2l-rubric#semver:^3",
     "lit-element": "^2",
-    "mobx": "^5.15.4"
+    "mobx": "^5.15.4",
+    "sinon": "^9.0.2"
   }
 }

@@ -1,22 +1,46 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import { assessmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel } from './constants.js';
 
+export const ConsistentEvaluationHrefControllerErrors = {
+	INVALID_BASE_HREF: 'baseHref was not defined when initializing ConsistentEvaluationHrefController',
+	INVALID_TYPE_BASE_HREF: 'baseHref must be a string when initializing ConsistentEvaluationHrefController',
+	INVALID_TOKEN: 'token was not defined when initializing ConsistentEvaluationHrefController',
+	INVALID_TYPE_TOKEN: 'token must be a string when initializing ConsistentEvaluationHrefController'
+};
+
 export class ConsistentEvaluationHrefController {
 	constructor(baseHref, token) {
 		if (!baseHref) {
-			throw new Error('baseHref was not defined when initializing HrefController');
+			throw new Error(ConsistentEvaluationHrefControllerErrors.INVALID_BASE_HREF);
+		}
+
+		if (typeof baseHref !== 'string') {
+			throw new Error(ConsistentEvaluationHrefControllerErrors.INVALID_TYPE_BASE_HREF);
 		}
 
 		if (!token) {
-			throw new Error('token was not defined when initializing HrefController');
+			throw new Error(ConsistentEvaluationHrefControllerErrors.INVALID_TOKEN);
+		}
+
+		if (typeof token !== 'string') {
+			throw new Error(ConsistentEvaluationHrefControllerErrors.INVALID_TYPE_TOKEN);
 		}
 
 		this.baseHref = baseHref;
 		this.token = token;
 	}
 
+	// these are in their own methods so that they can easily be stubbed in testing
+	async _getRootEntity(bypassCache) {
+		return await window.D2L.Siren.EntityStore.fetch(this.baseHref, this.token, bypassCache);
+	}
+
+	async _getAssessmentEntity(rubricAssessmentHref, bypassCache) {
+		return await window.D2L.Siren.EntityStore.fetch(rubricAssessmentHref, this.token, bypassCache);
+	}
+
 	async getHrefs(bypassCache = false) {
-		let root = await window.D2L.Siren.EntityStore.fetch(this.baseHref, this.token, bypassCache);
+		let root = await this._getRootEntity(bypassCache);
 
 		let gradeHref = undefined;
 		let feedbackHref = undefined;
@@ -26,7 +50,7 @@ export class ConsistentEvaluationHrefController {
 		let rubricAssessmentHref = undefined;
 		let rubricHref = undefined;
 
-		if (root.entity) {
+		if (root && root.entity) {
 			root = root.entity;
 
 			const getHref = (root, rel) => {
@@ -43,10 +67,12 @@ export class ConsistentEvaluationHrefController {
 			previousHref = getHref(root, previousRel);
 			rubricAssessmentHref = getHref(root, assessmentRel);
 
-			let assessmentEntity = await window.D2L.Siren.EntityStore.fetch(rubricAssessmentHref, this.token, bypassCache);
-			if (assessmentEntity.entity) {
-				assessmentEntity = assessmentEntity.entity;
-				rubricHref = getHref(assessmentEntity, rubricRel);
+			if (rubricAssessmentHref) {
+				let assessmentEntity = await this._getAssessmentEntity(rubricAssessmentHref, bypassCache);
+				if (assessmentEntity && assessmentEntity.entity) {
+					assessmentEntity = assessmentEntity.entity;
+					rubricHref = getHref(assessmentEntity, rubricRel);
+				}
 			}
 		}
 
