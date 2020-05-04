@@ -1,15 +1,21 @@
-import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
+import './footer/consistent-evaluation-footer.js';
+import './right-panel/consistent-evaluation-right-panel.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
+import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
-export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
+export default class ConsistentEvaluationPage extends LitElement {
 
 	static get properties() {
 		return {
-			overallScore: { type: Number },
-			overallScoreTwo: { type: Number },
-			scores: { type: Array }
+			rubricHref: { type: String },
+			rubricAssessmentHref: { type: String },
+			outcomesHref: { type: String },
+			gradeHref: { type: String },
+			feedbackHref: { type: String },
+			token: { type: String },
+			rubricReadOnly: { type: Boolean },
+			richTextEditorDisabled: { type: Boolean },
 		};
 	}
 
@@ -21,50 +27,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			:host([hidden]) {
 				display: none;
 			}
-			d2l-input-text {
-				margin-bottom: 1.5rem;
-			}
 		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		for await (const lang of langs) {
-			let translations;
-			switch (lang) {
-				case 'en':
-					translations = await import('../locales/en.js');
-					break;
-			}
-
-			if (translations && translations.val) {
-				return {
-					language: lang,
-					resources: translations.val
-				};
-			}
-		}
-
-		return null;
-	}
-
-	constructor() {
-		super();
-
-		this.overallScore = NaN;
-		this.overallScoreTwo = NaN;
-		this.scores = [];
-	}
-
-	handleChange(i) {
-		return (e) => {
-			this.dispatchEvent(
-				new CustomEvent('d2l-score-changed', {
-					detail: {
-						score: parseInt(e.target.value),
-						i: i
-					}
-				}));
-		};
 	}
 
 	render() {
@@ -72,22 +35,32 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
-					${this.scores.map((s, i) => html`<d2l-input-text
-						label=${`Question ${i + 1} Score`}
-						placeholder="%"
-						type="number"
-						value=${s}
-						min="0"
-						max="100"
-						@change=${this.handleChange(i)}>
-					</d2l-input-text>`)}
+					<div>
+						<span>evidence</span>
+					</div>
 				</div>
 				<div slot="secondary">
-					<div>${this.localize('overallAverage')}: ${this.overallScore}</div>
-					<div>${this.localize('overallAverage')}2: ${this.overallScoreTwo}</div>
+					<consistent-evaluation-right-panel
+						rubricHref=${this.rubricHref}
+						rubricAssessmentHref=${this.rubricAssessmentHref}
+						outcomesHref=${this.outcomesHref}
+						gradeHref=${this.gradeHref}
+						token=${this.token}
+						?rubricReadOnly=${this.rubricReadOnly}
+						?richTextEditorDisabled=${this.richTextEditorDisabled}
+						?hideRubric=${this.rubricHref === undefined}
+						?hideGrade=${this.gradeHref === undefined}
+						?hideOutcomes=${this.outcomesHref === undefined}
+						?hideFeedback=${this.feedbackHref === undefined}
+					></consistent-evaluation-right-panel>
+				</div>
+				<div slot="footer">
+					<!-- the hrefs need to be added here once main controller is merged -->
+					<d2l-consistent-evaluation-footer></d2l-consistent-evaluation-footer>
 				</div>
 			</d2l-template-primary-secondary>
 		`;
 	}
+
 }
 customElements.define('d2l-consistent-evaluation-page', ConsistentEvaluationPage);
