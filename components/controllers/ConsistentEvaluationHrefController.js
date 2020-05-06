@@ -68,10 +68,9 @@ export class ConsistentEvaluationHrefController {
 			rubricAssessmentHref = getHref(root, assessmentRel);
 
 			if (rubricAssessmentHref) {
-				let assessmentEntity = await this._getAssessmentEntity(rubricAssessmentHref, bypassCache);
+				const assessmentEntity = await this._getAssessmentEntity(rubricAssessmentHref, bypassCache);
 				if (assessmentEntity && assessmentEntity.entity) {
-					assessmentEntity = assessmentEntity.entity;
-					rubricHref = getHref(assessmentEntity, rubricRel);
+					rubricHref = getHref(assessmentEntity.entity, rubricRel);
 				}
 			}
 		}

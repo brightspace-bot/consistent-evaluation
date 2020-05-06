@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { publishActionName, retractActionName } from './constants.js';
+import { publishActionName, publishedState, retractActionName } from './constants.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 export const ConsistentEvaluationFooterControllerErrors = {
@@ -59,7 +59,7 @@ export class ConsistentEvaluationFooterController {
 			return false;
 		}
 
-		return evaluationEntity.properties.state === 'Published';
+		return evaluationEntity.properties.state === publishedState;
 	}
 
 	async __performSirenAction(action) {
