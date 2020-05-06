@@ -13,6 +13,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 			outcomesHref: { type: String },
 			gradeHref: { type: String },
 			feedbackHref: { type: String },
+			evaluationHref: { type: String },
+			nextStudentHref: { type: String },
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
@@ -55,8 +57,11 @@ export default class ConsistentEvaluationPage extends LitElement {
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
-					<!-- the hrefs need to be added here once main controller is merged -->
-					<d2l-consistent-evaluation-footer></d2l-consistent-evaluation-footer>
+					<d2l-consistent-evaluation-footer
+						.evaluationHref=${this.evaluationHref}
+						.nextStudentHref=${this.nextStudentHref}
+						.token=${this.token}
+					></d2l-consistent-evaluation-footer>
 				</div>
 			</d2l-template-primary-secondary>
 		`;

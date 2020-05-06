@@ -27,11 +27,17 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 	}
 
-	async firstUpdated() {
-		super.firstUpdated();
+	async updated(changedProperties) {
+		super.updated();
 
-		const controller = new ConsistentEvaluationHrefController(this.href, this.token);
-		this._childHrefs = await controller.getHrefs();
+		if (changedProperties.has('href')) {
+			const controller = new ConsistentEvaluationHrefController(this.href, this.token);
+			this._childHrefs = await controller.getHrefs();
+		}
+	}
+
+	onNextStudentClick() {
+		this.href = this._childHrefs.nextHref;
 	}
 
 	render() {
@@ -41,9 +47,12 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.rubricAssessmentHref=${this._childHrefs && this._childHrefs.rubricAssessmentHref}
 				.outcomesHref=${this._childHrefs && this._childHrefs.outcomesHref}
 				.gradeHref=${this._childHrefs && this._childHrefs.gradeHref}
+				.evaluationHref=${this._childHrefs && this._childHrefs.evaluationHref}
+				.nextStudentHref=${this._childHrefs && this._childHrefs.nextHref}
 				.token=${this.token}
 				?rubricReadOnly=${this._rubricReadOnly}
 				?richTextEditorDisabled=${this._richTextEditorDisabled}
+				@next-student-click=${this.onNextStudentClick}
 			></d2l-consistent-evaluation-page>
 		`;
 	}
