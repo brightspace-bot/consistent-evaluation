@@ -1,5 +1,5 @@
 import '@brightspace-ui/core/components/button/button.js';
-import '@brightspace-ui/core/components/button/button-subtle.js';
+import '@brightspace-ui/core/components/button/button-icon.js';
 import { css, html, LitElement } from 'lit-element';
 
 export class ConsistentEvaluationFooterPresentational extends LitElement {
@@ -58,13 +58,12 @@ export class ConsistentEvaluationFooterPresentational extends LitElement {
 
 	_getNextStudentButton() {
 		return this.showNextStudent ? html`
-			<d2l-button-subtle
-				icon="tier1:chevron-right"
-				icon-right
-				text="Next Student"
+			<d2l-button-icon
 				id="consistent-evaluation-footer-next-student"
+				icon="tier3:chevron-right-circle"
 				@click=${this._emitNextStudentEvent}
-			></d2l-button-subtle>
+				aria-label="Next Student"
+			></d2l-button-icon>
 		` : html``;
 	}
 
