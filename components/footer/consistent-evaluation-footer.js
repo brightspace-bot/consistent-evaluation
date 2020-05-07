@@ -34,16 +34,16 @@ export class ConsistentEvaluationFooter extends LitElement {
 		}
 	}
 
-	_onPublishClick() {
-		console.log('published');
+	async _onPublishClick() {
+		this._evaluationEntity = await this._controller.publish(this._evaluationEntity);
 	}
 
 	_onSaveDraftClick() {
 		console.log('save draft');
 	}
 
-	_onRetractClick() {
-		console.log('retract');
+	async _onRetractClick() {
+		this._evaluationEntity = await this._controller.retract(this._evaluationEntity);
 	}
 
 	_onUpdateClick() {
@@ -51,7 +51,10 @@ export class ConsistentEvaluationFooter extends LitElement {
 	}
 
 	_onNextStudentClick() {
-		console.log('next student');
+		this.dispatchEvent(new CustomEvent('next-student-click', {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	_isEntityPublished() {
