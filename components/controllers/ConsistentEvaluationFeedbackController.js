@@ -31,7 +31,8 @@ export class ConsistentEvaluationFeedbackController {
 		if (typeof token !== 'string') {
 			throw new Error(FeedbackControllerErrors.INVALID_TYPE_TOKEN);
 		}
-
+		this.baseHref = baseHref;
+		this.token = token;
 	}
 	async requestFeedback() {
 		const response = await window.D2L.Siren.EntityStore.fetch(this.baseHref, this.token);
