@@ -1,7 +1,7 @@
 import '@brightspace-ui/core/components/button/button-icon.js';
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import '@brightspace-ui/core/components/colors/colors';
-import 'd2l-tooltip/d2l-tooltip';
+import '@brightspace-ui/core/components/tooltip/tooltip';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
@@ -45,7 +45,7 @@ class FeedbackActions extends LocalizeMixin(LitElement) {
 			let translations;
 			switch (lang) {
 				case 'en':
-					translations = await import('../locales/en.js');
+					translations = await import('../../locales/en.js');
 					break;
 			}
 

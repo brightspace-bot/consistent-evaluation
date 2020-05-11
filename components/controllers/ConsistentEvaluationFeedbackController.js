@@ -1,4 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
+import { saveFeedbackActionName, saveFeedbackFieldName } from './constants.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 export const FeedbackControllerErrors = {
@@ -8,7 +9,7 @@ export const FeedbackControllerErrors = {
 	INVALID_TYPE_TOKEN: 'token must be a string when initializing FeedbackController',
 	REQUEST_FAILED: 'request for feedback failed',
 	ENTITY_NOT_FOUND_REQUEST_FEEDBACK: 'entity not found for requestFeedback',
-	INVALID_FEEDBACK_TEXT: 'feedback text must be provided to update feedback text.',
+	INVALID_FEEDBACK_TEXT: 'feedback text must be a string (empty string permitted) to update feedback text.',
 	FEEDBACK_MUST_HAVE_ENTITY: 'entity must be provided with the feedback to update feedback.',
 	NO_SAVE_FEEDBACK_ACTION: 'Could not find the SaveFeedback action from entity.',
 	FIELD_IN_ACTION_NOT_FOUND: (actionName, fieldName) => `Expected the ${actionName} action to have a ${fieldName} field.`
@@ -42,35 +43,28 @@ export class ConsistentEvaluationFeedbackController {
 		if (!response.entity) {
 			throw new Error(FeedbackControllerErrors.ENTITY_NOT_FOUND_REQUEST_FEEDBACK);
 		}
-		const entity = response.entity;
-
-		return entity;
+		return response.entity;
 	}
 	async updateFeedbackText(feedbackText, entity) {
-		if (!feedbackText) {
+		if (typeof feedbackText !== 'string') {
 			throw new Error(FeedbackControllerErrors.INVALID_FEEDBACK_TEXT);
 		}
 		if (!entity) {
 			throw new Error(FeedbackControllerErrors.FEEDBACK_MUST_HAVE_ENTITY);
 		}
-
-		const actionName = 'SaveFeedback';
-		const fieldName = 'feedback';
-
-		if (!entity.hasActionByName(actionName)) {
+		if (!entity.hasActionByName(saveFeedbackActionName)) {
 			throw new Error(FeedbackControllerErrors.NO_SAVE_FEEDBACK_ACTION);
 		}
 
-		const saveFeedbackAction = entity.getActionByName(actionName);
+		const saveFeedbackAction = entity.getActionByName(saveFeedbackActionName);
 
-		if (!saveFeedbackAction.hasFieldByName(fieldName)) {
-			throw new Error(FeedbackControllerErrors.FIELD_IN_ACTION_NOT_FOUND(saveFeedbackAction.name, fieldName));
+		if (!saveFeedbackAction.hasFieldByName(saveFeedbackFieldName)) {
+			throw new Error(FeedbackControllerErrors.FIELD_IN_ACTION_NOT_FOUND(saveFeedbackAction.name, saveFeedbackFieldName));
 		}
 
-		const field = saveFeedbackAction.getFieldByName(fieldName);
+		const field = saveFeedbackAction.getFieldByName(saveFeedbackFieldName);
 		field.value = feedbackText;
 
-		const newFeedbackEntity = await performSirenAction(this.token, saveFeedbackAction, [field], true);
-		return newFeedbackEntity;
+		return await performSirenAction(this.token, saveFeedbackAction, [field], true);
 	}
 }
