@@ -1,5 +1,12 @@
 export const val = {
+	addFile: 'File Upload',
+	addGoogleDriveLink: 'Attach from Google Drive',
+	addLink: 'Attach Weblink',
+	addOneDriveLink: 'Attach from OneDrive',
+	addQuicklink: 'Attach Link to Existing Activity',
 	retract: 'Retract',
+	recordAudio: 'Record Audio',
+	recordVideo: 'Record Video',
 	rubrics: 'Rubrics',
 	outcomes: 'Outcomes',
 	overallAverage: 'Overall Average',
