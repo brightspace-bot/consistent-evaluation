@@ -92,15 +92,13 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	_renderFeedback() {
 		if (!this.hideFeedback) {
 			return html`
-				<d2l-consistent-evaluation-html-editor
+				<d2l-consistent-evaluation-feedback
+					feedback="This is the value"
 					header=${this.localize('overallFeedback')}
-					value="This is the value"
-					ariaLabel="aria label"
+					href="href"
 					.richtextEditorConfig=${this._richTextEditorConfig}
-					?disabled=${this.richTextEditorDisabled}
-					@d2l-request-provider=${this._onRequestProvider}
-					@html-editor-demo-change=${this._saveInstructionsOnChange}
-				></d2l-consistent-evaluation-html-editor>
+					token="token"
+				></d2l-consistent-evaluation-feedback>
 			`;
 		}
 
