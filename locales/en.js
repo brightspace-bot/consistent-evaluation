@@ -4,10 +4,14 @@ export const val = {
 	addLink: 'Attach Weblink',
 	addOneDriveLink: 'Attach from OneDrive',
 	addQuicklink: 'Attach Link to Existing Activity',
+	retract: 'Retract',
+	recordAudio: 'Record Audio',
+	recordVideo: 'Record Video',
+	rubrics: 'Rubrics',
 	outcomes: 'Outcomes',
 	overallAverage: 'Overall Average',
 	overallFeedback: 'Overall Feedback',
-	recordAudio: 'Record Audio',
-	recordVideo: 'Record Video',
-	rubrics: 'Rubrics'
+	publish: 'Publish',
+	saveDraft: 'Save Draft',
+	update: 'Update',
 };
