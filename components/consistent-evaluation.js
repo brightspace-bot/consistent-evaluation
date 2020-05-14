@@ -49,6 +49,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.gradeHref=${this._childHrefs && this._childHrefs.gradeHref}
 				.evaluationHref=${this._childHrefs && this._childHrefs.evaluationHref}
 				.nextStudentHref=${this._childHrefs && this._childHrefs.nextHref}
+				.feedbackHref=${this._childHrefs && this._childHrefs.feedbackHref}
 				.token=${this.token}
 				?rubricReadOnly=${this._rubricReadOnly}
 				?richTextEditorDisabled=${this._richTextEditorDisabled}
