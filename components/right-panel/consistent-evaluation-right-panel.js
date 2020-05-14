@@ -1,10 +1,9 @@
-import './consistent-evaluation-html-editor.js';
+import './consistent-evaluation-feedback.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
 import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
-import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
@@ -24,8 +23,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			hideGrade: { type: Boolean },
 			hideFeedback: { type: Boolean },
 			hideOutcomes: { type: Boolean },
-			_richTextEditorConfig: { type: Object },
-			_htmlEditorUniqueId: { type: String }
+			_richTextEditorConfig: { type: Object }
 		};
 	}
 
@@ -41,7 +39,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		super();
 
 		this._richTextEditorConfig = {};
-		this._htmlEditorUniqueId = `htmleditor-${getUniqueId()}`;
 
 		this.hideRubric = false;
 		this.hideGrade = false;
@@ -82,7 +79,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideFeedback) {
 			return html`
 				<d2l-consistent-evaluation-feedback
-					feedback=""
 					header=${this.localize('overallFeedback')}
 					href=${this.feedbackHref}
 					.richtextEditorConfig=${this._richTextEditorConfig}
