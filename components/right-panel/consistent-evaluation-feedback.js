@@ -30,8 +30,10 @@ class ConsistentEvaluationFeedback extends LocalizeMixin(LitElement) {
 		this.canEditFeedback = true;
 	}
 
-	_save() {
-		// TODO
+	_save(e) {
+		const feedback = e.detail.content;
+
+		// TODO - save feedback
 	}
 
 	render() {

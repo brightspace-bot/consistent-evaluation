@@ -49,17 +49,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideOutcomes = false;
 	}
 
-	_onRequestProvider(e) {
-		if (e.detail.key === 'd2l-provider-html-editor-enabled') {
-			e.detail.provider = true;
-			e.stopPropagation();
-		}
-	}
-
-	_saveInstructionsOnChange() {
-		console.log('save on change');
-	}
-
 	_renderRubric() {
 		if (!this.hideRubric) {
 			return html`
@@ -93,11 +82,11 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideFeedback) {
 			return html`
 				<d2l-consistent-evaluation-feedback
-					feedback="This is the value"
+					feedback=""
 					header=${this.localize('overallFeedback')}
-					href="href"
+					href=${this.feedbackHref}
 					.richtextEditorConfig=${this._richTextEditorConfig}
-					token="token"
+					token=${this.token}
 				></d2l-consistent-evaluation-feedback>
 			`;
 		}
