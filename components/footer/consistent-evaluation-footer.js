@@ -17,21 +17,45 @@ export class ConsistentEvaluationFooter extends LitElement {
 	constructor() {
 		super();
 
-		this.evaluationHref = undefined;
+		this._evaluationHref = undefined;
 		this.nextStudentHref = undefined;
-		this.token = undefined;
+		this._token = undefined;
 
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
 	}
 
-	async updated(changedProperties) {
-		super.updated(changedProperties);
+	get evaluationHref() {
+		return this._evaluationHref;
+	}
 
-		if (changedProperties.has('evaluationHref')) {
-			this._controller = new ConsistentEvaluationFooterController(this.evaluationHref, this.token);
-			this._evaluationEntity = await this._controller.requestEvaluationEntity();
+	set evaluationHref(val) {
+		const oldVal = this.evaluationHref;
+		if (oldVal !== val) {
+			this._evaluationHref = val;
+			if (this._evaluationHref && this._token) {
+				this._initializeController().then(() => this.requestUpdate());
+			}
 		}
+	}
+
+	get token() {
+		return this._token;
+	}
+
+	set token(val) {
+		const oldVal = this.token;
+		if (oldVal !== val) {
+			this._token = val;
+			if (this._evaluationHref && this._token) {
+				this._initializeController().then(() => this.requestUpdate());
+			}
+		}
+	}
+
+	async _initializeController() {
+		this._controller = new ConsistentEvaluationFooterController(this._evaluationHref, this._token);
+		this._evaluationEntity = await this._controller.requestEvaluationEntity();
 	}
 
 	async _onPublishClick() {
