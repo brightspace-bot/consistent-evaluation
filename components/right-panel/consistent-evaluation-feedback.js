@@ -35,6 +35,9 @@ class ConsistentEvaluationFeedback extends LocalizeMixin(LitElement) {
 	constructor() {
 		super();
 
+		this._href = undefined;
+		this._token = undefined;
+
 		this._feedbackText = '';
 		this._debounceJobs = {};
 
