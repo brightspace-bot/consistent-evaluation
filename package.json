@@ -43,9 +43,9 @@
     "@brightspace-ui-labs/grade-result": "^1.0.5",
     "@brightspace-ui/core": "^1.36.0",
     "@webcomponents/webcomponentsjs": "^2",
-    "d2l-html-editor": "github:brightspace/d2l-html-editor#semver:^2",
+    "d2l-html-editor": "github:Brightspace/d2l-html-editor#semver:^2",
     "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2",
-    "d2l-rubric": "github:brightspace/d2l-rubric",
+    "d2l-rubric": "github:brightspace/d2l-rubric#semver:^3",
     "lit-element": "^2",
     "mobx": "^5.15.4"
   }
