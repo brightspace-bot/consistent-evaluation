@@ -7,7 +7,7 @@ import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
-class ConsistentEvaluationFeedback extends LocalizeMixin(LitElement) {
+class ConsistentEvaluationFeedbackPresentation extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
 			canEditFeedback: {
@@ -80,11 +80,7 @@ class ConsistentEvaluationFeedback extends LocalizeMixin(LitElement) {
 	}
 
 	_saveFeedback(feedback, entity) {
-		this._debounceJobs.value = Debouncer.debounce(
-			this._debounceJobs.value,
-			timeOut.after(2000),
-			() => this._controller.updateFeedbackText(feedback, entity)
-		);
+		this._controller.updateFeedbackText(feedback, entity);
 	}
 
 	_saveOnFeedbackChange(e) {
@@ -121,4 +117,4 @@ class ConsistentEvaluationFeedback extends LocalizeMixin(LitElement) {
 	}
 }
 
-customElements.define('d2l-consistent-evaluation-feedback', ConsistentEvaluationFeedback);
+customElements.define('d2l-consistent-evaluation-feedback-presentation', ConsistentEvaluationFeedbackPresentation);
