@@ -79,9 +79,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideFeedback) {
 			return html`
 				<d2l-consistent-evaluation-feedback
-					header=${this.localize('overallFeedback')}
 					href=${this.feedbackHref}
-					.richtextEditorConfig=${this._richTextEditorConfig}
 					token=${this.token}
 				></d2l-consistent-evaluation-feedback>
 			`;
