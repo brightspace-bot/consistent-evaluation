@@ -52,10 +52,10 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 					</d2l-activity-text-editor>
 				</div>
 
-				<div id="feedback-actions-container" ?hidden="${!this.href}">
+				<div id="feedback-actions-container">
 					<d2l-activity-attachments-editor
 						href="${this.href}"
-						.token="${this.token}">
+						token="${this.token}">
 					</d2l-activity-attachments-editor>
 				</div>
 			</d2l-consistent-evaluation-right-panel-block>
