@@ -9,6 +9,7 @@ class ConsistentEvaluationFeedback extends LitElement {
 		return {
 			href: { type: String },
 			token: { type: String }
+			//_debounceJobs: { type: Object }
 		};
 	}
 
