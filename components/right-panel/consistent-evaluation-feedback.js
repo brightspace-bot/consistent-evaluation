@@ -9,7 +9,6 @@ class ConsistentEvaluationFeedback extends LitElement {
 		return {
 			href: { type: String },
 			token: { type: String }
-			//_debounceJobs: { type: Object }
 		};
 	}
 
@@ -82,7 +81,7 @@ class ConsistentEvaluationFeedback extends LitElement {
 				href="${this._href}"
 				.richtextEditorConfig="${this._richTextEditorConfig}"
 				@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
-				token="${this._token}"
+				.token="${this._token}"
 			></d2l-consistent-evaluation-feedback-presentational>
 		`;
 	}

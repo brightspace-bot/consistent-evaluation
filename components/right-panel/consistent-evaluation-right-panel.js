@@ -53,7 +53,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					header=${this.localize('rubrics')}
 					href=${this.rubricHref}
 					assessmentHref=${this.rubricAssessmentHref}
-					token=${this.token}
+					.token=${this.token}
 					?readonly=${this.rubricReadOnly}
 				></d2l-consistent-evaluation-rubric>
 			`;
@@ -67,7 +67,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			return html`
 				<d2l-consistent-evaluation-grade-result
 					href=${this.gradeHref}
-					token=${this.token}
+					.token=${this.token}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}
@@ -80,7 +80,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			return html`
 				<d2l-consistent-evaluation-feedback
 					href=${this.feedbackHref}
-					token=${this.token}
+					.token=${this.token}
 				></d2l-consistent-evaluation-feedback>
 			`;
 		}
@@ -95,7 +95,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-outcomes
 					header=${this.localize('outcomes')}
 					href=${this.outcomesHref}
-					token=${this.token}
+					.token=${this.token}
 				></d2l-consistent-evaluation-outcomes>
 			`;
 		}

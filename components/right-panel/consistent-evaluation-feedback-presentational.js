@@ -1,18 +1,14 @@
 import 'd2l-activities/components/d2l-activity-editor/d2l-activity-text-editor.js';
 import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d2l-activity-attachments-editor.js';
 import './consistent-evaluation-right-panel-block';
-import { css, html, LitElement } from 'lit-element';
+import { html, LitElement } from 'lit-element';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
 class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
-			canEditFeedback: {
-				attribute: 'can-edit-feedback',
-				reflect: true,
-				type: Boolean
-			},
+			canEditFeedback: { type: Boolean },
 			feedbackText: {
 				attribute: 'feedback-text',
 				reflect: true,
@@ -25,10 +21,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		};
 	}
 
-	static get styles() {
-		return css``;
-	}
-
 	static async getLocalizeResources(langs) {
 		return await loadLocalizationResources(langs);
 	}
@@ -36,13 +28,13 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 	constructor() {
 		super();
 
-		this.canEditFeedback = false;
+		this.canEditFeedback = true;
 	}
 
 	render() {
 		return html`
 			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
-				<div id="feedback-container">
+				<div>
 					<d2l-activity-text-editor
 						.value="${this.feedbackText}"
 						.richtextEditorConfig="${this.richTextEditorConfig}"
@@ -52,7 +44,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 					</d2l-activity-text-editor>
 				</div>
 
-				<div id="feedback-actions-container" ?hidden="${!this.href}">
+				<div ?hidden="${!this.href}">
 					<d2l-activity-attachments-editor
 						href="${this.href}"
 						.token="${this.token}">
