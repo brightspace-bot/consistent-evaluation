@@ -17,11 +17,13 @@ class ConsistentEvaluationFeedback extends LitElement {
 
 		this._href = undefined;
 		this._token = undefined;
+		this._lastUpdated = undefined;
 
 		this._debounceJobs = {};
 		this._feedbackEntity = {};
 		this._feedbackText = '';
 		this._richTextEditorConfig = {};
+		window.addEventListener('my-custom-event-save-draft-click', this.test, false);
 	}
 
 	get href() {
@@ -52,6 +54,17 @@ class ConsistentEvaluationFeedback extends LitElement {
 		}
 	}
 
+	set lastUpdated(newDate) {
+		if (newDate) {
+			const oldVal = this._lastUpdated;
+			if (oldVal !== newDate) {
+				this._saveFeedback();
+				this._lastUpdated = newDate;
+				this.requestUpdate('lastUpdated', oldVal);
+			}
+		}
+	}
+
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationFeedbackController(this._href, this._token);
 
@@ -59,8 +72,14 @@ class ConsistentEvaluationFeedback extends LitElement {
 		this._feedbackText = this._feedbackEntity.entities[0].entities[0].properties.text;
 	}
 
-	_saveFeedback(feedback, entity) {
-		this._controller.updateFeedbackText(feedback, entity);
+	test(e) {
+		console.log('reaching here FEEDBACK');
+		console.log(e);
+	}
+
+	_saveFeedback() {
+		console.log('_saveFeedback() hitting db');
+		this._controller.updateFeedbackText(this._feedbackText, this._feedbackEntity);
 	}
 
 	_saveOnFeedbackChange(e) {
@@ -69,8 +88,15 @@ class ConsistentEvaluationFeedback extends LitElement {
 		this._debounceJobs.feedback = Debouncer.debounce(
 			this._debounceJobs.feedback,
 			timeOut.after(500),
-			() => this._saveFeedback(feedback, this._feedbackEntity)
+			() => this._saveTransient(feedback, this._feedbackEntity)
 		);
+	}
+
+	_saveTransient(feedbackText, entity) {
+		this._feedbackText = feedbackText;
+		console.log('_saveTransient not actually writing to db');
+		// probably something like ...
+		// this._controller.updateTransientFeedbackText(feedback, entity);
 	}
 
 	render() {

@@ -12,7 +12,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 			token: { type: String },
 			_rubricReadOnly: { type: Boolean },
 			_richTextEditorDisabled: { type: Boolean },
-			_childHrefs: { type: Object }
+			_childHrefs: { type: Object },
+			lastUpdated: { type: String }
 		};
 	}
 
@@ -25,10 +26,16 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._rubricReadOnly = false;
 		this._richTextEditorDisabled = false;
 		this._childHrefs = undefined;
+		this.lastUpdated = undefined;
 	}
 
 	async updated(changedProperties) {
+		//console.log(this.lastUpdated);
 		super.updated();
+
+		if (changedProperties.has('lastUpdated')) {
+			this.lastUpdated = new Date().toTimeString();
+		}
 
 		if (changedProperties.has('href')) {
 			const controller = new ConsistentEvaluationHrefController(this.href, this.token);
@@ -40,9 +47,16 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this.href = this._childHrefs.nextHref;
 	}
 
+	saveDraft(e) {
+		this.lastUpdated = new Date().toTimeString();
+		const event = new CustomEvent('my-custom-event-save-draft-click',
+			{ 'detail': this });
+		window.dispatchEvent(event);
+	}
+
 	render() {
 		return html`
-			<d2l-consistent-evaluation-page
+			<d2l-consistent-evaluation-page id='zero'
 				.rubricHref=${this._childHrefs && this._childHrefs.rubricHref}
 				.rubricAssessmentHref=${this._childHrefs && this._childHrefs.rubricAssessmentHref}
 				.outcomesHref=${this._childHrefs && this._childHrefs.outcomesHref}
@@ -50,10 +64,12 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.evaluationHref=${this._childHrefs && this._childHrefs.evaluationHref}
 				.nextStudentHref=${this._childHrefs && this._childHrefs.nextHref}
 				.feedbackHref=${this._childHrefs && this._childHrefs.feedbackHref}
+				.lastUpdated=${this.lastUpdated}
 				.token=${this.token}
 				?rubricReadOnly=${this._rubricReadOnly}
 				?richTextEditorDisabled=${this._richTextEditorDisabled}
 				@next-student-click=${this.onNextStudentClick}
+				@save-draft=${this.saveDraft}
 			></d2l-consistent-evaluation-page>
 		`;
 	}

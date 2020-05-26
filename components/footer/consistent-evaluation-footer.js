@@ -64,6 +64,10 @@ export class ConsistentEvaluationFooter extends LitElement {
 
 	_onSaveDraftClick() {
 		console.log('save draft');
+		this.dispatchEvent(new CustomEvent('save-draft', {
+			bubbles: true,
+			composed: true
+		}));
 	}
 
 	async _onRetractClick() {
@@ -94,7 +98,7 @@ export class ConsistentEvaluationFooter extends LitElement {
 			<d2l-consistent-evaluation-footer-presentational
 				?published=${this._isEntityPublished()}
 				?showNextStudent=${this.nextStudentHref !== undefined}
-				@on-publish=${this._onPublishClick}				
+				@on-publish=${this._onPublishClick}
 				@on-save-draft=${this._onSaveDraftClick}
 				@on-retract=${this._onRetractClick}
 				@on-update=${this._onUpdateClick}

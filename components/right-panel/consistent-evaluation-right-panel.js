@@ -2,6 +2,7 @@ import './consistent-evaluation-feedback.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
+import '../footer/consistent-evaluation-footer.js';
 import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
 import { loadLocalizationResources } from '../locale.js';
@@ -16,6 +17,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			outcomesHref: { type: String },
 			gradeHref: { type: String },
 			feedbackHref: { type: String },
+			lastUpdated: { type: String },
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
@@ -66,8 +68,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideGrade) {
 			return html`
 				<d2l-consistent-evaluation-grade-result
-					href=${this.gradeHref}
+					.href=${this.gradeHref}
 					.token=${this.token}
+					.lastUpdated=${this.lastUpdated}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}
@@ -79,8 +82,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideFeedback) {
 			return html`
 				<d2l-consistent-evaluation-feedback
-					href=${this.feedbackHref}
+					.href=${this.feedbackHref}
 					.token=${this.token}
+					.lastUpdated=${this.lastUpdated}
 				></d2l-consistent-evaluation-feedback>
 			`;
 		}

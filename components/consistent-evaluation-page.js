@@ -18,6 +18,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
+			lastUpdated: { type: String }
 		};
 	}
 
@@ -47,7 +48,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 						rubricAssessmentHref=${this.rubricAssessmentHref}
 						outcomesHref=${this.outcomesHref}
 						gradeHref=${this.gradeHref}
-						feedbackHref=${this.feedbackHref}
+						.feedbackHref=${this.feedbackHref}
+						.lastUpdated=${this.lastUpdated}
 						.token=${this.token}
 						?rubricReadOnly=${this.rubricReadOnly}
 						?richTextEditorDisabled=${this.richTextEditorDisabled}
