@@ -18,7 +18,6 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 		this._href = undefined;
 		this._token = undefined;
 		this._lastupdated = undefined;
-		window.addEventListener('my-custom-event-save-draft-click', this.test, false);
 	}
 
 	get lastUpdated() {
@@ -26,42 +25,27 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 	}
 
 	set lastUpdated(newDate) {
-		console.log('newDate');
-		console.log(newDate);
 		if (newDate) {
-			// console.log(newDate);
 			const oldVal = this._lastupdated;
 			if (oldVal !== newDate) {
-				console.log('this for grade result lastUpdated');
-				console.log(this);
-				let gradeBlock = this.shadowRoot.getElementById('graderpblock');
-				if (gradeBlock) {
-					const gradeResult = gradeBlock.getElementsByTagName('d2l-labs-d2l-grade-result')[0];
-					// this works but is really ugly. is there a better way?
-					console.log('saveGrade saving to db');
-					// console.log(gradeResult);
-					gradeResult.saveGrade();
-				}
+				const actualGradeResult = this.shadowRoot.querySelector('d2l-labs-d2l-grade-result');
+				console.log('saveGrade saving to db');
+				// console.log(gradeResult);
+				// gradeResult.saveGrade();
+				actualGradeResult.saveGrade();
 				this._lastUpdated = newDate;
 				this.requestUpdate('lastUpdated', oldVal);
 			}
 		}
 	}
 
-	test(e) {
-		console.log('reaching here');
-		const page = e.detail;
-		console.log(page);
-	}
-
 	render() {
 		return html`
-			<d2l-consistent-evaluation-right-panel-block title="Overall Grade" id="graderpblock">
+			<d2l-consistent-evaluation-right-panel-block title="Overall Grade">
 				<d2l-labs-d2l-grade-result
 					.href=${this.href}
 					.token=${this.token}
 					.lastupdated=${this.lastUpdated}
-					@my-custom-event-save-draft-click=${this.test}
 					disableAutoSave
 					_hideTitle
 				></d2l-labs-d2l-grade-result>

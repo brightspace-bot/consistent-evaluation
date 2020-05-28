@@ -76,6 +76,10 @@ export class ConsistentEvaluationFooter extends LitElement {
 
 	_onUpdateClick() {
 		console.log('update');
+		this.dispatchEvent(new CustomEvent('update-published', {
+			bubbles: true,
+			composed: true
+		}));
 	}
 
 	_onNextStudentClick() {

@@ -23,7 +23,6 @@ class ConsistentEvaluationFeedback extends LitElement {
 		this._feedbackEntity = {};
 		this._feedbackText = '';
 		this._richTextEditorConfig = {};
-		window.addEventListener('my-custom-event-save-draft-click', this.test, false);
 	}
 
 	get href() {
@@ -70,11 +69,6 @@ class ConsistentEvaluationFeedback extends LitElement {
 
 		this._feedbackEntity = await this._controller.requestFeedback();
 		this._feedbackText = this._feedbackEntity.entities[0].entities[0].properties.text;
-	}
-
-	test(e) {
-		console.log('reaching here FEEDBACK');
-		console.log(e);
 	}
 
 	_saveFeedback() {

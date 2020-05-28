@@ -49,9 +49,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	saveDraft(e) {
 		this.lastUpdated = new Date().toTimeString();
-		const event = new CustomEvent('my-custom-event-save-draft-click',
-			{ 'detail': this });
-		window.dispatchEvent(event);
+	}
+
+	updateEvaluation(e) {
+		this.lastUpdated = new Date().toTimeString();
 	}
 
 	render() {
@@ -70,6 +71,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				?richTextEditorDisabled=${this._richTextEditorDisabled}
 				@next-student-click=${this.onNextStudentClick}
 				@save-draft=${this.saveDraft}
+				@update-published=${this.updateEvaluation}
 			></d2l-consistent-evaluation-page>
 		`;
 	}
