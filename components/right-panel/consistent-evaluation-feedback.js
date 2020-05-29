@@ -76,8 +76,8 @@ class ConsistentEvaluationFeedback extends LitElement {
 	render() {
 		return html`
 			<d2l-consistent-evaluation-feedback-presentational
-				can-edit-feedback
-				feedback-text="${this._feedbackText}"
+				canEditFeedback
+				feedbackText="${this._feedbackText}"
 				href="${this._href}"
 				.richtextEditorConfig="${this._richTextEditorConfig}"
 				@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
