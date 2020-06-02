@@ -1,10 +1,9 @@
-import './consistent-evaluation-html-editor.js';
+import './consistent-evaluation-feedback.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
 import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
-import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
@@ -24,8 +23,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			hideGrade: { type: Boolean },
 			hideFeedback: { type: Boolean },
 			hideOutcomes: { type: Boolean },
-			_richTextEditorConfig: { type: Object },
-			_htmlEditorUniqueId: { type: String }
+			_richTextEditorConfig: { type: Object }
 		};
 	}
 
@@ -41,23 +39,11 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		super();
 
 		this._richTextEditorConfig = {};
-		this._htmlEditorUniqueId = `htmleditor-${getUniqueId()}`;
 
 		this.hideRubric = false;
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
-	}
-
-	_onRequestProvider(e) {
-		if (e.detail.key === 'd2l-provider-html-editor-enabled') {
-			e.detail.provider = true;
-			e.stopPropagation();
-		}
-	}
-
-	_saveInstructionsOnChange() {
-		console.log('save on change');
 	}
 
 	_renderRubric() {
@@ -67,7 +53,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					header=${this.localize('rubrics')}
 					href=${this.rubricHref}
 					assessmentHref=${this.rubricAssessmentHref}
-					token=${this.token}
+					.token=${this.token}
 					?readonly=${this.rubricReadOnly}
 				></d2l-consistent-evaluation-rubric>
 			`;
@@ -81,7 +67,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			return html`
 				<d2l-consistent-evaluation-grade-result
 					href=${this.gradeHref}
-					token=${this.token}
+					.token=${this.token}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}
@@ -92,15 +78,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	_renderFeedback() {
 		if (!this.hideFeedback) {
 			return html`
-				<d2l-consistent-evaluation-html-editor
-					header=${this.localize('overallFeedback')}
-					value="This is the value"
-					ariaLabel="aria label"
-					.richtextEditorConfig=${this._richTextEditorConfig}
-					?disabled=${this.richTextEditorDisabled}
-					@d2l-request-provider=${this._onRequestProvider}
-					@html-editor-demo-change=${this._saveInstructionsOnChange}
-				></d2l-consistent-evaluation-html-editor>
+				<d2l-consistent-evaluation-feedback
+					href=${this.feedbackHref}
+					.token=${this.token}
+				></d2l-consistent-evaluation-feedback>
 			`;
 		}
 
@@ -114,7 +95,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-outcomes
 					header=${this.localize('outcomes')}
 					href=${this.outcomesHref}
-					token=${this.token}
+					.token=${this.token}
 				></d2l-consistent-evaluation-outcomes>
 			`;
 		}
