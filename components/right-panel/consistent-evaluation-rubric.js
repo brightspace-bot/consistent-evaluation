@@ -29,7 +29,7 @@ class ConsistentEvaluationRubric extends LitElement {
 				<d2l-rubric
 					href=${this.href}
 					assessment-href=${this.assessmentHref}
-					token=${this.token}
+					.token=${this.token}
 					?read-only=${this.readonly}
 					force-Compact
 					overall-score-flag

@@ -47,7 +47,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 						rubricAssessmentHref=${this.rubricAssessmentHref}
 						outcomesHref=${this.outcomesHref}
 						gradeHref=${this.gradeHref}
-						token=${this.token}
+						feedbackHref=${this.feedbackHref}
+						.token=${this.token}
 						?rubricReadOnly=${this.rubricReadOnly}
 						?richTextEditorDisabled=${this.richTextEditorDisabled}
 						?hideRubric=${this.rubricHref === undefined}
