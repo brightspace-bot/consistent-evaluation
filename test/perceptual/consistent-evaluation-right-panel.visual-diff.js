@@ -9,14 +9,13 @@ describe('d2l-consistent-evaluation', () => {
 
 	before(async() => {
 		browser = await puppeteer.launch();
-		page = await browser.newPage();
+		page = await visualDiff.createPage(browser);
 		await page.setViewport({width: 900, height: 900, deviceScaleFactor: 2});
 		await page.goto(`${visualDiff.getBaseUrl()}/test/perceptual/consistent-evaluation-right-panel.visual-diff.html`, { waitUntil: ['networkidle0', 'load'] });
 		await page.bringToFront();
-		await visualDiff.disableAnimations(page);
 	});
 
-	after(() => browser.close());
+	after(async() => await browser.close());
 
 	it('renders the right panel', async function() {
 		const rect = await visualDiff.getRect(page, '#default');
