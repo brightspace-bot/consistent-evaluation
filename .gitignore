@@ -2,3 +2,4 @@ node_modules/
 /test/**/screenshots/current/
 /test/**/screenshots/golden/
 .vscode/
+package-lock.json
