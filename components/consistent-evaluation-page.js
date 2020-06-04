@@ -1,6 +1,6 @@
 import './footer/consistent-evaluation-footer.js';
 import './right-panel/consistent-evaluation-right-panel.js';
-import './submissions-page.js';
+import './left-panel/consistent-evaluation-submissions-page.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
@@ -42,10 +42,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="primary">
 					<div>
 						<span>evidence</span>
-						<submissions-page
+						<consistent-evaluation-submissions-page
 						.submissionList=${this.submissionList}
 						evaluationState=${this.evaluationState}
-						.token=${this.token}></submissions-page>
+						.token=${this.token}></consistent-evaluation-submissions-page>
 					</div>
 				</div>
 				<div slot="secondary">

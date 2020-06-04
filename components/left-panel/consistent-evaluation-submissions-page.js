@@ -6,7 +6,7 @@ import '@brightspace-ui/core/components/icons/icon.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { heading4Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 
-export class SubmissionsPage extends LitElement {
+export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get properties() {
 		return {
 			submissionList: { type: Array },
@@ -96,7 +96,7 @@ export class SubmissionsPage extends LitElement {
 
 	_getReadableFileSizeString(fileSizeBytes) {
 		let i = -1;
-		const byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+		const byteUnits = [' kB', ' MB', ' GB'];
 		do {
 			fileSizeBytes = fileSizeBytes / 1024;
 			i++;
@@ -104,42 +104,52 @@ export class SubmissionsPage extends LitElement {
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + byteUnits[i];
 	}
 
+	_getSubmissionDisplayHtml(displayNumber, date) {
+		return `<h3 class="first-item">Submission ${displayNumber}</h3>\n
+		<p class="submission-info">${date.toDateString()} ${date.toLocaleTimeString()}<d2l-icon icon="tier1:dot"></d2l-icon>${this.evaluationState}</p>`;
+	}
+
+	_getAttachmentDisplayHtml(href, filename, fileSizeBytes) {
+		return `<d2l-list-item>
+		<d2l-list-item-content>
+		<d2l-icon class="item" icon="tier2:${this._getIcon(filename)}"></d2l-icon>
+		<div class="item">
+		<a href="${href}"><span>${filename}</span></a>
+		<div slot="secondary">${this._getReadableFileSizeString(fileSizeBytes)}</div></div>
+		</d2l-list-item-content>
+		</d2l-list-item>\n`;
+	}
+
+	_getCommentDisplayHtml(comment) {
+		return `<d2l-list-item><d2l-list-item-content>
+		<div class="d2l-label-text">Comments</div>
+		<div slot="secondary">${comment}</div>
+		</d2l-list-item-content>
+		</d2l-list-item>`;
+	}
+
 	_renderList() {
 		let builder = '';
 		for (let j = 0; j < this._submissionEntities.length; j++) {
 			if (this._submissionEntities[j].entity) {
 				const assignmentSubmission = this._submissionEntities[j].entity;
-				console.log(assignmentSubmission);
 				const displayNumber = this._submissionEntities.length - j;
 				const dateStr = assignmentSubmission.getSubEntityByClass('date').properties.date;
 				const date = new Date(dateStr);
 				const attachmentsListEntity = assignmentSubmission.getSubEntityByClass('attachment-list');
-				builder += `
-				<h3 class="first-item">Submission ${displayNumber}</h3>\n
-				<p class="submission-info">${date.toDateString()} ${date.toLocaleTimeString()}<d2l-icon icon="tier1:dot"></d2l-icon>${this.evaluationState}</p>`;
+				builder += this._getSubmissionDisplayHtml(displayNumber, date);
 				if (attachmentsListEntity && attachmentsListEntity.entities) {
 					const attachmentsList = attachmentsListEntity.entities;
 					for (let i = 0; i < attachmentsList.length; i++) {
 						const filename = attachmentsList[i].properties.name;
 						const fileSizeBytes = attachmentsList[i].properties.size;
-						builder += `<d2l-list-item>
-						<d2l-list-item-content>
-						<d2l-icon class="item" icon="tier2:${this._getIcon(filename)}"></d2l-icon>
-						<div class="item">
-						<a href="${attachmentsList[i].properties.href}"><span>${filename}</span></a>
-						<div slot="secondary">${this._getReadableFileSizeString(fileSizeBytes)}</div></div>
-						</d2l-list-item-content>
-						</d2l-list-item>\n`;
+						builder += this._getAttachmentDisplayHtml(attachmentsList[i].properties.href, filename, fileSizeBytes);
 					}
 				}
 				let comment = '';
 				if (assignmentSubmission.getSubEntityByClass('submission-comment')) {
 					comment = assignmentSubmission.getSubEntityByClass('submission-comment').properties.html;
-					builder += `<d2l-list-item><d2l-list-item-content>
-					<div class="d2l-label-text">Comments</div>
-					<div slot="secondary">${comment}</div>
-					</d2l-list-item-content>
-					</d2l-list-item>`;
+					builder += this._getCommentDisplayHtml(comment);
 				}
 			}
 		}
@@ -155,4 +165,4 @@ export class SubmissionsPage extends LitElement {
 	}
 }
 
-customElements.define('submissions-page', SubmissionsPage);
+customElements.define('consistent-evaluation-submissions-page', ConsistentEvaluationSubmissionsPage);
