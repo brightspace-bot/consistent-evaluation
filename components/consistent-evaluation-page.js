@@ -41,6 +41,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
 					<div>
+						<span>evidence</span>
 						<submissions-page
 						.submissionList=${this.submissionList}
 						evaluationState=${this.evaluationState}
