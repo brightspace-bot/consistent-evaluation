@@ -1,4 +1,5 @@
 import './footer/consistent-evaluation-footer.js';
+import './left-panel/consistent-evaluation-left-panel.js';
 import './right-panel/consistent-evaluation-right-panel.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
@@ -17,7 +18,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 			nextStudentHref: { type: String },
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
-			richTextEditorDisabled: { type: Boolean },
+			richTextEditorDisabled: { type: Boolean }
 		};
 	}
 
@@ -37,9 +38,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
-					<div>
-						<span>evidence</span>
-					</div>
+					<consistent-evaluation-left-panel
+					></consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
