@@ -12,7 +12,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 			token: { type: String },
 			_rubricReadOnly: { type: Boolean },
 			_richTextEditorDisabled: { type: Boolean },
-			_childHrefs: { type: Object }
+			_childHrefs: { type: Object },
+			_submissionInfo: { type: Object }
 		};
 	}
 
@@ -25,6 +26,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._rubricReadOnly = false;
 		this._richTextEditorDisabled = false;
 		this._childHrefs = undefined;
+		this._submissionInfo = undefined;
 	}
 
 	async updated(changedProperties) {
@@ -33,6 +35,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 		if (changedProperties.has('href')) {
 			const controller = new ConsistentEvaluationHrefController(this.href, this.token);
 			this._childHrefs = await controller.getHrefs();
+			this._submissionInfo = await controller.getSubmissionInfo();
 		}
 	}
 
@@ -50,8 +53,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.evaluationHref=${this._childHrefs && this._childHrefs.evaluationHref}
 				.nextStudentHref=${this._childHrefs && this._childHrefs.nextHref}
 				.feedbackHref=${this._childHrefs && this._childHrefs.feedbackHref}
-				.submissionList=${this._childHrefs && this._childHrefs.submissionList}
-				.evaluationState=${this._childHrefs && this._childHrefs.evaluationState}
+				.submissionList=${this._submissionInfo && this._submissionInfo.submissionList}
+				.evaluationState=${this._submissionInfo && this._submissionInfo.evaluationState}
 				.token=${this.token}
 				?rubricReadOnly=${this._rubricReadOnly}
 				?richTextEditorDisabled=${this._richTextEditorDisabled}

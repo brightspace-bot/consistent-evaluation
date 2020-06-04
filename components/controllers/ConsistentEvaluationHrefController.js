@@ -49,8 +49,6 @@ export class ConsistentEvaluationHrefController {
 		let previousHref = undefined;
 		let rubricAssessmentHref = undefined;
 		let rubricHref = undefined;
-		let submissionList = undefined;
-		let evaluationState = undefined;
 
 		if (root && root.entity) {
 			root = root.entity;
@@ -68,8 +66,7 @@ export class ConsistentEvaluationHrefController {
 			nextHref = getHref(root, nextRel);
 			previousHref = getHref(root, previousRel);
 			rubricAssessmentHref = getHref(root, assessmentRel);
-			submissionList = root.getSubEntityByClass('assignment-submission-list').links;
-			evaluationState = root.getSubEntityByClass('evaluation').properties.state;
+
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getAssessmentEntity(rubricAssessmentHref, bypassCache);
 				if (assessmentEntity && assessmentEntity.entity) {
@@ -88,7 +85,20 @@ export class ConsistentEvaluationHrefController {
 			nextHref,
 			previousHref,
 			rubricAssessmentHref,
-			rubricHref,
+			rubricHref
+		};
+	}
+
+	async getSubmissionInfo() {
+		let root = await this._getRootEntity(false);
+		let submissionList = undefined;
+		let evaluationState = undefined;
+		if (root && root.entity) {
+			root = root.entity;
+			submissionList = root.getSubEntityByClass('assignment-submission-list').links;
+			evaluationState = root.getSubEntityByClass('evaluation').properties.state;
+		}
+		return {
 			submissionList,
 			evaluationState
 		};
