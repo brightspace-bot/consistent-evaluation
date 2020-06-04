@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 
 export class ConsistentEvaluationEvidence extends LitElement {
 
@@ -7,6 +7,15 @@ export class ConsistentEvaluationEvidence extends LitElement {
 			src: { type: String },
 			token: { type: String }
 		};
+	}
+
+	static get styles() {
+		return css`
+			iframe {
+				height: 80vh;
+				width: 100%;
+			}
+		`;
 	}
 
 	constructor() {
@@ -25,8 +34,7 @@ export class ConsistentEvaluationEvidence extends LitElement {
 	render() {
 		return html`
 			<iframe 
-				src="${this.src}" 
-				style="height:100vh; width:100vw;" 
+				src="${this.src}"
 				frameborder="0" 
 				scrolling="no" 
 				allowfullscreen="true" 
