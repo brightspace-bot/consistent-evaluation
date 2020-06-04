@@ -30,9 +30,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
-			#consistent-eval-left-panel {
-				overflow: hidden;
-			}
 		`;
 	}
 
@@ -40,7 +37,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 		return html`
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
-				<div class="consistent-eval-left-panel" slot="primary">
+				<div slot="primary">
 					<consistent-evaluation-left-panel
 					></consistent-evaluation-left-panel>
 				</div>

@@ -1,11 +1,19 @@
 import './consistent-evaluation-evidence.js';
-import { html, LitElement } from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 
 export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	static get properties() {
 		return {
 		};
+	}
+
+	static get styles() {
+		return css`
+			#consistent-eval-evidence {
+				overflow: hidden;
+			}
+		`;
 	}
 
 	constructor() {
@@ -22,6 +30,7 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 	render() {
 		return html`
 			<consistent-evaluation-evidence
+				class="consistent-eval-evidence"
 				src="${this._iframeSrc}"
 				token="${this._token}"
 			></consistent-evaluation-evidence>
