@@ -42,10 +42,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="primary">
 					<div>
 						<span>evidence</span>
-						<consistent-evaluation-submissions-page
+						<d2l-consistent-evaluation-submissions-page
 						.submissionList=${this.submissionList}
 						evaluationState=${this.evaluationState}
-						.token=${this.token}></consistent-evaluation-submissions-page>
+						.token=${this.token}></d2l-consistent-evaluation-submissions-page>
 					</div>
 				</div>
 				<div slot="secondary">

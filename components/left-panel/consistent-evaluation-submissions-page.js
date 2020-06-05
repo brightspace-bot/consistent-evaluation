@@ -1,5 +1,6 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import '@brightspace-ui/core/components/list/list.js';
+import '@brightspace-ui/core/components/list/list-item.js';
 import './consistent-evaluation-submission-item.js';
 import { html, LitElement } from 'lit-element/lit-element.js';
 
@@ -63,22 +64,24 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 			if (this._submissionEntities[i].entity) {
 				const assignmentSubmission = this._submissionEntities[i].entity;
 				itemTemplate.push(html`
-				<consistent-evaluation-submission-item
-				.assignmentSubmission=${assignmentSubmission}
-				.displayNumber=${this._submissionEntities.length - i}
-				dateStr=${assignmentSubmission.getSubEntityByClass('date').properties.date}
-				evaluationState=${this.evaluationState}
-				></consistent-evaluation-submission-item>`);
+				<d2l-list-item>
+				<d2l-consistent-evaluation-submission-item
+					.assignmentSubmission=${assignmentSubmission}
+					.displayNumber=${this._submissionEntities.length - i}
+					dateStr=${assignmentSubmission.getSubEntityByClass('date').properties.date}
+					evaluationState=${this.evaluationState}
+				></d2l-consistent-evaluation-submission-item>
+				</d2l-list-item>`);
 			}
 		}
 		return html`${itemTemplate}`;
 	}
 
 	render() {
-		return html`<d2l-list>
+		return html`<d2l-list separators="none">
 				${this._renderListItems()}
 				</d2l-list>`;
 	}
 }
 
-customElements.define('consistent-evaluation-submissions-page', ConsistentEvaluationSubmissionsPage);
+customElements.define('d2l-consistent-evaluation-submissions-page', ConsistentEvaluationSubmissionsPage);
