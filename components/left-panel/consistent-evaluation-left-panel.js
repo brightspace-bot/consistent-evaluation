@@ -5,12 +5,14 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	static get properties() {
 		return {
+			url: { type: String },
+			token: { type: String }
 		};
 	}
 
 	static get styles() {
 		return css`
-			#consistent-eval-evidence {
+			#d2l-consistent-evaluation-left-panel-evidence {
 				overflow: hidden;
 			}
 		`;
@@ -19,34 +21,23 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 	constructor() {
 		super();
 
-		// TODO: get these from API as properties
-		const dropboxId = 3;
-		const entityId = 30221;
-		const fileId = 79;
-		const submissionId = 4;
-		const ou = 123063;
-		const host = 'f1ee0a3f5111.eu.ngrok.io';
+		// TODO: remove this once url comes from the API
+		const qs = 'dropboxId=3&entityId=30221&fileId=79&submissionId=4&ou=123063&host=https%3A%2F%2Ff1ee0a3f5111.eu.ngrok.io';
+		this.url = `http://localhost:8000?${qs}`;
 
-		const qs = `dropboxId=${dropboxId}&entityId=${entityId}&fileId=${fileId}&submissionId=${submissionId}&ou=${ou}&host=https%3A%2F%2F${host}`;
-
-		this._src = `http://localhost:8000?${qs}`;
-
-		// TODO: use CDN for annotations viewer
-		//this._iframeSrc = `//s.brightspace.com/apps/annotations-viewer/1.13.1/index.html?${qs}`;
-
-		// TODO: get token from API
-		this._token = '';
+		// TODO: remove this once token comes from API
+		this.token = '';
 	}
 
 	render() {
 		return html`
-			<consistent-evaluation-evidence
-				class="consistent-eval-evidence"
-				src="${this._src}"
-				token="${this._token}"
-			></consistent-evaluation-evidence>
+			<d2l-consistent-evaluation-evidence
+				class="d2l-consistent-evaluation-left-panel-evidence"
+				url="${this.url}"
+				token="${this.token}"
+			></d2l-consistent-evaluation-evidence>
 		`;
 	}
 }
 
-customElements.define('consistent-evaluation-left-panel', ConsistentEvaluationLeftPanel);
+customElements.define('d2l-consistent-evaluation-left-panel', ConsistentEvaluationLeftPanel);

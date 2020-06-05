@@ -4,7 +4,7 @@ export class ConsistentEvaluationEvidence extends LitElement {
 
 	static get properties() {
 		return {
-			src: { type: String },
+			url: { type: String },
 			token: { type: String }
 		};
 	}
@@ -34,7 +34,7 @@ export class ConsistentEvaluationEvidence extends LitElement {
 	render() {
 		return html`
 			<iframe 
-				src="${this.src}"
+				src="${this.url}"
 				frameborder="0" 
 				scrolling="no" 
 				allowfullscreen="true" 
@@ -44,4 +44,4 @@ export class ConsistentEvaluationEvidence extends LitElement {
 	}
 }
 
-customElements.define('consistent-evaluation-evidence', ConsistentEvaluationEvidence);
+customElements.define('d2l-consistent-evaluation-evidence', ConsistentEvaluationEvidence);

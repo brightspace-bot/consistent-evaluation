@@ -38,8 +38,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
-					<consistent-evaluation-left-panel
-					></consistent-evaluation-left-panel>
+					<d2l-consistent-evaluation-left-panel
+					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
