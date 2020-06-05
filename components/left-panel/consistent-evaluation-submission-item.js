@@ -119,7 +119,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			</div>
 			</d2l-list-item-content>
 			</d2l-list-item>
-			<d2l-list>`)}`;
+			</d2l-list>`)}`;
 	}
 
 	_renderComment() {
