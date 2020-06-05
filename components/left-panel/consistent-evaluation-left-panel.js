@@ -19,11 +19,22 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 	constructor() {
 		super();
 
-		const qs = 'dropboxId=3&entityId=30221&fileId=79&submissionId=4&ou=123063&host=https%3A%2F%2F223f1313e448.eu.ngrok.io';
+		// TODO: get these from API as properties
+		const dropboxId = 3;
+		const entityId = 30221;
+		const fileId = 79;
+		const submissionId = 4;
+		const ou = 123063;
+		const host = 'f1ee0a3f5111.eu.ngrok.io';
 
-		this._iframeSrc = `http://localhost:8000?${qs}`;
+		const qs = `dropboxId=${dropboxId}&entityId=${entityId}&fileId=${fileId}&submissionId=${submissionId}&ou=${ou}&host=https%3A%2F%2F${host}`;
+
+		this._src = `http://localhost:8000?${qs}`;
+
+		// TODO: use CDN for annotations viewer
 		//this._iframeSrc = `//s.brightspace.com/apps/annotations-viewer/1.13.1/index.html?${qs}`;
 
+		// TODO: get token from API
 		this._token = '';
 	}
 
@@ -31,7 +42,7 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		return html`
 			<consistent-evaluation-evidence
 				class="consistent-eval-evidence"
-				src="${this._iframeSrc}"
+				src="${this._src}"
 				token="${this._token}"
 			></consistent-evaluation-evidence>
 		`;
