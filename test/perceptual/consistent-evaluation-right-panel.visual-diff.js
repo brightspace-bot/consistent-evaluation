@@ -13,6 +13,7 @@ describe('d2l-consistent-evaluation', () => {
 		await page.setViewport({width: 900, height: 900, deviceScaleFactor: 2});
 		await page.goto(`${visualDiff.getBaseUrl()}/test/perceptual/consistent-evaluation-right-panel.visual-diff.html`, { waitUntil: ['networkidle0', 'load'] });
 		await page.bringToFront();
+		await visualDiff.disableAnimations(page);
 	});
 
 	after(async() => await browser.close());
