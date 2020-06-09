@@ -36,24 +36,20 @@ export default class ConsistentEvaluationPage extends LitElement {
 	render() {
 		return html`
 			<d2l-template-primary-secondary>
-				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
+				<div slot="header"><h1>Assignment 1</h1></div>
 				<div slot="primary">
 					<d2l-consistent-evaluation-left-panel
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
-						rubricHref=${this.rubricHref}
-						rubricAssessmentHref=${this.rubricAssessmentHref}
-						outcomesHref=${this.outcomesHref}
-						gradeHref=${this.gradeHref}
+						rubricHref="../../demo/data/rubric.json"
+						rubricAssessmentHref="../../demo/data/assessment.json"
+						outcomesHref="../../demo/data/outcomes/suggested-level.json"
+						gradeHref="../../demo/data/grade/grade.json"
 						token=${this.token}
 						?rubricReadOnly=${this.rubricReadOnly}
 						?richTextEditorDisabled=${this.richTextEditorDisabled}
-						?hideRubric=${this.rubricHref === undefined}
-						?hideGrade=${this.gradeHref === undefined}
-						?hideOutcomes=${this.outcomesHref === undefined}
-						?hideFeedback=${this.feedbackHref === undefined}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">

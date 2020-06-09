@@ -2,7 +2,7 @@
 	"properties": {
 		"outOf": 100,
 		"scoreType": "Numeric",
-		"score": 47,
+		"score": 80,
 		"letterGrade": null,
 		"letterGradeOptions": null
 	},

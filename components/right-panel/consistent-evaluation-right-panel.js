@@ -94,7 +94,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			return html`
 				<d2l-consistent-evaluation-html-editor
 					header=${this.localize('overallFeedback')}
-					value="This is the value"
+					value="Good job!"
 					ariaLabel="aria label"
 					.richtextEditorConfig=${this._richTextEditorConfig}
 					?disabled=${this.richTextEditorDisabled}

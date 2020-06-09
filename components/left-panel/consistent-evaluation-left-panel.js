@@ -22,7 +22,8 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		super();
 
 		// TODO: remove this once url comes from the API
-		const qs = 'dropboxId=3&entityId=30221&fileId=79&submissionId=4&ou=123063&host=https%3A%2F%2Ff1ee0a3f5111.eu.ngrok.io';
+
+		const qs = 'dropboxId=3&entityId=30220&fileId=79&submissionId=4&ou=123063&host=https%3A%2F%2F11709704b303.eu.ngrok.io';
 		this.url = `http://localhost:8000?${qs}`;
 
 		// TODO: remove this once token comes from API
