@@ -1,3 +1,4 @@
+import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import './consistent-evaluation-evidence.js';
 import { css, html, LitElement } from 'lit-element';
 
@@ -5,8 +6,9 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	static get properties() {
 		return {
-			url: { type: String },
-			token: { type: String }
+			submissionList: { type: Array },
+			token: { type: String },
+			evaluationState: { type: String }
 		};
 	}
 
@@ -20,22 +22,76 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	constructor() {
 		super();
+		this._submissionList = [];
+		this._token = undefined;
+		this._submissionEntities = [];
+	}
 
-		// TODO: remove this once url comes from the API
-		const qs = 'dropboxId=3&entityId=30221&fileId=79&submissionId=4&ou=123063&host=https%3A%2F%2Ff1ee0a3f5111.eu.ngrok.io';
-		this.url = `http://localhost:8000?${qs}`;
+	get submissionList() {
+		return this._submissionList;
+	}
 
-		// TODO: remove this once token comes from API
-		this.token = '';
+	set submissionList(val) {
+		const oldVal = this.submissionList;
+		if (oldVal !== val) {
+			this._submissionList = val;
+			this._initialize().then(() => this.requestUpdate());
+		}
+	}
+	get token() {
+		return this._token;
+	}
+
+	set token(val) {
+		const oldVal = this.token;
+		if (oldVal !== val) {
+			this._token = val;
+			this.requestUpdate();
+		}
+	}
+
+	async _initialize() {
+		if (this._submissionList !== undefined) {
+			for (const submissionLink of this._submissionList) {
+				if (submissionLink.href) {
+					const submission = await this._getSubmissionEntity(submissionLink.href);
+					this._submissionEntities.push(submission);
+				}
+			}
+		}
+	}
+
+	async _getSubmissionEntity(submissionHref) {
+		return await window.D2L.Siren.EntityStore.fetch(submissionHref, this._token, false);
+	}
+
+	_renderEvidence() {
+		const evidenceTemplate = [];
+		if (this._submissionEntities[0].entity) {
+			const assignmentSubmission = this._submissionEntities[0].entity;
+			const attachmentsListEntity = assignmentSubmission.getSubEntityByClass('attachment-list');
+
+			let attachments = [];
+			if (attachmentsListEntity && attachmentsListEntity.entities) {
+				attachments = attachmentsListEntity.entities;
+			}
+
+			const url = attachments[0].properties.annotationsViewer;
+			console.log(url);
+
+			evidenceTemplate.push(html`
+			<d2l-consistent-evaluation-evidence
+				class="d2l-consistent-evaluation-left-panel-evidence"
+				url="${url}"
+				token="${this.token}"
+			></d2l-consistent-evaluation-evidence>`);
+		}
+		return html`${evidenceTemplate}`;
 	}
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-evidence
-				class="d2l-consistent-evaluation-left-panel-evidence"
-				url="${this.url}"
-				token="${this.token}"
-			></d2l-consistent-evaluation-evidence>
+			${this._renderEvidence()}
 		`;
 	}
 }
