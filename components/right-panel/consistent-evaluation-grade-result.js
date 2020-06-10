@@ -30,8 +30,6 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 			if (oldVal !== newDate) {
 				const actualGradeResult = this.shadowRoot.querySelector('d2l-labs-d2l-grade-result');
 				console.log('saveGrade saving to db');
-				// console.log(gradeResult);
-				// gradeResult.saveGrade();
 				actualGradeResult.saveGrade();
 				this._lastUpdated = newDate;
 				this.requestUpdate('lastUpdated', oldVal);

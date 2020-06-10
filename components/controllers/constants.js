@@ -9,5 +9,6 @@ export const rubricRel = 'https://api.brightspace.com/rels/rubric';
 export const nextRel = 'next';
 export const previousRel = 'previous';
 export const saveFeedbackActionName = 'SaveFeedback';
+export const saveFeedbackActualActionName = 'save-draft';
 export const saveFeedbackFieldName = 'feedback';
 export const publishedState = 'Published';

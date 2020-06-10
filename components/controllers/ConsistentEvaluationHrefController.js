@@ -42,8 +42,8 @@ export class ConsistentEvaluationHrefController {
 	async getHrefs(bypassCache = false) {
 		let root = await this._getRootEntity(bypassCache);
 
-		let gradeHref = undefined;
-		let feedbackHref = undefined;
+		// let gradeHref = undefined;
+		// let feedbackHref = undefined;
 		let evaluationHref = undefined;
 		let nextHref = undefined;
 		let previousHref = undefined;
@@ -60,8 +60,8 @@ export class ConsistentEvaluationHrefController {
 				return undefined;
 			};
 
-			gradeHref = getHref(root, gradesRel);
-			feedbackHref = getHref(root, feedbackRel);
+			// gradeHref = getHref(root, gradesRel);
+			// feedbackHref = getHref(root, feedbackRel);
 			evaluationHref = getHref(root, evaluationRel);
 			nextHref = getHref(root, nextRel);
 			previousHref = getHref(root, previousRel);
@@ -79,8 +79,8 @@ export class ConsistentEvaluationHrefController {
 
 		return {
 			root,
-			gradeHref,
-			feedbackHref,
+			// gradeHref,
+			// feedbackHref,
 			evaluationHref,
 			nextHref,
 			previousHref,

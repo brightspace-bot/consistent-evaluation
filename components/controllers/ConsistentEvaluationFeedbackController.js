@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { saveFeedbackActionName, saveFeedbackFieldName } from './constants.js';
+import { saveFeedbackActionName, saveFeedbackActualActionName, saveFeedbackFieldName } from './constants.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 export const FeedbackControllerErrors = {
@@ -35,8 +35,9 @@ export class ConsistentEvaluationFeedbackController {
 		this.baseHref = baseHref;
 		this.token = token;
 	}
-	async requestFeedback() {
+	async evalEntity() {
 		const response = await window.D2L.Siren.EntityStore.fetch(this.baseHref, this.token);
+
 		if (!response) {
 			throw new Error(FeedbackControllerErrors.REQUEST_FAILED);
 		}
@@ -45,7 +46,13 @@ export class ConsistentEvaluationFeedbackController {
 		}
 		return response.entity;
 	}
+	async requestFeedback() {
+		const response = await this.evalEntity();
+		return response.getSubEntityByClass('feedback');
+	}
 	async updateFeedbackText(feedbackText, entity) {
+		// const response = await window.D2L.Siren.EntityStore.fetch(href, token);
+		// console.log(response);
 		if (typeof feedbackText !== 'string') {
 			throw new Error(FeedbackControllerErrors.INVALID_FEEDBACK_TEXT);
 		}
@@ -64,7 +71,22 @@ export class ConsistentEvaluationFeedbackController {
 
 		const field = saveFeedbackAction.getFieldByName(saveFeedbackFieldName);
 		field.value = feedbackText;
-
 		return await performSirenAction(this.token, saveFeedbackAction, [field], true);
+	}
+
+	async saveFeedbackText(feedbackText, entity) {
+		if (typeof feedbackText !== 'string') {
+			throw new Error(FeedbackControllerErrors.INVALID_FEEDBACK_TEXT);
+		}
+		if (!entity) {
+			throw new Error(FeedbackControllerErrors.FEEDBACK_MUST_HAVE_ENTITY);
+		}
+		if (!entity.hasActionByName(saveFeedbackActualActionName)) {
+			throw new Error(FeedbackControllerErrors.NO_SAVE_FEEDBACK_ACTION);
+		}
+
+		const saveFeedbackAction = entity.getActionByName(saveFeedbackActualActionName);
+
+		return await performSirenAction(this.token, saveFeedbackAction, [], true);
 	}
 }

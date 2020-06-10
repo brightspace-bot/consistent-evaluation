@@ -1,8 +1,9 @@
 import './consistent-evaluation-footer-presentational.js';
 import { html, LitElement } from 'lit-element';
 import { ConsistentEvaluationFooterController } from '../controllers/FooterController.js';
+import { savePublishMixin } from '../save-publish-mixin.js';
 
-export class ConsistentEvaluationFooter extends LitElement {
+export class ConsistentEvaluationFooter extends savePublishMixin(LitElement) {
 
 	static get properties() {
 		return {
@@ -16,6 +17,8 @@ export class ConsistentEvaluationFooter extends LitElement {
 
 	constructor() {
 		super();
+
+		this._components = ['feedback-actions'];
 
 		this._evaluationHref = undefined;
 		this.nextStudentHref = undefined;
