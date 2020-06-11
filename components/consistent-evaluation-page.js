@@ -51,6 +51,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
+						.evaluationHref=${this.evaluationHref}
 						rubricHref=${this.rubricHref}
 						rubricAssessmentHref=${this.rubricAssessmentHref}
 						outcomesHref=${this.outcomesHref}

@@ -46,6 +46,14 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 	}
 
 	onGradeUpdatedSuccess(e) {
+		console.log('onGradeUpdatedSuccess', e);
+		this.dispatchEvent(new CustomEvent('on-d2l-grade-result-grade-updated-success', {
+			composed: true,
+			bubbles: true,
+			detail: {
+				grade: e.detail.grade.score
+			}
+		}));
 		console.log('grade updated success', e);
 	}
 

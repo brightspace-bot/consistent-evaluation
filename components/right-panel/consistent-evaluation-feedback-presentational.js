@@ -9,10 +9,9 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 	static get properties() {
 		return {
 			canEditFeedback: { type: Boolean },
-			feedbackText: { type: String },
+			feedback: { type: String },
 			href: { type: String },
 			richTextEditorConfig: { type: Object },
-			saveOnFeedbackChange: { type: Object },
 			token: { type: String }
 		};
 	}
@@ -31,7 +30,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		return html`
 			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 				<d2l-activity-text-editor
-					.value="${this.feedbackText}"
+					.value="${this.feedback}"
 					.richtextEditorConfig="${this.richTextEditorConfig}"
 
 					ariaLabel="${this.localize('overallFeedback')}"

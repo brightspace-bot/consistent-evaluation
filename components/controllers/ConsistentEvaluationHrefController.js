@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { assessmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel } from './constants.js';
+import { assessmentRel, evaluationRel, nextRel, previousRel, rubricRel } from './constants.js';
 
 export const ConsistentEvaluationHrefControllerErrors = {
 	INVALID_BASE_HREF: 'baseHref was not defined when initializing ConsistentEvaluationHrefController',
