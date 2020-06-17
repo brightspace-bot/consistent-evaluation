@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { saveDraftActionName, saveFeedbackActionName, saveFeedbackFieldName } from './constants.js';
+import { saveActionName, saveFeedbackActionName, saveFeedbackFieldName } from './constants.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 export const FeedbackControllerErrors = {
@@ -81,11 +81,11 @@ export class ConsistentEvaluationFeedbackController {
 		if (!entity) {
 			throw new Error(FeedbackControllerErrors.FEEDBACK_MUST_HAVE_ENTITY);
 		}
-		if (!entity.hasActionByName(saveDraftActionName)) {
+		if (!entity.hasActionByName(saveActionName)) {
 			throw new Error(FeedbackControllerErrors.NO_SAVE_FEEDBACK_ACTION);
 		}
 
-		const saveFeedbackAction = entity.getActionByName(saveDraftActionName);
+		const saveFeedbackAction = entity.getActionByName(saveActionName);
 
 		return await performSirenAction(this.token, saveFeedbackAction, [], true);
 	}

@@ -24,6 +24,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		super();
 
 		this.canEditFeedback = false;
+		this.feedback = '';
 	}
 
 	render() {

@@ -4,6 +4,7 @@ import './left-panel/consistent-evaluation-submissions-page.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 
 export default class ConsistentEvaluationPage extends LitElement {
 
@@ -19,7 +20,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
-			lastUpdated: { type: String },
 			submissionList: { type: Array },
 			evaluationState: { type: String }
 		};
@@ -34,6 +34,103 @@ export default class ConsistentEvaluationPage extends LitElement {
 				display: none;
 			}
 		`;
+	}
+
+	constructor() {
+		super();
+		this._evaluationHref = undefined;
+		this._token = undefined;
+
+		this._controller = undefined;
+		this._evaluationEntity = undefined;
+	}
+
+	get evaluationEntity() {
+		return this._evaluationEntity;
+	}
+
+	set evaluationEntity(entity) {
+		const oldVal = this.evaluationEntity;
+		if (oldVal !== entity) {
+			this._evaluationEntity = entity;
+			this.evaluationHref = entity.links[1].href;
+			this.requestUpdate('evaluationEntity', oldVal);
+		}
+	}
+
+	get evaluationHref() {
+		return this._evaluationHref;
+	}
+
+	set evaluationHref(val) {
+		const oldVal = this.evaluationHref;
+		if (oldVal !== val) {
+			this._evaluationHref = val;
+			if (this._evaluationHref && this._token) {
+				if (oldVal) {
+					this.requestUpdate('evaluationHref', oldVal);
+				}
+				else {
+					this._initializeController().then(() => this.requestUpdate());
+				}
+			}
+		}
+	}
+
+	get token() {
+		return this._token;
+	}
+
+	set token(val) {
+		const oldVal = this.token;
+		if (oldVal !== val) {
+			this._token = val;
+			if (this._evaluationHref && this._token) {
+				this._initializeController().then(() => this.requestUpdate());
+			}
+		}
+	}
+
+	async _initializeController() {
+		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
+		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
+	}
+
+	_onNextStudentClick() {
+		this.dispatchEvent(new CustomEvent('next-student-click', {
+			composed: true,
+			bubbles: true
+		}));
+	}
+
+	async _transientSaveFeedback(e) {
+		const newFeedbackVal = e.detail;
+		this.evaluationEntity = await this._controller.transientSaveFeedback(this.evaluationEntity, newFeedbackVal);
+	}
+
+	async _transientSaveGrade(e) {
+		const newGradeVal = e.detail;
+		this.evaluationEntity = await this._controller.transientSaveGrade(this.evaluationEntity, newGradeVal);
+	}
+
+	async _saveEvaluation() {
+		this.evaluationEntity = await this._controller.save(this.evaluationEntity);
+		this.evaluationState = this.evaluationEntity.properties.state;
+	}
+
+	async _updateEvaluation() {
+		this.evaluationEntity = await this._controller.update(this.evaluationEntity);
+		this.evaluationState = this.evaluationEntity.properties.state;
+	}
+
+	async _publishEvaluation() {
+		this.evaluationEntity = await this._controller.publish(this.evaluationEntity);
+		this.evaluationState = this.evaluationEntity.properties.state;
+	}
+
+	async _retractEvaluation() {
+		this.evaluationEntity = await this._controller.retract(this.evaluationEntity);
+		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	render() {
@@ -57,7 +154,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 						outcomesHref=${this.outcomesHref}
 						gradeHref=${this.gradeHref}
 						.feedbackHref=${this.feedbackHref}
-						.lastUpdated=${this.lastUpdated}
 						.token=${this.token}
 						?rubricReadOnly=${this.rubricReadOnly}
 						?richTextEditorDisabled=${this.richTextEditorDisabled}
@@ -65,6 +161,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 						?hideGrade=${this.gradeHref === undefined}
 						?hideOutcomes=${this.outcomesHref === undefined}
 						?hideFeedback=${this.feedbackHref === undefined}
+						@on-transient-save-feedback=${this._transientSaveFeedback}
+						@on-transient-save-grade=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
@@ -72,6 +170,11 @@ export default class ConsistentEvaluationPage extends LitElement {
 						.evaluationHref=${this.evaluationHref}
 						.nextStudentHref=${this.nextStudentHref}
 						.token=${this.token}
+						@on-publish=${this._publishEvaluation}
+						@on-save-draft=${this._saveEvaluation}
+						@on-retract=${this._retractEvaluation}
+						@on-update=${this._updateEvaluation}
+						@on-next-student=${this._onNextStudentClick}
 					></d2l-consistent-evaluation-footer>
 				</div>
 			</d2l-template-primary-secondary>

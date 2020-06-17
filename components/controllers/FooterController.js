@@ -1,6 +1,6 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { publishActionName, publishedState, retractActionName } from './constants.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
+import { publishedState } from './constants.js';
 
 export const ConsistentEvaluationFooterControllerErrors = {
 	INVALID_EVALUATION_HREF: 'evaluationHref was not defined when initializing ConsistentEvaluationFooterController',
@@ -72,13 +72,5 @@ export class ConsistentEvaluationFooterController {
 		} else {
 			throw new Error(ConsistentEvaluationFooterControllerErrors.COULD_NOT_FIND_ACTION(actionName));
 		}
-	}
-
-	async publish(evaluationEntity) {
-		return await this._performAction(evaluationEntity, publishActionName);
-	}
-
-	async retract(evaluationEntity) {
-		return await this._performAction(evaluationEntity, retractActionName);
 	}
 }

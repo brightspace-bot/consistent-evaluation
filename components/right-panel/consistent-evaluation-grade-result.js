@@ -7,8 +7,7 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 	static get properties() {
 		return {
 			href: { type: String },
-			token: { type: String },
-			lastUpdated: { type: String }
+			token: { type: String }
 		};
 	}
 
@@ -17,24 +16,6 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 
 		this._href = undefined;
 		this._token = undefined;
-		this._lastupdated = undefined;
-	}
-
-	get lastUpdated() {
-		return this._lastUpdated;
-	}
-
-	set lastUpdated(newDate) {
-		if (newDate) {
-			const oldVal = this._lastupdated;
-			if (oldVal !== newDate) {
-				const actualGradeResult = this.shadowRoot.querySelector('d2l-labs-d2l-grade-result');
-				console.log('saveGrade saving to db');
-				actualGradeResult.saveGrade();
-				this._lastUpdated = newDate;
-				this.requestUpdate('lastUpdated', oldVal);
-			}
-		}
 	}
 
 	onInitializedSuccess(e) {
@@ -46,12 +27,11 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 	}
 
 	onGradeUpdatedSuccess(e) {
-		console.log('onGradeUpdatedSuccess', e);
 		this.dispatchEvent(new CustomEvent('on-d2l-grade-result-grade-updated-success', {
 			composed: true,
 			bubbles: true,
 			detail: {
-				grade: e.detail.grade.score
+				grade: e.detail.grade
 			}
 		}));
 		console.log('grade updated success', e);
@@ -75,7 +55,6 @@ export class ConsistentEvaluationGradeResult extends LitElement {
 				<d2l-labs-d2l-grade-result
 					.href=${this.href}
 					.token=${this.token}
-					.lastupdated=${this.lastUpdated}
 					disableAutoSave
 					_hideTitle
 					@d2l-grade-result-initialized-success=${this.onInitializedSuccess}

@@ -16,12 +16,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
 			evaluationHref: { type: String },
+			feedbackText: { type: String },
 			rubricHref: { type: String },
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
-			gradeHref: { type: String },
-			feedbackHref: { type: String },
-			lastUpdated: { type: String },
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
@@ -44,32 +42,18 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	constructor() {
 		super();
 
-		this._controller = undefined;
-		this._evaluationEntity = undefined;
-		this._feedbackEntity = undefined;
-		this._lastUpdated = undefined;
-
 		this._evaluationHref = undefined;
 		this._token = undefined;
 		this._richTextEditorConfig = {};
 		this._debounceJobs = {};
 
-		this.feedbackText = '';
 		this.hideRubric = false;
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
-	}
+		this.feedbackText = '';
 
-	get evaluationEntity() {
-		return this._evaluationEntity;
-	}
-
-	set evaluationEntity(entity) {
-		if (this._evaluationEntity !== entity) {
-			this._evaluationEntity = entity;
-			this.evaluationHref = entity.links[1].href;
-		}
+		// window.addEventListener('on-d2l-consistent-evaluation-save-draft', this._saveEvaluationDraft.bind(this));
 	}
 
 	get evaluationHref() {
@@ -105,44 +89,38 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		}
 	}
 
-	set lastUpdated(newDate) {
-		if (newDate) {
-			const oldVal = this._lastUpdated;
-			if (oldVal !== newDate) {
-				this._saveEvaluationDraft();
-				this._lastUpdated = newDate;
-				this.requestUpdate('lastUpdated', oldVal);
-			}
-		}
-	}
-
 	async _initializeController() {
 		this._controller = new RightPanelController(this._evaluationHref, this._token);
-		this._evaluationEntity = await this._controller.requestEvaluationEntity();
-		this._feedbackEntity = await this._controller.requestFeedbackEntity();
-		this._gradeEntity = await this._controller.requestGradeEntity();
-		this.feedbackText = this._feedbackEntity.properties.text;
-	}
-
-	_saveEvaluationDraft() {
-		this._controller.saveEvaluation(this._evaluationEntity);
+		const feedback = await this._controller.requestFeedbackEntity();
+		this.feedbackText = feedback.properties.text ? feedback.properties.text : '';
 	}
 
 	async _transientSaveFeedback(e) {
 		this.feedbackText = e.detail.content;
-		const feedbackEntity = await this._controller.requestFeedbackEntity();
 
 		this._debounceJobs.feedback = Debouncer.debounce(
 			this._debounceJobs.feedback,
 			timeOut.after(500),
-			async() => this._evaluationEntity = await this._controller.saveFeedbackTransient(this.feedbackText, feedbackEntity)
+			async() => { this._emitTransientSaveEvent('on-transient-save-feedback', this.feedbackText); }
 		);
 	}
 
 	async _transientSaveGrade(e) {
-		const grade = e.detail.grade;
-		const gradeEntity = await this._controller.requestGradeEntity();
-		this._evaluationEntity = await this._controller.saveGradeTransient(grade, gradeEntity);
+		const type = e.detail.grade.scoreType;
+		if (type === 'LetterGrade') {
+			this._emitTransientSaveEvent('on-transient-save-grade', e.detail.grade.letterGrade);
+		}
+		else if (type === 'Numeric') {
+			this._emitTransientSaveEvent('on-transient-save-grade', e.detail.grade.score);
+		}
+	}
+
+	_emitTransientSaveEvent(eventName, newValue) {
+		this.dispatchEvent(new CustomEvent(eventName, {
+			composed: true,
+			bubbles: true,
+			detail: newValue
+		}));
 	}
 
 	_renderRubric() {
@@ -167,7 +145,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-grade-result
 					href=${this.evaluationHref}
 					.token=${this.token}
-					.lastUpdated=${this.lastUpdated}
 					@on-d2l-grade-result-grade-updated-success=${this._transientSaveGrade}
 				></d2l-consistent-evaluation-grade-result>
 			`;

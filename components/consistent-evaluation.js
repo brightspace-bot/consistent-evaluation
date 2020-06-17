@@ -13,7 +13,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_rubricReadOnly: { type: Boolean },
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
-			lastUpdated: { type: String },
 			_submissionInfo: { type: Object }
 		};
 	}
@@ -27,17 +26,11 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._rubricReadOnly = false;
 		this._richTextEditorDisabled = false;
 		this._childHrefs = undefined;
-		this.lastUpdated = undefined;
 		this._submissionInfo = undefined;
 	}
 
 	async updated(changedProperties) {
-		//console.log(this.lastUpdated);
 		super.updated();
-
-		if (changedProperties.has('lastUpdated')) {
-			this.lastUpdated = new Date().toTimeString();
-		}
 
 		if (changedProperties.has('href')) {
 			const controller = new ConsistentEvaluationHrefController(this.href, this.token);
@@ -50,14 +43,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this.href = this._childHrefs.nextHref;
 	}
 
-	saveDraft(e) {
-		this.lastUpdated = new Date().toTimeString();
-	}
-
-	updateEvaluation(e) {
-		this.lastUpdated = new Date().toTimeString();
-	}
-
 	render() {
 		return html`
 			<d2l-consistent-evaluation-page id='zero'
@@ -68,15 +53,12 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.evaluationHref=${this._childHrefs && this._childHrefs.evaluationHref}
 				.nextStudentHref=${this._childHrefs && this._childHrefs.nextHref}
 				.feedbackHref=${this._childHrefs && this._childHrefs.evaluationHref}
-				.lastUpdated=${this.lastUpdated}
 				.submissionList=${this._submissionInfo && this._submissionInfo.submissionList}
 				.evaluationState=${this._submissionInfo && this._submissionInfo.evaluationState}
 				.token=${this.token}
 				?rubricReadOnly=${this._rubricReadOnly}
 				?richTextEditorDisabled=${this._richTextEditorDisabled}
 				@next-student-click=${this.onNextStudentClick}
-				@save-draft=${this.saveDraft}
-				@update-published=${this.updateEvaluation}
 			></d2l-consistent-evaluation-page>
 		`;
 	}
