@@ -41,13 +41,11 @@ export default class ConsistentEvaluationPage extends LitElement {
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
-					<div>
-						<d2l-consistent-evaluation-left-panel
-							.submissionList=${this.submissionList}
-							evaluationState=${this.evaluationState}
-							.token=${this.token}
-						></d2l-consistent-evaluation-left-panel>
-					</div>
+					<d2l-consistent-evaluation-left-panel
+						.submissionList=${this.submissionList}
+						evaluationState=${this.evaluationState}
+						.token=${this.token}
+					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel

@@ -2,6 +2,7 @@ import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/list/list-item-content.js';
 import '@brightspace-ui/core/components/icons/icon.js';
+import '@brightspace-ui/core/components/button/button.js';
 import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { formatDateTime } from '@brightspace-ui/intl/lib/dateTime.js';
@@ -93,6 +94,18 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
+	_dispatchRenderEvidenceEvent() {
+		const url = 'attachment.properties.annotationsViewer';
+
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence', {
+			detail: {
+				url: url
+			},
+			composed: true
+		});
+		this.dispatchEvent(event);
+	}
+
 	_renderTitle() {
 		const date = formatDateTime(
 			this._date,
@@ -116,6 +129,11 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			<div class="consistent-eval-submission-attachment-item">
 			<a href="${attachment.properties.href}"><span>${attachment.properties.name}</span></a>
 			<div slot="secondary" class="d2l-body-small">${this._getReadableFileSizeString(attachment.properties.size)}</div>
+
+			<d2l-button
+				@click="${this._dispatchRenderEvidenceEvent}">View File
+			</d2l-button>
+
 			</div>
 			</d2l-list-item-content>
 			</d2l-list-item>

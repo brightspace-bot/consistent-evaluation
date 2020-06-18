@@ -1,5 +1,6 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import './consistent-evaluation-evidence.js';
+import './consistent-evaluation-submissions-page.js';
 import { css, html, LitElement } from 'lit-element';
 
 export class ConsistentEvaluationLeftPanel extends LitElement {
@@ -8,7 +9,8 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		return {
 			submissionList: { type: Array },
 			token: { type: String },
-			evaluationState: { type: String }
+			evaluationState: { type: String },
+			displayEvidence: { type: Boolean }
 		};
 	}
 
@@ -22,76 +24,52 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	constructor() {
 		super();
-		this._submissionList = [];
-		this._token = undefined;
-		this._submissionEntities = [];
+
+		this._evidenceUrl = undefined;
+		this._displayEvidence = false;
 	}
 
-	get submissionList() {
-		return this._submissionList;
+	get displayEvidence() {
+		return this._displayEvidence;
 	}
 
-	set submissionList(val) {
-		const oldVal = this.submissionList;
-		if (oldVal !== val) {
-			this._submissionList = val;
-			this._initialize().then(() => this.requestUpdate());
-		}
-	}
-	get token() {
-		return this._token;
-	}
-
-	set token(val) {
-		const oldVal = this.token;
-		if (oldVal !== val) {
-			this._token = val;
-			this.requestUpdate();
+	set displayEvidence(newVal) {
+		const oldVal = this._displayEvidence;
+		if (oldVal !== newVal) {
+			this._displayEvidence = newVal;
+			this.requestUpdate('displayEvidence', oldVal);
 		}
 	}
 
-	async _initialize() {
-		if (this._submissionList !== undefined) {
-			for (const submissionLink of this._submissionList) {
-				if (submissionLink.href) {
-					const submission = await this._getSubmissionEntity(submissionLink.href);
-					this._submissionEntities.push(submission);
-				}
-			}
-		}
+	connectedCallback() {
+		this.addEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._renderEvidence);
+		super.connectedCallback();
 	}
 
-	async _getSubmissionEntity(submissionHref) {
-		return await window.D2L.Siren.EntityStore.fetch(submissionHref, this._token, false);
+	disconnectedCallback() {
+		this.removeEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._renderEvidence);
+		super.disconnectedCallback();
 	}
 
-	_renderEvidence() {
-		const evidenceTemplate = [];
-		if (this._submissionEntities[0].entity) {
-			const assignmentSubmission = this._submissionEntities[0].entity;
-			const attachmentsListEntity = assignmentSubmission.getSubEntityByClass('attachment-list');
-
-			let attachments = [];
-			if (attachmentsListEntity && attachmentsListEntity.entities) {
-				attachments = attachmentsListEntity.entities;
-			}
-
-			const url = attachments[0].properties.annotationsViewer;
-			console.log(url);
-
-			evidenceTemplate.push(html`
-			<d2l-consistent-evaluation-evidence
-				class="d2l-consistent-evaluation-left-panel-evidence"
-				url="${url}"
-				token="${this.token}"
-			></d2l-consistent-evaluation-evidence>`);
-		}
-		return html`${evidenceTemplate}`;
+	_renderEvidence(e) {
+		this.displayEvidence = true;
+		this._evidenceUrl = e.detail.url;
 	}
 
 	render() {
 		return html`
-			${this._renderEvidence()}
+			<d2l-consistent-evaluation-evidence
+				class="d2l-consistent-evaluation-left-panel-evidence"
+				.url=${this._evidenceUrl}
+				.token=${this.token}
+				?hidden=${!this.displayEvidence}
+			></d2l-consistent-evaluation-evidence>
+			<d2l-consistent-evaluation-submissions-page
+				.submissionList=${this.submissionList}
+				evaluationState=${this.evaluationState}
+				.token=${this.token}
+				?hidden=${this.displayEvidence}
+			></d2l-consistent-evaluation-submissions-page>
 		`;
 	}
 }
