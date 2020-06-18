@@ -1,68 +1,27 @@
 import './consistent-evaluation-footer-presentational.js';
 import { html, LitElement } from 'lit-element';
-import { ConsistentEvaluationFooterController } from '../controllers/FooterController.js';
+import { publishedState } from '../controllers/constants.js';
 
 export class ConsistentEvaluationFooter extends LitElement {
 
 	static get properties() {
 		return {
-			evaluationHref: { type: String },
-			nextStudentHref: { type: String },
-			token: { type: String },
-			_controller: { type: Object },
-			_evaluationEntity: { type: Object }
+			evaluationEntity: { type: Object },
+			nextStudentHref: { type: String }
 		};
 	}
 
 	constructor() {
 		super();
-		this._evaluationHref = undefined;
 		this.nextStudentHref = undefined;
-		this._token = undefined;
-
-		this._controller = undefined;
-		this._evaluationEntity = undefined;
-	}
-
-	get evaluationHref() {
-		return this._evaluationHref;
-	}
-
-	set evaluationHref(val) {
-		const oldVal = this.evaluationHref;
-		if (oldVal !== val) {
-			this._evaluationHref = val;
-			if (this._evaluationHref && this._token) {
-				this._initializeController().then(() => this.requestUpdate());
-			}
-		}
-	}
-
-	get token() {
-		return this._token;
-	}
-
-	set token(val) {
-		const oldVal = this.token;
-		if (oldVal !== val) {
-			this._token = val;
-			if (this._evaluationHref && this._token) {
-				this._initializeController().then(() => this.requestUpdate());
-			}
-		}
-	}
-
-	async _initializeController() {
-		this._controller = new ConsistentEvaluationFooterController(this._evaluationHref, this._token);
-		this._evaluationEntity = await this._controller.requestEvaluationEntity();
+		this.evaluationEntity = undefined;
 	}
 
 	_isEntityPublished() {
-		if (!this._evaluationEntity || !this._controller) {
+		if (!this.evaluationEntity) {
 			return false;
 		}
-
-		return this._controller.isPublished(this._evaluationEntity);
+		return this.evaluationEntity.properties.state === publishedState;
 	}
 
 	render() {

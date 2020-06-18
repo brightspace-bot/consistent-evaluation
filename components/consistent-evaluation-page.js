@@ -67,12 +67,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 		if (oldVal !== val) {
 			this._evaluationHref = val;
 			if (this._evaluationHref && this._token) {
-				if (oldVal) {
-					this.requestUpdate('evaluationHref', oldVal);
-				}
-				else {
-					this._initializeController().then(() => this.requestUpdate());
-				}
+				this._initializeController().then(() => this.requestUpdate());
 			}
 		}
 	}
@@ -94,6 +89,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
+		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	_onNextStudentClick() {
@@ -167,9 +163,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 				</div>
 				<div slot="footer">
 					<d2l-consistent-evaluation-footer
-						.evaluationHref=${this.evaluationHref}
+						.evaluationEntity=${this.evaluationEntity}
 						.nextStudentHref=${this.nextStudentHref}
-						.token=${this.token}
 						@on-publish=${this._publishEvaluation}
 						@on-save-draft=${this._saveEvaluation}
 						@on-retract=${this._retractEvaluation}

@@ -1,6 +1,4 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { saveActionName, saveFeedbackActionName, saveFeedbackFieldName } from './constants.js';
-import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 export const FeedbackControllerErrors = {
 	INVALID_BASE_HREF: 'baseHref was not defined when initializing FeedbackController',
@@ -35,7 +33,8 @@ export class ConsistentEvaluationFeedbackController {
 		this.baseHref = baseHref;
 		this.token = token;
 	}
-	async evalEntity() {
+
+	async requestFeedbackEntity() {
 		const response = await window.D2L.Siren.EntityStore.fetch(this.baseHref, this.token);
 
 		if (!response) {
@@ -44,49 +43,6 @@ export class ConsistentEvaluationFeedbackController {
 		if (!response.entity) {
 			throw new Error(FeedbackControllerErrors.ENTITY_NOT_FOUND_REQUEST_FEEDBACK);
 		}
-		return response.entity;
-	}
-	async requestFeedback() {
-		const response = await this.evalEntity();
-		return response.getSubEntityByRel('feedback');
-	}
-	async updateFeedbackText(feedbackText, entity) {
-		// const response = await window.D2L.Siren.EntityStore.fetch(href, token);
-		// console.log(response);
-		if (typeof feedbackText !== 'string') {
-			throw new Error(FeedbackControllerErrors.INVALID_FEEDBACK_TEXT);
-		}
-		if (!entity) {
-			throw new Error(FeedbackControllerErrors.FEEDBACK_MUST_HAVE_ENTITY);
-		}
-		if (!entity.hasActionByName(saveFeedbackActionName)) {
-			throw new Error(FeedbackControllerErrors.NO_SAVE_FEEDBACK_ACTION);
-		}
-
-		const saveFeedbackAction = entity.getActionByName(saveFeedbackActionName);
-
-		if (!saveFeedbackAction.hasFieldByName(saveFeedbackFieldName)) {
-			throw new Error(FeedbackControllerErrors.FIELD_IN_ACTION_NOT_FOUND(saveFeedbackAction.name, saveFeedbackFieldName));
-		}
-
-		const field = saveFeedbackAction.getFieldByName(saveFeedbackFieldName);
-		field.value = feedbackText;
-		return await performSirenAction(this.token, saveFeedbackAction, [field], true);
-	}
-
-	async saveFeedbackText(feedbackText, entity) {
-		if (typeof feedbackText !== 'string') {
-			throw new Error(FeedbackControllerErrors.INVALID_FEEDBACK_TEXT);
-		}
-		if (!entity) {
-			throw new Error(FeedbackControllerErrors.FEEDBACK_MUST_HAVE_ENTITY);
-		}
-		if (!entity.hasActionByName(saveActionName)) {
-			throw new Error(FeedbackControllerErrors.NO_SAVE_FEEDBACK_ACTION);
-		}
-
-		const saveFeedbackAction = entity.getActionByName(saveActionName);
-
-		return await performSirenAction(this.token, saveFeedbackAction, [], true);
+		return response.entity.getSubEntityByRel('feedback');
 	}
 }

@@ -1,5 +1,5 @@
 // import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { assessmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel } from '../components/controllers/constants.js';
+import { assessmentRel, evaluationRel, nextRel, previousRel, rubricRel } from '../components/controllers/constants.js';
 import { ConsistentEvaluationHrefController, ConsistentEvaluationHrefControllerErrors } from '../components/controllers/ConsistentEvaluationHrefController';
 import { assert } from '@open-wc/testing';
 import sinon from 'sinon';
@@ -51,8 +51,6 @@ describe('ConsistentEvaluationHrefController', () => {
 
 	describe('getHrefs works properly and will set the correct hrefs', () => {
 		const relations = [
-			{ key: 'gradeHref', rel: gradesRel },
-			{ key: 'feedbackHref', rel: feedbackRel },
 			{ key: 'evaluationHref', rel: evaluationRel },
 			{ key: 'nextHref', rel: nextRel },
 			{ key: 'previousHref', rel: previousRel },

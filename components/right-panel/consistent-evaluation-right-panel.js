@@ -5,18 +5,14 @@ import './consistent-evaluation-grade-result.js';
 import '../footer/consistent-evaluation-footer.js';
 import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
-import { RightPanelController } from '../controllers/RightPanelController.js';
-import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
 export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
 			evaluationHref: { type: String },
-			feedbackText: { type: String },
 			rubricHref: { type: String },
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
@@ -26,8 +22,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			hideRubric: { type: Boolean },
 			hideGrade: { type: Boolean },
 			hideFeedback: { type: Boolean },
-			hideOutcomes: { type: Boolean },
-			_richTextEditorConfig: { type: Object }
+			hideOutcomes: { type: Boolean }
 		};
 	}
 
@@ -44,65 +39,15 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 		this._evaluationHref = undefined;
 		this._token = undefined;
-		this._richTextEditorConfig = {};
-		this._debounceJobs = {};
 
 		this.hideRubric = false;
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
-		this.feedbackText = '';
-
-		// window.addEventListener('on-d2l-consistent-evaluation-save-draft', this._saveEvaluationDraft.bind(this));
-	}
-
-	get evaluationHref() {
-		return this._evaluationHref;
-	}
-
-	set evaluationHref(val) {
-		const oldVal = this.evaluationHref;
-		if (oldVal !== val) {
-			this._evaluationHref = val;
-			if (this._evaluationHref && this._token) {
-				if (oldVal) {
-					this.requestUpdate('evaluationHref', oldVal);
-				}
-				else {
-					this._initializeController().then(() => this.requestUpdate());
-				}
-			}
-		}
-	}
-
-	get token() {
-		return this._token;
-	}
-
-	set token(val) {
-		const oldVal = this.token;
-		if (oldVal !== val) {
-			this._token = val;
-			if (this._evaluationHref && this._token) {
-				this._initializeController().then(() => this.requestUpdate());
-			}
-		}
-	}
-
-	async _initializeController() {
-		this._controller = new RightPanelController(this._evaluationHref, this._token);
-		const feedback = await this._controller.requestFeedbackEntity();
-		this.feedbackText = feedback.properties.text ? feedback.properties.text : '';
 	}
 
 	async _transientSaveFeedback(e) {
-		this.feedbackText = e.detail.content;
-
-		this._debounceJobs.feedback = Debouncer.debounce(
-			this._debounceJobs.feedback,
-			timeOut.after(500),
-			async() => { this._emitTransientSaveEvent('on-transient-save-feedback', this.feedbackText); }
-		);
+		this._emitTransientSaveEvent('on-transient-save-feedback', e.detail);
 	}
 
 	async _transientSaveGrade(e) {
@@ -156,13 +101,11 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	_renderFeedback() {
 		if (!this.hideFeedback) {
 			return html`
-				<d2l-consistent-evaluation-feedback-presentational
-					canEditFeedback
-					feedback=${this.feedbackText}
+				<d2l-consistent-evaluation-feedback
 					href=${this.evaluationHref}
 					.token=${this.token}
-					@d2l-activity-text-editor-change="${this._transientSaveFeedback}"
-				></d2l-consistent-evaluation-feedback-presentational>
+					@on-feedback-edit="${this._transientSaveFeedback}"
+				></d2l-consistent-evaluation-feedback>
 			`;
 		}
 

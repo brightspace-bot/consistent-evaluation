@@ -1,6 +1,5 @@
 
 import { ConsistentEvaluationFooterController, ConsistentEvaluationFooterControllerErrors } from '../components/controllers/FooterController';
-import { publishActionName, retractActionName } from '../components/controllers/constants';
 import { assert } from '@open-wc/testing';
 import sinon from 'sinon';
 
@@ -139,84 +138,6 @@ describe('FooterController', () => {
 			assert.equal(entity.properties.state, 'Published');
 
 			controller._requestEvaluationEntity.restore();
-		});
-	});
-
-	describe('publish', () => {
-		it('can publish when action is present', async() => {
-			const controller = new ConsistentEvaluationFooterController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
-
-			const res = await controller.publish({
-				properties: {
-					state: 'Unevaluated'
-				},
-				hasActionByName: (action) => action === publishActionName,
-				getActionByName: () => ({ some: 'action' })
-			});
-
-			assert.isTrue(res);
-
-			controller.__performSirenAction.restore();
-		});
-
-		it('will throw error when action is not present', async() => {
-			const controller = new ConsistentEvaluationFooterController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
-
-			try {
-				await controller.publish({
-					properties: {
-						state: 'Published'
-					},
-					hasActionByName: () => false,
-					getActionByName: () => ({ some: 'action' })
-				});
-				assert.fail();
-			} catch (e) {
-				assert.equal(e.message, ConsistentEvaluationFooterControllerErrors.COULD_NOT_FIND_ACTION(publishActionName));
-			}
-
-			controller.__performSirenAction.restore();
-		});
-	});
-
-	describe('retract', async() => {
-		it('can retract when action is present', async() => {
-			const controller = new ConsistentEvaluationFooterController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
-
-			const res = await controller.retract({
-				properties: {
-					state: 'Published'
-				},
-				hasActionByName: (action) => action === retractActionName,
-				getActionByName: () => ({ some: 'action' })
-			});
-
-			assert.isTrue(res);
-
-			controller.__performSirenAction.restore();
-		});
-
-		it('will throw error when action is not present', async() => {
-			const controller = new ConsistentEvaluationFooterController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
-
-			try {
-				await controller.retract({
-					properties: {
-						state: 'Unevaluated'
-					},
-					hasActionByName: () => false,
-					getActionByName: () => ({ some: 'action' })
-				});
-				assert.fail();
-			} catch (e) {
-				assert.equal(e.message, ConsistentEvaluationFooterControllerErrors.COULD_NOT_FIND_ACTION(retractActionName));
-			}
-
-			controller.__performSirenAction.restore();
 		});
 	});
 });
