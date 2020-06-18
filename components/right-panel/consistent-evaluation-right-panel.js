@@ -2,8 +2,6 @@ import './consistent-evaluation-feedback.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
-import '../footer/consistent-evaluation-footer.js';
-import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
