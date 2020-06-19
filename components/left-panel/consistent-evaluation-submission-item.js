@@ -94,9 +94,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_dispatchRenderEvidenceEvent() {
-		const url = 'attachment.properties.annotationsViewer';
-
+	_dispatchRenderEvidenceEvent(url) {
 		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence', {
 			detail: {
 				url: url
@@ -131,7 +129,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			<div slot="secondary" class="d2l-body-small">${this._getReadableFileSizeString(attachment.properties.size)}</div>
 
 			<d2l-button
-				@click="${this._dispatchRenderEvidenceEvent}">View File
+				@click="${() => this._dispatchRenderEvidenceEvent(attachment.properties.annotationsViewer)}">View File
 			</d2l-button>
 
 			</div>
