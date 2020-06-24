@@ -47,7 +47,9 @@
     "d2l-html-editor": "github:Brightspace/d2l-html-editor#semver:^2",
     "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:^2",
     "d2l-rubric": "github:Brightspace/d2l-rubric#semver:^3",
+    "d2l-table": "github:BrightspaceUI/table#semver:^2",
     "d2l-tooltip": "github:BrightspaceUI/tooltip#semver:^3",
+    "d2l-users": "github:BrightspaceHypermediaComponents/users#semver:^2",
     "lit-element": "^2",
     "mobx": "^5.15.4"
   }
