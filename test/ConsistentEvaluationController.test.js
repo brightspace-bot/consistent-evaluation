@@ -1,4 +1,3 @@
-
 import { ConsistentEvaluationController, ConsistentEvaluationControllerErrors } from '../components/controllers/ConsistentEvaluationController';
 import { publishActionName, retractActionName, saveActionName, saveFeedbackActionName, saveGradeActionName, updateActionName } from '../components/controllers/constants';
 import { assert } from '@open-wc/testing';
@@ -132,7 +131,7 @@ describe('ConsistentEvaluationController', () => {
 	describe('save', () => {
 		it('can save when action is present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			const result = await controller.save({properties: { state: 'Unevaluated' },
 				hasActionByName: (action) => action === saveActionName,
@@ -140,12 +139,12 @@ describe('ConsistentEvaluationController', () => {
 			});
 			assert.isTrue(result);
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 
 		it('will throw error when action is not present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			try {
 				await controller.save({
@@ -160,14 +159,14 @@ describe('ConsistentEvaluationController', () => {
 				assert.equal(e.message, ConsistentEvaluationControllerErrors.ACTION_NOT_FOUND(saveActionName));
 			}
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 	});
 
 	describe('update', () => {
 		it('can update when action is present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			const result = await controller.update({properties: { state: 'Unevaluated' },
 				hasActionByName: (action) => action === updateActionName,
@@ -175,12 +174,12 @@ describe('ConsistentEvaluationController', () => {
 			});
 			assert.isTrue(result);
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 
 		it('will throw error when action is not present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			try {
 				await controller.update({
@@ -195,14 +194,14 @@ describe('ConsistentEvaluationController', () => {
 				assert.equal(e.message, ConsistentEvaluationControllerErrors.ACTION_NOT_FOUND(updateActionName));
 			}
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 	});
 
 	describe('publish', () => {
 		it('can publish when action is present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			const res = await controller.publish({
 				properties: {
@@ -214,12 +213,12 @@ describe('ConsistentEvaluationController', () => {
 
 			assert.isTrue(res);
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 
 		it('will throw error when action is not present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			try {
 				await controller.publish({
@@ -234,14 +233,14 @@ describe('ConsistentEvaluationController', () => {
 				assert.equal(e.message, ConsistentEvaluationControllerErrors.ACTION_NOT_FOUND(publishActionName));
 			}
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 	});
 
 	describe('retract', async() => {
 		it('can retract when action is present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			const res = await controller.retract({
 				properties: {
@@ -253,12 +252,12 @@ describe('ConsistentEvaluationController', () => {
 
 			assert.isTrue(res);
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 
 		it('will throw error when action is not present', async() => {
 			const controller = new ConsistentEvaluationController('href', 'token');
-			sinon.stub(controller, '__performSirenAction').returns(true);
+			sinon.stub(controller, '_performSirenAction').returns(true);
 
 			try {
 				await controller.retract({
@@ -273,7 +272,7 @@ describe('ConsistentEvaluationController', () => {
 				assert.equal(e.message, ConsistentEvaluationControllerErrors.ACTION_NOT_FOUND(retractActionName));
 			}
 
-			controller.__performSirenAction.restore();
+			controller._performSirenAction.restore();
 		});
 	});
 });

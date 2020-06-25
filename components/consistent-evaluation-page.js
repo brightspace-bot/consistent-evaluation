@@ -5,6 +5,7 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
+import { evaluationRel } from './controllers/constants.js';
 
 export default class ConsistentEvaluationPage extends LitElement {
 
@@ -53,8 +54,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 		const oldVal = this.evaluationEntity;
 		if (oldVal !== entity) {
 			this._evaluationEntity = entity;
-			this.evaluationHref = entity.links[1].href;
-			this.requestUpdate('evaluationEntity', oldVal);
+			this.evaluationHref = entity.getLinkByRel(evaluationRel).href;
 		}
 	}
 
@@ -89,7 +89,16 @@ export default class ConsistentEvaluationPage extends LitElement {
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
+		console.log(this.evaluationEntity.getSubEntityByRel('grade'));
 		this.evaluationState = this.evaluationEntity.properties.state;
+	}
+
+	_hasFeedbackComponent() {
+		return this.evaluationEntity && this.evaluationEntity.getSubEntityByRel('feedback') === undefined;
+	}
+
+	_hasGradeComponent() {
+		return this.evaluationEntity && this.evaluationEntity.getSubEntityByRel('grade') === undefined;
 	}
 
 	_onNextStudentClick() {
@@ -148,15 +157,13 @@ export default class ConsistentEvaluationPage extends LitElement {
 						rubricHref=${this.rubricHref}
 						rubricAssessmentHref=${this.rubricAssessmentHref}
 						outcomesHref=${this.outcomesHref}
-						gradeHref=${this.gradeHref}
-						.feedbackHref=${this.feedbackHref}
 						.token=${this.token}
 						?rubricReadOnly=${this.rubricReadOnly}
 						?richTextEditorDisabled=${this.richTextEditorDisabled}
 						?hideRubric=${this.rubricHref === undefined}
-						?hideGrade=${this.gradeHref === undefined}
+						?hideGrade=${this._hasGradeComponent()}
 						?hideOutcomes=${this.outcomesHref === undefined}
-						?hideFeedback=${this.feedbackHref === undefined}
+						?hideFeedback=${this._hasFeedbackComponent()}
 						@on-transient-save-feedback=${this._transientSaveFeedback}
 						@on-transient-save-grade=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>

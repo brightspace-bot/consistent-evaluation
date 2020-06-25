@@ -56,7 +56,7 @@ class ConsistentEvaluationFeedback extends LitElement {
 		this._controller = new ConsistentEvaluationFeedbackController(this._href, this._token);
 
 		this._feedbackEntity = await this._controller.requestFeedbackEntity();
-		this._feedbackText = this._feedbackEntity.properties.text;
+		this._feedbackText = this._feedbackEntity.properties.text || this._feedbackText;
 	}
 
 	_saveOnFeedbackChange(e) {

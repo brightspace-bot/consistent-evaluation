@@ -28,7 +28,9 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		const oldVal = this.submissionList;
 		if (oldVal !== val) {
 			this._submissionList = val;
-			this._initialize().then(() => this.requestUpdate());
+			if (this._submissionList && this._token) {
+				this._initialize().then(() => this.requestUpdate());
+			}
 		}
 	}
 	get token() {
@@ -39,7 +41,9 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		const oldVal = this.token;
 		if (oldVal !== val) {
 			this._token = val;
-			this.requestUpdate();
+			if (this._submissionList && this._token) {
+				this._initialize().then(() => this.requestUpdate());
+			}
 		}
 	}
 

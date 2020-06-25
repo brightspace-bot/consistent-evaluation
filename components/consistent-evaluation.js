@@ -45,7 +45,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-page id='zero'
+			<d2l-consistent-evaluation-page
 				.rubricHref=${this._childHrefs && this._childHrefs.rubricHref}
 				.rubricAssessmentHref=${this._childHrefs && this._childHrefs.rubricAssessmentHref}
 				.outcomesHref=${this._childHrefs && this._childHrefs.outcomesHref}

@@ -52,7 +52,7 @@ export class ConsistentEvaluationController {
 		return evaluationEntity;
 	}
 
-	async __performSirenAction(action, field = null) {
+	async _performSirenAction(action, field = null) {
 		return await performSirenAction(this.token, action, field, true);
 	}
 
@@ -65,10 +65,10 @@ export class ConsistentEvaluationController {
 				} else {
 					const field = action.getFieldByName(fieldName);
 					field.value = fieldValue;
-					return await this.__performSirenAction(action, [field]);
+					return await this._performSirenAction(action, [field]);
 				}
 			} else {
-				return await this.__performSirenAction(action);
+				return await this._performSirenAction(action);
 			}
 		} else {
 			throw new Error(ConsistentEvaluationControllerErrors.ACTION_NOT_FOUND(actionName));
