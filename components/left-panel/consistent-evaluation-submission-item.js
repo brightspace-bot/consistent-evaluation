@@ -124,13 +124,14 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			this._date,
 			{format: 'full'}
 		);
+		const text = this.submissionType === 'Text submission' ? 'Text ' : '';
 		return html`
 		<d2l-list-item>
 		<d2l-list-item-content>
-		<h3 class="d2l-heading-3">Submission ${this.displayNumber}</h3>
+		<h3 class="d2l-heading-3">${text}Submission ${this.displayNumber}</h3>
 		<div class="d2l-body-small">
 		${this._renderStatus()}
-		<d2l-status-indicator state="default" text="${this.evaluationState}"></d2l-status-indicator>
+		${this._renderEvaluationState()}
 		${date}</div>
 		</d2l-list-item-content>
 		${this._addActionsForTextSubmission()}
@@ -142,6 +143,15 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			return html`<d2l-status-indicator state="alert" text="Late" bold></d2l-status-indicator>`;
 		} else {
 			return html ``;
+		}
+	}
+
+	_renderEvaluationState() {
+		// TODO: compare submission date vs evaluation published date to determine if new submission
+		if (this.evaluationState) {
+			return html`<d2l-status-indicator state="default" text="${this.evaluationState}"></d2l-status-indicator>`;
+		} else {
+			return html``;
 		}
 	}
 
