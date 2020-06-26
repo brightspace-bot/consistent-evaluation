@@ -27,8 +27,22 @@ export class ConsistentEvaluationDiscussionEvidence extends LitElement {
 	}
 
 	_buildPostList() {
+		const post1 = {};
+		post1.title = 'Post 1';
+		post1.body = 'The body of the first post';
+		post1.wordCount = 6;
+		post1.href = 'https://www.mlb.com';
+		post1.date = 'June 12, 2020 - 10:17 AM';
+
+		const post2 = {};
+		post2.title = 'Post 2';
+		post2.body = 'Second post';
+		post2.wordCount = 2;
+		post2.href = 'https://www.nfl.com';
+		post2.date = 'March 7, 2016 - 12:20 AM';
+
 		return [
-			'post1', 'post2', 'post3'
+			post1, post2
 		];
 	}
 

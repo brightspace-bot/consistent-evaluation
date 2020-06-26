@@ -1,4 +1,5 @@
 import 'd2l-users/components/d2l-profile-image.js';
+import { bodyCompactStyles, bodySmallStyles, bodyStandardStyles  } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { d2lTableStyles } from './styles/d2l-table-styles.js';
 import { inputLabelStyles } from '@brightspace-ui/core/components/inputs/input-label-styles.js';
@@ -19,6 +20,9 @@ export class ConsistentEvaluationDiscussionEvidencePresentational extends RtlMix
 		return [d2lTableStyles,
 			inputLabelStyles,
 			selectStyles,
+			bodySmallStyles,
+			bodyCompactStyles,
+			bodyStandardStyles,
 			css`
 				.d2l-consistent-evaluation-discussion-evidence-container {
 					display: grid;
@@ -58,7 +62,11 @@ export class ConsistentEvaluationDiscussionEvidencePresentational extends RtlMix
 	_renderDiscussionPosts() {
 		return html`${this.posts.map((post) => html`
 			<tr>
-				<td>${post}</td>
+				<td>
+					<a href="${post.href}">${post.title}</a>
+					<span class="d2l-body-compact"> - <i>${post.date}</i> &#149; ${post.wordCount} words</div>
+					<div class="d2l-body-small">${post.body}</div>
+				</td>
 			</tr>
 		`)}`;
 	}
@@ -74,7 +82,8 @@ export class ConsistentEvaluationDiscussionEvidencePresentational extends RtlMix
 				></d2l-profile-image>
 
 				<div class="d2l-consistent-evaluation-discussion-evidence-profile-user">
-					${this.userName}
+					<div class="d2l-body-standard">${this.userName}</div>
+					<div class="d2l-body-small">${this.posts.length} posts, 0 replies</div>
 				</div>
 
 				<div class="d2l-consistent-evaluation-discussion-evidence-profile-posts-sort-order">
