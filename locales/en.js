@@ -14,4 +14,7 @@ export const val = {
 	publish: 'Publish',
 	saveDraft: 'Save Draft',
 	update: 'Update',
+	kB: ' kB',
+	MB: ' MB',
+	GB: ' GB'
 };

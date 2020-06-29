@@ -88,4 +88,19 @@ export class ConsistentEvaluationHrefController {
 			rubricHref
 		};
 	}
+
+	async getSubmissionInfo() {
+		let root = await this._getRootEntity(false);
+		let submissionList = undefined;
+		let evaluationState = undefined;
+		if (root && root.entity) {
+			root = root.entity;
+			submissionList = root.getSubEntityByClass('assignment-submission-list').links;
+			evaluationState = root.getSubEntityByClass('evaluation').properties.state;
+		}
+		return {
+			submissionList,
+			evaluationState
+		};
+	}
 }
