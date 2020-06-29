@@ -16,7 +16,7 @@ describe('d2l-consistent-evaluation', () => {
 		await visualDiff.disableAnimations(page);
 	});
 
-	after(() => browser.close());
+	after(async() => await browser.close());
 
 	it('renders the right panel', async function() {
 		const rect = await visualDiff.getRect(page, '#default');
