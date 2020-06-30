@@ -48,7 +48,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 				<d2l-activity-text-editor
 					.value="${this.feedbackText}"
-					.rich-text-editor-config="${this.richTextEditorConfig}"
+					.richtextEditorConfig="${this.richTextEditorConfig}"
 					ariaLabel="${this.localize('overallFeedback')}"
 					?disabled="${!this.canEditFeedback}">
 				</d2l-activity-text-editor>
