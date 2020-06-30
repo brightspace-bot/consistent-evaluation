@@ -89,7 +89,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
-		console.log(this.evaluationEntity.getSubEntityByRel('grade'));
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
