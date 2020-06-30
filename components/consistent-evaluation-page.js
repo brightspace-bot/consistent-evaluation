@@ -9,18 +9,53 @@ export default class ConsistentEvaluationPage extends LitElement {
 
 	static get properties() {
 		return {
-			rubricHref: { type: String },
-			rubricAssessmentHref: { type: String },
-			outcomesHref: { type: String },
-			gradeHref: { type: String },
-			feedbackHref: { type: String },
-			evaluationHref: { type: String },
-			nextStudentHref: { type: String },
-			token: { type: String },
-			rubricReadOnly: { type: Boolean },
-			richTextEditorDisabled: { type: Boolean },
-			submissionList: { type: Array },
-			evaluationState: { type: String }
+			rubricHref: {
+				attribute: 'rubric-href',
+				type: String
+			},
+			rubricAssessmentHref: {
+				attribute: 'rubric-assessment-href',
+				type: String
+			},
+			outcomesHref: {
+				attribute: 'outcomes-href',
+				type: String
+			},
+			gradeHref: {
+				attribute: 'grade-href',
+				type: String
+			},
+			feedbackHref: {
+				attribute: 'feedback-href',
+				type: String
+			},
+			evaluationHref: {
+				attribute: 'evaluation-href',
+				type: String
+			},
+			nextStudentHref: {
+				attribute: 'next-student-href',
+				type: String
+			},
+			token: {
+				type: String
+			},
+			rubricReadOnly: {
+				attribute: 'rubric-read-only',
+				type: Boolean
+			},
+			richTextEditorDisabled: {
+				attribute: 'rich-text-editor-disabled',
+				type: Boolean
+			},
+			submissionList: {
+				attribute: 'submission-list',
+				type: Array
+			},
+			evaluationState: {
+				attribute: 'evaluation-state',
+				type: String
+			}
 		};
 	}
 
@@ -43,31 +78,31 @@ export default class ConsistentEvaluationPage extends LitElement {
 					<div>
 						<span>evidence</span>
 						<d2l-consistent-evaluation-submissions-page
-						.submissionList=${this.submissionList}
-						evaluationState=${this.evaluationState}
+						.submission-list=${this.submissionList}
+						evaluation-state=${this.evaluationState}
 						.token=${this.token}></d2l-consistent-evaluation-submissions-page>
 					</div>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
-						rubricHref=${this.rubricHref}
-						rubricAssessmentHref=${this.rubricAssessmentHref}
-						outcomesHref=${this.outcomesHref}
-						gradeHref=${this.gradeHref}
-						feedbackHref=${this.feedbackHref}
+						rubric-href=${this.rubricHref}
+						rubric-assessment-href=${this.rubricAssessmentHref}
+						outcomes-href=${this.outcomesHref}
+						grade-href=${this.gradeHref}
+						feedback-href=${this.feedbackHref}
 						.token=${this.token}
-						?rubricReadOnly=${this.rubricReadOnly}
-						?richTextEditorDisabled=${this.richTextEditorDisabled}
-						?hideRubric=${this.rubricHref === undefined}
-						?hideGrade=${this.gradeHref === undefined}
-						?hideOutcomes=${this.outcomesHref === undefined}
-						?hideFeedback=${this.feedbackHref === undefined}
+						?rubric-read-only=${this.rubricReadOnly}
+						?rich-text-editor-disabled=${this.richTextEditorDisabled}
+						?hide-rubric=${this.rubricHref === undefined}
+						?hide-grade=${this.gradeHref === undefined}
+						?hide-outcomes=${this.outcomesHref === undefined}
+						?hide-feedback=${this.feedbackHref === undefined}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
 					<d2l-consistent-evaluation-footer
-						.evaluationHref=${this.evaluationHref}
-						.nextStudentHref=${this.nextStudentHref}
+						.evaluation-href=${this.evaluationHref}
+						.nextStudent-href=${this.nextStudentHref}
 						.token=${this.token}
 					></d2l-consistent-evaluation-footer>
 				</div>

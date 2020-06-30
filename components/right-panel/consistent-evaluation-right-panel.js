@@ -11,19 +11,56 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
-			rubricHref: { type: String },
-			rubricAssessmentHref: { type: String },
-			outcomesHref: { type: String },
-			gradeHref: { type: String },
-			feedbackHref: { type: String },
-			token: { type: String },
-			rubricReadOnly: { type: Boolean },
-			richTextEditorDisabled: { type: Boolean },
-			hideRubric: { type: Boolean },
-			hideGrade: { type: Boolean },
-			hideFeedback: { type: Boolean },
-			hideOutcomes: { type: Boolean },
-			_richTextEditorConfig: { type: Object }
+			rubricHref: {
+				attribute: 'rubric-href',
+				type: String
+			},
+			rubricAssessmentHref: {
+				attribute: 'rubric-assessment-href',
+				type: String
+			},
+			outcomesHref: {
+				attribute: 'outcomes-href',
+				type: String
+			},
+			gradeHref: {
+				attribute: 'grade-href',
+				type: String
+			},
+			feedbackHref: {
+				attribute: 'feedback-href',
+				type: String
+			},
+			token: {
+				type: String
+			},
+			rubricReadOnly: {
+				attribute: 'rubric-read-only',
+				type: Boolean
+			},
+			richTextEditorDisabled: {
+				attribute: 'rich-text-editor-disabled',
+				type: Boolean
+			},
+			hideRubric: {
+				attribute: 'hide-rubric',
+				type: Boolean
+			},
+			hideGrade: {
+				attribute: 'hide-grade',
+				type: Boolean
+			},
+			hideFeedback: {
+				attribute: 'hide-feedback',
+				type: Boolean
+			},
+			hideOutcomes: {
+				attribute: 'hide-outcomes',
+				type: Boolean
+			},
+			_richTextEditorConfig: {
+				type: Object
+			}
 		};
 	}
 
@@ -52,9 +89,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-rubric
 					header=${this.localize('rubrics')}
 					href=${this.rubricHref}
-					assessmentHref=${this.rubricAssessmentHref}
+					assessment-href=${this.rubricAssessmentHref}
 					.token=${this.token}
-					?readonly=${this.rubricReadOnly}
+					?read-only=${this.rubricReadOnly}
 				></d2l-consistent-evaluation-rubric>
 			`;
 		}

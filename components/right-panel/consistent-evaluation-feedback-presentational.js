@@ -8,12 +8,28 @@ import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
-			canEditFeedback: { type: Boolean },
-			feedbackText: { type: String },
-			href: { type: String },
-			richTextEditorConfig: { type: Object },
-			saveOnFeedbackChange: { type: Object },
-			token: { type: String }
+			canEditFeedback: {
+				attribute: 'can-edit-feedback',
+				type: Boolean
+			},
+			feedbackText: {
+				attribute: 'feedback-text',
+				type: String
+			},
+			href: {
+				type: String
+			},
+			richTextEditorConfig: {
+				attribute: 'rich-text-editor-config',
+				type: Object
+			},
+			saveOnFeedbackChange: {
+				attribute: 'save-on-feedback-change',
+				type: Object
+			},
+			token: {
+				type: String
+			}
 		};
 	}
 
@@ -32,8 +48,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 				<d2l-activity-text-editor
 					.value="${this.feedbackText}"
-					.richtextEditorConfig="${this.richTextEditorConfig}"
-
+					.rich-text-editor-config="${this.richTextEditorConfig}"
 					ariaLabel="${this.localize('overallFeedback')}"
 					?disabled="${!this.canEditFeedback}">
 				</d2l-activity-text-editor>

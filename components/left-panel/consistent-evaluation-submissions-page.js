@@ -7,9 +7,17 @@ import { html, LitElement } from 'lit-element/lit-element.js';
 export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get properties() {
 		return {
-			submissionList: { type: Array },
-			token: { type: String },
-			evaluationState: { type: String }
+			submissionList: {
+				attribute: 'submission-list',
+				type: Array
+			},
+			token: {
+				type: String
+			},
+			evaluationState: {
+				attribute: 'evaluation-state',
+				type: String
+			}
 		};
 	}
 
@@ -66,10 +74,10 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 				itemTemplate.push(html`
 				<d2l-list-item>
 				<d2l-consistent-evaluation-submission-item
-					.assignmentSubmission=${assignmentSubmission}
-					.displayNumber=${this._submissionEntities.length - i}
-					dateStr=${assignmentSubmission.getSubEntityByClass('date').properties.date}
-					evaluationState=${this.evaluationState}
+					.assignment-submission=${assignmentSubmission}
+					.display-number=${this._submissionEntities.length - i}
+					date-str=${assignmentSubmission.getSubEntityByClass('date').properties.date}
+					evaluation-state=${this.evaluationState}
 				></d2l-consistent-evaluation-submission-item>
 				</d2l-list-item>`);
 			}

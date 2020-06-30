@@ -6,11 +6,23 @@ export class ConsistentEvaluationFooter extends LitElement {
 
 	static get properties() {
 		return {
-			evaluationHref: { type: String },
-			nextStudentHref: { type: String },
-			token: { type: String },
-			_controller: { type: Object },
-			_evaluationEntity: { type: Object }
+			evaluationHref: {
+				attribute: 'evaluation-href',
+				type: String
+			},
+			nextStudentHref: {
+				attribute: 'next-student-href',
+				type: String
+			},
+			token: {
+				type: String
+			},
+			_controller: {
+				type: Object
+			},
+			_evaluationEntity: {
+				type: Object
+			}
 		};
 	}
 
@@ -93,7 +105,7 @@ export class ConsistentEvaluationFooter extends LitElement {
 		return html`
 			<d2l-consistent-evaluation-footer-presentational
 				?published=${this._isEntityPublished()}
-				?showNextStudent=${this.nextStudentHref !== undefined}
+				?show-next-student=${this.nextStudentHref !== undefined}
 				@on-publish=${this._onPublishClick}				
 				@on-save-draft=${this._onSaveDraftClick}
 				@on-retract=${this._onRetractClick}
