@@ -1,12 +1,18 @@
 import '@brightspace-ui/core/components/button/button-icon.js';
+import '@brightspace-ui/core/components/colors/colors.js';
+import '@brightspace-ui/core/components/dropdown/dropdown-more.js';
+import '@brightspace-ui/core/components/dropdown/dropdown-menu.js';
 import '@brightspace-ui/core/components/icons/icon.js';
 import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/list/list-item-content.js';
+import '@brightspace-ui/core/components/menu/menu.js';
+import '@brightspace-ui/core/components/menu/menu-item-link.js';
 import '@brightspace-ui/core/components/more-less/more-less.js';
 import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
 import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDateTime } from '@brightspace-ui/intl/lib/dateTime.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
@@ -27,17 +33,15 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	static get styles() {
 		return [heading3Styles, labelStyles, bodySmallStyles, css`
 		:host {
-			background-color: #ffffff;
+			background-color: white;
 			border: 1px solid var(--d2l-color-gypsum);
 			border-radius: 6px;
 			box-sizing: border-box;
 			display: flex;
 			flex-direction: column;
 			position: relative;
-			z-index: 0;
 		}
 		.d2l-heading-3 {
-			padding: 0;
 			margin: 0;
 		}
 		.consistent-eval-submission-attachment-item {
@@ -119,35 +123,63 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_renderTitle() {
+	_renderFileSubmissionTitle() {
 		const date = formatDateTime(
 			this._date,
 			{format: 'full'}
 		);
-		const text = this.submissionType === 'Text submission' ? 'Text ' : '';
 		return html`
 		<d2l-list-item>
 		<d2l-list-item-content>
-		<h3 class="d2l-heading-3">${text}Submission ${this.displayNumber}</h3>
-		<div class="d2l-body-small">
-		${this._renderStatus()}
-		${this._renderEvaluationState()}
-		${date}</div>
+			<h3 class="d2l-heading-3">${this.localize('submission')} ${this.displayNumber}</h3>
+			<div class="d2l-body-small">
+				${this._renderLateStatus()}
+				${this._renderEvaluationState()}
+				${date}
+			</div>
+		</d2l-list-item-content>
+		</d2l-list-item>`;
+	}
+
+	_renderTextSubmissionTitle() {
+		const date = formatDateTime(
+			this._date,
+			{format: 'full'}
+		);
+		// There is only one attachment for text submissions: an html file
+		const flagged = this._attachments[0].properties.flagged;
+		const read = this._attachments[0].properties.read;
+		return html`
+		<d2l-list-item>
+		<d2l-list-item-content>
+			<h3 class="d2l-heading-3">${this.localize('textSubmission')} ${this.displayNumber}${this._renderReadStatus(read)}</h3>
+			<div class="d2l-body-small">
+				${this._renderLateStatus()}
+				${this._renderEvaluationState()}
+				${this._renderFlaggedStatus(flagged)}
+				${date}
+			</div>
 		</d2l-list-item-content>
 		${this._addActionsForTextSubmission()}
 		</d2l-list-item>`;
 	}
 
-	_renderStatus() {
+	_renderReadStatus(read) {
+		if (!read) {
+			return html`<d2l-icon icon="tier1:dot" style="color: #E87511; vertical-align: top; position: relative; top: 0px;
+			right: 0px;"></d2l-icon>`;
+		}
+	}
+
+	_renderLateStatus() {
 		if (this.late) {
-			return html`<d2l-status-indicator state="alert" text="Late" bold></d2l-status-indicator>`;
+			return html`<d2l-status-indicator state="alert" text="${this.localize('late')}" bold></d2l-status-indicator>`;
 		} else {
 			return html ``;
 		}
 	}
 
 	_renderEvaluationState() {
-		// TODO: compare submission date vs evaluation published date to determine if new submission
 		if (this.evaluationState) {
 			return html`<d2l-status-indicator state="default" text="${this.evaluationState}"></d2l-status-indicator>`;
 		} else {
@@ -155,13 +187,30 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		}
 	}
 
+	_renderFlaggedStatus(flag) {
+		if (flag) {
+			return html`<d2l-status-indicator state="alert" text="${this.localize('flagged')}"></d2l-status-indicator>`;
+		}
+	}
+
 	_addActionsForTextSubmission() {
+		//Placeholder for menu presentational
 		if (this.submissionType === 'Text submission') {
 			return html`
-			<div slot="actions">
-				<d2l-button-icon icon="tier1:more"></d2l-button-icon>
+			<div slot="actions" style="z-index: inherit;">
+			<d2l-dropdown-more text="More Options">
+  			<d2l-dropdown-menu>
+				<d2l-menu>
+				<d2l-menu-item-link text="Download" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
+				<d2l-menu-item-link text="Mark as Read" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
+				<d2l-menu-item-link text="Flag" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
+				<d2l-menu-item-link text="Edit a Copy" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
+				</d2l-menu>
+			</d2l-dropdown-menu>
+
+			</d2l-dropdown-more>
 			</div>
-			</d2l-list-item>`;
+			`;
 		} else {
 			return html``;
 		}
@@ -171,28 +220,49 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return html`${this._attachments.map((file) => html`
 			<d2l-list-item class="consistent-eval-submission-attachment-item-container">
 			<d2l-list-item-content>
-			<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(file.properties.name)}"></d2l-icon>
-			<div class="consistent-eval-submission-attachment-item">
-				<a href="${file.properties.href}"><span>${this._getFileTitle(file.properties.name)}</span></a>
-				<div slot="secondary" class="d2l-body-small">${this._getFileType(file.properties.name)}
-					<d2l-icon icon="tier1:dot"></d2l-icon>${this._getReadableFileSizeString(file.properties.size)}
+				<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(file.properties.name)}">
+				</d2l-icon>
+				${this._renderReadStatus(file.properties.read)}
+				<div class="consistent-eval-submission-attachment-item">
+					<span>${this._getFileTitle(file.properties.name)}</span>
+					<div slot="secondary" class="d2l-body-small">
+						${this._renderFlaggedStatus(file.properties.flagged)}
+						${this._getFileType(file.properties.name)}
+						<d2l-icon icon="tier1:dot"></d2l-icon>${this._getReadableFileSizeString(file.properties.size)}
+					</div>
 				</div>
-			</div>
 			</d2l-list-item-content>
+			${this._addActionsForFileSubmission(file.properties.href)}
+			</d2l-list-item>
+			`)}`;
+	}
 
-			<div slot="actions">
-				<d2l-button-icon icon="tier1:more"></d2l-button-icon>
-			</div>
-			</d2l-list-item>`)}`;
+	_addActionsForFileSubmission(downloadHref) {
+		// Placeholder for menu presentational
+		return html`<div slot="actions" style="z-index: inherit;">
+			<d2l-dropdown-more text="More Options">
+			<d2l-dropdown-menu id="dropdown">
+				<d2l-menu label="Options">
+					<d2l-menu-item-link text="Download" href="${downloadHref}"></d2l-menu-item-link>
+					<d2l-menu-item-link text="Mark as Read" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
+					<d2l-menu-item-link text="Flag" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
+					<d2l-menu-item-link text="Edit a Copy" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
+				</d2l-menu>
+			</d2l-dropdown-menu>
+			</d2l-dropdown-more>
+			</div>`;
 	}
 
 	_renderComment() {
-		const peekHeight = this.submissionType === 'File submission' ? '5em' : '8em';
+		const peekHeight = this.submissionType === fileSubmission ? '5em' : '8em';
 		if (this._comment) {
 			return html`
-				<d2l-list-item><d2l-list-item-content>
-				${this._renderCommentTitle()}
-				<div slot="secondary"><d2l-more-less height='${peekHeight}' h-align>${unsafeHTML(this._comment)}</d2l-more-less></div>
+				<d2l-list-item>
+				<d2l-list-item-content>
+					${this._renderCommentTitle()}
+					<div slot="secondary">
+						<d2l-more-less height='${peekHeight}' h-align>${unsafeHTML(this._comment)}</d2l-more-less>
+					</div>
 				</d2l-list-item-content>
 				</d2l-list-item>`;
 		}
@@ -200,8 +270,8 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	}
 
 	_renderCommentTitle() {
-		if (this.submissionType === 'File submission') {
-			return html`<div class="d2l-label-text">Comments</div>`;
+		if (this.submissionType === fileSubmission) {
+			return html`<div class="d2l-label-text">${this.localize('comments')}</div>`;
 		} else {
 			return html``;
 		}
@@ -209,9 +279,9 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	_renderFileSubmission() {
 		return html`
-		${this._renderTitle()}
+		${this._renderFileSubmissionTitle()}
 		<d2l-list separators="between">
-		${this._renderAttachments()}
+			${this._renderAttachments()}
 		</d2l-list>
 		${this._renderComment()}
 		`;
@@ -219,15 +289,15 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	_renderTextSubmission() {
 		return html`
-		${this._renderTitle()}
+		${this._renderTextSubmissionTitle()}
 		${this._renderComment()}
 		`;
 	}
 
 	render() {
-		if (this.submissionType === 'File submission') {
+		if (this.submissionType === fileSubmission) {
 			return html`${this._renderFileSubmission()}`;
-		} else if (this.submissionType === 'Text submission') {
+		} else if (this.submissionType === textSubmission) {
 			return html`${this._renderTextSubmission()}`;
 		}
 	}

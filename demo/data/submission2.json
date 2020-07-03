@@ -21,6 +21,8 @@
           "properties": {
             "name": "Test doc.pdf",
             "size": 124499,
+            "flagged": true,
+            "read": true,
             "href": "http://wvd-cc-dev-016.desire2learn.d2l:44444/d2l/common/viewFile.d2lfile/Database/ODM/Test%20doc.pdf?ou=6609",
             "annotationsViewer": "//s.brightspace.com/apps/annotations-viewer/1.13.1/index.html?dropboxId=1&entityId=10183&fileId=83&submissionId=6&ou=6609&host=http://wvd-cc-dev-016.desire2learn.d2l:44444"
           },

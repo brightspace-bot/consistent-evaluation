@@ -21,6 +21,7 @@
           "properties": {
             "name": "errors.png",
             "size": 544589,
+            "flagged": true,
             "href": "http://wvd-cc-dev-016.desire2learn.d2l:44444/d2l/common/viewFile.d2lfile/Database/ODA/errors.png?ou=6609",
             "annotationsViewer": "//s.brightspace.com/apps/annotations-viewer/1.13.1/index.html?dropboxId=1&entityId=10183&fileId=80&submissionId=5&ou=6609&host=http://wvd-cc-dev-016.desire2learn.d2l:44444"
           },

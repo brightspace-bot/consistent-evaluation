@@ -1,5 +1,6 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { assessmentRel, assignmentRel, evaluationRel, evaluationSubEntityRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel, submissionsRel } from './constants.js';
+import { assessmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel } from './constants.js';
+import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
 	INVALID_BASE_HREF: 'baseHref was not defined when initializing ConsistentEvaluationHrefController',
@@ -29,6 +30,12 @@ export class ConsistentEvaluationHrefController {
 		this.baseHref = baseHref;
 		this.token = token;
 	}
+	_getHref(root, rel) {
+		if (root.hasLinkByRel(rel)) {
+			return root.getLinkByRel(rel).href;
+		}
+		return undefined;
+	}
 
 	// these are in their own methods so that they can easily be stubbed in testing
 	async _getRootEntity(bypassCache) {
@@ -53,24 +60,17 @@ export class ConsistentEvaluationHrefController {
 		if (root && root.entity) {
 			root = root.entity;
 
-			const getHref = (root, rel) => {
-				if (root.hasLinkByRel(rel)) {
-					return root.getLinkByRel(rel).href;
-				}
-				return undefined;
-			};
-
-			gradeHref = getHref(root, gradesRel);
-			feedbackHref = getHref(root, feedbackRel);
-			evaluationHref = getHref(root, evaluationRel);
-			nextHref = getHref(root, nextRel);
-			previousHref = getHref(root, previousRel);
-			rubricAssessmentHref = getHref(root, assessmentRel);
+			gradeHref = this._getHref(root, gradesRel);
+			feedbackHref = this._getHref(root, feedbackRel);
+			evaluationHref = this._getHref(root, evaluationRel);
+			nextHref = this._getHref(root, nextRel);
+			previousHref = this._getHref(root, previousRel);
+			rubricAssessmentHref = this._getHref(root, assessmentRel);
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
 				if (assessmentEntity && assessmentEntity.entity) {
-					rubricHref = getHref(assessmentEntity.entity, rubricRel);
+					rubricHref = this._getHref(assessmentEntity.entity, rubricRel);
 				}
 			}
 		}
@@ -92,21 +92,18 @@ export class ConsistentEvaluationHrefController {
 	async getSubmissionInfo() {
 		let root = await this._getRootEntity(false);
 		let submissionList, evaluationState, submissionType, dueDate;
-		const getHref = (root, rel) => {
-			if (root.hasLinkByRel(rel)) {
-				return root.getLinkByRel(rel).href;
-			}
-			return undefined;
-		};
 		if (root && root.entity) {
 			root = root.entity;
-			submissionList = root.getSubEntityByRel(submissionsRel).links;
-			evaluationState = root.getSubEntityByRel(evaluationSubEntityRel).properties.state;
-			dueDate = root.getSubEntityByClass('due-date');
-			if (dueDate) {
-				dueDate = dueDate.properties.date;
+			if (root.getSubEntityByClass(Classes.assignments.submissionList)) {
+				submissionList = root.getSubEntityByClass(Classes.assignments.submissionList).links;
 			}
-			const assignmentHref = getHref(root, assignmentRel);
+			if (root.getSubEntityByRel(Rels.evaluation)) {
+				evaluationState = root.getSubEntityByRel(Rels.evaluation).properties.state;
+			}
+			if (root.getSubEntityByClass(Classes.dates.dueDate)) {
+				dueDate = root.getSubEntityByClass(Classes.dates.dueDate).properties.date;
+			}
+			const assignmentHref = this._getHref(root, Rels.assignment);
 			if (assignmentHref) {
 				const assignmentEntity = await this._getEntityFromHref(assignmentHref, false);
 				if (assignmentEntity && assignmentEntity.entity) {

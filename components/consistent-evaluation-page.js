@@ -19,10 +19,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
-			submissionList: { type: Array },
-			evaluationState: { type: String },
-			submissionType: { type: String },
-			activityDueDate: { type: Object }
+			submissionInfo: { type: Object }
 		};
 	}
 
@@ -45,14 +42,12 @@ export default class ConsistentEvaluationPage extends LitElement {
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
-					<div>
-						<d2l-consistent-evaluation-submissions-page
-						.dueDate=${this.activityDueDate}
-						evaluationState=${this.evaluationState}
-						submissionType=${this.submissionType}
-						.submissionList=${this.submissionList}
-						.token=${this.token}></d2l-consistent-evaluation-submissions-page>
-					</div>
+					<d2l-consistent-evaluation-submissions-page
+					.dueDate=${this.submissionInfo.dueDate}
+					evaluationState=${this.submissionInfo.evaluationState}
+					submissionType=${this.submissionInfo.submissionType}
+					.submissionList=${this.submissionInfo.submissionList}
+					.token=${this.token}></d2l-consistent-evaluation-submissions-page>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel

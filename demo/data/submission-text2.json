@@ -21,6 +21,7 @@
           "properties": {
             "name": "Text trial-Jun 25, 2020 1035 AM.html",
             "size": 54,
+            "flagged": true,
             "href": "http://wvd-cc-dev-016.desire2learn.d2l:44444/d2l/common/viewFile.d2lfile/Database/ODU/Text%20trial-Jun%2025,%202020%201035%20AM.html?ou=6609",
             "annotationsViewer": "//s.brightspace.com/apps/annotations-viewer/1.13.1/index.html?dropboxId=3&entityId=10187&fileId=85&submissionId=8&ou=6609&host=http://wvd-cc-dev-016.desire2learn.d2l:44444"
           },

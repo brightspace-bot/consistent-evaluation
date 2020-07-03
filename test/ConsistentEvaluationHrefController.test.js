@@ -1,5 +1,5 @@
-// import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { assessmentRel, assignmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel, submissionsRel } from '../components/controllers/constants.js';
+import { assessmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel } from '../components/controllers/constants.js';
+import { Classes, Rels } from 'd2l-hypermedia-constants';
 import { ConsistentEvaluationHrefController, ConsistentEvaluationHrefControllerErrors } from '../components/controllers/ConsistentEvaluationHrefController';
 import { assert } from '@open-wc/testing';
 import sinon from 'sinon';
@@ -144,11 +144,10 @@ describe('ConsistentEvaluationHrefController', () => {
 			const controller = new ConsistentEvaluationHrefController('href', 'token');
 			sinon.stub(controller, '_getRootEntity').returns({
 				entity: {
-					hasLinkByRel: (r) => r === assignmentRel,
-					getLinkByRel: (r) => (r === assignmentRel ? { href: assignmentHref } : undefined),
-					getSubEntityByClass: (r) => (r === 'due-date' ? { properties: { date: expectedDueDate } } : undefined),
-					getSubEntityByRel: (r) => (r === submissionsRel ? { links: expectedSubmissions } :
-						{ properties: {state: expectedEvaluationState}})
+					hasLinkByRel: (r) => r === Rels.assignment,
+					getLinkByRel: (r) => (r === Rels.assignment ? { href: assignmentHref } : undefined),
+					getSubEntityByClass: (r) => (r === Classes.dates.dueDate ? { properties: { date: expectedDueDate } } : { links: expectedSubmissions }),
+					getSubEntityByRel: (r) => (r === Rels.evaluation ? { properties: {state: expectedEvaluationState}} : undefined)
 				}
 			});
 			sinon.stub(controller, '_getEntityFromHref').returns({

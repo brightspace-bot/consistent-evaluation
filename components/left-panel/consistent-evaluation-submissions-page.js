@@ -4,6 +4,7 @@ import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { Classes } from 'd2l-hypermedia-constants';
 
 export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get properties() {
@@ -20,14 +21,15 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return css`
 			:host {
 				display: inline-block;
+				position: relative;
 				background-color: var(--d2l-color-sylvite);
 			}
 			:host([hidden]) {
 				display: none;
 			}
 			d2l-consistent-evaluation-submission-item {
-				padding: 1rem;
-				margin: 1rem;
+				padding: 0.5rem;
+				margin: 0.5rem;
 			}
 		`;
 	}
@@ -86,16 +88,27 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		for (let i = 0; i < this._submissionEntities.length; i++) {
 			if (this._submissionEntities[i].entity) {
 				const submissionEntity = this._submissionEntities[i].entity;
-				const submissionDate = submissionEntity.getSubEntityByClass('submission-date').properties.date;
-				itemTemplate.push(html`
-					<d2l-consistent-evaluation-submission-item
-						dateStr=${submissionDate}
-						.displayNumber=${this._submissionEntities.length - i}
-						evaluationState=${this.evaluationState}
-						?late=${new Date(this.dueDate) < new Date(submissionDate)}
-						.submissionEntity=${submissionEntity}
-						submissionType=${this.submissionType}
-					></d2l-consistent-evaluation-submission-item>`);
+				if (submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate)) {
+					const submissionDate = submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
+					itemTemplate.push(html`
+						<d2l-consistent-evaluation-submission-item
+							dateStr=${submissionDate}
+							.displayNumber=${this._submissionEntities.length - i}
+							evaluationState=${this.evaluationState}
+							?late=${new Date(this.dueDate) < new Date(submissionDate)}
+							.submissionEntity=${submissionEntity}
+							submissionType=${this.submissionType}
+						></d2l-consistent-evaluation-submission-item>`);
+				} else {
+					itemTemplate.push(html`
+						<d2l-consistent-evaluation-submission-item
+							.displayNumber=${this._submissionEntities.length - i}
+							evaluationState=${this.evaluationState}
+							.submissionEntity=${submissionEntity}
+							submissionType=${this.submissionType}
+						></d2l-consistent-evaluation-submission-item>`);
+					throw new Error('Consistent Evaluation submission date property not found');
+				}
 			}
 		}
 		return html`${itemTemplate}`;
