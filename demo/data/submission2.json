@@ -71,8 +71,8 @@
         "https://assignments.api.brightspace.com/rels/submission-comment"
       ],
       "properties": {
-        "text": "the PDF version of the test doc!!!!!",
-        "html": "<p><span style=\"font-size: 24pt;\">the PDF version of the test doc!!!!!</span></p>"
+        "text": "",
+        "html": ""
       }
     }
   ]

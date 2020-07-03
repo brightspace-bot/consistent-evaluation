@@ -95,6 +95,8 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		}
 	}
 
+	//Helper methods
+
 	_getIcon(filename) {
 		const ext = this._getFileType(filename);
 		if (ext === 'PNG' || ext === 'JPG' || ext === 'TIF' || ext === 'TIFF') {
@@ -131,6 +133,8 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return formattedDate;
 	}
 
+	//Helper rendering methods
+
 	_renderFileSubmissionTitle() {
 		return html`
 		<d2l-list-item>
@@ -147,8 +151,10 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	_renderTextSubmissionTitle() {
 		// There is only one attachment for text submissions: an html file
-		const flagged = this._attachments[0].properties.flagged;
-		const read = this._attachments[0].properties.read;
+		const file = this._attachments[0];
+		const flagged = file.properties.flagged;
+		const read = file.properties.read;
+		const href = file.properties.href;
 		return html`
 		<d2l-list-item>
 		<d2l-list-item-content>
@@ -160,7 +166,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				${this._formatDate()}
 			</div>
 		</d2l-list-item-content>
-		${this._addActionsForTextSubmission()}
+		${this._addMenuOptions(href)}
 		</d2l-list-item>`;
 	}
 
@@ -193,29 +199,6 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		}
 	}
 
-	_addActionsForTextSubmission() {
-		//Placeholder for menu presentational
-		if (this.submissionType === 'Text submission') {
-			return html`
-			<div slot="actions" style="z-index: inherit;">
-			<d2l-dropdown-more text="More Options">
-  			<d2l-dropdown-menu>
-				<d2l-menu>
-				<d2l-menu-item-link text="Download" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
-				<d2l-menu-item-link text="Mark as Read" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
-				<d2l-menu-item-link text="Flag" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
-				<d2l-menu-item-link text="Edit a Copy" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
-				</d2l-menu>
-			</d2l-dropdown-menu>
-
-			</d2l-dropdown-more>
-			</div>
-			`;
-		} else {
-			return html``;
-		}
-	}
-
 	_renderAttachments() {
 		return html`${this._attachments.map((file) => html`
 			<d2l-list-item class="consistent-eval-submission-attachment-item-container">
@@ -232,12 +215,12 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 					</div>
 				</div>
 			</d2l-list-item-content>
-			${this._addActionsForFileSubmission(file.properties.href)}
+			${this._addMenuOptions(file.properties.href)}
 			</d2l-list-item>
 			`)}`;
 	}
 
-	_addActionsForFileSubmission(downloadHref) {
+	_addMenuOptions(downloadHref) {
 		// Placeholder for menu presentational
 		return html`<div slot="actions" style="z-index: inherit;">
 			<d2l-dropdown-more text="More Options">
@@ -261,7 +244,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				<d2l-list-item-content>
 					${this._renderCommentTitle()}
 					<div slot="secondary">
-						<d2l-more-less height='${peekHeight}' h-align>${unsafeHTML(this._comment)}</d2l-more-less>
+						<d2l-more-less height=${peekHeight} h-align>${unsafeHTML(this._comment)}</d2l-more-less>
 					</div>
 				</d2l-list-item-content>
 				</d2l-list-item>`;

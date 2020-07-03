@@ -99,13 +99,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							submissionType=${this.submissionType}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
-					itemTemplate.push(html`
-						<d2l-consistent-evaluation-submission-item
-							.displayNumber=${this._submissionEntities.length - i}
-							evaluationState=${this.evaluationState}
-							.submissionEntity=${submissionEntity}
-							submissionType=${this.submissionType}
-						></d2l-consistent-evaluation-submission-item>`);
 					console.warn('Consistent Evaluation submission date property not found');
 				}
 			}
