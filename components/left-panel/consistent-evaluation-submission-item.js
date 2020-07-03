@@ -64,6 +64,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	constructor() {
 		super();
+
 		this._submissionEntity = undefined;
 		this._date = undefined;
 		this._attachments = [];
@@ -84,8 +85,8 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	}
 
 	_initializeSubmissionProperties() {
-		this._date = new Date(this.dateStr);
-		const attachmentsListEntity = this._submissionEntity.getSubEntityByClass('attachment-list');
+		this._date = this.dateStr ? new Date(this.dateStr) : undefined;
+		const attachmentsListEntity = this.submissionEntity.getSubEntityByClass('attachment-list');
 		if (attachmentsListEntity && attachmentsListEntity.entities) {
 			this._attachments = attachmentsListEntity.entities;
 		}
@@ -96,7 +97,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	_getIcon(filename) {
 		const ext = this._getFileType(filename);
-		if (ext === 'PNG' || ext === 'JPG') {
+		if (ext === 'PNG' || ext === 'JPG' || ext === 'TIF' || ext === 'TIFF') {
 			return 'file-image';
 		}
 		else {
@@ -123,11 +124,14 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_renderFileSubmissionTitle() {
-		const date = formatDateTime(
+	_formatDate() {
+		const formattedDate = (this._date) ? formatDateTime(
 			this._date,
-			{format: 'full'}
-		);
+			{format: 'full'}) : '';
+		return formattedDate;
+	}
+
+	_renderFileSubmissionTitle() {
 		return html`
 		<d2l-list-item>
 		<d2l-list-item-content>
@@ -135,17 +139,13 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			<div class="d2l-body-small">
 				${this._renderLateStatus()}
 				${this._renderEvaluationState()}
-				${date}
+				${this._formatDate()}
 			</div>
 		</d2l-list-item-content>
 		</d2l-list-item>`;
 	}
 
 	_renderTextSubmissionTitle() {
-		const date = formatDateTime(
-			this._date,
-			{format: 'full'}
-		);
 		// There is only one attachment for text submissions: an html file
 		const flagged = this._attachments[0].properties.flagged;
 		const read = this._attachments[0].properties.read;
@@ -157,7 +157,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				${this._renderLateStatus()}
 				${this._renderEvaluationState()}
 				${this._renderFlaggedStatus(flagged)}
-				${date}
+				${this._formatDate()}
 			</div>
 		</d2l-list-item-content>
 		${this._addActionsForTextSubmission()}

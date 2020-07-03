@@ -21,7 +21,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return css`
 			:host {
 				display: inline-block;
-				position: relative;
 				background-color: var(--d2l-color-sylvite);
 			}
 			:host([hidden]) {
@@ -107,7 +106,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							.submissionEntity=${submissionEntity}
 							submissionType=${this.submissionType}
 						></d2l-consistent-evaluation-submission-item>`);
-					throw new Error('Consistent Evaluation submission date property not found');
+					console.warn('Consistent Evaluation submission date property not found');
 				}
 			}
 		}

@@ -43,10 +43,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
 					<d2l-consistent-evaluation-submissions-page
-					.dueDate=${this.submissionInfo.dueDate}
-					evaluationState=${this.submissionInfo.evaluationState}
-					submissionType=${this.submissionInfo.submissionType}
-					.submissionList=${this.submissionInfo.submissionList}
+					.dueDate=${this.submissionInfo && this.submissionInfo.dueDate}
+					evaluationState=${this.submissionInfo && this.submissionInfo.evaluationState}
+					submissionType=${this.submissionInfo && this.submissionInfo.submissionType}
+					.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 					.token=${this.token}></d2l-consistent-evaluation-submissions-page>
 				</div>
 				<div slot="secondary">
