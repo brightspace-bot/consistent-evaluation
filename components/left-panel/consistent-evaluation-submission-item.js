@@ -111,40 +111,40 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		);
 		return html`
 			<d2l-list-item>
-			<d2l-list-item-content>
-			<h3 class="d2l-heading-3">Submission ${this.displayNumber}</h3>
-			<div class="d2l-body-small">${date}<d2l-icon icon="tier1:dot"></d2l-icon>${this.evaluationState}</div>
-			</d2l-list-item-content>
+				<d2l-list-item-content>
+					<h3 class="d2l-heading-3">Submission ${this.displayNumber}</h3>
+					<div class="d2l-body-small">${date}<d2l-icon icon="tier1:dot"></d2l-icon>${this.evaluationState}</div>
+				</d2l-list-item-content>
 			</d2l-list-item>`;
 	}
 
 	_renderAttachments() {
 		return html`${this._attachments.map((attachment) => html`
 			<d2l-list>
-			<d2l-list-item>
-			<d2l-list-item-content>
-			<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(attachment.properties.name)}"></d2l-icon>
-			<div class="consistent-eval-submission-attachment-item">
-			<a href="${attachment.properties.href}"><span>${attachment.properties.name}</span></a>
-			<div slot="secondary" class="d2l-body-small">${this._getReadableFileSizeString(attachment.properties.size)}</div>
+				<d2l-list-item>
+					<d2l-list-item-content>
+						<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(attachment.properties.name)}"></d2l-icon>
+						
+						<div class="consistent-eval-submission-attachment-item">
+							<a href="#" @click="${() => this._dispatchRenderEvidenceEvent(attachment.properties.annotationsViewer)}">
+								<span>${attachment.properties.name}</span>
+							</a>
+						<div slot="secondary" class="d2l-body-small">${this._getReadableFileSizeString(attachment.properties.size)}</div>
 
-			<d2l-button
-				@click="${() => this._dispatchRenderEvidenceEvent(attachment.properties.annotationsViewer)}">View File
-			</d2l-button>
-
-			</div>
-			</d2l-list-item-content>
-			</d2l-list-item>
+						</div>
+					</d2l-list-item-content>
+				</d2l-list-item>
 			</d2l-list>`)}`;
 	}
 
 	_renderComment() {
 		if (this._comment) {
 			return html`
-				<d2l-list-item><d2l-list-item-content>
-				<div class="d2l-label-text">Comments</div>
-				<div slot="secondary">${unsafeHTML(this._comment)}</div>
-				</d2l-list-item-content>
+				<d2l-list-item>
+					<d2l-list-item-content>
+						<div class="d2l-label-text">Comments</div>
+						<div slot="secondary">${unsafeHTML(this._comment)}</div>
+					</d2l-list-item-content>
 				</d2l-list-item>`;
 		}
 		return html``;

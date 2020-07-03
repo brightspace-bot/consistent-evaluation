@@ -57,20 +57,21 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 	}
 
 	render() {
-		return html`
+		return html`${this.displayEvidence ?
+			html`
 			<d2l-consistent-evaluation-evidence
 				class="d2l-consistent-evaluation-left-panel-evidence"
 				.url=${this._evidenceUrl}
 				.token=${this.token}
-				?hidden=${!this.displayEvidence}
-			></d2l-consistent-evaluation-evidence>
+			></d2l-consistent-evaluation-evidence>` :
+			html`
 			<d2l-consistent-evaluation-submissions-page
 				.submissionList=${this.submissionList}
 				evaluationState=${this.evaluationState}
 				.token=${this.token}
 				?hidden=${this.displayEvidence}
-			></d2l-consistent-evaluation-submissions-page>
-		`;
+			></d2l-consistent-evaluation-submissions-page>`
+		}`;
 	}
 }
 
