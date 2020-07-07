@@ -11,3 +11,5 @@ export const previousRel = 'previous';
 export const saveFeedbackActionName = 'SaveFeedback';
 export const saveFeedbackFieldName = 'feedback';
 export const publishedState = 'Published';
+export const fileSubmission = 'File submission';
+export const textSubmission = 'Text submission';
