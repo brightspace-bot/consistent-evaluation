@@ -1,7 +1,7 @@
 import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import './consistent-evaluation-right-panel-block';
+import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
-import { GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
 export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
@@ -27,7 +27,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 
 	constructor() {
 		super();
-
+		this.grade = new Grade(GradeType.Number, 0, 0, null, null, null);
 		this.customManualOverrideText = undefined;
 		this.customManualOverrideClearText = undefined;
 		this._readOnly = false;

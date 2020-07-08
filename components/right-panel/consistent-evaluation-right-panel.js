@@ -10,7 +10,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
-			evaluationHref: { type: String },
 			rubricHref: { type: String },
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
@@ -37,7 +36,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	constructor() {
 		super();
 
-		this._evaluationHref = undefined;
 		this._token = undefined;
 		this._richTextEditorConfig = {};
 
