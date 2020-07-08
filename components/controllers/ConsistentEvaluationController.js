@@ -1,5 +1,6 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import { publishActionName, retractActionName, saveActionName, saveFeedbackActionName, saveFeedbackFieldName, saveGradeActionName, saveGradeFieldName, updateActionName } from './constants.js';
+import { Grade } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 export const ConsistentEvaluationControllerErrors = {
@@ -12,6 +13,7 @@ export const ConsistentEvaluationControllerErrors = {
 	ERROR_FETCHING_ENTITY: 'Error while fetching evaluation entity.',
 	FEEDBACK_ENTITY_NOT_FOUND: 'Evaluation entity must have feedback entity to update feedback.',
 	GRADE_ENTITY_NOT_FOUND: 'Evaluation entity must have grade entity to update grade.',
+	NO_PROPERTIES_FOR_ENTITY: 'Entity does not have properties attached to it.',
 	ACTION_NOT_FOUND: (actionName) => `Could not find the ${actionName} action from the evaluation entity.`,
 	FIELD_IN_ACTION_NOT_FOUND: (actionName, fieldName) => `Expected the ${actionName} action to have a ${fieldName} field.`
 };
@@ -73,6 +75,21 @@ export class ConsistentEvaluationController {
 		} else {
 			throw new Error(ConsistentEvaluationControllerErrors.ACTION_NOT_FOUND(actionName));
 		}
+	}
+
+	parseGrade(entity) {
+		if (!entity.properties) {
+			throw new Error(ConsistentEvaluationControllerErrors.NO_PROPERTIES_FOR_ENTITY);
+		}
+
+		return new Grade(
+			entity.properties.scoreType,
+			entity.properties.score,
+			entity.properties.outOf,
+			entity.properties.letterGrade,
+			entity.properties.letterGradeOptions,
+			entity
+		);
 	}
 
 	async transientSaveFeedback(evaluationEntity, feedbackValue) {

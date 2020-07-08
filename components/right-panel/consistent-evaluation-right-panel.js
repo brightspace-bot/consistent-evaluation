@@ -20,7 +20,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			hideRubric: { type: Boolean },
 			hideGrade: { type: Boolean },
 			hideFeedback: { type: Boolean },
-			hideOutcomes: { type: Boolean }
+			hideOutcomes: { type: Boolean },
+			feedbackText: { type: String },
+			grade: { type: Object }
 		};
 	}
 
@@ -37,6 +39,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 		this._evaluationHref = undefined;
 		this._token = undefined;
+		this._richTextEditorConfig = {};
 
 		this.hideRubric = false;
 		this.hideGrade = false;
@@ -45,16 +48,16 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	}
 
 	async _transientSaveFeedback(e) {
-		this._emitTransientSaveEvent('on-transient-save-feedback', e.detail);
+		this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-feedback', e.detail);
 	}
 
 	async _transientSaveGrade(e) {
 		const type = e.detail.grade.scoreType;
 		if (type === 'LetterGrade') {
-			this._emitTransientSaveEvent('on-transient-save-grade', e.detail.grade.letterGrade);
+			this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-grade', e.detail.grade.letterGrade);
 		}
 		else if (type === 'Numeric') {
-			this._emitTransientSaveEvent('on-transient-save-grade', e.detail.grade.score);
+			this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-grade', e.detail.grade.score);
 		}
 	}
 
@@ -86,9 +89,8 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideGrade) {
 			return html`
 				<d2l-consistent-evaluation-grade-result
-					href=${this.evaluationHref}
-					.token=${this.token}
-					@on-d2l-grade-result-grade-updated-success=${this._transientSaveGrade}
+					.grade=${this.grade}
+					@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}
@@ -99,11 +101,12 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	_renderFeedback() {
 		if (!this.hideFeedback) {
 			return html`
-				<d2l-consistent-evaluation-feedback
-					href=${this.evaluationHref}
-					.token=${this.token}
-					@on-feedback-edit="${this._transientSaveFeedback}"
-				></d2l-consistent-evaluation-feedback>
+				<d2l-consistent-evaluation-feedback-presentational
+					canEditFeedback
+					.feedbackText=${this.feedbackText}
+					.richTextEditorConfig=${this._richTextEditorConfig}
+					@d2l-consistent-eval-on-feedback-edit=${this._transientSaveFeedback}
+				></d2l-consistent-evaluation-feedback-presentational>
 			`;
 		}
 

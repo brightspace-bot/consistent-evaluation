@@ -4,8 +4,8 @@ import './left-panel/consistent-evaluation-submissions-page.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { evaluationRel, publishedState } from './controllers/constants.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
-import { evaluationRel } from './controllers/constants.js';
 
 export default class ConsistentEvaluationPage extends LitElement {
 
@@ -22,7 +22,11 @@ export default class ConsistentEvaluationPage extends LitElement {
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
 			submissionList: { type: Array },
-			evaluationState: { type: String }
+			evaluationState: { type: String },
+			feedbackText: { attribute: false },
+			grade: { attribute: false },
+			_feedbackEntity: { attribute: false },
+			_gradeEntity: { attribute: false }
 		};
 	}
 
@@ -86,18 +90,53 @@ export default class ConsistentEvaluationPage extends LitElement {
 		}
 	}
 
+	get feedbackText() {
+		if (this._feedbackEntity) {
+			return this._feedbackEntity.properties.text || '';
+		}
+		return '';
+	}
+
+	get grade() {
+		if (this._gradeEntity) {
+			return this._controller.parseGrade(this._gradeEntity);
+		}
+		return undefined;
+	}
+
+	get _feedbackEntity() {
+		if (this.evaluationEntity) {
+			return this.evaluationEntity.getSubEntityByRel('feedback');
+		}
+		return undefined;
+	}
+
+	get _gradeEntity() {
+		if (this.evaluationEntity) {
+			return this.evaluationEntity.getSubEntityByRel('grade');
+		}
+		return undefined;
+	}
+
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
-	_hasFeedbackComponent() {
+	_noFeedbackComponent() {
 		return this.evaluationEntity && this.evaluationEntity.getSubEntityByRel('feedback') === undefined;
 	}
 
-	_hasGradeComponent() {
+	_noGradeComponent() {
 		return this.evaluationEntity && this.evaluationEntity.getSubEntityByRel('grade') === undefined;
+	}
+
+	_isEvaluationPublished() {
+		if (!this.evaluationEntity) {
+			return false;
+		}
+		return this.evaluationEntity.properties.state === publishedState;
 	}
 
 	_onNextStudentClick() {
@@ -152,31 +191,33 @@ export default class ConsistentEvaluationPage extends LitElement {
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
+						.grade=${this.grade}
 						.evaluationHref=${this.evaluationHref}
 						rubricHref=${this.rubricHref}
 						rubricAssessmentHref=${this.rubricAssessmentHref}
 						outcomesHref=${this.outcomesHref}
+						feedbackText=${this.feedbackText}
 						.token=${this.token}
 						?rubricReadOnly=${this.rubricReadOnly}
 						?richTextEditorDisabled=${this.richTextEditorDisabled}
 						?hideRubric=${this.rubricHref === undefined}
-						?hideGrade=${this._hasGradeComponent()}
+						?hideGrade=${this._noGradeComponent()}
 						?hideOutcomes=${this.outcomesHref === undefined}
-						?hideFeedback=${this._hasFeedbackComponent()}
-						@on-transient-save-feedback=${this._transientSaveFeedback}
-						@on-transient-save-grade=${this._transientSaveGrade}
+						?hideFeedback=${this._noFeedbackComponent()}
+						@on-d2l-consistent-eval-transient-save-feedback=${this._transientSaveFeedback}
+						@on-d2l-consistent-eval-transient-save-grade=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
-					<d2l-consistent-evaluation-footer
-						.evaluationEntity=${this.evaluationEntity}
+					<d2l-consistent-evaluation-footer-presentational
+						?published=${this._isEvaluationPublished()}
 						.nextStudentHref=${this.nextStudentHref}
 						@on-publish=${this._publishEvaluation}
 						@on-save-draft=${this._saveEvaluation}
 						@on-retract=${this._retractEvaluation}
 						@on-update=${this._updateEvaluation}
 						@on-next-student=${this._onNextStudentClick}
-					></d2l-consistent-evaluation-footer>
+					></d2l-consistent-evaluation-footer-presentational>
 				</div>
 			</d2l-template-primary-secondary>
 		`;

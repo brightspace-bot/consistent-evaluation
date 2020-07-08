@@ -2,8 +2,10 @@ import 'd2l-activities/components/d2l-activity-editor/d2l-activity-text-editor.j
 import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d2l-activity-attachments-editor.js';
 import './consistent-evaluation-right-panel-block';
 import { html, LitElement } from 'lit-element';
+import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
 class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
 	static get properties() {
@@ -25,6 +27,26 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 		this.canEditFeedback = false;
 		this.feedbackText = '';
+
+		this._debounceJobs = {};
+	}
+
+	_saveOnFeedbackChange(e) {
+		const feedback = e.detail.content;
+
+		this._debounceJobs.feedback = Debouncer.debounce(
+			this._debounceJobs.feedback,
+			timeOut.after(500),
+			() => this._emitFeedbackEditEvent(feedback)
+		);
+	}
+
+	_emitFeedbackEditEvent(feedback) {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-eval-on-feedback-edit', {
+			composed: true,
+			bubbles: true,
+			detail: feedback
+		}));
 	}
 
 	render() {
@@ -33,7 +55,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 				<d2l-activity-text-editor
 					.value="${this.feedbackText}"
 					.richtextEditorConfig="${this.richTextEditorConfig}"
-
+					@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
 					ariaLabel="${this.localize('overallFeedback')}"
 					?disabled="${!this.canEditFeedback}">
 				</d2l-activity-text-editor>
