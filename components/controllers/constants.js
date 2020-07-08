@@ -15,3 +15,5 @@ export const rubricRel = 'https://api.brightspace.com/rels/rubric';
 export const nextRel = 'next';
 export const previousRel = 'previous';
 export const publishedState = 'Published';
+export const fileSubmission = 'File submission';
+export const textSubmission = 'Text submission';
