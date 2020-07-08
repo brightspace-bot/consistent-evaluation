@@ -14,8 +14,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 			rubricHref: { type: String },
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
-			gradeHref: { type: String },
-			feedbackHref: { type: String },
 			evaluationHref: { type: String },
 			nextStudentHref: { type: String },
 			token: { type: String },
@@ -23,8 +21,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 			richTextEditorDisabled: { type: Boolean },
 			submissionList: { type: Array },
 			evaluationState: { type: String },
-			feedbackText: { attribute: false },
-			grade: { attribute: false },
+			feedbackText: { attribute: false, type: String },
+			grade: { attribute: false, type: Object },
 			_feedbackEntity: { attribute: false },
 			_gradeEntity: { attribute: false }
 		};
@@ -91,7 +89,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 	}
 
 	get feedbackText() {
-		if (this._feedbackEntity) {
+		if (this._feedbackEntity && this._feedbackEntity.properties) {
 			return this._feedbackEntity.properties.text || '';
 		}
 		return '';
@@ -140,7 +138,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 	}
 
 	_onNextStudentClick() {
-		this.dispatchEvent(new CustomEvent('next-student-click', {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-eval-next-student-click', {
 			composed: true,
 			bubbles: true
 		}));
