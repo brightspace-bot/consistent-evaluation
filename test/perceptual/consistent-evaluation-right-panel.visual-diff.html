@@ -9,6 +9,14 @@
 			import '@brightspace-ui/core/components/typography/styles.js';
 			import '@brightspace-ui/core/components/typography/typography.js';
 			import '../../components/right-panel/consistent-evaluation-right-panel.js';
+			import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
+			const data = require('data/grade/grade.json');
+			const entity = JSON.parse(data);
+			const grade = new Grade(GradeType.Number, 47, 100, null, null, entity);
+			const panels = document.getElementsByTagName('consistent-evaluation-right-panel');
+			for (let i = 0; i < panels.length; i++) {
+				panels[i].setAttribute('grade', grade);
+			}
 		</script>
 		<style>
 			html {
@@ -27,7 +35,7 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
 				token="token"
 			></consistent-evaluation-right-panel>
 		</div>
@@ -37,7 +45,7 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
 				token="token"
 				rubricReadOnly
 			></consistent-evaluation-right-panel>
@@ -48,7 +56,7 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
 				token="token"
 				richTextEditorDisabled
 			></consistent-evaluation-right-panel>
@@ -59,7 +67,8 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
+				grade=""
 				token="token"
 				hideRubric
 			></consistent-evaluation-right-panel>
@@ -70,7 +79,7 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
 				token="token"
 				hideGrade
 			></consistent-evaluation-right-panel>
@@ -81,7 +90,7 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
 				token="token"
 				hideFeedback
 			></consistent-evaluation-right-panel>
@@ -92,7 +101,7 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
 				token="token"
 				hideOutcomes
 			></consistent-evaluation-right-panel>
@@ -103,7 +112,7 @@
 				rubricHref="data/rubric.json"
 				rubricAssessmentHref="data/assessment.json"
 				outcomesHref="data/outcomes/suggested-level.json"
-				gradeHref="data/grade/grade.json"
+				feedbackText=""
 				token="token"
 				hideRubric
 				hideGrade
