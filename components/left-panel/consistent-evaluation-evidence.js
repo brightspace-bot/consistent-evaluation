@@ -1,6 +1,8 @@
 import { css, html, LitElement } from 'lit-element';
+import { loadLocalizationResources } from '../locale.js';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 
-export class ConsistentEvaluationEvidence extends LitElement {
+export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
@@ -18,6 +20,10 @@ export class ConsistentEvaluationEvidence extends LitElement {
 		`;
 	}
 
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
+	}
+
 	constructor() {
 		super();
 
@@ -31,8 +37,18 @@ export class ConsistentEvaluationEvidence extends LitElement {
 		});
 	}
 
+	_dispatchBackToUserSubmissionsEvent() {
+		const event = new CustomEvent('d2l-consistent-evaluation-evidence-back-to-user-submissions', {
+			composed: true
+		});
+		this.dispatchEvent(event);
+	}
+
 	render() {
 		return html`
+			<a href="#" @click="${this._dispatchBackToUserSubmissionsEvent}">
+				${this.localize('backToUserSubmissions')}
+			</a>
 			<iframe 
 				src="${this.url}"
 				frameborder="0" 

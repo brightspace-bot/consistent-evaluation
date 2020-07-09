@@ -41,17 +41,24 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	connectedCallback() {
 		this.addEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._renderEvidence);
+		this.addEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._renderSubmissionList);
 		super.connectedCallback();
 	}
 
 	disconnectedCallback() {
 		this.removeEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._renderEvidence);
+		this.removeEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._renderSubmissionList);
 		super.disconnectedCallback();
 	}
 
 	_renderEvidence(e) {
 		this.displayEvidence = true;
 		this._evidenceUrl = e.detail.url;
+	}
+
+	_renderSubmissionList() {
+		this.displayEvidence = false;
+		this._evidenceUrl = undefined;
 	}
 
 	render() {

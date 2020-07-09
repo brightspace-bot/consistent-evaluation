@@ -220,7 +220,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				${this._renderReadStatus(file.properties.read)}
 				<div class="consistent-eval-submission-attachment-item">
 					
-					<a href="#" @click="${() => this._dispatchRenderEvidenceEvent(file.properties.annotationsViewer)}">
+					<a href="#" @click="${() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
 						<span>${this._getFileTitle(file.properties.name)}</span>
 					</a>
 
