@@ -10,13 +10,14 @@
 			import '@brightspace-ui/core/components/typography/typography.js';
 			import '../../components/right-panel/consistent-evaluation-right-panel.js';
 			import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
-			const data = require('data/grade/grade.json');
-			const entity = JSON.parse(data);
-			const grade = new Grade(GradeType.Number, 47, 100, null, null, entity);
-			const panels = document.getElementsByTagName('consistent-evaluation-right-panel');
-			for (let i = 0; i < panels.length; i++) {
-				panels[i].setAttribute('grade', grade);
-			}
+			import SirenParse from 'siren-parser';
+			fetch('data/grade/evaluationEntity.json').then(response => response.json()).then(entity => {
+				const parsedEntity = SirenParse(entity);
+				const grade = new Grade(GradeType.Number, 47, 100, null, null, parsedEntity);
+				const panels = document.getElementsByTagName('consistent-evaluation-right-panel');
+				for (let i = 0; i < panels.length; i++) {
+					panels[i].grade = grade;
+				}});
 		</script>
 		<style>
 			html {
