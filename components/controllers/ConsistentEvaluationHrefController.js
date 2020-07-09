@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { assessmentRel, evaluationRel, feedbackRel, gradesRel, nextRel, previousRel, rubricRel } from './constants.js';
+import { assessmentRel, evaluationRel, nextRel, previousRel, rubricRel } from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
@@ -49,8 +49,6 @@ export class ConsistentEvaluationHrefController {
 	async getHrefs(bypassCache = false) {
 		let root = await this._getRootEntity(bypassCache);
 
-		let gradeHref = undefined;
-		let feedbackHref = undefined;
 		let evaluationHref = undefined;
 		let nextHref = undefined;
 		let previousHref = undefined;
@@ -60,8 +58,6 @@ export class ConsistentEvaluationHrefController {
 		if (root && root.entity) {
 			root = root.entity;
 
-			gradeHref = this._getHref(root, gradesRel);
-			feedbackHref = this._getHref(root, feedbackRel);
 			evaluationHref = this._getHref(root, evaluationRel);
 			nextHref = this._getHref(root, nextRel);
 			previousHref = this._getHref(root, previousRel);
@@ -79,8 +75,6 @@ export class ConsistentEvaluationHrefController {
 
 		return {
 			root,
-			gradeHref,
-			feedbackHref,
 			evaluationHref,
 			nextHref,
 			previousHref,

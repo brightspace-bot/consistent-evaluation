@@ -2,7 +2,6 @@ import './consistent-evaluation-feedback.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
-import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
@@ -14,8 +13,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			rubricHref: { type: String },
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
-			gradeHref: { type: String },
-			feedbackHref: { type: String },
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
@@ -23,7 +20,8 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			hideGrade: { type: Boolean },
 			hideFeedback: { type: Boolean },
 			hideOutcomes: { type: Boolean },
-			_richTextEditorConfig: { type: Object }
+			feedbackText: { type: String },
+			grade: { type: Object }
 		};
 	}
 
@@ -38,12 +36,35 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	constructor() {
 		super();
 
+		this._token = undefined;
 		this._richTextEditorConfig = {};
 
 		this.hideRubric = false;
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
+	}
+
+	async _transientSaveFeedback(e) {
+		this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-feedback', e.detail);
+	}
+
+	async _transientSaveGrade(e) {
+		const type = e.detail.grade.scoreType;
+		if (type === 'LetterGrade') {
+			this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-grade', e.detail.grade.letterGrade);
+		}
+		else if (type === 'Numeric') {
+			this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-grade', e.detail.grade.score);
+		}
+	}
+
+	_emitTransientSaveEvent(eventName, newValue) {
+		this.dispatchEvent(new CustomEvent(eventName, {
+			composed: true,
+			bubbles: true,
+			detail: newValue
+		}));
 	}
 
 	_renderRubric() {
@@ -66,8 +87,8 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideGrade) {
 			return html`
 				<d2l-consistent-evaluation-grade-result
-					href=${this.gradeHref}
-					.token=${this.token}
+					.grade=${this.grade}
+					@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}
@@ -78,10 +99,12 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	_renderFeedback() {
 		if (!this.hideFeedback) {
 			return html`
-				<d2l-consistent-evaluation-feedback
-					href=${this.feedbackHref}
-					.token=${this.token}
-				></d2l-consistent-evaluation-feedback>
+				<d2l-consistent-evaluation-feedback-presentational
+					canEditFeedback
+					.feedbackText=${this.feedbackText}
+					.richTextEditorConfig=${this._richTextEditorConfig}
+					@d2l-consistent-eval-on-feedback-edit=${this._transientSaveFeedback}
+				></d2l-consistent-evaluation-feedback-presentational>
 			`;
 		}
 
