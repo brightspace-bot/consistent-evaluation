@@ -1,3 +1,4 @@
+import '@brightspace-ui/core/components/button/button-subtle.js';
 import { css, html, LitElement } from 'lit-element';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
@@ -13,6 +14,9 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 
 	static get styles() {
 		return css`
+			.d2l-consistent-evaluation-evidence-top-bar {
+				height: 2.7rem;
+			}
 			iframe {
 				height: 80vh;
 				width: 100%;
@@ -46,9 +50,13 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 
 	render() {
 		return html`
-			<a href="#" @click="${this._dispatchBackToUserSubmissionsEvent}">
-				${this.localize('backToUserSubmissions')}
-			</a>
+			<div class="d2l-consistent-evaluation-evidence-top-bar">
+				<d2l-button-subtle 
+					text="${this.localize('backToUserSubmissions')}" 
+					icon="tier1:chevron-left"
+					@click="${this._dispatchBackToUserSubmissionsEvent}"
+				></d2l-button-subtle>
+			</div>
 			<iframe 
 				src="${this.url}"
 				frameborder="0" 
