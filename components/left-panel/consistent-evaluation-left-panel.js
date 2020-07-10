@@ -7,7 +7,10 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	static get properties() {
 		return {
-			submissionInfo: { type: Object },
+			submissionInfo: {
+				attribute: 'submission-info',
+				type: Object
+			},
 			token: { type: String }
 		};
 	}
@@ -16,6 +19,9 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		return css`
 			#d2l-consistent-evaluation-left-panel-evidence {
 				overflow: hidden;
+			}
+			d2l-consistent-evaluation-submissions-page {
+				width: 100%;
 			}
 		`;
 	}
@@ -71,10 +77,10 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 			></d2l-consistent-evaluation-evidence>` :
 			html`
 			<d2l-consistent-evaluation-submissions-page
-				.dueDate=${this.submissionInfo && this.submissionInfo.dueDate}
-				evaluationState=${this.submissionInfo && this.submissionInfo.evaluationState}
-				submissionType=${this.submissionInfo && this.submissionInfo.submissionType}
-				.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
+				.due-date=${this.submissionInfo && this.submissionInfo.dueDate}
+				evaluation-state=${this.submissionInfo && this.submissionInfo.evaluationState}
+				submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
+				.submission-list=${this.submissionInfo && this.submissionInfo.submissionList}
 				.token=${this.token}
 			></d2l-consistent-evaluation-submissions-page>`
 		}`;

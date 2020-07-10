@@ -1,7 +1,6 @@
 import './footer/consistent-evaluation-footer.js';
 import './left-panel/consistent-evaluation-left-panel.js';
 import './right-panel/consistent-evaluation-right-panel.js';
-import './left-panel/consistent-evaluation-submissions-page.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
@@ -52,9 +51,9 @@ export default class ConsistentEvaluationPage extends LitElement {
 				attribute: 'rubric-read-only',
 				type: Boolean
 			},
-			submissionList: {
-				attribute: 'submission-list',
-				type: Array
+			submissionInfo: {
+				attribute: 'submission-info',
+				type: Object
 			},
 			token: {
 				type: String
@@ -75,9 +74,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 			}
 			:host([hidden]) {
 				display: none;
-			}
-			d2l-consistent-evaluation-submissions-page {
-				width: 100%;
 			}
 		`;
 	}
@@ -223,7 +219,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
 					<d2l-consistent-evaluation-left-panel
-						.submissionInfo=${this.submissionInfo}
+						.submission-info=${this.submissionInfo}
 						.token=${this.token}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
