@@ -10,18 +10,52 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
-			rubricHref: { type: String },
-			rubricAssessmentHref: { type: String },
-			outcomesHref: { type: String },
-			token: { type: String },
-			rubricReadOnly: { type: Boolean },
-			richTextEditorDisabled: { type: Boolean },
-			hideRubric: { type: Boolean },
-			hideGrade: { type: Boolean },
-			hideFeedback: { type: Boolean },
-			hideOutcomes: { type: Boolean },
-			feedbackText: { type: String },
-			grade: { type: Object }
+			feedbackText: {
+				attribute: 'feedback-text',
+				type: String
+			},
+			grade: {
+				type: Object
+			},
+			hideRubric: {
+				attribute: 'hide-rubric',
+				type: Boolean
+			},
+			hideGrade: {
+				attribute: 'hide-grade',
+				type: Boolean
+			},
+			hideFeedback: {
+				attribute: 'hide-feedback',
+				type: Boolean
+			},
+			hideOutcomes: {
+				attribute: 'hide-outcomes',
+				type: Boolean
+			},
+			outcomesHref: {
+				attribute: 'outcomes-href',
+				type: String
+			},
+			richTextEditorDisabled: {
+				attribute: 'rich-text-editor-disabled',
+				type: Boolean
+			},
+			rubricAssessmentHref: {
+				attribute: 'rubric-assessment-href',
+				type: String
+			},
+			rubricHref: {
+				attribute: 'rubric-href',
+				type: String
+			},
+			rubricReadOnly: {
+				attribute: 'rubric-read-only',
+				type: Boolean
+			},
+			token: {
+				type: String
+			}
 		};
 	}
 
@@ -73,9 +107,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-rubric
 					header=${this.localize('rubrics')}
 					href=${this.rubricHref}
-					assessmentHref=${this.rubricAssessmentHref}
+					assessment-href=${this.rubricAssessmentHref}
 					.token=${this.token}
-					?readonly=${this.rubricReadOnly}
+					?read-only=${this.rubricReadOnly}
 				></d2l-consistent-evaluation-rubric>
 			`;
 		}
@@ -100,9 +134,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideFeedback) {
 			return html`
 				<d2l-consistent-evaluation-feedback-presentational
-					canEditFeedback
-					.feedbackText=${this.feedbackText}
-					.richTextEditorConfig=${this._richTextEditorConfig}
+					can-edit-feedback
+					.feedback-text=${this.feedbackText}
+					.rich-text-editor-config=${this._richTextEditorConfig}
 					@d2l-consistent-eval-on-feedback-edit=${this._transientSaveFeedback}
 				></d2l-consistent-evaluation-feedback-presentational>
 			`;

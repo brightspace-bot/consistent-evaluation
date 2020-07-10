@@ -6,8 +6,14 @@ export class ConsistentEvaluationFooter extends LitElement {
 
 	static get properties() {
 		return {
-			evaluationEntity: { type: Object },
-			nextStudentHref: { type: String }
+			evaluationHref: {
+				attribute: 'evaluation-href',
+				type: String
+			},
+			nextStudentHref: {
+				attribute: 'next-student-href',
+				type: String
+			}
 		};
 	}
 
@@ -28,7 +34,7 @@ export class ConsistentEvaluationFooter extends LitElement {
 		return html`
 			<d2l-consistent-evaluation-footer-presentational
 				?published=${this._isEntityPublished()}
-				?showNextStudent=${this.nextStudentHref !== undefined}
+				?show-next-student=${this.nextStudentHref !== undefined}
 			></d2l-consistent-evaluation-footer-presentational>
 		`;
 	}

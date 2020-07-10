@@ -21,12 +21,29 @@ import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
-			dateStr : { type: String },
-			displayNumber : { type: Number },
-			evaluationState : { type: String },
-			late: { type: Boolean },
-			submissionEntity : { type: Object },
-			submissionType: { type: String }
+			dateStr : {
+				attribute: 'date-str',
+				type: String
+			},
+			displayNumber : {
+				attribute: 'display-number',
+				type: Number
+			},
+			evaluationState : {
+				attribute: 'evaluation-state',
+				type: String
+			},
+			late: {
+				type: Boolean
+			},
+			submissionEntity : {
+				attribute: 'submission-entity',
+				type: Object
+			},
+			submissionType: {
+				attribute: 'submission-type',
+				type: String
+			}
 		};
 	}
 
