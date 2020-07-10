@@ -225,7 +225,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				${this._renderReadStatus(file.properties.read)}
 				<div class="consistent-eval-submission-attachment-item">
 					<span>${this._getFileTitle(file.properties.name)}</span>
-					<div slot="supporting-info" class="d2l-body-small">
+					<div slot="supporting-info">
 						${this._renderFlaggedStatus(file.properties.flagged)}
 						${this._getFileType(file.properties.name)}
 						<d2l-icon icon="tier1:dot"></d2l-icon>${this._getReadableFileSizeString(file.properties.size)}
