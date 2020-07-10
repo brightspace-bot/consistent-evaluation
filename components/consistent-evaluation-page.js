@@ -12,20 +12,59 @@ export default class ConsistentEvaluationPage extends LitElement {
 
 	static get properties() {
 		return {
-			rubricHref: { type: String },
-			rubricAssessmentHref: { type: String },
-			outcomesHref: { type: String },
-			evaluationHref: { type: String },
-			nextStudentHref: { type: String },
-			token: { type: String },
-			rubricReadOnly: { type: Boolean },
-			richTextEditorDisabled: { type: Boolean },
-			submissionInfo: { type: Object },
-			evaluationState: { type: String },
-			feedbackText: { attribute: false, type: String },
-			grade: { attribute: false, type: Object },
-			_feedbackEntity: { attribute: false },
-			_gradeEntity: { attribute: false }
+			evaluationHref: {
+				attribute: 'evaluation-href',
+				type: String
+			},
+			evaluationState: {
+				attribute: 'evaluation-state',
+				type: String
+			},
+			feedbackText: {
+				attribute: false,
+				type: String
+			},
+			grade: {
+				attribute: false,
+				type: Object
+			},
+			nextStudentHref: {
+				attribute: 'next-student-href',
+				type: String
+			},
+			outcomesHref: {
+				attribute: 'outcomes-href',
+				type: String
+			},
+			richTextEditorDisabled: {
+				attribute: 'rich-text-editor-disabled',
+				type: Boolean
+			},
+			rubricAssessmentHref: {
+				attribute: 'rubric-assessment-href',
+				type: String
+			},
+			rubricHref: {
+				attribute: 'rubric-href',
+				type: String
+			},
+			rubricReadOnly: {
+				attribute: 'rubric-read-only',
+				type: Boolean
+			},
+			submissionList: {
+				attribute: 'submission-list',
+				type: Array
+			},
+			token: {
+				type: String
+			},
+			_feedbackEntity: {
+				attribute: false
+			},
+			_gradeEntity: {
+				attribute: false
+			}
 		};
 	}
 
@@ -183,25 +222,34 @@ export default class ConsistentEvaluationPage extends LitElement {
 			<d2l-template-primary-secondary>
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
+<<<<<<< HEAD
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
 					></d2l-consistent-evaluation-left-panel>
+=======
+					<d2l-consistent-evaluation-submissions-page
+					.due-date=${this.submissionInfo && this.submissionInfo.dueDate}
+					evaluation-state=${this.submissionInfo && this.submissionInfo.evaluationState}
+					submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
+					.submission-list=${this.submissionInfo && this.submissionInfo.submissionList}
+					.token=${this.token}></d2l-consistent-evaluation-submissions-page>
+>>>>>>> master
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
 						.grade=${this.grade}
-						rubricHref=${this.rubricHref}
-						rubricAssessmentHref=${this.rubricAssessmentHref}
-						outcomesHref=${this.outcomesHref}
-						feedbackText=${this.feedbackText}
+						rubric-href=${this.rubricHref}
+						rubric-assessment-href=${this.rubricAssessmentHref}
+						outcomes-href=${this.outcomesHref}
+						feedback-text=${this.feedbackText}
 						.token=${this.token}
-						?rubricReadOnly=${this.rubricReadOnly}
-						?richTextEditorDisabled=${this.richTextEditorDisabled}
-						?hideRubric=${this.rubricHref === undefined}
-						?hideGrade=${this._noGradeComponent()}
-						?hideOutcomes=${this.outcomesHref === undefined}
-						?hideFeedback=${this._noFeedbackComponent()}
+						?rubric-read-only=${this.rubricReadOnly}
+						?rich-text-editor-disabled=${this.richTextEditorDisabled}
+						?hide-rubric=${this.rubricHref === undefined}
+						?hide-grade=${this._noGradeComponent()}
+						?hide-outcomes=${this.outcomesHref === undefined}
+						?hide-feedback=${this._noFeedbackComponent()}
 						@on-d2l-consistent-eval-transient-save-feedback=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-transient-save-grade=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
@@ -209,7 +257,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="footer">
 					<d2l-consistent-evaluation-footer-presentational
 						?published=${this._isEvaluationPublished()}
-						.nextStudentHref=${this.nextStudentHref}
+						.next-student-href=${this.nextStudentHref}
 						@on-publish=${this._publishEvaluation}
 						@on-save-draft=${this._saveEvaluation}
 						@on-retract=${this._retractEvaluation}
