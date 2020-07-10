@@ -225,7 +225,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				${this._renderReadStatus(file.properties.read)}
 				<div class="consistent-eval-submission-attachment-item">
 					<span>${this._getFileTitle(file.properties.name)}</span>
-					<div slot="secondary" class="d2l-body-small">
+					<div slot="supporting-info" class="d2l-body-small">
 						${this._renderFlaggedStatus(file.properties.flagged)}
 						${this._getFileType(file.properties.name)}
 						<d2l-icon icon="tier1:dot"></d2l-icon>${this._getReadableFileSizeString(file.properties.size)}
@@ -260,7 +260,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				<d2l-list-item>
 				<d2l-list-item-content>
 					${this._renderCommentTitle()}
-					<div slot="secondary">
+					<div slot="supporting-info">
 						<d2l-more-less height=${peekHeight} h-align>${unsafeHTML(this._comment)}</d2l-more-less>
 					</div>
 				</d2l-list-item-content>
