@@ -49,16 +49,13 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.rubric-href=${this._childHrefs && this._childHrefs.rubricHref}
 				.rubric-assessment-href=${this._childHrefs && this._childHrefs.rubricAssessmentHref}
 				.outcomes-href=${this._childHrefs && this._childHrefs.outcomesHref}
-				.grade-href=${this._childHrefs && this._childHrefs.gradeHref}
 				.evaluation-href=${this._childHrefs && this._childHrefs.evaluationHref}
 				.next-student-href=${this._childHrefs && this._childHrefs.nextHref}
-				.feedback-href=${this._childHrefs && this._childHrefs.feedbackHref}
-				.submission-list=${this._submissionInfo && this._submissionInfo.submissionList}
-				.evaluation-state=${this._submissionInfo && this._submissionInfo.evaluationState}
+				.submission-info=${this._submissionInfo}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
-				@next-student-click=${this.onNextStudentClick}
+				@d2l-consistent-eval-next-student-click=${this.onNextStudentClick}
 			></d2l-consistent-evaluation-page>
 		`;
 	}

@@ -2,7 +2,6 @@ import './consistent-evaluation-feedback.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
-import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
@@ -11,36 +10,12 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
-			rubricHref: {
-				attribute: 'rubric-href',
+			feedbackText: {
+				attribute: 'feedback-text',
 				type: String
 			},
-			rubricAssessmentHref: {
-				attribute: 'rubric-assessment-href',
-				type: String
-			},
-			outcomesHref: {
-				attribute: 'outcomes-href',
-				type: String
-			},
-			gradeHref: {
-				attribute: 'grade-href',
-				type: String
-			},
-			feedbackHref: {
-				attribute: 'feedback-href',
-				type: String
-			},
-			token: {
-				type: String
-			},
-			rubricReadOnly: {
-				attribute: 'rubric-read-only',
-				type: Boolean
-			},
-			richTextEditorDisabled: {
-				attribute: 'rich-text-editor-disabled',
-				type: Boolean
+			grade: {
+				type: Object
 			},
 			hideRubric: {
 				attribute: 'hide-rubric',
@@ -58,8 +33,28 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				attribute: 'hide-outcomes',
 				type: Boolean
 			},
-			_richTextEditorConfig: {
-				type: Object
+			outcomesHref: {
+				attribute: 'outcomes-href',
+				type: String
+			},
+			richTextEditorDisabled: {
+				attribute: 'rich-text-editor-disabled',
+				type: Boolean
+			},
+			rubricAssessmentHref: {
+				attribute: 'rubric-assessment-href',
+				type: String
+			},
+			rubricHref: {
+				attribute: 'rubric-href',
+				type: String
+			},
+			rubricReadOnly: {
+				attribute: 'rubric-read-only',
+				type: Boolean
+			},
+			token: {
+				type: String
 			}
 		};
 	}
@@ -75,12 +70,35 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	constructor() {
 		super();
 
+		this._token = undefined;
 		this._richTextEditorConfig = {};
 
 		this.hideRubric = false;
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
+	}
+
+	async _transientSaveFeedback(e) {
+		this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-feedback', e.detail);
+	}
+
+	async _transientSaveGrade(e) {
+		const type = e.detail.grade.scoreType;
+		if (type === 'LetterGrade') {
+			this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-grade', e.detail.grade.letterGrade);
+		}
+		else if (type === 'Numeric') {
+			this._emitTransientSaveEvent('on-d2l-consistent-eval-transient-save-grade', e.detail.grade.score);
+		}
+	}
+
+	_emitTransientSaveEvent(eventName, newValue) {
+		this.dispatchEvent(new CustomEvent(eventName, {
+			composed: true,
+			bubbles: true,
+			detail: newValue
+		}));
 	}
 
 	_renderRubric() {
@@ -103,8 +121,8 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideGrade) {
 			return html`
 				<d2l-consistent-evaluation-grade-result
-					href=${this.gradeHref}
-					.token=${this.token}
+					.grade=${this.grade}
+					@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}
@@ -115,10 +133,12 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	_renderFeedback() {
 		if (!this.hideFeedback) {
 			return html`
-				<d2l-consistent-evaluation-feedback
-					href=${this.feedbackHref}
-					.token=${this.token}
-				></d2l-consistent-evaluation-feedback>
+				<d2l-consistent-evaluation-feedback-presentational
+					can-edit-feedback
+					.feedback-text=${this.feedbackText}
+					.rich-text-editor-config=${this._richTextEditorConfig}
+					@d2l-consistent-eval-on-feedback-edit=${this._transientSaveFeedback}
+				></d2l-consistent-evaluation-feedback-presentational>
 			`;
 		}
 

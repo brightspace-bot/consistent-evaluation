@@ -8,6 +8,15 @@
 			import '@brightspace-ui/core/components/typography/styles.js';
 			import '@brightspace-ui/core/components/typography/typography.js';
 			import '../components/consistent-evaluation.js';
+			import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
+			import SirenParse from 'siren-parser';
+			fetch('data/grade/evaluationEntity.json').then(response => response.json()).then(entity => {
+				const parsedEntity = SirenParse(entity);
+				const grade = new Grade(GradeType.Number, 47, 100, null, null, parsedEntity);
+				const panels = document.getElementsByTagName('consistent-evaluation-right-panel');
+				for (let i = 0; i < panels.length; i++) {
+					panels[i].grade = grade;
+				}});
 		</script>
 		<title>d2l-consistent-evaluation</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +32,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 				></consistent-evaluation-right-panel>
 			</d2l-demo-snippet>
@@ -34,7 +43,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 					rubric-read-only
 				></consistent-evaluation-right-panel>
@@ -46,7 +55,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 					rich-text-editor-disabled
 				></consistent-evaluation-right-panel>
@@ -58,7 +67,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 					hide-rubric
 				></consistent-evaluation-right-panel>
@@ -70,7 +79,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 					hide-grade
 				></consistent-evaluation-right-panel>
@@ -82,7 +91,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 					hide-feedback
 				></consistent-evaluation-right-panel>
@@ -94,7 +103,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 					hide-outcomes
 				></consistent-evaluation-right-panel>
@@ -106,7 +115,7 @@
 					rubric-href="data/rubric.json"
 					rubric-assessment-href="data/assessment.json"
 					outcomes-href="data/outcomes/suggested-level.json"
-					grade-href="data/grade/grade.json"
+					feedback-text=""
 					token="token"
 					hide-rubric
 					hide-grade
