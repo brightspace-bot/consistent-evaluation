@@ -27,7 +27,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			},
 			displayNumber : {
 				attribute: 'display-number',
-				type: Number
+				type: String
 			},
 			evaluationState : {
 				attribute: 'evaluation-state',
@@ -81,7 +81,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	constructor() {
 		super();
-
+		this.late = false;
 		this._submissionEntity = undefined;
 		this._date = undefined;
 		this._attachments = [];
@@ -295,6 +295,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	}
 
 	render() {
+		console.log(this);
 		if (this.submissionType === fileSubmission) {
 			return html`${this._renderFileSubmission()}`;
 		} else if (this.submissionType === textSubmission) {
