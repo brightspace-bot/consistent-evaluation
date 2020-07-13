@@ -13,6 +13,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			rubricHref: { type: String },
 			rubricAssessmentHref: { type: String },
 			outcomesHref: { type: String },
+			evaluationHref: {type: String},
 			token: { type: String },
 			rubricReadOnly: { type: Boolean },
 			richTextEditorDisabled: { type: Boolean },
@@ -102,7 +103,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-feedback-presentational
 					canEditFeedback
 					.feedbackText=${this.feedbackText}
+					.href=${this.evaluationHref}
 					.richTextEditorConfig=${this._richTextEditorConfig}
+					.token=${this.token}
 					@d2l-consistent-eval-on-feedback-edit=${this._transientSaveFeedback}
 				></d2l-consistent-evaluation-feedback-presentational>
 			`;

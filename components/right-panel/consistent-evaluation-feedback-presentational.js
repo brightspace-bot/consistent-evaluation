@@ -56,6 +56,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		this.shadowRoot.querySelector('d2l-activity-attachments-editor').save();
 	}
 	render() {
+		if(this.href && this.token) {
 		return html`
 			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 				<d2l-activity-text-editor
@@ -68,17 +69,17 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 				<div>
 					<d2l-activity-attachments-editor
-						href="${this.href}"
-						.token="${this.token}">
+						.href="${this.href}/attachments"
+						.token="${this.token}"
+						@d2l-activity-attachments-picker-files-uploaded="${this.saveAttachment}"
+						@d2l-attachment-removed="${this.saveAttachment}">
 					</d2l-activity-attachments-editor>
 				</div>
-				<d2l-button
-					id="asd"
-					text="$asdasd"
-					@click="${this.saveAttachment}">
-				</d2l-button>
 			</d2l-consistent-evaluation-right-panel-block>
 		`;
+		} else {
+			return html``;
+		}
 	}
 }
 
