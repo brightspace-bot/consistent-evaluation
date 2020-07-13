@@ -295,7 +295,6 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	}
 
 	render() {
-		console.log(this);
 		if (this.submissionType === fileSubmission) {
 			return html`${this._renderFileSubmission()}`;
 		} else if (this.submissionType === textSubmission) {
