@@ -52,7 +52,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				type: String
 			},
 			evaluationHref: {
-				attribute: 'rubric-href',
+				attribute: 'evaluation-href',
 				type: String
 			},
 			rubricReadOnly: {

@@ -2,8 +2,6 @@ import 'd2l-activities/components/d2l-activity-editor/d2l-activity-text-editor.j
 import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d2l-activity-attachments-editor.js';
 import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d2l-activity-attachments-list.js';
 import './consistent-evaluation-right-panel-block';
-import '@brightspace-ui/core/components/button/button.js';
-import '@brightspace-ui/core/components/button/button-icon.js';
 import { html, LitElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { loadLocalizationResources } from '../locale.js';
