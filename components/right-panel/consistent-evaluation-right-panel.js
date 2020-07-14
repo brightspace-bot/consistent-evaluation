@@ -1,8 +1,9 @@
-import './consistent-evaluation-feedback.js';
+import './consistent-evaluation-feedback-presentational.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
@@ -15,6 +16,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				type: String
 			},
 			grade: {
+				attribute: false,
 				type: Object
 			},
 			hideRubric: {
@@ -107,7 +109,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-rubric
 					header=${this.localize('rubrics')}
 					href=${this.rubricHref}
-					assessment-href=${this.rubricAssessmentHref}
+					assessment-href=${ifDefined(this.rubricAssessmentHref)}
 					.token=${this.token}
 					?read-only=${this.rubricReadOnly}
 				></d2l-consistent-evaluation-rubric>
@@ -135,7 +137,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			return html`
 				<d2l-consistent-evaluation-feedback-presentational
 					can-edit-feedback
-					.feedback-text=${this.feedbackText}
+					feedback-text=${this.feedbackText}
 					.rich-text-editor-config=${this._richTextEditorConfig}
 					@d2l-consistent-eval-on-feedback-edit=${this._transientSaveFeedback}
 				></d2l-consistent-evaluation-feedback-presentational>

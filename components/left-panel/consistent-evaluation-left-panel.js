@@ -2,13 +2,14 @@ import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import './consistent-evaluation-evidence.js';
 import './consistent-evaluation-submissions-page.js';
 import { css, html, LitElement } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	static get properties() {
 		return {
 			submissionInfo: {
-				attribute: 'submission-info',
+				attribute: false,
 				type: Object
 			},
 			token: { type: String }
@@ -77,10 +78,10 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 			></d2l-consistent-evaluation-evidence>` :
 			html`
 			<d2l-consistent-evaluation-submissions-page
-				.due-date=${this.submissionInfo && this.submissionInfo.dueDate}
+				due-date=${ifDefined(this.submissionInfo && this.submissionInfo.dueDate)}
 				evaluation-state=${this.submissionInfo && this.submissionInfo.evaluationState}
 				submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
-				.submission-list=${this.submissionInfo && this.submissionInfo.submissionList}
+				.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 				.token=${this.token}
 			></d2l-consistent-evaluation-submissions-page>`
 		}`;

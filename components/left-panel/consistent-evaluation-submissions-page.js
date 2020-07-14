@@ -11,7 +11,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return {
 			dueDate: {
 				attribute: 'due-date',
-				type: Object
+				type: String
 			},
 			evaluationState: {
 				attribute: 'evaluation-state',
@@ -106,11 +106,11 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 					itemTemplate.push(html`
 						<d2l-consistent-evaluation-submission-item
 							date-str=${submissionDate}
-							.display-number=${this._submissionEntities.length - i}
+							display-number=${this._submissionEntities.length - i}
 							evaluation-state=${this.evaluationState}
-							?late=${new Date(this.dueDate) < new Date(submissionDate)}
-							.submission-entity=${submissionEntity}
 							submission-type=${this.submissionType}
+							.submissionEntity=${submissionEntity}
+							?late=${new Date(this.dueDate) < new Date(submissionDate)}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
 					console.warn('Consistent Evaluation submission date property not found');

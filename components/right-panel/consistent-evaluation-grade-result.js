@@ -8,12 +8,24 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
-			grade: { type: Object },
-			customManualOverrideText: { type: String },
-			customManualOverrideClearText: { type: String },
-			_labelText: { type: String },
-			_readOnly: { type: Boolean },
-			_hideTitle: { type: Boolean },
+			grade: {
+				attribute: false,
+				type: Object },
+			customManualOverrideText: {
+				attribute: 'custom-manual-override-text',
+				type: String },
+			customManualOverrideClearText: {
+				attribute:'custom-manual-override-clear-text',
+				type: String },
+			labelText: {
+				attribute: 'label-text',
+				type: String },
+			readOnly: {
+				attribute: 'read-only',
+				type: Boolean },
+			hideTitle: {
+				attribute: 'hide-title',
+				type: Boolean },
 
 			_manuallyOverriddenGrade: { type: Object },
 			_hasUnsavedChanged: { type: Boolean },
@@ -21,7 +33,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 			_includeReportsButton: { type: Boolean },
 			_gradeButtonTooltip: { type: String },
 			_reportsButtonTooltip: { type: String },
-			_isGradeAutoCompleted: { type: Boolean },
+			_isGradeAutoCompleted: { type: Boolean }
 		};
 	}
 
@@ -30,9 +42,9 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		this.grade = new Grade(GradeType.Number, 0, 0, null, null, null);
 		this.customManualOverrideText = undefined;
 		this.customManualOverrideClearText = undefined;
-		this._readOnly = false;
-		this._labelText = '';
-		this._hideTitle = false;
+		this.readOnly = false;
+		this.labelText = '';
+		this.hideTitle = false;
 		// hard coded as disabled as not yet supported by API
 		this._manuallyOverriddenGrade = undefined;
 		this._hasUnsavedChanged = false;
@@ -69,7 +81,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		return html`
 			<d2l-consistent-evaluation-right-panel-block title="Overall Grade">
 			<d2l-labs-d2l-grade-result-presentational
-				labelText=${this.localize('overallGrade')}
+				labelText=${this.labelText || this.localize('overallGrade')}
 				.gradeType=${gradeType}
 				scoreNumerator=${score}
 				scoreDenominator=${scoreOutOf}
@@ -86,8 +98,8 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 				?isGradeAutoCompleted=${this._isGradeAutoCompleted}
 				?isManualOverrideActive=${this._manuallyOverriddenGrade !== undefined}
 
-				?readOnly=${this._readOnly}
-				?hideTitle=${this._hideTitle}
+				?readOnly=${this.readOnly}
+				?hideTitle=${this.hideTitle}
 
 				@d2l-grade-result-grade-change=${this.onGradeChanged}
 				@d2l-grade-result-letter-score-selected=${this.onGradeChanged}

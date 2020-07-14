@@ -4,8 +4,10 @@ import './right-panel/consistent-evaluation-right-panel.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { evaluationRel, publishedState } from './controllers/constants.js';
+import { draftState, publishedState } from './controllers/constants.js';
+import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 export default class ConsistentEvaluationPage extends LitElement {
 
@@ -14,18 +16,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 			evaluationHref: {
 				attribute: 'evaluation-href',
 				type: String
-			},
-			evaluationState: {
-				attribute: 'evaluation-state',
-				type: String
-			},
-			feedbackText: {
-				attribute: false,
-				type: String
-			},
-			grade: {
-				attribute: false,
-				type: Object
 			},
 			nextStudentHref: {
 				attribute: 'next-student-href',
@@ -52,11 +42,17 @@ export default class ConsistentEvaluationPage extends LitElement {
 				type: Boolean
 			},
 			submissionInfo: {
-				attribute: 'submission-info',
+				attribute: false,
 				type: Object
 			},
 			token: {
 				type: String
+			},
+			_feedbackText: {
+				attribute: false
+			},
+			_grade: {
+				attribute: false
 			},
 			_feedbackEntity: {
 				attribute: false
@@ -95,7 +91,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 		const oldVal = this.evaluationEntity;
 		if (oldVal !== entity) {
 			this._evaluationEntity = entity;
-			this.evaluationHref = entity.getLinkByRel(evaluationRel).href;
+			this.requestUpdate();
 		}
 	}
 
@@ -127,18 +123,18 @@ export default class ConsistentEvaluationPage extends LitElement {
 		}
 	}
 
-	get feedbackText() {
+	get _feedbackText() {
 		if (this._feedbackEntity && this._feedbackEntity.properties) {
 			return this._feedbackEntity.properties.text || '';
 		}
 		return '';
 	}
 
-	get grade() {
+	get _grade() {
 		if (this._gradeEntity) {
 			return this._controller.parseGrade(this._gradeEntity);
 		}
-		return undefined;
+		return new Grade(GradeType.Number, 0, 0, null, null, this._gradeEntity);
 	}
 
 	get _feedbackEntity() {
@@ -206,11 +202,13 @@ export default class ConsistentEvaluationPage extends LitElement {
 	async _publishEvaluation() {
 		this.evaluationEntity = await this._controller.publish(this.evaluationEntity);
 		this.evaluationState = this.evaluationEntity.properties.state;
+		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
 		this.evaluationEntity = await this._controller.retract(this.evaluationEntity);
 		this.evaluationState = this.evaluationEntity.properties.state;
+		this.submissionInfo.evaluationState = draftState;
 	}
 
 	render() {
@@ -219,17 +217,17 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary">
 					<d2l-consistent-evaluation-left-panel
-						.submission-info=${this.submissionInfo}
+						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
-						.grade=${this.grade}
-						rubric-href=${this.rubricHref}
-						rubric-assessment-href=${this.rubricAssessmentHref}
-						outcomes-href=${this.outcomesHref}
-						feedback-text=${this.feedbackText}
+						feedback-text=${this._feedbackText}
+						rubric-href=${ifDefined(this.rubricHref)}
+						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
+						outcomes-href=${ifDefined(this.outcomesHref)}
+						.grade=${this._grade}
 						.token=${this.token}
 						?rubric-read-only=${this.rubricReadOnly}
 						?rich-text-editor-disabled=${this.richTextEditorDisabled}
@@ -243,13 +241,13 @@ export default class ConsistentEvaluationPage extends LitElement {
 				</div>
 				<div slot="footer">
 					<d2l-consistent-evaluation-footer-presentational
+						next-student-href=${ifDefined(this.nextStudentHref)}
 						?published=${this._isEvaluationPublished()}
-						.next-student-href=${this.nextStudentHref}
-						@on-publish=${this._publishEvaluation}
-						@on-save-draft=${this._saveEvaluation}
-						@on-retract=${this._retractEvaluation}
-						@on-update=${this._updateEvaluation}
-						@on-next-student=${this._onNextStudentClick}
+						@d2l-consistent-evaluation-on-publish=${this._publishEvaluation}
+						@d2l-consistent-evaluation-on-save-draft=${this._saveEvaluation}
+						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}
+						@d2l-consistent-evaluation-on-update=${this._updateEvaluation}
+						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
 					></d2l-consistent-evaluation-footer-presentational>
 				</div>
 			</d2l-template-primary-secondary>
