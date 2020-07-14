@@ -9,11 +9,25 @@ import { Classes } from 'd2l-hypermedia-constants';
 export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get properties() {
 		return {
-			submissionList: { type: Object },
-			token: { type: String },
-			evaluationState: { type: String },
-			submissionType: { type: String },
-			dueDate: { type: Object }
+			dueDate: {
+				attribute: 'due-date',
+				type: String
+			},
+			evaluationState: {
+				attribute: 'evaluation-state',
+				type: String
+			},
+			submissionList: {
+				attribute: 'submission-list',
+				type: Array
+			},
+			submissionType: {
+				attribute: 'submission-type',
+				type: String
+			},
+			token: {
+				type: String
+			}
 		};
 	}
 
@@ -91,12 +105,12 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 					const submissionDate = submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
 					itemTemplate.push(html`
 						<d2l-consistent-evaluation-submission-item
-							dateStr=${submissionDate}
-							.displayNumber=${this._submissionEntities.length - i}
-							evaluationState=${this.evaluationState}
-							?late=${new Date(this.dueDate) < new Date(submissionDate)}
+							date-str=${submissionDate}
+							display-number=${this._submissionEntities.length - i}
+							evaluation-state=${this.evaluationState}
+							submission-type=${this.submissionType}
 							.submissionEntity=${submissionEntity}
-							submissionType=${this.submissionType}
+							?late=${new Date(this.dueDate) < new Date(submissionDate)}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
 					console.warn('Consistent Evaluation submission date property not found');

@@ -14,11 +14,24 @@ import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
-			canEditFeedback: { type: Boolean },
-			feedbackText: { type: String },
-			href: { type: String },
-			richTextEditorConfig: { type: Object },
-			token: { type: String }
+			canEditFeedback: {
+				attribute: 'can-edit-feedback',
+				type: Boolean
+			},
+			feedbackText: {
+				attribute: 'feedback-text',
+				type: String
+			},
+			href: {
+				type: String
+			},
+			richTextEditorConfig: {
+				attribute: 'rich-text-editor-config',
+				type: Object
+			},
+			token: {
+				type: String
+			}
 		};
 	}
 
@@ -62,7 +75,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 				<d2l-activity-text-editor
 					.value="${this.feedbackText}"
 					.richtextEditorConfig="${this.richTextEditorConfig}"
-					@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
 					ariaLabel="${this.localize('overallFeedback')}"
 					?disabled="${!this.canEditFeedback}">
 				</d2l-activity-text-editor>

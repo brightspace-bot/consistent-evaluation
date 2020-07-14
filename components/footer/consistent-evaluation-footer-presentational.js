@@ -7,8 +7,13 @@ import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
-			published: { type: Boolean },
-			showNextStudent: { type: Boolean }
+			published: {
+				type: Boolean
+			},
+			showNextStudent: {
+				attribute: 'show-next-student',
+				type: Boolean
+			}
 		};
 	}
 	static get styles() {
@@ -41,11 +46,11 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 		}));
 	}
 
-	_emitPublishEvent()     { this._dispatchButtonClickEvent('on-publish'); }
-	_emitRetractEvent()     { this._dispatchButtonClickEvent('on-retract'); }
-	_emitUpdateEvent()      { this._dispatchButtonClickEvent('on-update'); }
-	_emitSaveDraftEvent()   { this._dispatchButtonClickEvent('on-save-draft'); }
-	_emitNextStudentEvent() { this._dispatchButtonClickEvent('on-next-student'); }
+	_emitPublishEvent()     { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-publish'); }
+	_emitRetractEvent()     { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-retract'); }
+	_emitUpdateEvent()      { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-update'); }
+	_emitSaveDraftEvent()   { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-save-draft'); }
+	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
 
 	_getPublishOrRetractButton() {
 		const text = this.published ? this.localize('retract') : this.localize('publish');

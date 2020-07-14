@@ -1,8 +1,9 @@
-import './consistent-evaluation-feedback.js';
+import './consistent-evaluation-feedback-presentational.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
 import { css, html, LitElement } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
@@ -10,19 +11,57 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
-			rubricHref: { type: String },
-			rubricAssessmentHref: { type: String },
-			outcomesHref: { type: String },
-			evaluationHref: {type: String},
-			token: { type: String },
-			rubricReadOnly: { type: Boolean },
-			richTextEditorDisabled: { type: Boolean },
-			hideRubric: { type: Boolean },
-			hideGrade: { type: Boolean },
-			hideFeedback: { type: Boolean },
-			hideOutcomes: { type: Boolean },
-			feedbackText: { type: String },
-			grade: { type: Object }
+			feedbackText: {
+				attribute: 'feedback-text',
+				type: String
+			},
+			grade: {
+				attribute: false,
+				type: Object
+			},
+			hideRubric: {
+				attribute: 'hide-rubric',
+				type: Boolean
+			},
+			hideGrade: {
+				attribute: 'hide-grade',
+				type: Boolean
+			},
+			hideFeedback: {
+				attribute: 'hide-feedback',
+				type: Boolean
+			},
+			hideOutcomes: {
+				attribute: 'hide-outcomes',
+				type: Boolean
+			},
+			outcomesHref: {
+				attribute: 'outcomes-href',
+				type: String
+			},
+			richTextEditorDisabled: {
+				attribute: 'rich-text-editor-disabled',
+				type: Boolean
+			},
+			rubricAssessmentHref: {
+				attribute: 'rubric-assessment-href',
+				type: String
+			},
+			rubricHref: {
+				attribute: 'rubric-href',
+				type: String
+			},
+      evaluationHref: {
+        attribute: 'rubric-href',
+        type: String
+      },
+			rubricReadOnly: {
+				attribute: 'rubric-read-only',
+				type: Boolean
+			},
+			token: {
+				type: String
+			}
 		};
 	}
 
@@ -74,9 +113,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-rubric
 					header=${this.localize('rubrics')}
 					href=${this.rubricHref}
-					assessmentHref=${this.rubricAssessmentHref}
+					assessment-href=${ifDefined(this.rubricAssessmentHref)}
 					.token=${this.token}
-					?readonly=${this.rubricReadOnly}
+					?read-only=${this.rubricReadOnly}
 				></d2l-consistent-evaluation-rubric>
 			`;
 		}
@@ -101,11 +140,11 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		if (!this.hideFeedback) {
 			return html`
 				<d2l-consistent-evaluation-feedback-presentational
-					canEditFeedback
-					.feedbackText=${this.feedbackText}
 					.href=${this.evaluationHref}
-					.richTextEditorConfig=${this._richTextEditorConfig}
 					.token=${this.token}
+					can-edit-feedback
+					feedback-text=${this.feedbackText}
+					.rich-text-editor-config=${this._richTextEditorConfig}
 					@d2l-consistent-eval-on-feedback-edit=${this._transientSaveFeedback}
 				></d2l-consistent-evaluation-feedback-presentational>
 			`;

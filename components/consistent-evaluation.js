@@ -1,6 +1,7 @@
 import './consistent-evaluation-page.js';
 import { ConsistentEvaluationHrefController } from './controllers/ConsistentEvaluationHrefController.js';
 import { html } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import RootStore from './stores/root.js';
 
@@ -46,15 +47,15 @@ export class ConsistentEvaluation extends MobxLitElement {
 	render() {
 		return html`
 			<d2l-consistent-evaluation-page
-				.rubricHref=${this._childHrefs && this._childHrefs.rubricHref}
-				.rubricAssessmentHref=${this._childHrefs && this._childHrefs.rubricAssessmentHref}
-				.outcomesHref=${this._childHrefs && this._childHrefs.outcomesHref}
-				.evaluationHref=${this._childHrefs && this._childHrefs.evaluationHref}
-				.nextStudentHref=${this._childHrefs && this._childHrefs.nextHref}
+				rubric-href=${ifDefined(this._childHrefs && this._childHrefs.rubricHref)}
+				rubric-assessment-href=${ifDefined(this._childHrefs && this._childHrefs.rubricAssessmentHref)}
+				outcomes-href=${ifDefined(this._childHrefs && this._childHrefs.outcomesHref)}
+				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
+				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				.submissionInfo=${this._submissionInfo}
 				.token=${this.token}
-				?rubricReadOnly=${this._rubricReadOnly}
-				?richTextEditorDisabled=${this._richTextEditorDisabled}
+				?rubric-read-only=${this._rubricReadOnly}
+				?rich-text-editor-disabled=${this._richTextEditorDisabled}
 				@d2l-consistent-eval-next-student-click=${this.onNextStudentClick}
 			></d2l-consistent-evaluation-page>
 		`;
