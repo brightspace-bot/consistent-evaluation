@@ -188,7 +188,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 		this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
 	}
 
-	async _transientSaveGrade(e) { 
+	async _transientSaveGrade(e) {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		const newGradeVal = e.detail;
 		this.evaluationEntity = await this._controller.transientSaveGrade(entity, newGradeVal);

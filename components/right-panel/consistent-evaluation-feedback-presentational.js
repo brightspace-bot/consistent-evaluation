@@ -10,7 +10,6 @@ import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
-
 class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
@@ -65,12 +64,12 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 			detail: feedback
 		}));
 	}
-	async saveAttachment(){
+	async saveAttachment() {
 		this.shadowRoot.querySelector('d2l-activity-attachments-editor').save();
 	}
 	render() {
-		if(this.href && this.token) {
-		return html`
+		if (this.href && this.token) {
+			return html`
 			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 				<d2l-activity-text-editor
 					.value="${this.feedbackText}"

@@ -51,10 +51,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				attribute: 'rubric-href',
 				type: String
 			},
-      evaluationHref: {
-        attribute: 'rubric-href',
-        type: String
-      },
+			evaluationHref: {
+				attribute: 'rubric-href',
+				type: String
+			},
 			rubricReadOnly: {
 				attribute: 'rubric-read-only',
 				type: Boolean
