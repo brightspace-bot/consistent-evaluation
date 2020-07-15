@@ -1,5 +1,5 @@
-import './footer/consistent-evaluation-footer.js';
 import './left-panel/consistent-evaluation-left-panel.js';
+import './footer/consistent-evaluation-footer-presentational.js';
 import './right-panel/consistent-evaluation-right-panel.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
@@ -180,33 +180,46 @@ export default class ConsistentEvaluationPage extends LitElement {
 	}
 
 	async _transientSaveFeedback(e) {
+		const entity = await this._controller.fetchEvaluationEntity(false);
 		const newFeedbackVal = e.detail;
-		this.evaluationEntity = await this._controller.transientSaveFeedback(this.evaluationEntity, newFeedbackVal);
+		this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
 	}
 
 	async _transientSaveGrade(e) {
-		const newGradeVal = e.detail;
-		this.evaluationEntity = await this._controller.transientSaveGrade(this.evaluationEntity, newGradeVal);
+		const entity = await this._controller.fetchEvaluationEntity(false);
+		let newGradeVal;
+		const type = e.detail.grade.scoreType;
+		if (type === GradeType.Letter) {
+			newGradeVal = e.detail.grade.letterGrade;
+		}
+		else if (type === GradeType.Number) {
+			newGradeVal = e.detail.grade.score;
+		}
+		this.evaluationEntity = await this._controller.transientSaveGrade(entity, newGradeVal);
 	}
 
 	async _saveEvaluation() {
-		this.evaluationEntity = await this._controller.save(this.evaluationEntity);
+		const entity = await this._controller.fetchEvaluationEntity(false);
+		this.evaluationEntity = await this._controller.save(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _updateEvaluation() {
-		this.evaluationEntity = await this._controller.update(this.evaluationEntity);
+		const entity = await this._controller.fetchEvaluationEntity(false);
+		this.evaluationEntity = await this._controller.update(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _publishEvaluation() {
-		this.evaluationEntity = await this._controller.publish(this.evaluationEntity);
+		const entity = await this._controller.fetchEvaluationEntity(false);
+		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
-		this.evaluationEntity = await this._controller.retract(this.evaluationEntity);
+		const entity = await this._controller.fetchEvaluationEntity(false);
+		this.evaluationEntity = await this._controller.retract(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
 	}
@@ -223,6 +236,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
+						evaluation-href=${this.evaluationHref}
 						feedback-text=${this._feedbackText}
 						rubric-href=${ifDefined(this.rubricHref)}
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
@@ -235,8 +249,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 						?hide-grade=${this._noGradeComponent()}
 						?hide-outcomes=${this.outcomesHref === undefined}
 						?hide-feedback=${this._noFeedbackComponent()}
-						@on-d2l-consistent-eval-transient-save-feedback=${this._transientSaveFeedback}
-						@on-d2l-consistent-eval-transient-save-grade=${this._transientSaveGrade}
+						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
+						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">

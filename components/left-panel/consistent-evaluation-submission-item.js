@@ -38,7 +38,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				type: Boolean
 			},
 			submissionEntity : {
-				attribute: 'submission-entity',
+				attribute: false,
 				type: Object
 			},
 			submissionType: {
@@ -274,7 +274,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				<d2l-list-item-content>
 					${this._renderCommentTitle()}
 					<div slot="supporting-info">
-						<d2l-more-less height=${peekHeight} h-align>${unsafeHTML(this._comment)}</d2l-more-less>
+						<d2l-more-less height=${peekHeight}>${unsafeHTML(this._comment)}</d2l-more-less>
 					</div>
 				</d2l-list-item-content>
 				</d2l-list-item>`;
