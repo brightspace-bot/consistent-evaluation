@@ -1,4 +1,3 @@
-import '@brightspace-ui/core/components/button/button-icon.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/dropdown/dropdown-more.js';
 import '@brightspace-ui/core/components/dropdown/dropdown-menu.js';
@@ -58,8 +57,12 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			flex-direction: column;
 			position: relative;
 		}
+		d2l-list-item, d2l-list-item:hover {
+			--d2l-list-item-content-text-color: var(--d2l-color-ferrite);
+		}
 		.d2l-heading-3 {
 			margin: 0;
+			padding-right: 0.5rem;
 		}
 		.consistent-eval-submission-attachment-item {
 			display: inline-block;
@@ -67,10 +70,29 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			padding-left: 0.5rem;
 		}
 		.consistent-eval-submission-attachment-item-container:hover {
-			background-color: var(--d2l-color-regolith);
+			background-color: red; /*not working*/
 		}
 		.consistent-eval-submission-attachment-item-container {
 			justify-content: space-between;
+		}
+		.parent {
+			display: inline-block;
+			position: relative;
+			top: 0;
+			left: 0;
+			border-radius: 0;
+		}
+		.child {
+			margin: 0.5rem;
+			position: relative;
+			top: 0;
+			left: 0;
+		}
+		.readStatus {
+			color: var(--d2l-color-carnelian);
+			position: absolute;
+			top: 0px;
+			right: -4px;
 		}
 	`];
 	}
@@ -175,7 +197,10 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return html`
 		<d2l-list-item>
 		<d2l-list-item-content>
-			<h3 class="d2l-heading-3">${this.localize('textSubmission')} ${this.displayNumber}${this._renderReadStatus(read)}</h3>
+			<div class="parent">
+			<h3 class="d2l-heading-3">${this.localize('textSubmission')} ${this.displayNumber}</h3>
+			${this._renderReadStatus(read)}
+			</div>
 			<div class="d2l-body-small">
 				${this._renderLateStatus()}
 				${this._renderEvaluationState()}
@@ -189,14 +214,23 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	_renderReadStatus(read) {
 		if (!read) {
-			return html`<d2l-icon icon="tier1:dot" style="color: #E87511; vertical-align: top; position: relative; top: 0px;
-			right: 0px;"></d2l-icon>`;
+			return html`
+			<d2l-icon
+				icon="tier1:dot"
+				class="readStatus"
+				aria-label="Unread">
+			</d2l-icon>`;
 		}
 	}
 
 	_renderLateStatus() {
 		if (this.late) {
-			return html`<d2l-status-indicator state="alert" text="${this.localize('late')}" bold></d2l-status-indicator>`;
+			return html`
+			<d2l-status-indicator
+				state="alert"
+				text="${this.localize('late')}"
+				bold>
+				</d2l-status-indicator>`;
 		} else {
 			return html ``;
 		}
@@ -217,12 +251,15 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	}
 
 	_renderAttachments() {
+		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item class="consistent-eval-submission-attachment-item-container">
-			<d2l-list-item-content>
-				<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(file.properties.name)}">
-				</d2l-icon>
+			<d2l-list-item href="#" class="consistent-eval-submission-attachment-item-container">
+			<div slot="illustration" class="parent">
+				<d2l-icon class="child"
+					icon="tier2:${this._getIcon(file.properties.name)}"></d2l-icon>
 				${this._renderReadStatus(file.properties.read)}
+			</div>
+			<d2l-list-item-content>
 				<div class="consistent-eval-submission-attachment-item">
 					<span>${this._getFileTitle(file.properties.name)}</span>
 					<div slot="supporting-info">
@@ -242,7 +279,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return html`<div slot="actions" style="z-index: inherit;">
 			<d2l-dropdown-more text="More Options">
 			<d2l-dropdown-menu id="dropdown">
-				<d2l-menu label="Options">
+				<d2l-menu>
 					<d2l-menu-item-link text="Download" href="${downloadHref}"></d2l-menu-item-link>
 					<d2l-menu-item-link text="Mark as Read" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
 					<d2l-menu-item-link text="Flag" href="https://en.wikipedia.org/wiki/Universe"></d2l-menu-item-link>
@@ -257,21 +294,21 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		const peekHeight = this.submissionType === fileSubmission ? '5em' : '8em';
 		if (this._comment) {
 			return html`
-				<d2l-list-item>
-				<d2l-list-item-content>
 					${this._renderCommentTitle()}
-					<div slot="supporting-info">
+					<div>
 						<d2l-more-less height=${peekHeight}>${unsafeHTML(this._comment)}</d2l-more-less>
 					</div>
-				</d2l-list-item-content>
-				</d2l-list-item>`;
+				`;
 		}
 		return html``;
 	}
 
 	_renderCommentTitle() {
 		if (this.submissionType === fileSubmission) {
-			return html`<div class="d2l-label-text">${this.localize('comments')}</div>`;
+			return html`
+			<div class="d2l-label-text" style="padding-top: 0.5rem;">
+				${this.localize('comments')}
+			</div>`;
 		} else {
 			return html``;
 		}
@@ -279,11 +316,12 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	_renderFileSubmission() {
 		return html`
+		<d2l-list grid separators="between">
 		${this._renderFileSubmissionTitle()}
-		<d2l-list separators="between">
-			${this._renderAttachments()}
-		</d2l-list>
+		${this._renderAttachments()}
 		${this._renderComment()}
+		</d2l-list>
+
 		`;
 	}
 

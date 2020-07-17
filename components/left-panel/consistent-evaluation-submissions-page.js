@@ -103,11 +103,12 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 				const submissionEntity = this._submissionEntities[i].entity;
 				if (submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate)) {
 					const submissionDate = submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
+					const evaluationState = submissionEntity.properties.evaluationStatus;
 					itemTemplate.push(html`
 						<d2l-consistent-evaluation-submission-item
 							date-str=${submissionDate}
 							display-number=${this._submissionEntities.length - i}
-							evaluation-state=${this.evaluationState}
+							evaluation-state=${evaluationState}
 							submission-type=${this.submissionType}
 							.submissionEntity=${submissionEntity}
 							?late=${new Date(this.dueDate) < new Date(submissionDate)}

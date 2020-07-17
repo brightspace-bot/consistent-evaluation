@@ -1,4 +1,7 @@
 {
+  "properties": {
+    "evaluationStatus": "Unevaluated"
+  },
   "class": [
     "assignment-submission"
   ],
