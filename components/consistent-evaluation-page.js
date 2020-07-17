@@ -75,6 +75,9 @@ export default class ConsistentEvaluationPage extends LitElement {
 			:host([hidden]) {
 				display: none;
 			}
+			.d2l-consistent-evaluation-page-primary-slot {
+				height: 100%;
+			}
 		`;
 	}
 
@@ -231,9 +234,9 @@ export default class ConsistentEvaluationPage extends LitElement {
 
 	render() {
 		return html`
-			<d2l-template-primary-secondary>
+			<d2l-template-primary-secondary primary-overflow="hidden">
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
-				<div slot="primary">
+				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}

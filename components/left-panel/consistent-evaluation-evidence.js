@@ -18,7 +18,7 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 				height: 2.7rem;
 			}
 			iframe {
-				height: 80vh;
+				height: calc(100% - 2.7rem);
 				width: 100%;
 			}
 		`;
