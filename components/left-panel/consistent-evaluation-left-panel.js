@@ -18,7 +18,7 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 
 	static get styles() {
 		return css`
-			#d2l-consistent-evaluation-left-panel-evidence {
+			d2l-consistent-evaluation-evidence {
 				overflow: hidden;
 			}
 			d2l-consistent-evaluation-submissions-page {
@@ -72,7 +72,6 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		return html`${this.displayEvidence ?
 			html`
 			<d2l-consistent-evaluation-evidence
-				class="d2l-consistent-evaluation-left-panel-evidence"
 				.url=${this._evidenceUrl}
 				.token=${this.token}
 			></d2l-consistent-evaluation-evidence>` :
