@@ -1,6 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import '@brightspace-ui/core/components/list/list.js';
-import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
