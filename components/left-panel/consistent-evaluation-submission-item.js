@@ -229,23 +229,24 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 
 	_renderAttachments() {
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item class="consistent-eval-submission-attachment-item-container">
-			<d2l-list-item-content>
-				<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(file.properties.name)}">
-				</d2l-icon>
-				${this._renderReadStatus(file.properties.read)}
-				<div class="consistent-eval-submission-attachment-item">
-					<a href="#" @click="${() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
+			<d2l-list-item 
+				class="consistent-eval-submission-attachment-item-container"
+				@click="${() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}"
+			>
+				<d2l-list-item-content>
+					<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(file.properties.name)}">
+					</d2l-icon>
+					${this._renderReadStatus(file.properties.read)}
+					<div class="consistent-eval-submission-attachment-item">
 						<span>${this._getFileTitle(file.properties.name)}</span>
-					</a>
-					<div slot="supporting-info">
-						${this._renderFlaggedStatus(file.properties.flagged)}
-						${this._getFileType(file.properties.name)}
-						<d2l-icon icon="tier1:dot"></d2l-icon>${this._getReadableFileSizeString(file.properties.size)}
+						<div slot="supporting-info">
+							${this._renderFlaggedStatus(file.properties.flagged)}
+							${this._getFileType(file.properties.name)}
+							<d2l-icon icon="tier1:dot"></d2l-icon>${this._getReadableFileSizeString(file.properties.size)}
+						</div>
 					</div>
-				</div>
-			</d2l-list-item-content>
-			${this._addMenuOptions(file.properties.href)}
+				</d2l-list-item-content>
+				${this._addMenuOptions(file.properties.href)}
 			</d2l-list-item>
 			`)}`;
 	}
