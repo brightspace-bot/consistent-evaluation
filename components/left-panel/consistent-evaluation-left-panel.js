@@ -1,4 +1,3 @@
-import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import './consistent-evaluation-evidence.js';
 import './consistent-evaluation-submissions-page.js';
 import { css, html, LitElement } from 'lit-element';
