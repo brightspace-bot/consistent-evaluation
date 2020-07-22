@@ -234,7 +234,6 @@ export default class ConsistentEvaluationPage extends LitElement {
 				<div slot="primary">
 					<d2l-consistent-evaluation-submissions-page
 					due-date=${ifDefined(this.submissionInfo && this.submissionInfo.dueDate)}
-					evaluation-state=${this.submissionInfo && this.submissionInfo.evaluationState}
 					submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
 					.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 					.token=${this.token}></d2l-consistent-evaluation-submissions-page>

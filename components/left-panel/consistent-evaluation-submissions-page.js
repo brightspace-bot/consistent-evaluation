@@ -12,10 +12,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 				attribute: 'due-date',
 				type: String
 			},
-			evaluationState: {
-				attribute: 'evaluation-state',
-				type: String
-			},
 			submissionList: {
 				attribute: false,
 				type: Array

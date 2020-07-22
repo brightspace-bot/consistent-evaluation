@@ -12,7 +12,7 @@ import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
 import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { fileSubmission, textSubmission } from '../controllers/constants';
-import { formatDateTime } from '@brightspace-ui/intl/lib/dateTime.js';
+import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
@@ -98,7 +98,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		.d2l-attachment-read-status {
 			color: var(--d2l-color-carnelian);
 			position: absolute;
-			top: 0px;
+			top: 0;
 			right: -4px;
 		}
 		.d2l-separator-icon {
@@ -182,11 +182,14 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_formatDate() {
-		const formattedDate = (this._date) ? formatDateTime(
+	_formatDateTime() {
+		const formattedDate = (this._date) ? formatDate(
 			this._date,
 			{format: 'full'}) : '';
-		return formattedDate;
+		const formattedTime = (this._date) ? formatTime(
+			this._date,
+			{format: 'short'}) : '';
+		return `${formattedDate} ${formattedTime}`;
 	}
 
 	//Helper rendering methods
@@ -202,7 +205,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				${this._renderEvaluationState()}
 			</span>
 			<span class="d2l-body-small">
-				${this._formatDate()}
+				${this._formatDateTime()}
 			</span>
 			</div>
 		</d2l-list-item-content>
@@ -226,7 +229,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 				${this._renderLateStatus()}
 				${this._renderEvaluationState()}
 				${this._renderFlaggedStatus(flagged)}
-				<span class="d2l-body-small">${this._formatDate()}</span>
+				<span class="d2l-body-small">${this._formatDateTime()}</span>
 			</div>
 		</d2l-list-item-content>
 		${this._addMenuOptions(read, flagged, href, file.properties.name)}
@@ -274,7 +277,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	_renderAttachments() {
 		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item href="#" class="consistent-eval-submission-attachment-item-container">
+			<d2l-list-item href="javascript:void(0);" class="consistent-eval-submission-attachment-item-container">
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
