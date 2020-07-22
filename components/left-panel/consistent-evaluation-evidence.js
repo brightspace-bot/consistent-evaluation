@@ -61,7 +61,7 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 				src="${this.url}"
 				frameborder="0" 
 				scrolling="no" 
-				allowfullscreen="true" 
+				?allowfullscreen="true" 
 				allow="fullscreen"
 			></iframe>
 		`;
