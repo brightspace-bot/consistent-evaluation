@@ -31,6 +31,8 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 	constructor() {
 		super();
 
+		this._allowFullscreen = true;
+
 		window.addEventListener('message', e => {
 			if (e.data.type === 'token-request') {
 				e.source.postMessage({
@@ -61,7 +63,7 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 				src="${this.url}"
 				frameborder="0" 
 				scrolling="no" 
-				?allowfullscreen="true" 
+				?allowfullscreen="${this._allowFullscreen}"
 				allow="fullscreen"
 			></iframe>
 		`;
