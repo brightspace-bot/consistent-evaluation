@@ -230,8 +230,9 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		return html`${this._attachments.map((file) => html`
 			<d2l-list-item 
 				class="consistent-eval-submission-attachment-item-container"
-				@click="${() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}"
-			>
+				@click="${
+	// eslint-disable-next-line lit/no-template-arrow
+	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
 				<d2l-list-item-content>
 					<d2l-icon class="consistent-eval-submission-attachment-item" icon="tier2:${this._getIcon(file.properties.name)}">
 					</d2l-icon>
