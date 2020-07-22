@@ -36,7 +36,7 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 				e.source.postMessage({
 					type: 'token-response',
 					token: this.token
-				}, '*');
+				}, 'http://s.brightspace.com');
 			}
 		});
 	}
