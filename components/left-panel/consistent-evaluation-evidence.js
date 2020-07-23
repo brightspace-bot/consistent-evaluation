@@ -14,11 +14,14 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 
 	static get styles() {
 		return css`
+			:host {
+				--top-bar-height: 2.7rem;
+			}
 			.d2l-consistent-evaluation-evidence-top-bar {
-				height: 2.7rem;
+				height: var(--top-bar-height);
 			}
 			iframe {
-				height: calc(100% - 2.7rem);
+				height: calc(100% - var(--top-bar-height));
 				width: 100%;
 			}
 		`;
@@ -30,8 +33,6 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 
 	constructor() {
 		super();
-
-		this._allowFullscreen = true;
 
 		window.addEventListener('message', e => {
 			if (e.data.type === 'token-request') {
@@ -62,8 +63,7 @@ export class ConsistentEvaluationEvidence extends LocalizeMixin(LitElement) {
 			<iframe 
 				src="${this.url}"
 				frameborder="0" 
-				scrolling="no" 
-				?allowfullscreen="${this._allowFullscreen}"
+				scrolling="no"
 				allow="fullscreen"
 			></iframe>
 		`;

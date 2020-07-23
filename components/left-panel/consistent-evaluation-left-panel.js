@@ -11,7 +11,11 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 				attribute: false,
 				type: Object
 			},
-			token: { type: String }
+			token: { type: String },
+			_evidenceUrl: {
+				attribute: false,
+				type: String
+			}
 		};
 	}
 
@@ -30,19 +34,6 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		super();
 
 		this._evidenceUrl = undefined;
-		this._displayEvidence = false;
-	}
-
-	get displayEvidence() {
-		return this._displayEvidence;
-	}
-
-	set displayEvidence(newVal) {
-		const oldVal = this._displayEvidence;
-		if (oldVal !== newVal) {
-			this._displayEvidence = newVal;
-			this.requestUpdate('displayEvidence', oldVal);
-		}
 	}
 
 	connectedCallback() {
@@ -58,31 +49,30 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 	}
 
 	_renderEvidence(e) {
-		this.displayEvidence = true;
 		this._evidenceUrl = e.detail.url;
 	}
 
 	_renderSubmissionList() {
-		this.displayEvidence = false;
 		this._evidenceUrl = undefined;
 	}
 
 	render() {
-		return html`${this.displayEvidence ?
-			html`
+		if (this._evidenceUrl) {
+			return html`
 			<d2l-consistent-evaluation-evidence
 				.url=${this._evidenceUrl}
 				.token=${this.token}
-			></d2l-consistent-evaluation-evidence>` :
-			html`
+			></d2l-consistent-evaluation-evidence>`;
+		} else {
+			return html`
 			<d2l-consistent-evaluation-submissions-page
 				due-date=${ifDefined(this.submissionInfo && this.submissionInfo.dueDate)}
 				evaluation-state=${this.submissionInfo && this.submissionInfo.evaluationState}
 				submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
 				.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 				.token=${this.token}
-			></d2l-consistent-evaluation-submissions-page>`
-		}`;
+			></d2l-consistent-evaluation-submissions-page>`;
+		}
 	}
 }
 
