@@ -166,7 +166,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	//Helper methods
 
 	_getIcon(filename) {
-		const ext = this._getFileType(filename);
+		const ext = this._getFileExtension(filename);
 		if (ext in fileTypes) {
 			return fileTypes[ext];
 		}
@@ -174,11 +174,21 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_getFileTitle(filename) {
-		return filename.split('.')[0];
+		const index = filename.lastIndexOf('.');
+		if (index < 0) {
+			return '';
+		} else {
+			return filename.substring(0, index);
+		}
 	}
 
-	_getFileType(filename) {
-		return filename.split('.')[1].toUpperCase();
+	_getFileExtension(filename) {
+		const index = filename.lastIndexOf('.');
+		if (index < 0) {
+			return '';
+		} else {
+			return filename.substring(index + 1).toUpperCase();
+		}
 	}
 
 	_getReadableFileSizeString(fileSizeBytes) {
@@ -298,7 +308,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				<span>${this._getFileTitle(file.properties.name)}</span>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
-					${this._getFileType(file.properties.name)}
+					${this._getFileExtension(file.properties.name)}
 					<d2l-icon class="d2l-separator-icon" aria-hidden="true" icon="tier1:dot"></d2l-icon>
 					${this._getReadableFileSizeString(file.properties.size)}
 				</div>
@@ -312,7 +322,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		// Placeholder for menu presentational
 		const oppositeReadState = read ? this.localize('markUnread') : this.localize('markRead');
 		const oppositeFlagState = flagged ? this.localize('unflag') : this.localize('flag');
-		const fileType = this._getFileType(name);
+		const fileType = this._getFileExtension(name);
 		return html`<div slot="actions" style="z-index: inherit;">
 			<d2l-dropdown-more text="More Options">
 			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
