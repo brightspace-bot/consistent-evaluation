@@ -84,13 +84,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		.d2l-label-text {
 			padding-top: 0.5rem;
 		}
-		.consistent-eval-submission-attachment-item {
-			display: inline-block;
-			vertical-align: middle;
-		}
-		.consistent-eval-submission-attachment-item-container:hover {
-			background-color: red; /*not working*/
-		}
 		.d2l-submission-attachment-icon-container {
 			display: inline-block;
 			position: relative;
@@ -294,7 +287,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderAttachments() {
 		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item href="javascript:void(0);" class="consistent-eval-submission-attachment-item-container">
+			<d2l-list-item href="javascript:void(0);">
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
@@ -302,14 +295,12 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				${this._renderReadStatus(file.properties.read)}
 			</div>
 			<d2l-list-item-content>
-				<div class="consistent-eval-submission-attachment-item">
-					<span>${this._getFileTitle(file.properties.name)}</span>
-					<div slot="supporting-info">
-						${this._renderFlaggedStatus(file.properties.flagged)}
-						${this._getFileType(file.properties.name)}
-						<d2l-icon class="d2l-separator-icon" aria-hidden="true" icon="tier1:dot"></d2l-icon>
-						${this._getReadableFileSizeString(file.properties.size)}
-					</div>
+				<span>${this._getFileTitle(file.properties.name)}</span>
+				<div slot="supporting-info">
+					${this._renderFlaggedStatus(file.properties.flagged)}
+					${this._getFileType(file.properties.name)}
+					<d2l-icon class="d2l-separator-icon" aria-hidden="true" icon="tier1:dot"></d2l-icon>
+					${this._getReadableFileSizeString(file.properties.size)}
 				</div>
 			</d2l-list-item-content>
 			${this._addMenuOptions(file.properties.read, file.properties.flagged, file.properties.href, file.properties.name)}
