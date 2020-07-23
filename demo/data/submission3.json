@@ -1,6 +1,7 @@
 {
   "properties": {
-    "evaluationStatus": "Unevaluated"
+    "evaluationStatus": "Unevaluated",
+    "lateTimeSpan": "123456"
   },
   "class": [
     "assignment-submission"

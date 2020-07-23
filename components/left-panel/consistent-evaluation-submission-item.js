@@ -15,6 +15,7 @@ import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
 export const fileTypes = {
@@ -26,7 +27,7 @@ export const fileTypes = {
 	'RM':'file-video', 'RA':'file-video', 'RAM':'file-video', 'SWF':'file-video', 'WMV':'file-video', 'AVI':'file-video', 'ASF':'file-video'
 };
 
-export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(LitElement)) {
 	static get properties() {
 		return {
 			dateStr : {
@@ -43,6 +44,9 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			},
 			late: {
 				type: Boolean
+			},
+			lateness: {
+				type: String
 			},
 			submissionEntity : {
 				attribute: false,
@@ -71,6 +75,14 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		}
 		.d2l-heading-3 {
 			margin: 0;
+			padding-right: 0.5rem;
+		}
+		:host([dir="rtl"]) .d2l-heading-3 {
+			padding-left: 0.5rem;
+			padding-right: 0;
+		}
+		.d2l-label-text {
+			padding-top: 0.5rem;
 		}
 		.consistent-eval-submission-attachment-item {
 			display: inline-block;
@@ -78,9 +90,6 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		}
 		.consistent-eval-submission-attachment-item-container:hover {
 			background-color: red; /*not working*/
-		}
-		.consistent-eval-submission-attachment-item-container {
-			justify-content: space-between;
 		}
 		.d2l-submission-attachment-icon-container {
 			display: inline-block;
@@ -101,6 +110,10 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			top: 0;
 			right: -4px;
 		}
+		:host([dir="rtl"]) .d2l-attachment-read-status {
+			left: -4px;
+			right: unset;
+		}
 		.d2l-separator-icon {
 			width: 10px;
 			height: 10px;
@@ -112,6 +125,10 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		d2l-status-indicator {
 			text-transform: none;
 			margin-right: 0.5rem;
+		}
+		:host([dir="rtl"]) d2l-status-indicator {
+			margin-left: 0.5rem;
+			margin-right: 0;
 		}
 	`];
 	}
@@ -222,7 +239,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		<d2l-list-item>
 		<d2l-list-item-content>
 			<div class="d2l-submission-attachment-icon-container">
-				<h3 style="padding-right: 0.5rem;" class="d2l-heading-3">${this.localize('textSubmission')} ${this.displayNumber}</h3>
+				<h3 class="d2l-heading-3">${this.localize('textSubmission')} ${this.displayNumber}</h3>
 				${this._renderReadStatus(read)}
 			</div>
 			<div slot="supporting-info">
@@ -253,7 +270,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 			return html`
 			<d2l-status-indicator bold
 				state="alert"
-				text="${this.localize('late')}">
+				text="${this.localize('late')} &gt; ${this.lateness}">
 				</d2l-status-indicator>`;
 		} else {
 			return html ``;
@@ -307,7 +324,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 		const fileType = this._getFileType(name);
 		return html`<div slot="actions" style="z-index: inherit;">
 			<d2l-dropdown-more text="More Options">
-			<d2l-dropdown-menu id="dropdown">
+			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
 				<d2l-menu>
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeReadState}" href="#"></d2l-menu-item-link>
@@ -340,7 +357,7 @@ export class ConsistentEvaluationSubmissionItem extends LocalizeMixin(LitElement
 	_renderCommentTitle() {
 		if (this.submissionType === fileSubmission) {
 			return html`
-			<div class="d2l-label-text" style="padding-top: 0.5rem;">
+			<div class="d2l-label-text">
 				${this.localize('comments')}
 			</div>`;
 		} else {
