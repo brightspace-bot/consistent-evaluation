@@ -30,24 +30,6 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		`;
 	}
 
-	constructor() {
-		super();
-
-		this._evidenceUrl = undefined;
-	}
-
-	connectedCallback() {
-		this.addEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._renderEvidence);
-		this.addEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._renderSubmissionList);
-		super.connectedCallback();
-	}
-
-	disconnectedCallback() {
-		this.removeEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._renderEvidence);
-		this.removeEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._renderSubmissionList);
-		super.disconnectedCallback();
-	}
-
 	_renderEvidence(e) {
 		this._evidenceUrl = e.detail.url;
 	}
@@ -62,6 +44,7 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 			<d2l-consistent-evaluation-evidence
 				.url=${this._evidenceUrl}
 				.token=${this.token}
+				@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._renderSubmissionList}
 			></d2l-consistent-evaluation-evidence>`;
 		} else {
 			return html`
@@ -71,6 +54,7 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 				submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
 				.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 				.token=${this.token}
+				@d2l-consistent-evaluation-submission-item-render-evidence=${this._renderEvidence}
 			></d2l-consistent-evaluation-submissions-page>`;
 		}
 	}
