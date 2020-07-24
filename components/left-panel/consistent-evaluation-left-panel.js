@@ -49,11 +49,9 @@ export class ConsistentEvaluationLeftPanel extends LitElement {
 		} else {
 			return html`
 			<d2l-consistent-evaluation-submissions-page
-				due-date=${ifDefined(this.submissionInfo && this.submissionInfo.dueDate)}
-				evaluation-state=${this.submissionInfo && this.submissionInfo.evaluationState}
 				submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
 				.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
-				.token=${this.token}
+				.token=${this.token}></d2l-consistent-evaluation-submissions-page>
 				@d2l-consistent-evaluation-submission-item-render-evidence=${this._renderEvidence}
 			></d2l-consistent-evaluation-submissions-page>`;
 		}
