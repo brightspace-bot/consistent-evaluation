@@ -4,6 +4,7 @@ export const val = {
 	addLink: 'Attach Weblink',
 	addOneDriveLink: 'Attach from OneDrive',
 	addQuicklink: 'Attach Link to Existing Activity',
+	backToUserSubmissions: 'Back to User Submissions',
 	comments: 'Comments',
 	download: 'Download',
 	editCopy: 'Edit a Copy',
