@@ -1,7 +1,6 @@
 import './consistent-evaluation-evidence.js';
 import './consistent-evaluation-submissions-page.js';
 import { css, html, LitElement } from 'lit-element';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 export class ConsistentEvaluationLeftPanel extends LitElement {
 
