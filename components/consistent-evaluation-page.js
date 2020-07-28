@@ -63,6 +63,9 @@ export default class ConsistentEvaluationPage extends LitElement {
 			},
 			_gradeEntity: {
 				attribute: false
+			},
+			_scrollbarStatus: {
+				attribute: false
 			}
 		};
 	}
@@ -88,6 +91,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
+
+		this._scrollbarStatus = 'default';
 	}
 
 	get evaluationEntity() {
@@ -187,6 +192,14 @@ export default class ConsistentEvaluationPage extends LitElement {
 		}));
 	}
 
+	_hideScrollbars() {
+		this._scrollbarStatus = 'hidden';
+	}
+
+	_showScrollbars() {
+		this._scrollbarStatus = 'default';
+	}
+
 	async _transientSaveFeedback(e) {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		const newFeedbackVal = e.detail;
@@ -234,12 +247,14 @@ export default class ConsistentEvaluationPage extends LitElement {
 
 	render() {
 		return html`
-			<d2l-template-primary-secondary primary-overflow="hidden">
+			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
+						@d2l-consistent-evaluation-left-panel-render-evidence=${this._hideScrollbars}
+						@d2l-consistent-evaluation-left-panel-render-submission-list=${this._showScrollbars}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">

@@ -83,10 +83,20 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 	_renderEvidence(e) {
 		this._evidenceUrl = e.detail.url;
+
+		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-evidence', {
+			composed: true
+		});
+		this.dispatchEvent(event);
 	}
 
 	_renderSubmissionList() {
 		this._evidenceUrl = undefined;
+
+		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-submission-list', {
+			composed: true
+		});
+		this.dispatchEvent(event);
 	}
 
 	render() {
