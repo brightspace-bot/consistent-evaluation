@@ -47,9 +47,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		moment.relativeTimeThreshold('s', 60);
 		moment.relativeTimeThreshold('m', 60);
 		moment.relativeTimeThreshold('h', 24);
-		moment.relativeTimeThreshold('d', 7);
-		moment.relativeTimeThreshold('w', 4);
-		moment.relativeTimeThreshold('M', 12);
+		moment.relativeTimeThreshold('d', Number.MAX_SAFE_INTEGER);
 		moment.relativeTimeRounding(Math.floor);
 	}
 
