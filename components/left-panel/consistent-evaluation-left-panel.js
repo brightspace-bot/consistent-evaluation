@@ -1,4 +1,4 @@
-import './consistent-evaluation-evidence.js';
+import './consistent-evaluation-evidence-file.js';
 import './consistent-evaluation-submissions-page.js';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
@@ -86,7 +86,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 	}
 
 	_showFileEvidence(e) {
-		this._evidenceUrl = e.detail.url;
+		this._fileEvidenceUrl = e.detail.url;
 	}
 
 	_showTextEvidence(e) {
@@ -100,11 +100,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 	_renderFileEvidence() {
 		return html`
-		<d2l-consistent-evaluation-evidence
+		<d2l-consistent-evaluation-evidence-file
 			.url=${this._fileEvidenceUrl}
 			.token=${this.token}
 			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
-		></d2l-consistent-evaluation-evidence>`;
+		></d2l-consistent-evaluation-evidence-file>`;
 	}
 
 	_renderNoEvidenceSubmissionType() {

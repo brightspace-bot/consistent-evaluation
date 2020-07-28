@@ -326,7 +326,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				href="javascript:void(0);"
 				@click="${
 	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderFileEvidenceFileEvent(file.properties.fileViewer)}">
+	() => this._dispatchRenderEvidenceFileEvent(file.properties.fileViewer)}">
 
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
