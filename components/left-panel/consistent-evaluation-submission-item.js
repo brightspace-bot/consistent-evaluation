@@ -212,6 +212,21 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this.dispatchEvent(event);
 	}
 
+	_dispatchRenderEvidenceTextEvent() {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
+			detail: {
+				textSubmissionEvidence: {
+					title: `${this.localize('textSubmission')} ${this.displayNumber}`,
+					user: 'TODO: FindUsername',
+					date: this._formatDateTime(),
+					content: this._comment
+				}
+			},
+			composed: true
+		});
+		this.dispatchEvent(event);
+	}
+
 	_formatDateTime() {
 		const formattedDate = (this._date) ? formatDate(
 			this._date,
@@ -342,6 +357,10 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			<d2l-dropdown-more text="More Options">
 			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
 				<d2l-menu>
+					${this.submissionType === textSubmission ? html`
+						<d2l-menu-item-link text="${this.localize('viewFullSubmission')}"
+							href="javascript:void(0);"
+							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null }
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeReadState}" href="#"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeFlagState}" href="#"></d2l-menu-item-link>

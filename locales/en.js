@@ -32,6 +32,7 @@ export const val = {
 	update: 'Update',
 	unevaluated: 'Unevaluated',
 	unflag: 'Unflag',
+	viewFullSubmission: 'View Full Submission',
 	kB: ' KB',
 	MB: ' MB',
 	GB: ' GB'

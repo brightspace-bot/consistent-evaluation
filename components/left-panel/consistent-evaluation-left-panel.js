@@ -33,6 +33,10 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			_fileEvidenceUrl: {
 				attribute: false,
 				type: String
+			},
+			_textEvidence: {
+				attribute: false,
+				type: Object
 			}
 		};
 	}
@@ -85,8 +89,14 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		this._evidenceUrl = e.detail.url;
 	}
 
+	_showTextEvidence(e) {
+		this._textEvidence = e.detail.textSubmissionEvidence;
+	}
+
 	_showSubmissionList() {
 		this._fileEvidenceUrl = undefined;
+		this._textEvidence = undefined;
+	}
 
 	_renderFileEvidence() {
 		return html`
@@ -119,9 +129,15 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 			.token=${this.token}
 			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._showFileEvidence}
+			@d2l-consistent-evaluation-submission-item-render-evidence-text=${this._showTextEvidence}
 		></d2l-consistent-evaluation-submissions-page>`;
 	}
 
+	_renderTextEvidence() {
+		return html`
+		<div class="d2l-consistent-evaluation-no-submissions-container">
+			<div class="d2l-consistent-evaluation-no-submissions d2l-body-standard">TODO: Make a component to display text submission</div>
+		</div>`;
 	}
 
 	render() {
@@ -135,6 +151,10 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 		if (this._fileEvidenceUrl) {
 			return this._renderFileEvidence();
+		}
+
+		if (this._textEvidence) {
+			return this._renderTextEvidence();
 		}
 
 		return this._renderSubmissionList();
