@@ -30,7 +30,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 				type: Object
 			},
 			token: { type: String },
-			_evidenceUrl: {
+			_fileEvidenceUrl: {
 				attribute: false,
 				type: String
 			}
@@ -81,46 +81,63 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		return await loadLocalizationResources(langs);
 	}
 
-	_renderEvidence(e) {
+	_showFileEvidence(e) {
 		this._evidenceUrl = e.detail.url;
 	}
 
+	_showSubmissionList() {
+		this._fileEvidenceUrl = undefined;
+
+	_renderFileEvidence() {
+		return html`
+		<d2l-consistent-evaluation-evidence
+			.url=${this._fileEvidenceUrl}
+			.token=${this.token}
+			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
+		></d2l-consistent-evaluation-evidence>`;
+	}
+
+	_renderNoEvidenceSubmissionType() {
+		return html`
+		<div class="d2l-consistent-evaluation-no-evidence">
+			<h2 class="d2l-heading-2">${this.localize(getSubmissionTypeName(this.submissionInfo.submissionType))}</h2>
+			<p class="d2l-body-standard">${this.localize('noEvidence')}</p>
+		</div>`;
+	}
+
+	_renderNoSubmissions() {
+		return html`
+		<div class="d2l-consistent-evaluation-no-submissions-container">
+			<div class="d2l-consistent-evaluation-no-submissions d2l-body-standard">${this.localize('noSubmissions')}</div>
+		</div>`;
+	}
+
 	_renderSubmissionList() {
-		this._evidenceUrl = undefined;
+		return html`
+		<d2l-consistent-evaluation-submissions-page
+			submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
+			.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
+			.token=${this.token}
+			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._showFileEvidence}
+		></d2l-consistent-evaluation-submissions-page>`;
+	}
+
 	}
 
 	render() {
 		if (submissionTypesWithNoEvidence.includes(this.submissionInfo.submissionType)) {
-			return html`
-			<div class="d2l-consistent-evaluation-no-evidence">
-				<h2 class="d2l-heading-2">${this.localize(getSubmissionTypeName(this.submissionInfo.submissionType))}</h2>
-				<p class="d2l-body-standard">${this.localize('noEvidence')}</p>
-			</div>`;
+			return this._renderNoEvidenceSubmissionType();
 		}
 
 		if (this.submissionInfo.submissionList === undefined) {
-			return html`
-			<div class="d2l-consistent-evaluation-no-submissions-container">
-				<div class="d2l-consistent-evaluation-no-submissions d2l-body-standard">${this.localize('noSubmissions')}</div>
-			</div>`;
+			return this._renderNoSubmissions();
 		}
 
-		if (this._evidenceUrl) {
-			return html`
-			<d2l-consistent-evaluation-evidence
-				.url=${this._evidenceUrl}
-				.token=${this.token}
-				@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._renderSubmissionList}
-			></d2l-consistent-evaluation-evidence>`;
-		} else {
-			return html`
-			<d2l-consistent-evaluation-submissions-page
-				submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
-				.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
-				.token=${this.token}
-				@d2l-consistent-evaluation-submission-item-render-evidence=${this._renderEvidence}
-			></d2l-consistent-evaluation-submissions-page>`;
+		if (this._fileEvidenceUrl) {
+			return this._renderFileEvidence();
 		}
+
+		return this._renderSubmissionList();
 	}
 }
 

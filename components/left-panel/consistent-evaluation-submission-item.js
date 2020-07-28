@@ -202,8 +202,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_dispatchRenderEvidenceEvent(url) {
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence', {
+	_dispatchRenderEvidenceFileEvent(url) {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-file', {
 			detail: {
 				url: url
 			},
@@ -307,11 +307,11 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderAttachments() {
 		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item 
+			<d2l-list-item
 				href="javascript:void(0);"
 				@click="${
 	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
+	() => this._dispatchRenderFileEvidenceFileEvent(file.properties.fileViewer)}">
 
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
