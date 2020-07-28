@@ -11,7 +11,7 @@ export const val = {
 	flag: 'Flag',
 	fileSubmission: 'File Submission',
 	flagged: 'Flagged',
-	late: 'Late',
+	late: 'late',
 	rubrics: 'Rubrics',
 	markRead: 'Mark as Read',
 	markUnread: 'Mark as Unread',

@@ -283,7 +283,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			return html`
 			<d2l-status-indicator bold
 				state="alert"
-				text="${this.localize('late')} &gt; ${this.lateness}">
+				text="${this.lateness} ${this.localize('late')}">
 				</d2l-status-indicator>`;
 		} else {
 			return html ``;
@@ -307,7 +307,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderAttachments() {
 		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item 
+			<d2l-list-item
 				href="javascript:void(0);"
 				@click="${
 	// eslint-disable-next-line lit/no-template-arrow
