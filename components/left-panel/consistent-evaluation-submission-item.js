@@ -283,7 +283,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			return html`
 			<d2l-status-indicator bold
 				state="alert"
-				text="${this.localize('late')} &gt; ${this.lateness}">
+				text="${this.lateness} ${this.localize('late')}">
 				</d2l-status-indicator>`;
 		} else {
 			return html ``;
