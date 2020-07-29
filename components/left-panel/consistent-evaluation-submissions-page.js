@@ -4,7 +4,6 @@ import '@brightspace-ui/core/components/colors/colors.js';
 import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { Classes } from 'd2l-hypermedia-constants';
-import moment from 'moment/src/moment';
 
 export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get properties() {
@@ -44,6 +43,11 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		this._submissionList = [];
 		this._token = undefined;
 		this._submissionEntities = [];
+		/* global moment:false */
+		moment.relativeTimeThreshold('s', 60);
+		moment.relativeTimeThreshold('m', 60);
+		moment.relativeTimeThreshold('h', 24);
+		moment.relativeTimeThreshold('d', Number.MAX_SAFE_INTEGER);
 		moment.relativeTimeRounding(Math.floor);
 	}
 
@@ -103,7 +107,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							date-str=${submissionDate}
 							display-number=${this._submissionEntities.length - i}
 							evaluation-state=${evaluationState}
-							lateness=${moment.duration(latenessTimespan, 'seconds').humanize()}
+							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()}
 							submission-type=${this.submissionType}
 							.submissionEntity=${submissionEntity}
 							?late=${latenessTimespan !== undefined}
