@@ -312,14 +312,16 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
-
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
 					aria-label="${this._getIcon(file.properties.name)}"></d2l-icon>
 				${this._renderReadStatus(file.properties.read)}
 			</div>
-			<d2l-list-item-content>
+			<d2l-list-item-content
+			@click="${
+	// eslint-disable-next-line lit/no-template-arrow
+	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
 				<span>${this._getFileTitle(file.properties.name)}</span>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
