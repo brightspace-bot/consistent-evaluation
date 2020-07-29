@@ -1,4 +1,5 @@
 import './consistent-evaluation-evidence-file.js';
+import './consistent-evaluation-evidence-text.js';
 import './consistent-evaluation-submissions-page.js';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
@@ -135,9 +136,12 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 	_renderTextEvidence() {
 		return html`
-		<div class="d2l-consistent-evaluation-no-submissions-container">
-			<div class="d2l-consistent-evaluation-no-submissions d2l-body-standard">TODO: Make a component to display text submission</div>
-		</div>`;
+		<d2l-consistent-evaluation-evidence-text
+			title=${this._textEvidence.title}
+			date=${this._textEvidence.date}
+			.content=${this._textEvidence.content}
+			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
+		></d2l-consistent-evaluation-evidence-text>`;
 	}
 
 	render() {

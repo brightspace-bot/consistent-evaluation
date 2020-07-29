@@ -217,7 +217,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			detail: {
 				textSubmissionEvidence: {
 					title: `${this.localize('textSubmission')} ${this.displayNumber}`,
-					user: 'TODO: FindUsername',
 					date: this._formatDateTime(),
 					content: this._comment
 				}

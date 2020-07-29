@@ -27,6 +27,7 @@ export const val = {
 	recordAudio: 'Record Audio',
 	recordVideo: 'Record Video',
 	saveDraft: 'Save Draft',
+	submitted: 'Submitted',
 	submission: 'Submission',
 	textSubmission: 'Text Submission',
 	update: 'Update',

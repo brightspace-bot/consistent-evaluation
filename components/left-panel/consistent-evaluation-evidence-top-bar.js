@@ -11,6 +11,7 @@ export class ConsistentEvaluationEvidenceTopBar extends LocalizeMixin(LitElement
 				display: flex;
 				align-items: center;
 				height: 2.7rem;
+				border-bottom: 1px solid var(--d2l-color-mica);
 			}
 		`;
 	}
