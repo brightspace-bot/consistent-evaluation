@@ -217,14 +217,14 @@ export default class ConsistentEvaluationPage extends LitElement {
 	async _saveEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.save(entity);
-		if (this.evaluationEntity instanceof Error)  {this._toastMessage = toastMessage.saved;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.saved;}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _updateEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.update(entity);
-		if (this.evaluationEntity instanceof Error)  {this._toastMessage = toastMessage.updated;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.updated;}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
@@ -232,14 +232,14 @@ export default class ConsistentEvaluationPage extends LitElement {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
-		if (this.evaluationEntity instanceof Error)  {this._toastMessage = toastMessage.published;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.published;}
 		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.retract(entity);
-		if (this.evaluationEntity instanceof Error)  {this._toastMessage = toastMessage.retracted;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.retracted;}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
 	}
