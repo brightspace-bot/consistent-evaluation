@@ -18,3 +18,8 @@ export const publishedState = 'Published';
 export const draftState = 'Draft';
 export const fileSubmission = 'File submission';
 export const textSubmission = 'Text submission';
+export const toastMessage = {
+	published:   'Evaluation published',
+	retracted:   'Evaluation retracted',
+	saved:  'Evaluation saved as draft',
+	updated:  'Evaluation updated' };
