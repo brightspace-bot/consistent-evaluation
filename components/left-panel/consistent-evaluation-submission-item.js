@@ -123,6 +123,16 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			margin-left: 0.5rem;
 			margin-right: 0;
 		}
+		.truncate {
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
+		:host[dir="rtl"] .truncate {
+			padding-left: 2rem;
+			padding-right: 0;
+		}
 	`];
 	}
 
@@ -318,7 +328,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
-				<span>${this._getFileTitle(file.properties.name)}</span>
+				<div class="truncate">${this._getFileTitle(file.properties.name)}</div>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
 					${this._getFileExtension(file.properties.name)}
