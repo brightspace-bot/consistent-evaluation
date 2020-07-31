@@ -250,8 +250,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 		if (this._toastMessage === '') return '';
 
 		return html`${this.displayToast ?
-			html`<d2l-alert-toast id="toast" open=true >${this._toastMessage} </d2l-alert-toast>` :
-			html`<d2l-alert-toast id="toast" open=false >${this._toastMessage} </d2l-alert-toast>`}`;
+			html`<d2l-alert-toast id="toast" open=true button-text=''>${this._toastMessage} </d2l-alert-toast>` :
+			html`<d2l-alert-toast id="toast" open=false button-text=''>${this._toastMessage} </d2l-alert-toast>`}`;
 	}
 
 	render() {
