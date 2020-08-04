@@ -124,14 +124,13 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			margin-right: 0;
 		}
 		.truncate {
+			text-overflow: ellipsis;
+			white-space: break-spaces;
 			overflow: hidden;
+			overflow-wrap: break-word;
 			display: -webkit-box;
-			-webkit-line-clamp: 2;
+			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
-		}
-		:host[dir="rtl"] .truncate {
-			padding-left: 2rem;
-			padding-right: 0;
 		}
 	`];
 	}
