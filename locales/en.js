@@ -21,5 +21,9 @@ export const val = {
 	update: 'Update',
 	kB: ' KB',
 	MB: ' MB',
-	GB: ' GB'
+	GB: ' GB',
+	published:   'Evaluation published',
+	retracted:   'Evaluation retracted',
+	saved:  'Evaluation saved as draft',
+	updated:  'Evaluation updated'
 };

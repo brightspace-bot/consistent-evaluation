@@ -5,12 +5,14 @@ import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { draftState, publishedState, toastMessage } from './controllers/constants.js';
+import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { loadLocalizationResources } from './locale.js';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
-export default class ConsistentEvaluationPage extends LitElement {
+export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
@@ -86,6 +88,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 				width: 100%;
 			}
 		`;
+	}
+
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {
@@ -217,14 +223,15 @@ export default class ConsistentEvaluationPage extends LitElement {
 	async _saveEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.save(entity);
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.saved;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('saved');}
+		this.toastMessage = this.localize(this._toastMessage);
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _updateEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.update(entity);
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.updated;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('updated');}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
@@ -232,14 +239,14 @@ export default class ConsistentEvaluationPage extends LitElement {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.published;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('published');}
 		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.retract(entity);
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = toastMessage.retracted;}
+		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('retracted');}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
 	}
