@@ -218,6 +218,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				textSubmissionEvidence: {
 					title: `${this.localize('textSubmission')} ${this.displayNumber}`,
 					date: this._formatDateTime(),
+					downloadUrl: this._attachments[0].properties.href,
 					content: this._comment
 				}
 			},

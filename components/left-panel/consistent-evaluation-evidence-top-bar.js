@@ -10,6 +10,7 @@ export class ConsistentEvaluationEvidenceTopBar extends LocalizeMixin(LitElement
 			.d2l-consistent-evaluation-evidence-top-bar {
 				display: flex;
 				align-items: center;
+				justify-content: space-between;
 				height: 2.7rem;
 				border-bottom: 1px solid var(--d2l-color-mica);
 			}
@@ -35,6 +36,7 @@ export class ConsistentEvaluationEvidenceTopBar extends LocalizeMixin(LitElement
 					icon="tier1:chevron-left"
 					@click="${this._dispatchBackToUserSubmissionsEvent}"
 				></d2l-button-subtle>
+				<slot></slot>
 			</div>
 		`;
 	}

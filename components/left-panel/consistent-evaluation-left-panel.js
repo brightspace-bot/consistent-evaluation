@@ -139,6 +139,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		<d2l-consistent-evaluation-evidence-text
 			title=${this._textEvidence.title}
 			date=${this._textEvidence.date}
+			download-url=${this._textEvidence.downloadUrl}
 			.content=${this._textEvidence.content}
 			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
 		></d2l-consistent-evaluation-evidence-text>`;
