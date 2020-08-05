@@ -9,10 +9,12 @@ import '@brightspace-ui/core/components/menu/menu.js';
 import '@brightspace-ui/core/components/menu/menu-item-link.js';
 import '@brightspace-ui/core/components/more-less/more-less.js';
 import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
+import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
+import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
@@ -316,7 +318,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderAttachments() {
 		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item>
+			<d2l-list-item @mouseover=${this.handle()}>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
@@ -327,7 +329,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
-				<div class="truncate">${this._getFileTitle(file.properties.name)}</div>
+				<div class="truncate" aria-label="heading">${this._getFileTitle(file.properties.name)}</div>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
 					${this._getFileExtension(file.properties.name)}
@@ -395,7 +397,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		${this._renderAttachments()}
 		</d2l-list>
 		${this._renderComment()}
-
 		`;
 	}
 
@@ -412,6 +413,31 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		} else if (this.submissionType === textSubmission) {
 			return html`${this._renderTextSubmission()}`;
 		}
+	}
+
+	async _getUpdateComplete() {
+		await super._getUpdateComplete();
+		this.insertFilenameTooltips();
+	}
+
+	isClamped(e) {
+		return e.clientHeight < e.scrollHeight;
+	}
+
+	async handle() {
+		await Promise.all([this.updateComplete]);
+	}
+
+	insertFilenameTooltips() {
+		const items = this.shadowRoot.querySelectorAll('.truncate');
+		items.forEach(element => {
+			if (this.isClamped(element)) {
+				const uniqueId = getUniqueId();
+				// attach to the d2l-list-item component for visibility
+				element.parentElement.parentElement.id = uniqueId;
+				element.parentElement.parentElement.insertAdjacentHTML('afterend', `<d2l-tooltip for="${uniqueId}" offset="0" align="start" style="overflow-wrap: break-word;">${element.innerText}</d2l-tooltip>`);
+			}
+		});
 	}
 }
 customElements.define('d2l-consistent-evaluation-submission-item', ConsistentEvaluationSubmissionItem);
