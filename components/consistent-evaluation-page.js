@@ -55,6 +55,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			token: {
 				type: String
 			},
+			refreshToast: {
+				type: Boolean
+			},
 			displayToast: {
 				type: Boolean
 			},
@@ -101,6 +104,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
+		this.displayToast = false;
 		this._toastMessage = '';
 	}
 
@@ -223,15 +227,20 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	async _saveEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.save(entity);
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('saved');}
-		this.toastMessage = this.localize(this._toastMessage);
+		if (!(this.evaluationEntity instanceof Error))  {
+			this.displayToast = true;
+			this._toastMessage = this.localize('saved');
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _updateEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.update(entity);
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('updated');}
+		if (!(this.evaluationEntity instanceof Error))  {
+			this.displayToast = true;
+			this._toastMessage = this.localize('updated');
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
@@ -239,26 +248,34 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('published');}
+		if (!(this.evaluationEntity instanceof Error))  {
+			this.displayToast = true;
+			this._toastMessage = this.localize('published');
+		}
 		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.retract(entity);
-		if (!(this.evaluationEntity instanceof Error))  {this._toastMessage = this.localize('retracted');}
+		if (!(this.evaluationEntity instanceof Error))  {
+			this.displayToast = true;
+			this._toastMessage = this.localize('retracted');
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
 	}
 
 	_renderToast() {
-		this.displayToast = (this.displayToast === true) ? false : true; // idk why but this resets the toast timer
-
 		if (this._toastMessage === '') return '';
+		if (this.displayToast) {
+			this.displayToast = false;
+			this.refreshToast = (this.refreshToast === true) ? false : true; // idk why but this refreshes the toast timer
 
-		return html`${this.displayToast ?
-			html`<d2l-alert-toast id="toast" open=true button-text=''>${this._toastMessage} </d2l-alert-toast>` :
-			html`<d2l-alert-toast id="toast" open=false button-text=''>${this._toastMessage} </d2l-alert-toast>`}`;
+			return html`${this.refreshToast ?
+				html`<d2l-alert-toast id="toast" open=true button-text=''>${this._toastMessage} </d2l-alert-toast>` :
+				html`<d2l-alert-toast id="toast" open=false button-text=''>${this._toastMessage} </d2l-alert-toast>`}`;
+		}
 	}
 
 	render() {
