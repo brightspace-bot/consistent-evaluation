@@ -88,15 +88,30 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 	_showFileEvidence(e) {
 		this._fileEvidenceUrl = e.detail.url;
+
+		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-evidence', {
+			composed: true
+		});
+		this.dispatchEvent(event);
 	}
 
 	_showTextEvidence(e) {
 		this._textEvidence = e.detail.textSubmissionEvidence;
+
+		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-evidence', {
+			composed: true
+		});
+		this.dispatchEvent(event);
 	}
 
 	_showSubmissionList() {
 		this._fileEvidenceUrl = undefined;
 		this._textEvidence = undefined;
+
+		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-submission-list', {
+			composed: true
+		});
+		this.dispatchEvent(event);
 	}
 
 	_renderFileEvidence() {

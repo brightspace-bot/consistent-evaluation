@@ -298,7 +298,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			return html`
 			<d2l-status-indicator bold
 				state="alert"
-				text="${this.localize('late')} &gt; ${this.lateness}">
+				text="${this.lateness} ${this.localize('late')}">
 				</d2l-status-indicator>`;
 		} else {
 			return html ``;
@@ -322,19 +322,17 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderAttachments() {
 		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item
-				href="javascript:void(0);"
-				@click="${
-	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderEvidenceFileEvent(file.properties.fileViewer)}">
-
+			<d2l-list-item>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
 					aria-label="${this._getIcon(file.properties.name)}"></d2l-icon>
 				${this._renderReadStatus(file.properties.read)}
 			</div>
-			<d2l-list-item-content>
+			<d2l-list-item-content
+			@click="${
+	// eslint-disable-next-line lit/no-template-arrow
+	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
 				<span>${this._getFileTitle(file.properties.name)}</span>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
