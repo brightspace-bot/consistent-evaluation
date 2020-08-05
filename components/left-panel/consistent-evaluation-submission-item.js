@@ -332,7 +332,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			<d2l-list-item-content
 			@click="${
 	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
+	() => this._dispatchRenderEvidenceFileEvent(file.properties.fileViewer)}">
 				<span>${this._getFileTitle(file.properties.name)}</span>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
