@@ -15,6 +15,7 @@ export const val = {
 	rubrics: 'Rubrics',
 	markRead: 'Mark as Read',
 	markUnread: 'Mark as Unread',
+	moreOptions: 'More Options',
 	noEvidence: 'There is no evidence uploaded for this submission type',
 	noSubmissions: 'No submissions made for this assignment',
 	observedInPerson: 'Observed In Person',
