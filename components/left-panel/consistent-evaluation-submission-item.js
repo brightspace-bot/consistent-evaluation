@@ -134,6 +134,9 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
 		}
+		.d2l-truncated-filename-tooltips {
+			overflow-wrap: break-word;
+		}
 	`];
 	}
 
@@ -318,7 +321,9 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderAttachments() {
 		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item @mouseover=${this.handle()}>
+			<d2l-list-item @mouseover=${
+	// eslint-disable-next-line lit/no-template-arrow
+	() => this.insertTooltipsAfterUpdateComplete()}>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
@@ -415,17 +420,12 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		}
 	}
 
-	async _getUpdateComplete() {
-		await super._getUpdateComplete();
-		this.insertFilenameTooltips();
-	}
-
 	isClamped(e) {
 		return e.clientHeight < e.scrollHeight;
 	}
 
-	async handle() {
-		await Promise.all([this.updateComplete]);
+	async insertTooltipsAfterUpdateComplete() {
+		this.updateComplete.then(this.insertFilenameTooltips());
 	}
 
 	insertFilenameTooltips() {
@@ -435,7 +435,9 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				const uniqueId = getUniqueId();
 				// attach to the d2l-list-item component for visibility
 				element.parentElement.parentElement.id = uniqueId;
-				element.parentElement.parentElement.insertAdjacentHTML('afterend', `<d2l-tooltip for="${uniqueId}" offset="0" align="start" style="overflow-wrap: break-word;">${element.innerText}</d2l-tooltip>`);
+				element.parentElement.parentElement.insertAdjacentHTML('afterend',
+					`<d2l-tooltip for="${uniqueId}" class="d2l-truncated-filename-tooltips"
+					offset="0" align="start">${element.innerText}</d2l-tooltip>`);
 			}
 		});
 	}
