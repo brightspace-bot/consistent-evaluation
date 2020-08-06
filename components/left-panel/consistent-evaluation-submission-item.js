@@ -57,6 +57,10 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			submissionType: {
 				attribute: 'submission-type',
 				type: String
+			},
+			tooltips : {
+				attribute: false,
+				type: Object
 			}
 		};
 	}
@@ -151,6 +155,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this._date = undefined;
 		this._attachments = [];
 		this._comment = '';
+		this._tooltips = [];
 	}
 
 	get submissionEntity() {
@@ -164,6 +169,27 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			this._initializeSubmissionProperties();
 			this.requestUpdate();
 		}
+	}
+
+	get tooltips() {
+		return this._tooltips;
+	}
+
+	set tooltips(newVal) {
+		const oldVal = this._tooltips;
+		if (oldVal !== newVal) {
+			this._tooltips = newVal;
+			this.requestUpdate();
+		}
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		window.addEventListener('load', this.insertTooltipsAfterUpdateComplete());
+	}
+	disconnectedCallback() {
+		window.removeEventListener('load', this.insertTooltipsAfterUpdateComplete());
+		super.disconnectedCallback();
 	}
 
 	_initializeSubmissionProperties() {
@@ -320,10 +346,12 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	_renderAttachments() {
 		// href placeholder on list-item
-		return html`${this._attachments.map((file) => html`
-			<d2l-list-item @mouseover=${
-	// eslint-disable-next-line lit/no-template-arrow
-	() => this.insertTooltipsAfterUpdateComplete()}>
+		const template = [];
+		for (let i = 0; i < this._attachments.length; i++) {
+			const file = this._attachments[i];
+			const hasTooltip = this.tooltips[i];
+			template.push(html`
+			<d2l-list-item>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
@@ -344,7 +372,43 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			</d2l-list-item-content>
 			${this._addMenuOptions(file.properties.read, file.properties.flagged, file.properties.href, file.properties.name)}
 			</d2l-list-item>
-			`)}`;
+			${this._renderTooltip(hasTooltip, file.properties.name)}
+			`);
+		}
+		return html`${template}`;
+	}
+
+	_renderTooltip(id, text) {
+		if (id) {
+			return html`<d2l-tooltip for="${id}" class="d2l-truncated-filename-tooltips"
+				offset="0" align="start">${text}</d2l-tooltip>`;
+		}
+	}
+
+	isClamped(e) {
+		return e.clientHeight < e.scrollHeight;
+	}
+
+	async insertTooltipsAfterUpdateComplete() {
+		await this.updateComplete;
+		this.insertFilenameTooltips();
+	}
+
+	insertFilenameTooltips() {
+		const items = this.shadowRoot.querySelectorAll('.truncate');
+		const keys = [];
+		items.forEach(element => {
+			if (this.isClamped(element)) {
+				const uniqueId = getUniqueId();
+				keys.push(uniqueId);
+				// attach to the parent d2l-list-item component for visibility
+				const target = element.closest('d2l-list-item');
+				target.id = uniqueId;
+			} else {
+				keys.push(false);
+			}
+		});
+		this.tooltips = keys;
 	}
 
 	_addMenuOptions(read, flagged, downloadHref, name) {
@@ -420,26 +484,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		}
 	}
 
-	isClamped(e) {
-		return e.clientHeight < e.scrollHeight;
-	}
-
-	async insertTooltipsAfterUpdateComplete() {
-		this.updateComplete.then(this.insertFilenameTooltips());
-	}
-
-	insertFilenameTooltips() {
-		const items = this.shadowRoot.querySelectorAll('.truncate');
-		items.forEach(element => {
-			if (this.isClamped(element)) {
-				const uniqueId = getUniqueId();
-				// attach to the d2l-list-item component for visibility
-				element.parentElement.parentElement.id = uniqueId;
-				element.parentElement.parentElement.insertAdjacentHTML('afterend',
-					`<d2l-tooltip for="${uniqueId}" class="d2l-truncated-filename-tooltips"
-					offset="0" align="start">${element.innerText}</d2l-tooltip>`);
-			}
-		});
+	async _getUpdateComplete() {
+		await super._getUpdateComplete();
 	}
 }
 customElements.define('d2l-consistent-evaluation-submission-item', ConsistentEvaluationSubmissionItem);
