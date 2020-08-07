@@ -5,7 +5,7 @@ import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { draftState, publishedState } from './controllers/constants.js';
+import { draftState, publishActionName, publishedState, retractActionName, saveActionName, updateActionName } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -55,10 +55,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			token: {
 				type: String
 			},
-			refreshToast: {
-				type: Boolean
-			},
-			displayToast: {
+			_displayToast: {
 				type: Boolean
 			},
 			_toastMessage: {
@@ -104,7 +101,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
-		this.displayToast = false;
+		this._displayToast = false;
 		this._toastMessage = '';
 	}
 
@@ -227,20 +224,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	async _saveEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.save(entity);
-		if (!(this.evaluationEntity instanceof Error))  {
-			this.displayToast = true;
-			this._toastMessage = this.localize('saved');
-		}
+		this._getToastMessage(saveActionName, this.evaluationEntity);
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _updateEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.update(entity);
-		if (!(this.evaluationEntity instanceof Error))  {
-			this.displayToast = true;
-			this._toastMessage = this.localize('updated');
-		}
+		this._getToastMessage(updateActionName, this.evaluationEntity);
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
@@ -248,34 +239,52 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
-		if (!(this.evaluationEntity instanceof Error))  {
-			this.displayToast = true;
-			this._toastMessage = this.localize('published');
-		}
+		this._getToastMessage(publishActionName, this.evaluationEntity);
 		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.retract(entity);
-		if (!(this.evaluationEntity instanceof Error))  {
-			this.displayToast = true;
-			this._toastMessage = this.localize('retracted');
-		}
+		this._getToastMessage(retractActionName, this.evaluationEntity);
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
 	}
 
-	_renderToast() {
-		if (this._toastMessage === '') return '';
-		if (this.displayToast) {
-			this.displayToast = false;
-			this.refreshToast = (this.refreshToast === true) ? false : true; // idk why but this refreshes the toast timer
-
-			return html`${this.refreshToast ?
-				html`<d2l-alert-toast id="toast" open=true button-text=''>${this._toastMessage} </d2l-alert-toast>` :
-				html`<d2l-alert-toast id="toast" open=false button-text=''>${this._toastMessage} </d2l-alert-toast>`}`;
+	_getToastMessage(action, entity) {
+		if (!(entity instanceof Error))  {
+			switch (action) {
+				case publishActionName:
+					this._toastMessage = this.localize('published');
+					break;
+				case retractActionName:
+					this._toastMessage = this.localize('retracted');
+					break;
+				case saveActionName:
+					this._toastMessage = this.localize('saved');
+					break;
+				case updateActionName:
+					this._toastMessage = this.localize('updated');
+					break;
+				default:
+					// throw action not found
+					break;
+			}
+			this._displayToast = true;
 		}
+		else {
+			//determine error message
+		}
+	}
+	_onToastClose() {
+		this._displayToast = false;
+	}
+
+	_renderToast() {
+		return html`<d2l-alert-toast 
+			?open=${this._displayToast} 
+			button-text=""
+			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
 
 	render() {
@@ -309,7 +318,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
-					</div>
+				</div>
 				<div slot="footer">
 					${this._renderToast()}
 					<d2l-consistent-evaluation-footer-presentational
