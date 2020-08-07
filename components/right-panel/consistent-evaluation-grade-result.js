@@ -114,7 +114,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 				?hideTitle=${this.hideTitle}
 
 				@d2l-grade-result-reports-button-click=${this._openGradeStatisticsDialog}
-				@d2l-grade-result-grade-button-click=${this._openGradeStatisticsDialog}
+				@d2l-grade-result-grade-button-click=${this._openGradeEvaluationDialog}
 				@d2l-grade-result-grade-change=${this.onGradeChanged}
 				@d2l-grade-result-letter-score-selected=${this.onGradeChanged}
 				@d2l-grade-result-manual-override-click=${this._handleManualOverrideClick}
@@ -126,7 +126,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 
 	_openGradeEvaluationDialog() {
 
-		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.evaluationUrl
+		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.evaluationUrl;
 
 		if (!dialogUrl) {
 			return;
@@ -166,7 +166,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 
 	_openGradeStatisticsDialog() {
 
-		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.statsUrl
+		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.statsUrl;
 
 		if (!dialogUrl) {
 			return;
