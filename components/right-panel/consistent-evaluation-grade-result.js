@@ -102,10 +102,10 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 				.customManualOverrideText=${this.customManualOverrideText}
 				.customManualOverrideClearText=${this.customManualOverrideClearText}
 
-				gradeButtonTooltip=${this.localize('attachedGradeItem', 'gradeItemName',this.gradeItemInfo && this.gradeItemInfo.gradeItemName)}
+				gradeButtonTooltip=${this.localize('attachedGradeItem', 'gradeItemName', this.gradeItemInfo && this.gradeItemInfo.gradeItemName)}
 				reportsButtonTooltip=${this.localize('statistics')}
-				gradeButtonUrl=${this.gradeItemInfo && this.gradeItemInfo.evaluationUrl || ''}
-				reportsButtonUrl=${this.gradeItemInfo && this.gradeItemInfo.statsUrl || ''}
+				?includeGradeButton=${this.gradeItemInfo && this.gradeItemInfo.evaluationUrl}
+				?includeReportsButton=${this.gradeItemInfo && this.gradeItemInfo.statsUrl}
 
 				?isGradeAutoCompleted=${this._isGradeAutoCompleted}
 				?isManualOverrideActive=${this._manuallyOverriddenGrade !== undefined}
@@ -113,6 +113,8 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 				?readOnly=${this.readOnly}
 				?hideTitle=${this.hideTitle}
 
+				@d2l-grade-result-reports-button-click=${this._openGradeStatisticsDialog}
+				@d2l-grade-result-grade-button-click=${this._openGradeStatisticsDialog}
 				@d2l-grade-result-grade-change=${this.onGradeChanged}
 				@d2l-grade-result-letter-score-selected=${this.onGradeChanged}
 				@d2l-grade-result-manual-override-click=${this._handleManualOverrideClick}
@@ -121,5 +123,80 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 			</d2l-consistent-evaluation-right-panel-block>
 		`;
 	}
+
+	_openGradeEvaluationDialog() {
+
+		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.evaluationUrl
+
+		if (!dialogUrl) {
+			return;
+		}
+
+		const location = new D2L.LP.Web.Http.UrlLocation(dialogUrl);
+
+		const buttons = [
+			{
+				Key: 'save',
+				Text: this.localize('saveBtn'),
+				ResponseType: 1, // D2L.Dialog.ResponseType.Positive
+				IsPrimary: true,
+				IsEnabled: true
+			},
+			{
+				Text: this.localize('cancelBtn'),
+				ResponseType: 2, // D2L.Dialog.ResponseType.Negative
+				IsPrimary: false,
+				IsEnabled: true
+			}
+		];
+
+		const delayedResult = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
+			/*               opener: */ document.body,
+			/*             location: */ location,
+			/*          srcCallback: */ 'SrcCallback',
+			/*       resizeCallback: */ '',
+			/*      responseDataKey: */ 'result',
+			/*                width: */ 1920,
+			/*               height: */ 1080,
+			/*            closeText: */ this.localize('closeBtn'),
+			/*              buttons: */ buttons,
+			/* forceTriggerOnCancel: */ false
+		);
+	}
+
+	_openGradeStatisticsDialog() {
+
+		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.statsUrl
+
+		if (!dialogUrl) {
+			return;
+		}
+
+		const location = new D2L.LP.Web.Http.UrlLocation(dialogUrl);
+
+		const buttons = [
+			{
+				Key: 'close',
+				Text: this.localize('closeBtn'),
+				ResponseType: 1, // D2L.Dialog.ResponseType.Positive
+				IsPrimary: true,
+				IsEnabled: true
+			}
+		];
+
+		const delayedResult = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
+			/*               opener: */ document.body,
+			/*             location: */ location,
+			/*          srcCallback: */ 'SrcCallback',
+			/*       resizeCallback: */ '',
+			/*      responseDataKey: */ 'result',
+			/*                width: */ 1920,
+			/*               height: */ 1080,
+			/*            closeText: */ this.localize('closeBtn'),
+			/*              buttons: */ buttons,
+			/* forceTriggerOnCancel: */ false
+		);
+	}
+
 }
 customElements.define('d2l-consistent-evaluation-grade-result', ConsistentEvaluationGradeResult);
