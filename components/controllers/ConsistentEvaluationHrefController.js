@@ -108,4 +108,32 @@ export class ConsistentEvaluationHrefController {
 			submissionType
 		};
 	}
+
+	async getGradeItemInfo() {
+		let root = await this._getRootEntity(false);
+		let evaluationUrl, statsUrl, gradeItemName;
+		if (root && root.entity) {
+			if(root.entity.hasLinkByRel(Rels.Activities.activityUsage)) {
+				const activityUsageLink = root.entity.getLinkByRel(Rels.Activities.activityUsage).href;
+				const activityUsageResponse = await this._getEntityFromHref(activityUsageLink, false);
+				
+				if(activityUsageResponse && activityUsageResponse.entity && activityUsageResponse.entity.getLinkByRel(Rels.Grades.grade)){
+					const gradeLink = activityUsageResponse.entity.getLinkByRel(Rels.Grades.grade).href;
+					const gradeResponse = await this._getEntityFromHref(gradeLink, false);
+					
+					if( gradeResponse && gradeResponse.entity  && gradeResponse.entity.properties) {
+						evaluationUrl = gradeResponse.entity.properties.evaluationUrl;
+						statsUrl  = gradeResponse.entity.properties.statsUrl;
+						gradeItemName = gradeResponse.entity.properties.name
+					}
+				}		
+			}
+		}
+
+		return {
+			evaluationUrl,
+			statsUrl,
+			gradeItemName
+		};
+	}
 }

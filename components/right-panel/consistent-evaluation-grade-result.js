@@ -2,6 +2,7 @@ import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import './consistent-evaluation-right-panel-block';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
+import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
 export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
@@ -10,13 +11,20 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		return {
 			grade: {
 				attribute: false,
-				type: Object },
+				type: Object 
+			},
+			gradeItemInfo: {
+				attribute: false,
+				type: Object 
+			},
 			customManualOverrideText: {
 				attribute: 'custom-manual-override-text',
-				type: String },
+				type: String 
+			},
 			customManualOverrideClearText: {
 				attribute:'custom-manual-override-clear-text',
-				type: String },
+				type: String
+			 },
 			labelText: {
 				attribute: 'label-text',
 				type: String },
@@ -29,8 +37,6 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 
 			_manuallyOverriddenGrade: { type: Object },
 			_hasUnsavedChanged: { type: Boolean },
-			_includeGradeButton: { type: Boolean },
-			_includeReportsButton: { type: Boolean },
 			_gradeButtonTooltip: { type: String },
 			_reportsButtonTooltip: { type: String },
 			_isGradeAutoCompleted: { type: Boolean }
@@ -40,19 +46,25 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 	constructor() {
 		super();
 		this.grade = new Grade(GradeType.Number, 0, 0, null, null, null);
+		this.gradeItemInfo = {};
 		this.customManualOverrideText = undefined;
 		this.customManualOverrideClearText = undefined;
 		this.readOnly = false;
 		this.labelText = '';
 		this.hideTitle = false;
+		this._gradeButtonUrl = '';
+		this._reportsButtonUrl = '';
 		// hard coded as disabled as not yet supported by API
+		
 		this._manuallyOverriddenGrade = undefined;
 		this._hasUnsavedChanged = false;
-		this._includeGradeButton = false;
-		this._includeReportsButton = false;
 		this._gradeButtonTooltip = undefined;
 		this._reportsButtonTooltip = undefined;
 		this._isGradeAutoCompleted = false;
+	}
+
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
 	}
 
 	onGradeChanged(e) {
@@ -82,7 +94,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 			<d2l-consistent-evaluation-right-panel-block title="Overall Grade">
 			<d2l-labs-d2l-grade-result-presentational
 				labelText=${this.labelText || this.localize('overallGrade')}
-				.gradeType=${gradeType}
+				.gradeType=${gradeType} 
 				scoreNumerator=${score}
 				scoreDenominator=${scoreOutOf}
 				.letterGradeOptions=${scoreOutOf}
@@ -90,10 +102,10 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 				.customManualOverrideText=${this.customManualOverrideText}
 				.customManualOverrideClearText=${this.customManualOverrideClearText}
 
-				gradeButtonTooltip=${this._gradeButtonTooltip}
-				reportsButtonTooltip=${this._reportsButtonTooltip}
-				?includeGradeButton=${this._includeGradeButton}
-				?includeReportsButton=${this._includeReportsButton}
+				gradeButtonTooltip=${this.localize('attachedGradeItem', 'gradeItemName',this.gradeItemInfo && this.gradeItemInfo.gradeItemName)}
+				reportsButtonTooltip=${this.localize('statistics')}
+				gradeButtonUrl=${this.gradeItemInfo && this.gradeItemInfo.evaluationUrl || ''}
+				reportsButtonUrl=${this.gradeItemInfo && this.gradeItemInfo.statsUrl || ''}
 
 				?isGradeAutoCompleted=${this._isGradeAutoCompleted}
 				?isManualOverrideActive=${this._manuallyOverriddenGrade !== undefined}
