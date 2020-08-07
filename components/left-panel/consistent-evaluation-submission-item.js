@@ -17,7 +17,7 @@ import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
 import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
-import { default as ResizeObserver } from 'resize-observer-polyfill/dist/ResizeObserver.es.js';
+import ResizeObserver from 'resize-observer-polyfill/dist/ResizeObserver.es.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
@@ -59,9 +59,9 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				attribute: 'submission-type',
 				type: String
 			},
-			tooltips : {
+			_tooltips : {
 				attribute: false,
-				type: Object
+				type: Array
 			}
 		};
 	}
@@ -172,25 +172,14 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		}
 	}
 
-	get tooltips() {
-		return this._tooltips;
-	}
-
-	set tooltips(newVal) {
-		const oldVal = this._tooltips;
-		if (oldVal !== newVal) {
-			this._tooltips = newVal;
-			this.requestUpdate();
-		}
-	}
-
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('load', this._insertFilenameTooltips());
-		this._resizeObserver = new ResizeObserver(() => this._insertFilenameTooltips());
+		window.addEventListener('load', this._updateFileNameTooltips());
+		this._resizeObserver = new ResizeObserver(() => this._updateFileNameTooltips());
 	}
+
 	disconnectedCallback() {
-		window.removeEventListener('load', this._insertFilenameTooltips());
+		window.removeEventListener('load', this._updateFileNameTooltips());
 		super.disconnectedCallback();
 	}
 
@@ -355,13 +344,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_renderAttachments() {
-		// href placeholder on list-item
-		const template = [];
-		for (let i = 0; i < this._attachments.length; i++) {
-			const file = this._attachments[i];
-			const hasTooltip = this.tooltips[i];
-			template.push(html`
-			<d2l-list-item>
+		return html`${this._attachments.map((file, index) => html`
+		<d2l-list-item>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
@@ -381,39 +365,35 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				</div>
 			</d2l-list-item-content>
 			${this._addMenuOptions(file.properties.read, file.properties.flagged, file.properties.href, file.properties.name)}
-			</d2l-list-item>
-			${this._renderTooltip(hasTooltip, file.properties.name)}
-			`);
-		}
-		return html`${template}`;
+		</d2l-list-item>
+		${this._renderTooltip(this._tooltips[index], this._getFileTitle(file.properties.name))}
+		`)}`;
 	}
 
-	_renderTooltip(id, text) {
-		if (id) {
-			return html`<d2l-tooltip for="${id}" class="d2l-truncated-filename-tooltips"
-				offset="0" align="start">${text}</d2l-tooltip>`;
+	_renderTooltip(uniqueId, text) {
+		if (uniqueId) {
+			return html`<d2l-tooltip for="${uniqueId}" class="d2l-truncated-filename-tooltips"
+				offset="0" align="start" aria-hidden="true">${text}</d2l-tooltip>`;
 		}
 	}
 
-	_isClamped(e) {
-		return e.clientHeight < e.scrollHeight;
+	_isClamped(element) {
+		return element.clientHeight < element.scrollHeight;
 	}
 
-	_insertFilenameTooltips() {
-		const items = this.shadowRoot.querySelectorAll('.truncate');
-		const keys = [];
-		items.forEach(element => {
+	_updateFileNameTooltips() {
+		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		const uniqueIds = [];
+		filenames.forEach(element => {
 			if (this._isClamped(element)) {
 				const uniqueId = getUniqueId();
-				keys.push(uniqueId);
-				// attach to the parent d2l-list-item component for visibility
-				const target = element.closest('d2l-list-item');
-				target.id = uniqueId;
+				uniqueIds.push(uniqueId);
+				element.id = uniqueId;
 			} else {
-				keys.push(false);
+				uniqueIds.push(false);
 			}
 		});
-		this.tooltips = keys;
+		this._tooltips = uniqueIds;
 	}
 
 	_addMenuOptions(read, flagged, downloadHref, name) {
@@ -467,7 +447,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderFileSubmission() {
 		return html`
 		${this._renderFileSubmissionTitle()}
-		<d2l-list grid separators="all">
+		<d2l-list aria-role="list" separators="all">
 		${this._renderAttachments()}
 		</d2l-list>
 		${this._renderComment()}
