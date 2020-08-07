@@ -17,6 +17,7 @@ import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
 import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { default as ResizeObserver } from 'resize-observer-polyfill/dist/ResizeObserver.es.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
@@ -185,11 +186,20 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('load', this.insertTooltipsAfterUpdateComplete());
+		window.addEventListener('load', this._insertFilenameTooltips());
+		this._resizeObserver = new ResizeObserver(() => this._insertFilenameTooltips());
 	}
 	disconnectedCallback() {
-		window.removeEventListener('load', this.insertTooltipsAfterUpdateComplete());
+		window.removeEventListener('load', this._insertFilenameTooltips());
 		super.disconnectedCallback();
+	}
+
+	firstUpdated() {
+		super.firstUpdated();
+		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		for (const filename of filenames) {
+			this._resizeObserver.observe(filename);
+		}
 	}
 
 	_initializeSubmissionProperties() {
@@ -385,20 +395,15 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		}
 	}
 
-	isClamped(e) {
+	_isClamped(e) {
 		return e.clientHeight < e.scrollHeight;
 	}
 
-	async insertTooltipsAfterUpdateComplete() {
-		await this.updateComplete;
-		this.insertFilenameTooltips();
-	}
-
-	insertFilenameTooltips() {
+	_insertFilenameTooltips() {
 		const items = this.shadowRoot.querySelectorAll('.truncate');
 		const keys = [];
 		items.forEach(element => {
-			if (this.isClamped(element)) {
+			if (this._isClamped(element)) {
 				const uniqueId = getUniqueId();
 				keys.push(uniqueId);
 				// attach to the parent d2l-list-item component for visibility
@@ -482,10 +487,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		} else if (this.submissionType === textSubmission) {
 			return html`${this._renderTextSubmission()}`;
 		}
-	}
-
-	async _getUpdateComplete() {
-		await super._getUpdateComplete();
 	}
 }
 customElements.define('d2l-consistent-evaluation-submission-item', ConsistentEvaluationSubmissionItem);
