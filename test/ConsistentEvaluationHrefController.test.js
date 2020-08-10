@@ -159,4 +159,47 @@ describe('ConsistentEvaluationHrefController', () => {
 			assert.equal(submissionInfo.submissionType, expectedSubmissionType);
 		});
 	});
+
+	describe('getGradeItemInfo gets correct grade item info', () => {
+		it('sets the gradeItem info', async() => {
+			const activityUsageHref = 'expected_activity_usage_href';
+			const gradeHref = 'expected_grade_href';
+			const evaluationUrl = 'expectedEvaluationUrl';
+			const statsUrl = 'expectedStatsUrl';
+			const gradeItemName = 'expectedGradeItemName';
+
+			const controller = new ConsistentEvaluationHrefController('href', 'token');
+
+			sinon.stub(controller, '_getRootEntity').returns({
+				entity: {
+					hasLinkByRel: (r) => r === Rels.Activities.activityUsage,
+					getLinkByRel: (r) => (r === Rels.Activities.activityUsage ? { href: activityUsageHref } : undefined)
+				}
+			});
+
+			const getHrefStub = sinon.stub(controller, '_getEntityFromHref');
+
+			getHrefStub.withArgs(activityUsageHref, false).returns({
+				entity: {
+					hasLinkByRel: (r) => r === Rels.Grades.grade,
+					getLinkByRel: (r) => (r === Rels.Grades.grade ? { href: gradeHref } : undefined)
+				}
+			});
+
+			getHrefStub.withArgs(gradeHref, false).returns({
+				entity: {
+					properties: {
+						evaluationUrl: evaluationUrl,
+						statsUrl: statsUrl,
+						name: gradeItemName
+					}
+				}
+			});
+
+			const gradeItemInfo = await controller.getGradeItemInfo();
+			assert.equal(gradeItemInfo.evaluationUrl, evaluationUrl);
+			assert.equal(gradeItemInfo.statsUrl, statsUrl);
+			assert.equal(gradeItemInfo.gradeItemName, gradeItemName);
+		});
+	});
 });
