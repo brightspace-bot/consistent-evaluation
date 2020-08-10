@@ -11,20 +11,20 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		return {
 			grade: {
 				attribute: false,
-				type: Object 
+				type: Object
 			},
 			gradeItemInfo: {
 				attribute: false,
-				type: Object 
+				type: Object
 			},
 			customManualOverrideText: {
 				attribute: 'custom-manual-override-text',
-				type: String 
+				type: String
 			},
 			customManualOverrideClearText: {
 				attribute:'custom-manual-override-clear-text',
 				type: String
-			 },
+			},
 			labelText: {
 				attribute: 'label-text',
 				type: String },
@@ -43,6 +43,10 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		};
 	}
 
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
+	}
+
 	constructor() {
 		super();
 		this.grade = new Grade(GradeType.Number, 0, 0, null, null, null);
@@ -55,16 +59,12 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		this._gradeButtonUrl = '';
 		this._reportsButtonUrl = '';
 		// hard coded as disabled as not yet supported by API
-		
+
 		this._manuallyOverriddenGrade = undefined;
 		this._hasUnsavedChanged = false;
 		this._gradeButtonTooltip = undefined;
 		this._reportsButtonTooltip = undefined;
 		this._isGradeAutoCompleted = false;
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	onGradeChanged(e) {
@@ -150,7 +150,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 			}
 		];
 
-		const delayedResult = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
+		D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
 			/*               opener: */ document.body,
 			/*             location: */ location,
 			/*          srcCallback: */ 'SrcCallback',
@@ -184,7 +184,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 			}
 		];
 
-		const delayedResult = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
+		D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
 			/*               opener: */ document.body,
 			/*             location: */ location,
 			/*          srcCallback: */ 'SrcCallback',

@@ -5,7 +5,7 @@ export const val = {
 	addOneDriveLink: 'Attach from OneDrive',
 	addQuicklink: 'Attach Link to Existing Activity',
 	attachedGradeItem: '{gradeItemName} attached',
-	backToUserSubmissions: 'Back to User Submissions',	
+	backToUserSubmissions: 'Back to User Submissions',
 	cancelBtn: 'Cancel',
 	closeBtn: 'Close',
 	comments: 'Comments',
