@@ -267,8 +267,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					this._toastMessage = this.localize('updated');
 					break;
 				default:
-					// throw action not found
-					break;
+					throw new Error('Could not find the action from the evaluation entity');
 			}
 			this._displayToast = true;
 		}
