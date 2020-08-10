@@ -9,12 +9,10 @@ import '@brightspace-ui/core/components/menu/menu.js';
 import '@brightspace-ui/core/components/menu/menu-item-link.js';
 import '@brightspace-ui/core/components/more-less/more-less.js';
 import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
-import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
-import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 import ResizeObserver from 'resize-observer-polyfill/dist/ResizeObserver.es.js';
@@ -58,10 +56,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			submissionType: {
 				attribute: 'submission-type',
 				type: String
-			},
-			_tooltips : {
-				attribute: false,
-				type: Array
 			}
 		};
 	}
@@ -139,9 +133,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
 		}
-		.d2l-truncated-filename-tooltips {
-			overflow-wrap: break-word;
-		}
 	`];
 	}
 
@@ -156,7 +147,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this._date = undefined;
 		this._attachments = [];
 		this._comment = '';
-		this._tooltips = [];
 	}
 
 	get submissionEntity() {
@@ -174,12 +164,16 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('load', this._updateFileNameTooltips());
-		this._resizeObserver = new ResizeObserver(() => this._updateFileNameTooltips());
+		window.addEventListener('load', this._updateFilenameTooltips());
+		this._resizeObserver = new ResizeObserver(() => this._updateFilenameTooltips());
 	}
 
 	disconnectedCallback() {
-		window.removeEventListener('load', this._updateFileNameTooltips());
+		window.removeEventListener('load', this._updateFilenameTooltips());
+		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		for (const filename of filenames) {
+			this._resizeObserver.unobserve(filename);
+		}
 		super.disconnectedCallback();
 	}
 
@@ -344,7 +338,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_renderAttachments() {
-		return html`${this._attachments.map((file, index) => html`
+		return html`${this._attachments.map((file) => html`
 		<d2l-list-item>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
@@ -366,34 +360,22 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			</d2l-list-item-content>
 			${this._addMenuOptions(file.properties.read, file.properties.flagged, file.properties.href, file.properties.name)}
 		</d2l-list-item>
-		${this._renderTooltip(this._tooltips[index], this._getFileTitle(file.properties.name))}
 		`)}`;
-	}
-
-	_renderTooltip(uniqueId, text) {
-		if (uniqueId) {
-			return html`<d2l-tooltip for="${uniqueId}" class="d2l-truncated-filename-tooltips"
-				offset="0" align="start" aria-hidden="true">${text}</d2l-tooltip>`;
-		}
 	}
 
 	_isClamped(element) {
 		return element.clientHeight < element.scrollHeight;
 	}
 
-	_updateFileNameTooltips() {
+	_updateFilenameTooltips() {
 		const filenames = this.shadowRoot.querySelectorAll('.truncate');
-		const uniqueIds = [];
 		filenames.forEach(element => {
 			if (this._isClamped(element)) {
-				const uniqueId = getUniqueId();
-				uniqueIds.push(uniqueId);
-				element.id = uniqueId;
+				element.title = element.innerText;
 			} else {
-				uniqueIds.push(false);
+				element.removeAttribute('title');
 			}
 		});
-		this._tooltips = uniqueIds;
 	}
 
 	_addMenuOptions(read, flagged, downloadHref, name) {
