@@ -5,7 +5,7 @@ import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { draftState, publishActionName, publishedState, retractActionName, saveActionName, updateActionName } from './controllers/constants.js';
+import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -224,14 +224,22 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	async _saveEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.save(entity);
-		this._getToastMessage(saveActionName, this.evaluationEntity);
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('saved'));
+		} else {
+			this._showToast(this.localize('saveError'));
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _updateEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.update(entity);
-		this._getToastMessage(updateActionName, this.evaluationEntity);
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('updated'));
+		} else {
+			this._showToast(this.localize('updatedError'));
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
@@ -239,42 +247,31 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
-		this._getToastMessage(publishActionName, this.evaluationEntity);
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('published'));
+		} else {
+			this._showToast(this.localize('publishError'));
+		}
 		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.retract(entity);
-		this._getToastMessage(retractActionName, this.evaluationEntity);
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('retracted'));
+		} else {
+			this._showToast(this.localize('retractError'));
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
 	}
 
-	_getToastMessage(action, entity) {
-		if (!(entity instanceof Error))  {
-			switch (action) {
-				case publishActionName:
-					this._toastMessage = this.localize('published');
-					break;
-				case retractActionName:
-					this._toastMessage = this.localize('retracted');
-					break;
-				case saveActionName:
-					this._toastMessage = this.localize('saved');
-					break;
-				case updateActionName:
-					this._toastMessage = this.localize('updated');
-					break;
-				default:
-					throw new Error('Could not find the action from the evaluation entity');
-			}
-			this._displayToast = true;
-		}
-		else {
-			//determine error message
-		}
+	_showToast(message) {
+		this._toastMessage = message;
+		this._displayToast = true;
 	}
+
 	_onToastClose() {
 		this._displayToast = false;
 	}
