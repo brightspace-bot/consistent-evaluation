@@ -1,3 +1,4 @@
+import './left-panel/consistent-evaluation-left-panel.js';
 import './footer/consistent-evaluation-footer-presentational.js';
 import './right-panel/consistent-evaluation-right-panel.js';
 import './left-panel/consistent-evaluation-submissions-page.js';
@@ -72,6 +73,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			},
 			_gradeEntity: {
 				attribute: false
+			},
+			_scrollbarStatus: {
+				attribute: false
 			}
 		};
 	}
@@ -84,8 +88,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			:host([hidden]) {
 				display: none;
 			}
-			d2l-consistent-evaluation-submissions-page {
-				width: 100%;
+			.d2l-consistent-evaluation-page-primary-slot {
+				height: 100%;
 			}
 		`;
 	}
@@ -103,6 +107,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._evaluationEntity = undefined;
 		this._displayToast = false;
 		this._toastMessage = '';
+		this._scrollbarStatus = 'default';
 	}
 
 	get evaluationEntity() {
@@ -149,7 +154,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		if (this._feedbackEntity && this._feedbackEntity.properties) {
 			return this._feedbackEntity.properties.text || '';
 		}
-		return '';
+		return undefined;
 	}
 
 	get _grade() {
@@ -200,6 +205,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			composed: true,
 			bubbles: true
 		}));
+	}
+
+	_hideScrollbars() {
+		this._scrollbarStatus = 'hidden';
+	}
+
+	_showScrollbars() {
+		this._scrollbarStatus = 'default';
 	}
 
 	async _transientSaveFeedback(e) {
@@ -285,20 +298,20 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	render() {
 		return html`
-			<d2l-template-primary-secondary>
+			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
 				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
-				<div slot="primary">
-					<d2l-consistent-evaluation-submissions-page
-					due-date=${ifDefined(this.submissionInfo && this.submissionInfo.dueDate)}
-					evaluation-state=${this.submissionInfo && this.submissionInfo.evaluationState}
-					submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
-					.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
-					.token=${this.token}></d2l-consistent-evaluation-submissions-page>
+				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
+					<d2l-consistent-evaluation-left-panel
+						.submissionInfo=${this.submissionInfo}
+						.token=${this.token}
+						@d2l-consistent-evaluation-left-panel-render-evidence=${this._hideScrollbars}
+						@d2l-consistent-evaluation-left-panel-render-submission-list=${this._showScrollbars}
+					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
 					<consistent-evaluation-right-panel
 						evaluation-href=${this.evaluationHref}
-						feedback-text=${this._feedbackText}
+						.feedbackText=${this._feedbackText}
 						rubric-href=${ifDefined(this.rubricHref)}
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
 						outcomes-href=${ifDefined(this.outcomesHref)}
