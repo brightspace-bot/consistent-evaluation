@@ -28,7 +28,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	_getTitle() {
-		return this.noTitle ? html`` : html`<h3>${this.title}</h3>`;
+		return this.noTitle ? html`` : html`<d2l-label-text>${this.title}</d2l-label-text>`;
 	}
 
 	render() {
