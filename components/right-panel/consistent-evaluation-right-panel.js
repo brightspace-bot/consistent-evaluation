@@ -18,6 +18,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				attribute: false,
 				type: Object
 			},
+			gradeItemInfo: {
+				attribute: false,
+				type: Object
+			},
 			hideRubric: {
 				attribute: 'hide-rubric',
 				type: Boolean
@@ -107,6 +111,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			return html`
 				<d2l-consistent-evaluation-grade-result
 					.grade=${this.grade}
+					.gradeItemInfo=${this.gradeItemInfo}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}

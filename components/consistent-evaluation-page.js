@@ -53,6 +53,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: false,
 				type: Object
 			},
+			gradeItemInfo: {
+				attribute: false,
+				type: Object
+			},
 			token: {
 				type: String
 			},
@@ -317,6 +321,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						outcomes-href=${ifDefined(this.outcomesHref)}
 						.richTextEditorConfig=${this.richtextEditorConfig}
 						.grade=${this._grade}
+						.gradeItemInfo=${this.gradeItemInfo}
 						.token=${this.token}
 						?rubric-read-only=${this.rubricReadOnly}
 						?rich-text-editor-disabled=${this.richTextEditorDisabled}
