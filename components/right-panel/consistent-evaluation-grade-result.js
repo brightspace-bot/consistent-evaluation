@@ -129,7 +129,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.evaluationUrl;
 
 		if (!dialogUrl) {
-			console.error(`Consistent-Eval: Expected grade item evalutaion dialog URL, but none found`);
+			console.error('Consistent-Eval: Expected grade item evalutaion dialog URL, but none found');
 			return;
 		}
 
@@ -170,7 +170,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		const dialogUrl = this.gradeItemInfo && this.gradeItemInfo.statsUrl;
 
 		if (!dialogUrl) {
-			console.error(`Consistent-Eval: Expected grade item statistics dialog URL, but none found`);
+			console.error('Consistent-Eval: Expected grade item statistics dialog URL, but none found');
 			return;
 		}
 
