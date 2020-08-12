@@ -1,4 +1,5 @@
 import { css, html, LitElement } from 'lit-element';
+import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 
 class ConsistentEvaluationRightPanelBlock extends LitElement {
 	static get properties() {
@@ -14,12 +15,15 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	static get styles() {
-		return css`
+		return [labelStyles, css`
 			.block {
 				margin-top: .75rem;
 				padding-left: .75rem;
 			}
-		`;
+			.d2l-label-text {
+				margin-bottom: .4rem;
+			}
+		`];
 	}
 
 	constructor() {
@@ -28,7 +32,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	_getTitle() {
-		return this.noTitle ? html`` : html`<h3>${this.title}</h3>`;
+		return this.noTitle ? html`` : html`<div class="d2l-label-text">${this.title}</div>`;
 	}
 
 	render() {
