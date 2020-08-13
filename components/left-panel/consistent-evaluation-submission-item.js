@@ -147,6 +147,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this._date = undefined;
 		this._attachments = [];
 		this._comment = '';
+		this._updateFilenameTooltips = this._updateFilenameTooltips.bind(this);
 	}
 
 	get submissionEntity() {
@@ -164,12 +165,12 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('load', this._updateFilenameTooltips());
-		this._resizeObserver = new ResizeObserver(() => this._updateFilenameTooltips());
+		window.addEventListener('load', this._updateFilenameTooltips);
+		this._resizeObserver = new ResizeObserver(this._updateFilenameTooltips);
 	}
 
 	disconnectedCallback() {
-		window.removeEventListener('load', this._updateFilenameTooltips());
+		window.removeEventListener('load', this._updateFilenameTooltips);
 		const filenames = this.shadowRoot.querySelectorAll('.truncate');
 		for (const filename of filenames) {
 			this._resizeObserver.unobserve(filename);
@@ -368,6 +369,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_updateFilenameTooltips() {
+		console.log(this);
 		const filenames = this.shadowRoot.querySelectorAll('.truncate');
 		filenames.forEach(element => {
 			if (this._isClamped(element)) {
