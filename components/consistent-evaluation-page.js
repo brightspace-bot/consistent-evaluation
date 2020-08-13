@@ -1,6 +1,8 @@
 import './left-panel/consistent-evaluation-left-panel.js';
 import './footer/consistent-evaluation-footer-presentational.js';
 import './right-panel/consistent-evaluation-right-panel.js';
+import './left-panel/consistent-evaluation-submissions-page.js';
+import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
@@ -8,8 +10,10 @@ import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { loadLocalizationResources } from './locale.js';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
-export default class ConsistentEvaluationPage extends LitElement {
+export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
@@ -49,7 +53,17 @@ export default class ConsistentEvaluationPage extends LitElement {
 				attribute: false,
 				type: Object
 			},
+			gradeItemInfo: {
+				attribute: false,
+				type: Object
+			},
 			token: {
+				type: String
+			},
+			_displayToast: {
+				type: Boolean
+			},
+			_toastMessage: {
 				type: String
 			},
 			_feedbackText: {
@@ -84,6 +98,10 @@ export default class ConsistentEvaluationPage extends LitElement {
 		`;
 	}
 
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
+	}
+
 	constructor() {
 		super();
 		this._evaluationHref = undefined;
@@ -91,7 +109,8 @@ export default class ConsistentEvaluationPage extends LitElement {
 
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
-
+		this._displayToast = false;
+		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
 	}
 
@@ -222,12 +241,22 @@ export default class ConsistentEvaluationPage extends LitElement {
 	async _saveEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.save(entity);
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('saved'));
+		} else {
+			this._showToast(this.localize('saveError'));
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	async _updateEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.update(entity);
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('updated'));
+		} else {
+			this._showToast(this.localize('updatedError'));
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
@@ -235,14 +264,40 @@ export default class ConsistentEvaluationPage extends LitElement {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('published'));
+		} else {
+			this._showToast(this.localize('publishError'));
+		}
 		this.submissionInfo.evaluationState = publishedState;
 	}
 
 	async _retractEvaluation() {
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.retract(entity);
+		if (!(this.evaluationEntity instanceof Error)) {
+			this._showToast(this.localize('retracted'));
+		} else {
+			this._showToast(this.localize('retractError'));
+		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
+	}
+
+	_showToast(message) {
+		this._toastMessage = message;
+		this._displayToast = true;
+	}
+
+	_onToastClose() {
+		this._displayToast = false;
+	}
+
+	_renderToast() {
+		return html`<d2l-alert-toast 
+			?open=${this._displayToast} 
+			button-text=""
+			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
 
 	render() {
@@ -266,6 +321,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 						outcomes-href=${ifDefined(this.outcomesHref)}
 						.richTextEditorConfig=${this.richtextEditorConfig}
 						.grade=${this._grade}
+						.gradeItemInfo=${this.gradeItemInfo}
 						.token=${this.token}
 						?rubric-read-only=${this.rubricReadOnly}
 						?rich-text-editor-disabled=${this.richTextEditorDisabled}
@@ -278,6 +334,7 @@ export default class ConsistentEvaluationPage extends LitElement {
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
+					${this._renderToast()}
 					<d2l-consistent-evaluation-footer-presentational
 						next-student-href=${ifDefined(this.nextStudentHref)}
 						?published=${this._isEvaluationPublished()}

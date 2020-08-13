@@ -369,7 +369,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_updateFilenameTooltips() {
-		console.log(this);
 		const filenames = this.shadowRoot.querySelectorAll('.truncate');
 		filenames.forEach(element => {
 			if (this._isClamped(element)) {

@@ -47,6 +47,7 @@ module.exports = config => {
 			customLaunchers: customLaunchers,
 			browsers: Object.keys(customLaunchers),
 			reporters: ['dots', 'saucelabs'],
+			browserNoActivityTimeout: 100000,
 			singleRun: true,
 			hostname: '127.0.0.1'
 		}),
