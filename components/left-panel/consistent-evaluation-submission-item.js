@@ -13,19 +13,11 @@ import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/co
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
+import { getFileIconTypeFromExtension } from '@brightspace-ui/core/components/icons/getFileIconType';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
-
-export const fileTypes = {
-	'MP3':'file-audio', 'WAV':'file-audio', 'WMA':'file-audio',
-	'DOC':'file-document', 'DOCX':'file-document', 'PDF':'file-document', 'TXT':'file-document', 'WPD':'file-document', 'XML':'file-document',
-	'BMP':'file-image', 'GIF':'file-image', 'PNG':'file-image', 'JPEG':'file-image', 'JPG':'file-image', 'TIF':'file-image', 'TIFF':'file-image',
-	'PPT':'file-presentation', 'PPTX':'file-presentation', 'PPS':'file-presentation',
-	'MPG':'file-video', 'MPEG':'file-video', 'MP4':'file-video', 'M4V':'file-video', 'M4A':'file-video', 'MOV':'file-video',
-	'RM':'file-video', 'RA':'file-video', 'RAM':'file-video', 'SWF':'file-video', 'WMV':'file-video', 'AVI':'file-video', 'ASF':'file-video'
-};
 
 export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(LitElement)) {
 	static get properties() {
@@ -164,14 +156,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	//Helper methods
-
-	_getIcon(filename) {
-		const ext = this._getFileExtension(filename);
-		if (ext in fileTypes) {
-			return fileTypes[ext];
-		}
-		return 'file-document';
-	}
 
 	_getFileTitle(filename) {
 		const index = filename.lastIndexOf('.');
@@ -321,36 +305,42 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	_renderAttachments() {
 		// href placeholder on list-item
-		return html`${this._attachments.map((file) => html`
+		return html`${this._attachments.map((file) => {
+			const read = file.properties.read;
+			const flagged = file.properties.flagged;
+			const href = file.properties.href;
+			const name = file.properties.name;
+			const extension = file.properties.extension;
+			const size = file.properties.size;
+			return html`
 			<d2l-list-item>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
-					icon="tier2:${this._getIcon(file.properties.name)}"
-					aria-label="${this._getIcon(file.properties.name)}"></d2l-icon>
-				${this._renderReadStatus(file.properties.read)}
+					icon="tier2:${getFileIconTypeFromExtension(extension)}"
+					aria-label="${getFileIconTypeFromExtension(extension)}"></d2l-icon>
+				${this._renderReadStatus(read)}
 			</div>
 			<d2l-list-item-content
 			@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchRenderEvidenceFileEvent(file.properties.fileViewer)}">
-				<span>${this._getFileTitle(file.properties.name)}</span>
+				<span>${this._getFileTitle(name)}</span>
 				<div slot="supporting-info">
-					${this._renderFlaggedStatus(file.properties.flagged)}
-					${this._getFileExtension(file.properties.name)}
+					${this._renderFlaggedStatus(flagged)}
+					${extension}
 					<d2l-icon class="d2l-separator-icon" aria-hidden="true" icon="tier1:dot"></d2l-icon>
-					${this._getReadableFileSizeString(file.properties.size)}
+					${this._getReadableFileSizeString(size)}
 				</div>
 			</d2l-list-item-content>
-			${this._addMenuOptions(file.properties.read, file.properties.flagged, file.properties.href, file.properties.name)}
-			</d2l-list-item>
-			`)}`;
+			${this._addMenuOptions(read, flagged, href, extension)}
+			</d2l-list-item>`;}
+		)}`;
 	}
 
-	_addMenuOptions(read, flagged, downloadHref, name) {
+	_addMenuOptions(read, flagged, downloadHref, extension) {
 		// Placeholder for menu presentational
 		const oppositeReadState = read ? this.localize('markUnread') : this.localize('markRead');
 		const oppositeFlagState = flagged ? this.localize('unflag') : this.localize('flag');
-		const fileType = this._getFileExtension(name);
 		return html`<div slot="actions" style="z-index: inherit;">
 			<d2l-dropdown-more text="More Options">
 			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
@@ -362,7 +352,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeReadState}" href="#"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeFlagState}" href="#"></d2l-menu-item-link>
-					${this._renderEditACopy(fileType)}
+					${this._renderEditACopy(extension)}
 				</d2l-menu>
 			</d2l-dropdown-menu>
 			</d2l-dropdown-more>
