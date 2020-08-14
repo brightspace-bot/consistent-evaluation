@@ -220,10 +220,34 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_dispatchRenderEvidenceEvent(url) {
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence', {
+	_dispatchRenderEvidence(extension, fileViewer) {
+		if (extension === 'txt') {
+			this._dispatchRenderEvidenceTextEvent();
+		}
+		else if (fileViewer !== undefined) {
+			this._dispatchRenderEvidenceFileEvent(fileViewer);
+		}
+	}
+
+	_dispatchRenderEvidenceFileEvent(url) {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-file', {
 			detail: {
 				url: url
+			},
+			composed: true
+		});
+		this.dispatchEvent(event);
+	}
+
+	_dispatchRenderEvidenceTextEvent() {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
+			detail: {
+				textSubmissionEvidence: {
+					title: `${this.localize('textSubmission')} ${this.displayNumber}`,
+					date: this._formatDateTime(),
+					downloadUrl: this._attachments[0].properties.href,
+					content: this._comment
+				}
 			},
 			composed: true
 		});
@@ -323,14 +347,11 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_renderAttachments() {
-		// href placeholder on list-item
 		return html`${this._attachments.map((file) => {
-			const read = file.properties.read;
-			const flagged = file.properties.flagged;
-			const href = file.properties.href;
-			const name = file.properties.name;
-			const extension = file.properties.extension;
-			const size = file.properties.size;
+			const read = file.properties.read, flagged = file.properties.flagged,
+				href = file.properties.href, name = file.properties.name,
+				extension = file.properties.extension, size = file.properties.size,
+				fileViewer = file.properties.fileViewer;
 			return html`
 			<d2l-list-item>
 				<div slot="illustration" class="d2l-submission-attachment-icon-container">
@@ -342,11 +363,11 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				<d2l-list-item-content
 				@click="${
 	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderEvidenceFileEvent(file.properties.fileViewer)}">
+	() => this._dispatchRenderEvidence(extension, fileViewer)}">
 					<div class="truncate" aria-label="heading">${this._getFileTitle(name)}</div>
 					<div slot="supporting-info">
 						${this._renderFlaggedStatus(flagged)}
-						${extension}
+						${extension.toUpperCase()}
 						<d2l-icon class="d2l-separator-icon" aria-hidden="true" icon="tier1:dot"></d2l-icon>
 						${this._getReadableFileSizeString(size)}
 					</div>
@@ -379,6 +400,10 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			<d2l-dropdown-more text="More Options">
 			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
 				<d2l-menu>
+				${this.submissionType === textSubmission ? html`
+						<d2l-menu-item-link text="${this.localize('viewFullSubmission')}"
+							href="javascript:void(0);"
+							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null }
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeReadState}" href="#"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeFlagState}" href="#"></d2l-menu-item-link>
@@ -389,8 +414,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			</div>`;
 	}
 
-	_renderEditACopy(fileType) {
-		if (fileType === 'TXT' || fileType === 'HTML') {
+	_renderEditACopy(extension) {
+		if (extension === 'txt' || extension === 'html') {
 			return html `<d2l-menu-item-link text="${this.localize('editCopy')}" href="#"></d2l-menu-item-link>`;
 		}
 		return html``;
