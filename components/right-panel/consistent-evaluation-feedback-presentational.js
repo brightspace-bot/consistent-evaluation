@@ -4,7 +4,7 @@ import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d
 import './consistent-evaluation-right-panel-block';
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 
-import { html, LitElement } from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 import { AttachmentCollectionEntity } from 'siren-sdk/src/activities/AttachmentCollectionEntity.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { loadLocalizationResources } from '../locale.js';
@@ -33,6 +33,14 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 				type: String
 			}
 		};
+	}
+
+	static get styles() {
+		return css`
+			.evaluation-feedback-wrapper {
+				margin-top: 0.3rem;
+			}
+		`;
 	}
 
 	static async getLocalizeResources(langs) {
@@ -91,15 +99,16 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		if (this.href && this.token) {
 
 			return html`
-			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
-				<d2l-activity-text-editor
-					.value="${this.feedbackText}"
-					.richtextEditorConfig="${this.richTextEditorConfig}"
-					@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
-					ariaLabel="${this.localize('overallFeedback')}"
-					?hidden="${!this.canEditFeedback}">
-				</d2l-activity-text-editor>
-
+			<div class="evaluation-feedback-wrapper">
+				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
+					<d2l-activity-text-editor
+						.value="${this.feedbackText}"
+						.richtextEditorConfig="${this.richTextEditorConfig}"
+						@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
+						ariaLabel="${this.localize('overallFeedback')}"
+						?hidden="${!this.canEditFeedback}">
+					</d2l-activity-text-editor>
+			</div>
 				<div>
 					<d2l-activity-attachments-editor
 						.href="${this.href}/attachments"
