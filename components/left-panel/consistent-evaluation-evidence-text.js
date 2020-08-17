@@ -21,18 +21,18 @@ export class ConsistentEvaluationEvidenceText extends LocalizeMixin(LitElement) 
 
 	static get styles() {
 		return [bodyStandardStyles, heading2Styles, css`
-			.consistent-eval-text-evidence {
+			.d2l-consistent-eval-text-evidence {
+				padding-bottom: 2rem;
 				padding-left: 0.8rem;
 				padding-right: 0.8rem;
-				padding-bottom: 2rem;
 			}
-			.consistent-eval-text-evidence-options {
+			.d2l-consistent-eval-text-evidence-options {
 				margin-right: 0.8rem;
 			}
-			.consistent-eval-text-evidence-title {
+			.d2l-consistent-eval-text-evidence-title {
 				margin-bottom: 1rem;
 			}
-			.consistent-eval-text-evidence-submitted-date {
+			.d2l-consistent-eval-text-evidence-submitted-date {
 				margin-bottom: 2rem;
 			}
 		`];

@@ -19,12 +19,12 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 	static get styles() {
 		return css`
 			#footer-container {
+				align-items: center;
 				display: flex;
 				justify-content: flex-end;
-				align-items: center;
 			}
-			.button-container {
-				margin: 0 0.3rem
+			.d2l-button-container {
+				margin: 0 0.3rem;
 			}
 		`;
 	}
@@ -80,13 +80,13 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 	render() {
 		return html`
 			<div id="footer-container">
-				<div class="button-container">
+				<div class="d2l-button-container">
 					${this._getPublishOrUpdateButton()}
 				</div>
-				<div class="button-container">
+				<div class="d2l-button-container">
 					${this._getSaveDraftOrRetractButton()}
 				</div>
-				<div class="button-container">
+				<div class="d2l-button-container">
 					${this._getNextStudentButton()}
 				</div>
 			</div>
