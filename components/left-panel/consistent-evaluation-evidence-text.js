@@ -45,7 +45,7 @@ export class ConsistentEvaluationEvidenceText extends LocalizeMixin(LitElement) 
 	render() {
 		return html`
 			<d2l-consistent-evaluation-evidence-top-bar>
-				<d2l-dropdown-more class="consistent-eval-text-evidence-options" text="${this.localize('moreOptions')}">
+				<d2l-dropdown-more class="d2l-consistent-eval-text-evidence-options" text="${this.localize('moreOptions')}">
 					<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
 						<d2l-menu>
 							<d2l-menu-item-link text="${this.localize('download')}" href="${this.downloadUrl}"></d2l-menu-item-link>
@@ -55,9 +55,9 @@ export class ConsistentEvaluationEvidenceText extends LocalizeMixin(LitElement) 
 				</d2l-dropdown-more>
 			</d2l-consistent-evaluation-evidence-top-bar>
 
-			<div class="consistent-eval-text-evidence">
-				<h2 class="d2l-heading-2 consistent-eval-text-evidence-title">${this.title}</h2>
-				<span class="consistent-eval-text-evidence-submitted-date">${this.localize('submitted')}: ${this.date}</span>
+			<div class="d2l-consistent-eval-text-evidence">
+				<h2 class="heading-2 d2l-consistent-eval-text-evidence-title">${this.title}</h2>
+				<span class="d2l-consistent-eval-text-evidence-submitted-date">${this.localize('submitted')}: ${this.date}</span>
 				${unsafeHTML(this.content)}
 			</div>
 		`;
