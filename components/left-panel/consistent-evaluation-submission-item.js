@@ -15,6 +15,7 @@ import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import ResizeObserver from 'resize-observer-polyfill/dist/ResizeObserver.es.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
@@ -123,6 +124,15 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			margin-left: 0.5rem;
 			margin-right: 0;
 		}
+		.truncate {
+			text-overflow: ellipsis;
+			white-space: break-spaces;
+			overflow: hidden;
+			overflow-wrap: break-word;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+		}
 	`];
 	}
 
@@ -137,6 +147,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this._date = undefined;
 		this._attachments = [];
 		this._comment = '';
+		this._updateFilenameTooltips = this._updateFilenameTooltips.bind(this);
 	}
 
 	get submissionEntity() {
@@ -149,6 +160,29 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			this._submissionEntity = newSubmission;
 			this._initializeSubmissionProperties();
 			this.requestUpdate();
+		}
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		window.addEventListener('load', this._updateFilenameTooltips);
+		this._resizeObserver = new ResizeObserver(this._updateFilenameTooltips);
+	}
+
+	disconnectedCallback() {
+		window.removeEventListener('load', this._updateFilenameTooltips);
+		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		for (const filename of filenames) {
+			this._resizeObserver.unobserve(filename);
+		}
+		super.disconnectedCallback();
+	}
+
+	firstUpdated() {
+		super.firstUpdated();
+		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		for (const filename of filenames) {
+			this._resizeObserver.observe(filename);
 		}
 	}
 
@@ -202,25 +236,10 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_dispatchRenderEvidenceFileEvent(url) {
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-file', {
+	_dispatchRenderEvidenceEvent(url) {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence', {
 			detail: {
 				url: url
-			},
-			composed: true
-		});
-		this.dispatchEvent(event);
-	}
-
-	_dispatchRenderEvidenceTextEvent() {
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
-			detail: {
-				textSubmissionEvidence: {
-					title: `${this.localize('textSubmission')} ${this.displayNumber}`,
-					date: this._formatDateTime(),
-					downloadUrl: this._attachments[0].properties.href,
-					content: this._comment
-				}
 			},
 			composed: true
 		});
@@ -320,9 +339,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_renderAttachments() {
-		// href placeholder on list-item
 		return html`${this._attachments.map((file) => html`
-			<d2l-list-item>
+		<d2l-list-item>
 			<div slot="illustration" class="d2l-submission-attachment-icon-container">
 				<d2l-icon class="d2l-submission-attachment-icon-container-inner"
 					icon="tier2:${this._getIcon(file.properties.name)}"
@@ -332,8 +350,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			<d2l-list-item-content
 			@click="${
 	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderEvidenceFileEvent(file.properties.fileViewer)}">
-				<span>${this._getFileTitle(file.properties.name)}</span>
+	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
+				<div class="truncate" aria-label="heading">${this._getFileTitle(file.properties.name)}</div>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
 					${this._getFileExtension(file.properties.name)}
@@ -342,8 +360,23 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				</div>
 			</d2l-list-item-content>
 			${this._addMenuOptions(file.properties.read, file.properties.flagged, file.properties.href, file.properties.name)}
-			</d2l-list-item>
-			`)}`;
+		</d2l-list-item>
+		`)}`;
+	}
+
+	_isClamped(element) {
+		return element.clientHeight < element.scrollHeight;
+	}
+
+	_updateFilenameTooltips() {
+		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		filenames.forEach(element => {
+			if (this._isClamped(element)) {
+				element.title = element.innerText;
+			} else {
+				element.removeAttribute('title');
+			}
+		});
 	}
 
 	_addMenuOptions(read, flagged, downloadHref, name) {
@@ -355,10 +388,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			<d2l-dropdown-more text="More Options">
 			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
 				<d2l-menu>
-					${this.submissionType === textSubmission ? html`
-						<d2l-menu-item-link text="${this.localize('viewFullSubmission')}"
-							href="javascript:void(0);"
-							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null }
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeReadState}" href="#"></d2l-menu-item-link>
 					<d2l-menu-item-link text="${oppositeFlagState}" href="#"></d2l-menu-item-link>
@@ -401,11 +430,10 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	_renderFileSubmission() {
 		return html`
 		${this._renderFileSubmissionTitle()}
-		<d2l-list grid separators="all">
+		<d2l-list aria-role="list" separators="all">
 		${this._renderAttachments()}
 		</d2l-list>
 		${this._renderComment()}
-
 		`;
 	}
 
