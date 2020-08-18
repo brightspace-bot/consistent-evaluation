@@ -13,6 +13,7 @@ import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/co
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
+import { Classes } from 'd2l-hypermedia-constants';
 import { getFileIconTypeFromExtension } from '@brightspace-ui/core/components/icons/getFileIconType';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
@@ -180,12 +181,12 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	_initializeSubmissionProperties() {
 		this._date = this.dateStr ? new Date(this.dateStr) : undefined;
-		const attachmentsListEntity = this.submissionEntity.getSubEntityByClass('attachment-list');
-		if (attachmentsListEntity && attachmentsListEntity.entities) {
-			this._attachments = attachmentsListEntity.entities;
+		const attachmentsListEntity = this.submissionEntity.getSubEntityByClass(Classes.assignments.attachmentList);
+		if (attachmentsListEntity) {
+			this._attachments = attachmentsListEntity.getSubEntitiesByClass(Classes.assignments.attachment);
 		}
-		if (this.submissionEntity.getSubEntityByClass('submission-comment')) {
-			this._comment = this.submissionEntity.getSubEntityByClass('submission-comment').properties.html;
+		if (this.submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment)) {
+			this._comment = this.submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment).properties.html;
 		}
 	}
 
@@ -224,7 +225,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		if (extension === 'txt') {
 			this._dispatchRenderEvidenceTextEvent();
 		}
-		else if (fileViewer !== undefined) {
+		else if (fileViewer) {
 			this._dispatchRenderEvidenceFileEvent(fileViewer);
 		}
 	}
@@ -348,10 +349,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	_renderAttachments() {
 		return html`${this._attachments.map((file) => {
-			const read = file.properties.read, flagged = file.properties.flagged,
-				href = file.properties.href, name = file.properties.name,
-				extension = file.properties.extension, size = file.properties.size,
-				fileViewer = file.properties.fileViewer;
+			const {name, size, extension, flagged, read, href, fileViewer} = file.properties;
 			return html`
 			<d2l-list-item>
 				<div slot="illustration" class="d2l-submission-attachment-icon-container">
