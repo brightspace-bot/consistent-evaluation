@@ -60,8 +60,8 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 			.d2l-consistent-evaluation-no-submissions-container {
 				background: white;
-				border-radius: 0.3rem;
 				border: 1px solid var(--d2l-color-gypsum);
+				border-radius: 0.3rem;
 				box-sizing: border-box;
 				margin: 1rem;
 				padding: 1rem;
@@ -69,8 +69,8 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 			.d2l-consistent-evaluation-no-submissions {
 				background: var(--d2l-color-regolith);
-				border-radius: 0.3rem;
 				border: 1px solid var(--d2l-color-gypsum);
+				border-radius: 0.3rem;
 				box-sizing: border-box;
 				padding: 2rem;
 				width: 100%;

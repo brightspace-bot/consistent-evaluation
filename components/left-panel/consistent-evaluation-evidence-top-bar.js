@@ -8,11 +8,11 @@ export class ConsistentEvaluationEvidenceTopBar extends LocalizeMixin(LitElement
 	static get styles() {
 		return css`
 			.d2l-consistent-evaluation-evidence-top-bar {
-				display: flex;
 				align-items: center;
-				justify-content: space-between;
-				height: 2.7rem;
 				border-bottom: 1px solid var(--d2l-color-mica);
+				display: flex;
+				height: 2.7rem;
+				justify-content: space-between;
 			}
 		`;
 	}

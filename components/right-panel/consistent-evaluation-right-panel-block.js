@@ -16,12 +16,12 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 
 	static get styles() {
 		return [labelStyles, css`
-			.block {
-				margin-top: .75rem;
-				padding-left: .75rem;
+			.d2l-block {
+				margin-top: 0.75rem;
+				padding-left: 0.75rem;
 			}
 			.d2l-label-text {
-				margin-bottom: .4rem;
+				margin-bottom: 0.4rem;
 			}
 		`];
 	}
@@ -37,7 +37,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 
 	render() {
 		return html`
-			<div class="block">
+			<div class="d2l-block">
 				${this._getTitle()}
 				<slot></slot>
 			</div>
