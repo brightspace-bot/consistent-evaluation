@@ -86,52 +86,54 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			padding-top: 0.5rem;
 		}
 		.d2l-submission-attachment-icon-container {
+			border-radius: 0;
 			display: inline-block;
+			left: 0;
 			position: relative;
 			top: 0;
-			left: 0;
-			border-radius: 0;
 		}
 		.d2l-submission-attachment-icon-container-inner {
+			left: 0;
 			margin: 0.5rem;
 			position: relative;
 			top: 0;
-			left: 0;
 		}
 		.d2l-attachment-read-status {
 			color: var(--d2l-color-carnelian);
 			position: absolute;
-			top: 0;
 			right: -4px;
+			top: 0;
 		}
 		:host([dir="rtl"]) .d2l-attachment-read-status {
 			left: -4px;
 			right: unset;
 		}
 		.d2l-separator-icon {
-			width: 10px;
 			height: 10px;
 			padding: 0.2rem;
+			width: 10px;
 		}
 		d2l-more-less p, ul {
-			margin: 0.5rem 0rem;
+			margin-bottom: 0.5rem;
+			margin-top: 0.5rem;
 		}
 		d2l-status-indicator {
-			text-transform: none;
 			margin-right: 0.5rem;
+			text-transform: none;
 		}
 		:host([dir="rtl"]) d2l-status-indicator {
 			margin-left: 0.5rem;
 			margin-right: 0;
 		}
-		.truncate {
-			text-overflow: ellipsis;
-			white-space: break-spaces;
-			overflow: hidden;
-			overflow-wrap: break-word;
+		.d2l-truncate {
+			-webkit-box-orient: vertical;
 			display: -webkit-box;
 			-webkit-line-clamp: 3;
-			-webkit-box-orient: vertical;
+			overflow: hidden;
+			overflow-wrap: break-word;
+			text-overflow: ellipsis;
+			white-space: break-spaces;
+			
 		}
 	`];
 	}
@@ -171,7 +173,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	disconnectedCallback() {
 		window.removeEventListener('load', this._updateFilenameTooltips);
-		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		const filenames = this.shadowRoot.querySelectorAll('.d2l-truncate');
 		for (const filename of filenames) {
 			this._resizeObserver.unobserve(filename);
 		}
@@ -180,7 +182,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	firstUpdated() {
 		super.firstUpdated();
-		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		const filenames = this.shadowRoot.querySelectorAll('.d2l-truncate');
 		for (const filename of filenames) {
 			this._resizeObserver.observe(filename);
 		}
@@ -351,7 +353,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 			@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchRenderEvidenceEvent(file.properties.fileViewer)}">
-				<div class="truncate" aria-label="heading">${this._getFileTitle(file.properties.name)}</div>
+				<div class="d2l-truncate" aria-label="heading">${this._getFileTitle(file.properties.name)}</div>
 				<div slot="supporting-info">
 					${this._renderFlaggedStatus(file.properties.flagged)}
 					${this._getFileExtension(file.properties.name)}
@@ -369,7 +371,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_updateFilenameTooltips() {
-		const filenames = this.shadowRoot.querySelectorAll('.truncate');
+		const filenames = this.shadowRoot.querySelectorAll('.d2l-truncate');
 		filenames.forEach(element => {
 			if (this._isClamped(element)) {
 				element.title = element.innerText;

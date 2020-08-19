@@ -44,13 +44,13 @@ class FeedbackActions extends LocalizeMixin(LitElement) {
 	static get styles() {
 		return css`
 			:host {
+				align-items: center;
+				background: var(--d2l-color-regolith);
+				border: 1px solid var(--d2l-color-mica);
+				border-radius: 6px;
 				display: flex;
 				flex-direction: row;
 				justify-content: space-between;
-				align-items: center;
-				background: var(--d2l-color-regolith);
-				border-radius: 6px;
-				border: 1px solid var(--d2l-color-mica);
 				padding: 12px;
 			}
 
