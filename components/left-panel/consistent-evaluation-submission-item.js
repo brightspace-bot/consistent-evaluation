@@ -397,7 +397,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		return html`<div slot="actions" style="z-index: inherit;">
 			<d2l-dropdown-more text="More Options">
 			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
-				<d2l-menu>
+				<d2l-menu label="More Options">
 				${this.submissionType === textSubmission ? html`
 						<d2l-menu-item-link text="${this.localize('viewFullSubmission')}"
 							href="javascript:void(0);"
