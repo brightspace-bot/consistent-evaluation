@@ -8,6 +8,7 @@ import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
+import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from './locale.js';
@@ -112,6 +113,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
+		this._mutex = new Awaiter();
 	}
 
 	get evaluationEntity() {
@@ -220,9 +222,15 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _transientSaveFeedback(e) {
+		console.log('3');
+		const unlock = await this._mutex.lock();
+		console.log('lock save feedback');
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		const newFeedbackVal = e.detail;
 		this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
+		console.log('done');
+		unlock();
+		console.log('unlock save feedback');
 	}
 
 	async _transientSaveGrade(e) {
@@ -239,14 +247,26 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _saveEvaluation() {
+		console.log('save');
+
+		window.dispatchEvent(new CustomEvent('d2l-flush', {
+			composed: true,
+			bubbles: true
+		}));
+		const unlock = await this._mutex.lock();
+		console.log('lock save draft');
 		const entity = await this._controller.fetchEvaluationEntity(false);
+		console.log('fetched it');
 		this.evaluationEntity = await this._controller.save(entity);
+		console.log('saved it, last message');
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('saved'));
 		} else {
 			this._showToast(this.localize('saveError'));
 		}
 		this.evaluationState = this.evaluationEntity.properties.state;
+		unlock();
+		console.log('unlock save draft');
 	}
 
 	async _updateEvaluation() {
@@ -294,8 +314,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_renderToast() {
-		return html`<d2l-alert-toast 
-			?open=${this._displayToast} 
+		return html`<d2l-alert-toast
+			?open=${this._displayToast}
 			button-text=""
 			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
