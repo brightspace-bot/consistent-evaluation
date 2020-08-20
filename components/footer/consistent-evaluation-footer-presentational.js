@@ -49,7 +49,7 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 	_emitPublishEvent()     { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-publish'); }
 	_emitRetractEvent()     { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-retract'); }
 	_emitUpdateEvent()      { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-update'); }
-	_emitSaveDraftEvent()   { console.log('save0'); this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-save-draft'); }
+	_emitSaveDraftEvent()   { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-save-draft'); }
 	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
 
 	_getPublishOrUpdateButton() {

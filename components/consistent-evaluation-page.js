@@ -222,15 +222,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _transientSaveFeedback(e) {
-		console.log('3');
 		const unlock = await this._mutex.lock();
-		console.log('lock save feedback');
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		const newFeedbackVal = e.detail;
+
 		this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
-		console.log('done');
+
 		unlock();
-		console.log('unlock save feedback');
 	}
 
 	async _transientSaveGrade(e) {
@@ -247,18 +245,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _saveEvaluation() {
-		console.log('save');
-
 		window.dispatchEvent(new CustomEvent('d2l-flush', {
 			composed: true,
 			bubbles: true
 		}));
+
 		const unlock = await this._mutex.lock();
-		console.log('lock save draft');
 		const entity = await this._controller.fetchEvaluationEntity(false);
-		console.log('fetched it');
 		this.evaluationEntity = await this._controller.save(entity);
-		console.log('saved it, last message');
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('saved'));
 		} else {
@@ -266,7 +260,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		unlock();
-		console.log('unlock save draft');
 	}
 
 	async _updateEvaluation() {

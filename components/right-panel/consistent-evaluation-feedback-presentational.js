@@ -52,17 +52,12 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 	}
 
 	flush() {
-		console.log('flush');
 		if (this._debounceJobs.feedback && this._debounceJobs.feedback.isActive()) {
 			this._debounceJobs.feedback.flush();
-			console.log('flushed');
-		} else {
-			console.log('no debouncer');
 		}
 	}
 
 	_saveOnFeedbackChange(e) {
-		console.log('1');
 		const feedback = e.detail.content;
 
 		this._debounceJobs.feedback = Debouncer.debounce(
@@ -73,7 +68,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 	}
 
 	_emitFeedbackEditEvent(feedback) {
-		console.log('2');
 		this.dispatchEvent(new CustomEvent('on-d2l-consistent-eval-feedback-edit', {
 			composed: true,
 			bubbles: true,
