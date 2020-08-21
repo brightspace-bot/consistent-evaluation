@@ -232,6 +232,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _transientSaveGrade(e) {
+		const unlock = await this._mutex.lock();
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		let newGradeVal;
 		const type = e.detail.grade.scoreType;
@@ -242,6 +243,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			newGradeVal = e.detail.grade.score;
 		}
 		this.evaluationEntity = await this._controller.transientSaveGrade(entity, newGradeVal);
+
+		unlock();
 	}
 
 	async _saveEvaluation() {
