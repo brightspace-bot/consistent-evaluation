@@ -1,16 +1,21 @@
 import './consistent-evaluation-page.js';
 import { css, html } from 'lit-element';
+import { ConsistentEvalTelemetryMixin } from './consistent-eval-telemetry-mixin.js';
 import { ConsistentEvaluationHrefController } from './controllers/ConsistentEvaluationHrefController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import RootStore from './stores/root.js';
 
-export class ConsistentEvaluation extends MobxLitElement {
+export class ConsistentEvaluation extends ConsistentEvalTelemetryMixin(MobxLitElement) {
 
 	static get properties() {
 		return {
 			href: { type: String },
 			token: { type: String },
+			dataTelemetryEndpoint: {
+				attribute: 'data-telemetry-endpoint',
+				type: String
+			},
 			_rubricReadOnly: { type: Boolean },
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
@@ -52,13 +57,20 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	}
 
+	connectedCallback() {
+		super.connectedCallback();
+		this.perfMark(this.constructor.name);
+	}
+
 	onNextStudentClick() {
 		this.href = this._childHrefs.nextHref;
 	}
 
 	render() {
+		console.log('dataTelemetryEndpoint', this.dataTelemetryEndpoint);
 		return html`
 			<d2l-consistent-evaluation-page
+				data-telemetry-endpoint=${this.dataTelemetryEndpoint}
 				rubric-href=${ifDefined(this._childHrefs && this._childHrefs.rubricHref)}
 				rubric-assessment-href=${ifDefined(this._childHrefs && this._childHrefs.rubricAssessmentHref)}
 				outcomes-href=${ifDefined(this._childHrefs && this._childHrefs.outcomesHref)}

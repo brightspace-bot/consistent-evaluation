@@ -3,11 +3,12 @@ import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
 import { html, LitElement } from 'lit-element';
+import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
-export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationRightPanel extends ConsistentEvalTelemetryMixin(LocalizeMixin(LitElement)) {
 
 	static get properties() {
 		return {

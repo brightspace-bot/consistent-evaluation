@@ -3,16 +3,16 @@ import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d
 import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d2l-activity-attachments-list.js';
 import './consistent-evaluation-right-panel-block';
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-
 import { html, LitElement } from 'lit-element';
 import { AttachmentCollectionEntity } from 'siren-sdk/src/activities/AttachmentCollectionEntity.js';
+import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 import { Rels } from 'd2l-hypermedia-constants';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
-class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
+class ConsistentEvaluationFeedbackPresentational extends ConsistentEvalTelemetryMixin(LocalizeMixin(LitElement)) {
 	static get properties() {
 		return {
 			canEditFeedback: {

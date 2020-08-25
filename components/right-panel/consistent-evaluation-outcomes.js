@@ -2,8 +2,9 @@ import './consistent-evaluation-right-panel-block';
 import 'd2l-outcomes-level-of-achievements/d2l-outcomes-level-of-achievements.js';
 import { html, LitElement } from 'lit-element';
 import { bodySmallStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
 
-class ConsistentEvaluationOutcomes extends LitElement {
+class ConsistentEvaluationOutcomes extends ConsistentEvalTelemetryMixin(LitElement) {
 	static get properties() {
 		return {
 			header: {

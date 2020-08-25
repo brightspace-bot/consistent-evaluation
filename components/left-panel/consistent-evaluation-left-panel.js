@@ -4,6 +4,7 @@ import './consistent-evaluation-submissions-page.js';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
 import { fileSubmission, observedInPerson, onPaperSubmission, submissionTypesWithNoEvidence, textSubmission } from '../controllers/constants';
+import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 
@@ -22,7 +23,7 @@ function getSubmissionTypeName(type) {
 	}
 }
 
-export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationLeftPanel extends ConsistentEvalTelemetryMixin(LocalizeMixin(LitElement)) {
 
 	static get properties() {
 		return {

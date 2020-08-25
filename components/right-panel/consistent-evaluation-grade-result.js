@@ -2,10 +2,11 @@ import '@brightspace-ui-labs/grade-result/d2l-grade-result.js';
 import './consistent-evaluation-right-panel-block';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
+import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
-export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationGradeResult extends ConsistentEvalTelemetryMixin(LocalizeMixin(LitElement)) {
 
 	static get properties() {
 		return {
@@ -94,7 +95,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 			<d2l-consistent-evaluation-right-panel-block title="Overall Grade">
 			<d2l-labs-d2l-grade-result-presentational
 				labelText=${this.labelText || this.localize('overallGrade')}
-				.gradeType=${gradeType} 
+				.gradeType=${gradeType}
 				scoreNumerator=${score}
 				scoreDenominator=${scoreOutOf}
 				.letterGradeOptions=${scoreOutOf}

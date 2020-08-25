@@ -1,8 +1,9 @@
 import 'd2l-rubric/d2l-rubric.js';
 import './consistent-evaluation-right-panel-block';
 import { html, LitElement } from 'lit-element';
+import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
 
-class ConsistentEvaluationRubric extends LitElement {
+class ConsistentEvaluationRubric extends ConsistentEvalTelemetryMixin(LitElement) {
 	static get properties() {
 		return {
 			header: {

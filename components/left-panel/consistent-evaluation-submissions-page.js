@@ -4,8 +4,9 @@ import '@brightspace-ui/core/components/colors/colors.js';
 import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { Classes } from 'd2l-hypermedia-constants';
+import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
 
-export class ConsistentEvaluationSubmissionsPage extends LitElement {
+export class ConsistentEvaluationSubmissionsPage extends ConsistentEvalTelemetryMixin(LitElement) {
 	static get properties() {
 		return {
 			submissionList: {
