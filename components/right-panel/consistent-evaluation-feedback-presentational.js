@@ -9,6 +9,7 @@ import { AttachmentCollectionEntity } from 'siren-sdk/src/activities/AttachmentC
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { Rels } from 'd2l-hypermedia-constants';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
 class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
@@ -68,17 +69,17 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 	}
 	async saveAttachment(e) {
 		const files = e.detail.files;
-		files.forEach(async file => {
-			const fileSystemType = file.m_fileSystemType;
-			const fileId = file.m_id;
+		for (let i = 0; files.length > i; i++) {
+			const fileSystemType = files[i].m_fileSystemType;
+			const fileId = files[i].m_id;
 
 			const sirenEntity = await window.D2L.Siren.EntityStore.get(this.href, this.token);
-			const link = sirenEntity.getLinkByRel('https://activities.api.brightspace.com/rels/attachments');
+			const link = sirenEntity.getLinkByRel(Rels.Activities.feedbackAttachments);
 			const entitytemp = await window.D2L.Siren.EntityStore.fetch(link, this.token);
 
-			const entity = new AttachmentCollectionEntity(entitytemp.entity, this.token);
+			const entity = new AttachmentCollectionEntity(entitytemp.entity, this.token, { remove: () => { } });
 			await entity.addFileAttachment(fileSystemType, fileId);
-		});
+		}
 
 	}
 

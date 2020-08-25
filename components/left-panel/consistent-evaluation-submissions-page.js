@@ -25,15 +25,15 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get styles() {
 		return css`
 			:host {
-				display: inline-block;
 				background-color: var(--d2l-color-sylvite);
+				display: inline-block;
 			}
 			:host([hidden]) {
 				display: none;
 			}
 			d2l-consistent-evaluation-submission-item {
-				padding: 0.5rem;
 				margin: 0.5rem;
+				padding: 0.5rem;
 			}
 		`;
 	}

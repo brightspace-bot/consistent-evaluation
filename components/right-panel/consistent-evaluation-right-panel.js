@@ -2,7 +2,7 @@ import './consistent-evaluation-feedback-presentational.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
-import { css, html, LitElement } from 'lit-element';
+import { html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
@@ -70,10 +70,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				type: String
 			}
 		};
-	}
-
-	static get styles() {
-		return css``;
 	}
 
 	static async getLocalizeResources(langs) {
