@@ -3,7 +3,7 @@ const VisualDiff = require('@brightspace-ui/visual-diff');
 
 describe('d2l-consistent-evaluation', () => {
 
-	const visualDiff = new VisualDiff('consistent-evaluation-outcomes', __dirname);
+	const visualDiff = new VisualDiff('consistent-evaluation-grade-result', __dirname);
 
 	let browser, page;
 
@@ -11,20 +11,20 @@ describe('d2l-consistent-evaluation', () => {
 		browser = await puppeteer.launch();
 		page = await browser.newPage();
 		await page.setViewport({width: 900, height: 900, deviceScaleFactor: 2});
-		await page.goto(`${visualDiff.getBaseUrl()}/test/perceptual/consistent-evaluation-outcomes.visual-diff.html`, { waitUntil: ['networkidle0', 'load'] });
+		await page.goto(`${visualDiff.getBaseUrl()}/test/perceptual/consistent-evaluation-grade-result.visual-diff.html`, { waitUntil: ['networkidle0', 'load'] });
 		await page.bringToFront();
 		await visualDiff.disableAnimations(page);
 	});
 
 	after(async() => await browser.close());
 
-	it.skip('renders outcomes', async function() {
-		const rect = await visualDiff.getRect(page, '#default');
+	it('renders grade-number result', async function() {
+		const rect = await visualDiff.getRect(page, '#grade-number');
 		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
 	});
 
-	it.skip('renders outcomes with description', async function() {
-		const rect = await visualDiff.getRect(page, '#outcome-with-description');
+	it('renders grade-letter result', async function() {
+		const rect = await visualDiff.getRect(page, '#grade-letter');
 		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
 	});
 });
