@@ -44,11 +44,24 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 		this.canEditFeedback = false;
 		this._debounceJobs = {};
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
 		this.addEventListener('d2l-request-provider',
 			e => {
 				if (e.detail.key === 'd2l-provider-html-editor-enabled') e.detail.provider = true;
 			});
 		window.addEventListener('d2l-flush', this.flush.bind(this));
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		this.removeEventListener('d2l-request-provider',
+			e => {
+				if (e.detail.key === 'd2l-provider-html-editor-enabled') e.detail.provider = true;
+			});
+		window.removeEventListener('d2l-flush', this.flush.bind(this));
 	}
 
 	flush() {

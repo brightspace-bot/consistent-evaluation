@@ -266,6 +266,12 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _updateEvaluation() {
+		window.dispatchEvent(new CustomEvent('d2l-flush', {
+			composed: true,
+			bubbles: true
+		}));
+
+		const unlock = await this._mutex.lock();
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.update(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
@@ -274,9 +280,16 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			this._showToast(this.localize('updatedError'));
 		}
 		this.evaluationState = this.evaluationEntity.properties.state;
+		unlock();
 	}
 
 	async _publishEvaluation() {
+		window.dispatchEvent(new CustomEvent('d2l-flush', {
+			composed: true,
+			bubbles: true
+		}));
+
+		const unlock = await this._mutex.lock();
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.publish(entity);
 		this.evaluationState = this.evaluationEntity.properties.state;
@@ -286,9 +299,16 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			this._showToast(this.localize('publishError'));
 		}
 		this.submissionInfo.evaluationState = publishedState;
+		unlock();
 	}
 
 	async _retractEvaluation() {
+		window.dispatchEvent(new CustomEvent('d2l-flush', {
+			composed: true,
+			bubbles: true
+		}));
+
+		const unlock = await this._mutex.lock();
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		this.evaluationEntity = await this._controller.retract(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
@@ -298,6 +318,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
+		unlock();
 	}
 
 	_showToast(message) {

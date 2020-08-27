@@ -69,7 +69,16 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		this._gradeButtonTooltip = undefined;
 		this._reportsButtonTooltip = undefined;
 		this._isGradeAutoCompleted = false;
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
 		window.addEventListener('d2l-flush', this.flush.bind(this));
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		window.removeEventListener('d2l-flush', this.flush.bind(this));
 	}
 
 	flush() {
