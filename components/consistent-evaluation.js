@@ -59,7 +59,7 @@ export class ConsistentEvaluation extends ConsistentEvalTelemetryMixin(MobxLitEl
 
 	connectedCallback() {
 		super.connectedCallback();
-		this.perfMark(this.constructor.name);
+		this.perfMark('ConsistentEvaluationStart');
 	}
 
 	onNextStudentClick() {

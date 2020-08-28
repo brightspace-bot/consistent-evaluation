@@ -46,25 +46,24 @@ export const ConsistentEvalTelemetryMixin = superclass => class extends supercla
 		}
 		window.performance.mark(name);
 	}
-	logAndDestroyPerformanceEvent(viewName, startMark, endMark, destroyAll = false) {
+	logAndDestroyPerformanceEvent(component, startMark, endMark, destroyAll = false) {
 		if (!window.performance || !window.performance.measure || !this._markExists(startMark)) {
 			return;
 		}
-		window.performance.measure(viewName, startMark, endMark);
+		window.performance.measure(component, startMark, endMark);
 		const eventBody = new d2lTelemetryBrowserClient.PerformanceEventBody()
-			.setAction('LoadView')
-			.addUserTiming(window.performance.getEntriesByName(viewName))
-			.addCustom('ViewName', `${viewName}LoadTime`);
+			.setAction('RenderComponent')
+			.addUserTiming(window.performance.getEntriesByName(component))
+			.addCustom('Component', `${component}LoadTime`);
 
 		this._logEvent(eventBody);
 		if (destroyAll) {
 			window.performance.clearMarks(startMark);
 		}
 		window.performance.clearMarks(endMark);
-		window.performance.clearMeasures(viewName);
+		window.performance.clearMeasures(component);
 
 		//returning event body to be consistent and to help with tests
-		console.log(eventBody);
 		return eventBody;
 	}
 	_markExists(markName) {
@@ -72,7 +71,7 @@ export const ConsistentEvalTelemetryMixin = superclass => class extends supercla
 	}
 	async _sendTelemetry() {
 		await this.updateComplete;
-		this.perfMark(this.constructor.name);
-		this.logAndDestroyPerformanceEvent(`${this.constructor.name}LoadTime`, 'ConsistentEvaluation', this.constructor.name);
+		this.perfMark(`${this.constructor.name}End`);
+		this.logAndDestroyPerformanceEvent(`${this.constructor.name}`, 'ConsistentEvaluationStart', `${this.constructor.name}End`);
 	}
 };
