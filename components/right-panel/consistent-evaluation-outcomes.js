@@ -1,5 +1,5 @@
 import './consistent-evaluation-right-panel-block';
-import 'd2l-outcomes-level-of-achievements/d2l-outcomes-level-of-achievements.js';
+import 'd2l-activity-alignments/d2l-activity-alignments.js';
 import { html, LitElement } from 'lit-element';
 import { bodySmallStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ConsistentEvalTelemetryMixin } from '../consistent-eval-telemetry-mixin.js';
@@ -29,8 +29,10 @@ class ConsistentEvaluationOutcomes extends ConsistentEvalTelemetryMixin(LitEleme
 	render() {
 		return html`
 			<d2l-consistent-evaluation-right-panel-block title=${this.header}>
-				<div class="d2l-body-small">${this.description}</div>
-				<d2l-outcomes-level-of-achievements href=${this.href} token=${this.token}></d2l-outcomes-level-of-achievements>
+				<d2l-activity-alignments
+					href=${this.href}
+					.token=${this.token}>
+				</d2l-activity-alignments>
 			</d2l-consistent-evaluation-right-panel-block>
 		`;
 	}
