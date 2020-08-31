@@ -54,6 +54,7 @@ export class ConsistentEvaluationHrefController {
 		let previousHref = undefined;
 		let rubricAssessmentHref = undefined;
 		let rubricHref = undefined;
+		let alignmentsHref = undefined;
 
 		if (root && root.entity) {
 			root = root.entity;
@@ -62,6 +63,7 @@ export class ConsistentEvaluationHrefController {
 			nextHref = this._getHref(root, nextRel);
 			previousHref = this._getHref(root, previousRel);
 			rubricAssessmentHref = this._getHref(root, assessmentRel);
+			alignmentsHref = this._getHref(root, Rels.Alignments.alignments);
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
@@ -77,6 +79,7 @@ export class ConsistentEvaluationHrefController {
 			root,
 			evaluationHref,
 			nextHref,
+			alignmentsHref,
 			previousHref,
 			rubricAssessmentHref,
 			rubricHref
