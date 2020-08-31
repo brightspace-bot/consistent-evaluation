@@ -37,7 +37,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 	static get styles() {
 		return css`
-			.evaluation-feedback-wrapper {
+			.d2l-evaluation-feedback-container {
 				margin-top: 0.3rem;
 			}
 		`;
@@ -99,7 +99,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		if (this.href && this.token) {
 
 			return html`
-			<div class="evaluation-feedback-wrapper">
+			<div class="d2l-evaluation-feedback-container">
 				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 					<d2l-activity-text-editor
 						.value="${this.feedbackText}"
@@ -108,19 +108,20 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 						ariaLabel="${this.localize('overallFeedback')}"
 						?hidden="${!this.canEditFeedback}">
 					</d2l-activity-text-editor>
+					<div>
+						<d2l-activity-attachments-editor
+							.href="${this.href}/attachments"
+							.token="${this.token}"
+							@d2l-activity-attachments-picker-files-uploaded="${this.saveAttachment}"
+							@d2l-activity-attachments-picker-video-uploaded="${this.saveAttachment}"
+							@d2l-activity-attachments-picker-audio-uploaded="${this.saveAttachment}"
+							@d2l-attachment-removed="${this.deleteAttachment}"
+							?disabled="${!this.canEditFeedback}">
+						</d2l-activity-attachments-editor>
+					</div>
+				</d2l-consistent-evaluation-right-panel-block>
 			</div>
-				<div>
-					<d2l-activity-attachments-editor
-						.href="${this.href}/attachments"
-						.token="${this.token}"
-						@d2l-activity-attachments-picker-files-uploaded="${this.saveAttachment}"
-						@d2l-activity-attachments-picker-video-uploaded="${this.saveAttachment}"
-						@d2l-activity-attachments-picker-audio-uploaded="${this.saveAttachment}"
-						@d2l-attachment-removed="${this.deleteAttachment}"
-						?disabled="${!this.canEditFeedback}">
-					</d2l-activity-attachments-editor>
-				</div>
-			</d2l-consistent-evaluation-right-panel-block>
+
 		`;
 		} else {
 			return html``;
