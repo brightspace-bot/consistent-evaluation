@@ -121,7 +121,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 					</div>
 				</d2l-consistent-evaluation-right-panel-block>
 			</div>
-
 		`;
 		} else {
 			return html``;
