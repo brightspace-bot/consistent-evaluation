@@ -1,3 +1,4 @@
+import './header/d2l-consistent-evaluation-learner-context-bar.js';
 import './left-panel/consistent-evaluation-left-panel.js';
 import './footer/consistent-evaluation-footer-presentational.js';
 import './right-panel/consistent-evaluation-right-panel.js';
@@ -54,6 +55,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				type: Object
 			},
 			gradeItemInfo: {
+				attribute: false,
+				type: Object
+			},
+			userInfo: {
 				attribute: false,
 				type: Object
 			},
@@ -303,7 +308,11 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	render() {
 		return html`
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
-				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
+				<div slot="header">
+					<d2l-consistent-evaluation-learner-context-bar
+						.userInfo=${this.userInfo}
+					></d2l-consistent-evaluation-learner-context-bar>
+				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}

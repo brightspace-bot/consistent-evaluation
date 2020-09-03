@@ -15,7 +15,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
 			_submissionInfo: { type: Object },
-			_gradeItemInfo: { type: Object }
+			_gradeItemInfo: { type: Object },
+			_userInfo: { type: Object }
 		};
 	}
 
@@ -38,6 +39,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
+		this._userInfo = undefined;
 	}
 
 	async updated(changedProperties) {
@@ -48,6 +50,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._childHrefs = await controller.getHrefs();
 			this._submissionInfo = await controller.getSubmissionInfo();
 			this._gradeItemInfo = await controller.getGradeItemInfo();
+			this._userInfo = await controller.getUserInfo();
 		}
 
 	}
@@ -66,6 +69,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
+				.userInfo=${this._userInfo}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
