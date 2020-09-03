@@ -21,6 +21,10 @@ export class ConsistentEvaluationLcbUserContext extends LitElement {
 			colourId: {
 				attribute: 'colour-id',
 				type: String
+			},
+			displayName: {
+				attribute: 'display-name',
+				type: String
 			}
 		};
 	}
@@ -49,7 +53,7 @@ export class ConsistentEvaluationLcbUserContext extends LitElement {
 				colour-id="${this.colourId}"
 				medium
 			></d2l-profile-image-base>
-			<span class="d2l-body-standard d2l-consistent-evaluation-lcb-user-name">${this.firstName} ${this.lastName}</span>
+			<span class="d2l-body-standard d2l-consistent-evaluation-lcb-user-name">${this.displayName}</span>
 		`;
 	}
 }
