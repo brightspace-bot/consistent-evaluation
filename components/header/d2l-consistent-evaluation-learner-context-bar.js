@@ -20,6 +20,9 @@ export class ConsistentEvaluationLearnerContextBar extends LitElement {
 				height: 100%;
 				margin: 1rem;
 			}
+			:host([hidden]) {
+				display: none;
+			}
 		`;
 	}
 
