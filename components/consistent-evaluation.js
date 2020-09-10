@@ -15,8 +15,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
 			_submissionInfo: { type: Object },
-			_gradeItemInfo: { type: Object },
-			_userInfo: { type: Object }
+			_gradeItemInfo: { type: Object }
 		};
 	}
 
@@ -39,7 +38,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
-		this._userInfo = undefined;
 	}
 
 	async updated(changedProperties) {
