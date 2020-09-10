@@ -2,8 +2,9 @@ import 'd2l-users/components/d2l-profile-image-base.js';
 import { css, html, LitElement } from 'lit-element';
 import { bodyStandardStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
-export class ConsistentEvaluationLcbUserContext extends LitElement {
+export class ConsistentEvaluationLcbUserContext extends RtlMixin(LitElement) {
 
 	static get properties() {
 		return {
@@ -41,6 +42,9 @@ export class ConsistentEvaluationLcbUserContext extends LitElement {
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				width: 100%;
+			}
+			:host([dir="rtl"]) .d2l-consistent-evaluation-lcb-user-name {
+				margin-right: 0.5rem;
 			}
 		`];
 	}
