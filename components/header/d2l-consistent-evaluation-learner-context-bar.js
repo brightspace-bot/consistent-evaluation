@@ -2,9 +2,10 @@ import './d2l-consistent-evaluation-lcb-user-context.js';
 import { css, html, LitElement } from 'lit-element';
 import { EntityMixinLit } from 'siren-sdk/src/mixin/entity-mixin-lit.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { UserEntity } from 'siren-sdk/src/users/UserEntity.js';
 
-export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(LitElement)) {
+export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(RtlMixin(LitElement))) {
 
 	static get properties() {
 		return {
