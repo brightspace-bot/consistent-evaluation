@@ -50,15 +50,15 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'rubric-read-only',
 				type: Boolean
 			},
+			userHref: {
+				attribute: 'user-href',
+				type: String
+			},
 			submissionInfo: {
 				attribute: false,
 				type: Object
 			},
 			gradeItemInfo: {
-				attribute: false,
-				type: Object
-			},
-			userInfo: {
 				attribute: false,
 				type: Object
 			},
@@ -310,7 +310,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
 				<div slot="header">
 					<d2l-consistent-evaluation-learner-context-bar
-						.userInfo=${this.userInfo}
+						href=${ifDefined(this.userHref)}
+						.token=${this.token}
 					></d2l-consistent-evaluation-learner-context-bar>
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">

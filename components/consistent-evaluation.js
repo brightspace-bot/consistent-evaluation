@@ -50,7 +50,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._childHrefs = await controller.getHrefs();
 			this._submissionInfo = await controller.getSubmissionInfo();
 			this._gradeItemInfo = await controller.getGradeItemInfo();
-			this._userInfo = await controller.getUserInfo();
 		}
 
 	}
@@ -67,9 +66,9 @@ export class ConsistentEvaluation extends MobxLitElement {
 				outcomes-href=${ifDefined((this._childHrefs && this._childHrefs.alignmentsHref) ? this.href : undefined)}
 				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
+				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
-				.userInfo=${this._userInfo}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}

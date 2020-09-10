@@ -56,6 +56,7 @@
     "lit-element": "^2",
     "mobx": "^5.15.4",
     "resize-observer-polyfill": "^1.5.1",
-    "stylelint": "^13.6.1"
+    "stylelint": "^13.6.1",
+    "siren-sdk": "github:BrightspaceHypermediaComponents/siren-sdk#semver:^1"
   }
 }

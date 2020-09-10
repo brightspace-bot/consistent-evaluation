@@ -1,14 +1,24 @@
 import './d2l-consistent-evaluation-lcb-user-context.js';
 import { css, html, LitElement } from 'lit-element';
+import { EntityMixinLit } from 'siren-sdk/src/mixin/entity-mixin-lit.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { UserEntity } from 'siren-sdk/src/users/UserEntity.js';
 
-export class ConsistentEvaluationLearnerContextBar extends LitElement {
+export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(LitElement)) {
 
 	static get properties() {
 		return {
-			userInfo: {
+			_displayName: {
 				attribute: false,
-				type: Object
+				type: String
+			},
+			_firstName: {
+				attribute: false,
+				type: String
+			},
+			_lastName: {
+				attribute: false,
+				type: String
 			}
 		};
 	}
@@ -16,7 +26,7 @@ export class ConsistentEvaluationLearnerContextBar extends LitElement {
 	static get styles() {
 		return css`
 			:host {
-				display: inline-block;
+				display: block;
 				height: 100%;
 				margin: 1rem;
 			}
@@ -26,49 +36,43 @@ export class ConsistentEvaluationLearnerContextBar extends LitElement {
 		`;
 	}
 
-	get _firstName() {
-		if (this.userInfo) {
-			const firstNameEntity = this.userInfo.getSubEntityByRel('https://api.brightspace.com/rels/first-name');
+	constructor() {
+		super();
 
-			if (firstNameEntity) {
-				return firstNameEntity.properties.name;
-			}
-		}
-		return '';
+		this._displayName = undefined;
+		this._firstName = undefined;
+		this._lastName = undefined;
+
+		this._setEntityType(UserEntity);
 	}
 
-	get _lastName() {
-		if (this.userInfo) {
-			const lastNameEntity = this.userInfo.getSubEntityByRel('https://api.brightspace.com/rels/last-name');
-
-			if (lastNameEntity) {
-				return lastNameEntity.properties.name;
-			}
+	set _entity(entity) {
+		if (this._entityHasChanged(entity)) {
+			this._onUserEntityChanged(entity);
+			super._entity = entity;
 		}
-		return '';
+	}
+
+	_onUserEntityChanged(userEntity, error) {
+		if (error || userEntity === null) {
+			return;
+		}
+
+		this._displayName = userEntity.getDisplayName();
+		this._firstName = userEntity.getFirstName();
+		this._lastName = userEntity.getLastName();
 	}
 
 	get _colourId() {
 		return 9;
 	}
 
-	get _displayName() {
-		if (this.userInfo) {
-			const displayNameEntity = this.userInfo.getSubEntityByRel('https://api.brightspace.com/rels/display-name');
-
-			if (displayNameEntity) {
-				return displayNameEntity.properties.name;
-			}
-		}
-		return undefined;
-	}
-
 	render() {
 		return html`
 			<d2l-consistent-evaluation-lcb-user-context
 				profile-image-href=""
-				first-name="${this._firstName}"
-				last-name="${this._lastName}"
+				first-name="${ifDefined(this._firstName)}"
+				last-name="${ifDefined(this._lastName)}"
 				colour-id="${this._colourId}"
 				display-name="${ifDefined(this._displayName)}"
 			></d2l-consistent-evaluation-lcb-user-context>

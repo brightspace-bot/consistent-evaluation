@@ -55,6 +55,7 @@ export class ConsistentEvaluationHrefController {
 		let rubricAssessmentHref = undefined;
 		let rubricHref = undefined;
 		let alignmentsHref = undefined;
+		let userHref = undefined;
 
 		if (root && root.entity) {
 			root = root.entity;
@@ -64,6 +65,7 @@ export class ConsistentEvaluationHrefController {
 			previousHref = this._getHref(root, previousRel);
 			rubricAssessmentHref = this._getHref(root, assessmentRel);
 			alignmentsHref = this._getHref(root, Rels.Alignments.alignments);
+			userHref = this._getHref(root, userRel);
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
@@ -82,7 +84,8 @@ export class ConsistentEvaluationHrefController {
 			alignmentsHref,
 			previousHref,
 			rubricAssessmentHref,
-			rubricHref
+			rubricHref,
+			userHref
 		};
 	}
 
@@ -138,25 +141,5 @@ export class ConsistentEvaluationHrefController {
 			statsUrl,
 			gradeItemName
 		};
-	}
-
-	async getUserInfo() {
-		let root = await this._getRootEntity(false);
-		let userEntity;
-
-		if (root && root.entity) {
-			root = root.entity;
-			const userHref = this._getHref(root, userRel);
-
-			if (userHref) {
-				const userResponse = await this._getEntityFromHref(userHref, false);
-
-				if (userResponse) {
-					userEntity = userResponse.entity;
-				}
-			}
-		}
-
-		return userEntity;
 	}
 }
