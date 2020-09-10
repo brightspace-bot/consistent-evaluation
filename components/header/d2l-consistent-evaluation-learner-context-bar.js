@@ -28,10 +28,32 @@ export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(LitEl
 			:host {
 				display: block;
 				height: 100%;
-				margin: 1rem;
+				margin: 0.75rem 0 0.75rem 1.5rem;
 			}
 			:host([hidden]) {
 				display: none;
+			}
+			:host([dir="rtl"]) {
+				margin-left: 0;
+				margin-right: 1.5rem;
+			}
+			@media (max-width: 929px) and (min-width: 768px) {
+				:host {
+					margin-left: 1.2rem;
+				}
+				:host([dir="rtl"]) {
+					margin-left: 0;
+					margin-right: 1.2rem;
+				}
+			}
+			@media (max-width: 767px) {
+				:host {
+					margin-left: 0.9rem;
+				}
+				:host([dir="rtl"]) {
+					margin-left: 0;
+					margin-right: 0.9rem;
+				}
 			}
 		`;
 	}
