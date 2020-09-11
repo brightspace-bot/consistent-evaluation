@@ -62,10 +62,6 @@ export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(RtlMi
 	constructor() {
 		super();
 
-		this._displayName = undefined;
-		this._firstName = undefined;
-		this._lastName = undefined;
-
 		this._setEntityType(UserEntity);
 	}
 

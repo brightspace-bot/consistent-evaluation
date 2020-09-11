@@ -35,12 +35,9 @@ export class ConsistentEvaluationLcbUserContext extends RtlMixin(LitElement) {
 		return [bodyCompactStyles, css`
 			:host {
 				display: flex;
-			}
-			.d2l-consistent-evaluation-lcb-profile-image {
-				align-self: center;
+				align-items: center;
 			}
 			.d2l-consistent-evaluation-lcb-user-name {
-				align-self: center;
 				margin-left: 0.5rem;
 				max-width: 10rem;
 				min-width: 2rem;
@@ -50,6 +47,7 @@ export class ConsistentEvaluationLcbUserContext extends RtlMixin(LitElement) {
 				width: 100%;
 			}
 			:host([dir="rtl"]) .d2l-consistent-evaluation-lcb-user-name {
+				margin-left: 0;
 				margin-right: 0.5rem;
 			}
 		`];
@@ -58,7 +56,6 @@ export class ConsistentEvaluationLcbUserContext extends RtlMixin(LitElement) {
 	render() {
 		return html`
 			<d2l-profile-image-base
-				class="d2l-consistent-evaluation-lcb-profile-image"
 				href="${this.profileImageHref}"
 				first-name="${ifDefined(this.firstName)}"
 				last-name="${ifDefined(this.lastName)}"
