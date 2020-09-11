@@ -1,7 +1,6 @@
 import 'd2l-activities/components/d2l-activity-editor/d2l-activity-text-editor.js';
-import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d2l-activity-attachments-editor.js';
-import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d2l-activity-attachments-list.js';
 import './consistent-evaluation-right-panel-block';
+import './consistent-evaluation-attachments-editor.js';
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 
 import { css, html, LitElement } from 'lit-element';
@@ -88,11 +87,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 			const entity = new AttachmentCollectionEntity(entitytemp.entity, this.token, { remove: () => { } });
 			await entity.addFileAttachment(fileSystemType, fileId);
 		}
-
-	}
-
-	async deleteAttachment() {
-		await this.shadowRoot.querySelector('d2l-activity-attachments-editor').save();
 	}
 
 	render() {
@@ -109,15 +103,14 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 						?hidden="${!this.canEditFeedback}">
 					</d2l-activity-text-editor>
 					<div>
-						<d2l-activity-attachments-editor
+						<d2l-consistent-evaluation-attachments-editor
 							.href="${this.href}/attachments"
 							.token="${this.token}"
 							@d2l-activity-attachments-picker-files-uploaded="${this.saveAttachment}"
 							@d2l-activity-attachments-picker-video-uploaded="${this.saveAttachment}"
 							@d2l-activity-attachments-picker-audio-uploaded="${this.saveAttachment}"
-							@d2l-attachment-removed="${this.deleteAttachment}"
-							?disabled="${!this.canEditFeedback}">
-						</d2l-activity-attachments-editor>
+							>
+						</d2l-consistent-evaluation-attachments-editor>
 					</div>
 				</d2l-consistent-evaluation-right-panel-block>
 			</div>
