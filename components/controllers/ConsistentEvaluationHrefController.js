@@ -139,4 +139,53 @@ export class ConsistentEvaluationHrefController {
 			gradeItemName
 		};
 	}
+
+	async getAssignmentName() {
+		const root = await this._getRootEntity(false);
+		let assignmentName;
+		if (root && root.entity) {
+			if (root.entity.hasLinkByRel(Rels.assignment)) {
+				const assignmentLink = root.entity.getLinkByRel(Rels.assignment).href;
+				const assignmentResponse = await this._getEntityFromHref(assignmentLink, false);
+
+				if (assignmentResponse && assignmentResponse.entity) {
+					assignmentName = assignmentResponse.entity.properties.name;
+				}
+			}
+		}
+		return assignmentName;
+	}
+
+	async getOrganizationName() {
+		const root = await this._getRootEntity(false);
+		let organizationName;
+		if (root && root.entity) {
+			if (root.entity.hasLinkByRel(Rels.organization)) {
+				const organizationLink = root.entity.getLinkByRel(Rels.organization).href;
+				const organizationResponse = await this._getEntityFromHref(organizationLink, false);
+				if (organizationResponse && organizationResponse.entity) {
+					organizationName = organizationResponse.entity.properties.name;
+				}
+			}
+		}
+		return organizationName;
+	}
+
+	async getIteratorTotal() {
+		const root = await this._getRootEntity(false);
+		let iteratorTotal;
+		if (root && root.entity) {
+			iteratorTotal = root.entity.properties.iteratorTotal;
+		}
+		return iteratorTotal;
+	}
+
+	async getIteratorIndex() {
+		const root = await this._getRootEntity(false);
+		let iteratorIndex;
+		if (root && root.entity) {
+			iteratorIndex = root.entity.properties.iteratorIndex;
+		}
+		return iteratorIndex;
+	}
 }
