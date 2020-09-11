@@ -15,7 +15,11 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
 			_submissionInfo: { type: Object },
-			_gradeItemInfo: { type: Object }
+			_gradeItemInfo: { type: Object },
+			_assignmentName: { type: String },
+			_organizationName: { type: String },
+			_iteratorTotal: { type: Number },
+			_iteratorIndex: {type: Number}
 		};
 	}
 
@@ -38,6 +42,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
+		this._assignmentName = ' ';
+		this._organizationName = ' ';
+		this._iteratorTotal = 0;
+		this._iteratorIndex = 0;
 	}
 
 	async updated(changedProperties) {
@@ -48,12 +56,19 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._childHrefs = await controller.getHrefs();
 			this._submissionInfo = await controller.getSubmissionInfo();
 			this._gradeItemInfo = await controller.getGradeItemInfo();
+			this._assignmentName = await controller.getAssignmentName();
+			this._organizationName = await controller.getOrganizationName();
+			this._iteratorTotal = await controller.getIteratorTotal();
+			this._iteratorIndex = await controller.getIteratorIndex();
 		}
-
 	}
 
 	onNextStudentClick() {
 		this.href = this._childHrefs.nextHref;
+	}
+
+	onPreviousStudentClick() {
+		this.href = this._childHrefs.previousHref;
 	}
 
 	render() {
@@ -66,10 +81,15 @@ export class ConsistentEvaluation extends MobxLitElement {
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
+				.assignmentName=${this._assignmentName}
+				.organizationName=${this._organizationName}
+				.iteratorTotal=${this._iteratorTotal}
+				.iteratorIndex=${this._iteratorIndex}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
-				@d2l-consistent-eval-next-student-click=${this.onNextStudentClick}
+				@d2l-consistent-evaluation-previous-student-click=${this.onPreviousStudentClick}
+				@d2l-consistent-evaluation-next-student-click=${this.onNextStudentClick}
 			></d2l-consistent-evaluation-page>
 		`;
 	}

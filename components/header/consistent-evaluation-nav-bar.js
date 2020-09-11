@@ -1,7 +1,5 @@
-import 'd2l-navigation/d2l-navigation.js';
-import 'd2l-navigation/d2l-navigation-main-header.js';
-import 'd2l-navigation/d2l-navigation-link-back.js';
-import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-link-iterator.js';
+import 'd2l-navigation/d2l-navigation-immersive.js';
+import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-iterator.js';
 
 import { css, html, LitElement } from 'lit-element';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
@@ -9,66 +7,70 @@ import { labelStyles } from '@brightspace-ui/core/components/typography/styles.j
 class ConsistentEvaluationNavBar extends LitElement {
 	static get properties() {
 		return {
-			_assignmentName: {
-				attribute: false,
-				type: Object
+			assignmentName: {
+				attribute: 'assignment-name',
+				type: String
 			},
-			_courseName: {
-				attribute: false,
-				type: Object
+			organizationName: {
+				attribute: 'organization-name',
+				type: String
 			},
+			iteratorTotal: {
+				attribute: 'iterator-total',
+				type: Number
+			},
+			iteratorIndex: {
+				attribute: 'iterator-index',
+				type: Number
+			}
 		};
 	}
 
 	static get styles() {
 		return [labelStyles, css`
-			.d2l-navigation-header-left{
-				padding-right: 1rem;
+			.d2l-student-iterator {
+				padding-left: 4rem;
+				padding-right: 4rem;
 			}
-			.d2l-user-iterator {
-				padding-left: 1rem;
-				padding-right: 1rem;
+			.d2l-heading-3 {
+				padding-top: 0.25rem;
 			}
 		`];
 	}
 
-	constructor() {
-		super();
-		this._assignmentName = 'Assignment 1 - File Submission';
-		this._courseName = 'History 1170-03';
+	_dispatchButtonClickEvent(eventName) {
+		this.dispatchEvent(new CustomEvent(eventName, {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
-	_backButtonClicked() {
-		// go back to previous page
-		console.log('This should go to previous page');
-	}
+	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-previous-student');}
+	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
 
 	render() {
 		return html`
-			<d2l-navigation>
-				<d2l-navigation-main-header>
+			<d2l-navigation-immersive 
+				back-link-href="https://www.d2l.com/"
+				back-link-text="Back to D2L" 
+				width-type="fullscreen">
 
-					<div slot="left" class="d2l-navigation-header-left">
-						<d2l-navigation-link-back 
-							class="d2l-label-text"
-							@click="${this._backButtonClicked}"
-							text="Back to Quick Eval">
-						</d2l-navigation-link-back>
-					</div>
+				<div slot="middle">
+					<div class="d2l-heading-3">${this.assignmentName}</div>
+					<div class="d2l-label-text">${this.organizationName}</div>
+				</div>
 
-					<div slot="left">
-						<div class="d2l-heading-3">${this._assignmentName}</div>
-						<div class="d2l-label-text">${this._courseName}</div>
-					</div>
+				<d2l-navigation-iterator 
+					slot="right"
+					@previous-click=${this._emitPreviousStudentEvent} 
+					@next-click=${this._emitNextStudentEvent}
+					?previous-disabled=${(this.iteratorIndex === 1)}
+					?next-disabled=${(this.iteratorIndex === this.iteratorTotal)}
+					hide-text>
+					<span class="d2l-student-iterator d2l-label-text">User ${this.iteratorIndex} of ${this.iteratorTotal}</span>
+				</d2l-navigation-iterator>
 
-					<div slot="right" class="d2l-navigation-header-right">
-						<d2l-navigation-link-iterator previous-href="https://www.d2l.com" next-href="https://www.nfl.com" hide-text>
-							<span class="d2l-user-iterator d2l-label-text">User 1 of 17</span>
-						</d2l-navigation-link-iterator>
-					</div>
-
-				</d2l-navigation-main-header>
-			</d2l-navigation>
+			</d2l-navigation-immersive>
 		`;
 	}
 }

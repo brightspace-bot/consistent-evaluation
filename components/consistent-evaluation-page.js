@@ -2,6 +2,7 @@ import './left-panel/consistent-evaluation-left-panel.js';
 import './footer/consistent-evaluation-footer-presentational.js';
 import './right-panel/consistent-evaluation-right-panel.js';
 import './left-panel/consistent-evaluation-submissions-page.js';
+import './header/consistent-evaluation-nav-bar.js';
 import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
@@ -56,6 +57,22 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			gradeItemInfo: {
 				attribute: false,
 				type: Object
+			},
+			assignmentName: {
+				attribute: false,
+				type: String
+			},
+			organizationName: {
+				attribute: false,
+				type: String
+			},
+			iteratorTotal: {
+				attribute: false,
+				type: Number
+			},
+			iteratorIndex: {
+				attribute: false,
+				type: Number
 			},
 			token: {
 				type: String
@@ -205,7 +222,21 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_onNextStudentClick() {
-		this.dispatchEvent(new CustomEvent('d2l-consistent-eval-next-student-click', {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
+			composed: true,
+			bubbles: true
+		}));
+	}
+
+	_onPreviousStudentClick() {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
+			composed: true,
+			bubbles: true
+		}));
+	}
+
+	_onBackButtonClick() {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-back-button-click', {
 			composed: true,
 			bubbles: true
 		}));
@@ -303,7 +334,16 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	render() {
 		return html`
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
-				<div slot="header"><h1>Hello, consistent-evaluation!</h1></div>
+				<div slot="header">
+					<d2l-consistent-evaluation-nav-bar
+						assignment-name=${this.assignmentName}
+						organization-name=${this.organizationName}
+						iterator-index=${this.iteratorIndex}
+						iterator-total=${this.iteratorTotal}
+						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
+						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
+					></d2l-consistent-evaluation-nav-bar>
+				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
