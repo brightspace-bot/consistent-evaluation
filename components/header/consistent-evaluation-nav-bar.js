@@ -56,9 +56,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 	render() {
 		return html`
-			<d2l-navigation-immersive 
-				back-link-href="https://www.d2l.com/"
-				back-link-text="Back to D2L" 
+			<d2l-navigation-immersive  
 				width-type="fullscreen">
 
 				<div slot="middle">

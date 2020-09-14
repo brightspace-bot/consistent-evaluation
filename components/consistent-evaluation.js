@@ -42,10 +42,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
-		this._assignmentName = '';
-		this._organizationName = '';
-		this._iteratorTotal = 0;
-		this._iteratorIndex = 0;
+		this._assignmentName = undefined;
+		this._organizationName = undefined;
+		this._iteratorTotal = undefined;
+		this._iteratorIndex = undefined;
 	}
 
 	async updated(changedProperties) {
@@ -82,10 +82,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
-				.assignmentName=${this._assignmentName}
-				.organizationName=${this._organizationName}
-				.iteratorTotal=${this._iteratorTotal}
-				.iteratorIndex=${this._iteratorIndex}
+				.assignmentName=${ifDefined(this._assignmentName)}
+				.organizationName=${ifDefined(this._organizationName)}
+				.iteratorTotal=${ifDefined(this._iteratorTotal)}
+				.iteratorIndex=${ifDefined(this._iteratorIndex)}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
