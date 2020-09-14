@@ -3,24 +3,26 @@ import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-iterato
 
 import { css, html, LitElement } from 'lit-element';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { loadLocalizationResources } from '../locale.js';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
-class ConsistentEvaluationNavBar extends LitElement {
+class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
 			assignmentName: {
-				attribute: 'assignment-name',
+				attribute: false,
 				type: String
 			},
 			organizationName: {
-				attribute: 'organization-name',
+				attribute: false,
 				type: String
 			},
 			iteratorTotal: {
-				attribute: 'iterator-total',
+				attribute: false,
 				type: Number
 			},
 			iteratorIndex: {
-				attribute: 'iterator-index',
+				attribute: false,
 				type: Number
 			}
 		};
@@ -36,6 +38,10 @@ class ConsistentEvaluationNavBar extends LitElement {
 				padding-top: 0.25rem;
 			}
 		`];
+	}
+
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
 	}
 
 	_dispatchButtonClickEvent(eventName) {
@@ -64,10 +70,10 @@ class ConsistentEvaluationNavBar extends LitElement {
 					slot="right"
 					@previous-click=${this._emitPreviousStudentEvent} 
 					@next-click=${this._emitNextStudentEvent}
-					?previous-disabled=${(this.iteratorIndex === 1)}
-					?next-disabled=${(this.iteratorIndex === this.iteratorTotal)}
+					?previous-disabled=${(this.iteratorIndex === 1 || this.iteratorIndex === undefined)}
+					?next-disabled=${(this.iteratorIndex === this.iteratorTotal || this.iteratorIndex === undefined || this.iteratorIndex === undefined)}
 					hide-text>
-					<span class="d2l-student-iterator d2l-label-text">User ${this.iteratorIndex} of ${this.iteratorTotal}</span>
+					<span class="d2l-student-iterator d2l-label-text">${this.localize('user')} ${this.iteratorIndex} ${this.localize('of')} ${this.iteratorTotal}</span>
 				</d2l-navigation-iterator>
 
 			</d2l-navigation-immersive>

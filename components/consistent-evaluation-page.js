@@ -341,10 +341,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
 				<div slot="header">
 					<d2l-consistent-evaluation-nav-bar
-						assignment-name=${this.assignmentName}
-						organization-name=${this.organizationName}
-						iterator-index=${this.iteratorIndex}
-						iterator-total=${this.iteratorTotal}
+						.assignmentName=${this.assignmentName}
+						.organizationName=${this.organizationName}
+						.iteratorIndex=${this.iteratorIndex}
+						.iteratorTotal=${this.iteratorTotal}
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
 					></d2l-consistent-evaluation-nav-bar>

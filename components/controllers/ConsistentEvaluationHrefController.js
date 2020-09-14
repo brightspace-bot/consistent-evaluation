@@ -143,52 +143,45 @@ export class ConsistentEvaluationHrefController {
 		};
 	}
 
-	async getAssignmentName() {
-		const root = await this._getRootEntity(false);
-		let assignmentName;
-		if (root && root.entity) {
-			if (root.entity.hasLinkByRel(Rels.assignment)) {
-				const assignmentLink = root.entity.getLinkByRel(Rels.assignment).href;
-				const assignmentResponse = await this._getEntityFromHref(assignmentLink, false);
+	async getAssignmentOrganizationName(domainName) {
+		let domainRel;
 
-				if (assignmentResponse && assignmentResponse.entity) {
-					assignmentName = assignmentResponse.entity.properties.name;
+		switch (domainName) {
+			case 'assignment':
+				domainRel = Rels.assignment;
+				break;
+			case 'organization':
+				domainRel = Rels.organization;
+				break;
+			default:
+				return undefined;
+		}
+		const root = await this._getRootEntity(false);
+		if (root && root.entity) {
+			if (root.entity.hasLinkByRel(domainRel)) {
+				const domainLink = root.entity.getLinkByRel(domainRel).href;
+				const domainResponse = await this._getEntityFromHref(domainLink, false);
+
+				if (domainResponse && domainResponse.entity) {
+					return domainResponse.entity.properties.name;
 				}
 			}
 		}
-		return assignmentName;
+		return undefined;
 	}
 
-	async getOrganizationName() {
+	async getIteratorInfo(iteratorProperty) {
 		const root = await this._getRootEntity(false);
-		let organizationName;
 		if (root && root.entity) {
-			if (root.entity.hasLinkByRel(Rels.organization)) {
-				const organizationLink = root.entity.getLinkByRel(Rels.organization).href;
-				const organizationResponse = await this._getEntityFromHref(organizationLink, false);
-				if (organizationResponse && organizationResponse.entity) {
-					organizationName = organizationResponse.entity.properties.name;
-				}
+			switch (iteratorProperty) {
+				case 'total':
+					return root.entity.properties.iteratorTotal;
+				case 'index':
+					return root.entity.properties.iteratorIndex;
+				default:
+					break;
 			}
 		}
-		return organizationName;
-	}
-
-	async getIteratorTotal() {
-		const root = await this._getRootEntity(false);
-		let iteratorTotal;
-		if (root && root.entity) {
-			iteratorTotal = root.entity.properties.iteratorTotal;
-		}
-		return iteratorTotal;
-	}
-
-	async getIteratorIndex() {
-		const root = await this._getRootEntity(false);
-		let iteratorIndex;
-		if (root && root.entity) {
-			iteratorIndex = root.entity.properties.iteratorIndex;
-		}
-		return iteratorIndex;
+		return undefined;
 	}
 }

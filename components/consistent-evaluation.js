@@ -42,8 +42,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
-		this._assignmentName = ' ';
-		this._organizationName = ' ';
+		this._assignmentName = '';
+		this._organizationName = '';
 		this._iteratorTotal = 0;
 		this._iteratorIndex = 0;
 	}
@@ -56,19 +56,19 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._childHrefs = await controller.getHrefs();
 			this._submissionInfo = await controller.getSubmissionInfo();
 			this._gradeItemInfo = await controller.getGradeItemInfo();
-			this._assignmentName = await controller.getAssignmentName();
-			this._organizationName = await controller.getOrganizationName();
-			this._iteratorTotal = await controller.getIteratorTotal();
-			this._iteratorIndex = await controller.getIteratorIndex();
+			this._assignmentName = await controller.getAssignmentOrganizationName('assignment');
+			this._organizationName = await controller.getAssignmentOrganizationName('organization');
+			this._iteratorTotal = await controller.getIteratorInfo('total');
+			this._iteratorIndex = await controller.getIteratorInfo('index');
 		}
 	}
 
-	onNextStudentClick() {
-		this.href = this._childHrefs.nextHref;
+	_onNextStudentClick() {
+		this.href = this._childHrefs?.nextHref;
 	}
 
-	onPreviousStudentClick() {
-		this.href = this._childHrefs.previousHref;
+	_onPreviousStudentClick() {
+		this.href = this._childHrefs?.previousHref;
 	}
 
 	render() {
@@ -89,8 +89,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
-				@d2l-consistent-evaluation-previous-student-click=${this.onPreviousStudentClick}
-				@d2l-consistent-evaluation-next-student-click=${this.onNextStudentClick}
+				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
+				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
 			></d2l-consistent-evaluation-page>
 		`;
 	}
