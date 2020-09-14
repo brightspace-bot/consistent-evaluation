@@ -82,10 +82,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
-				.assignmentName=${ifDefined(this._assignmentName)}
-				.organizationName=${ifDefined(this._organizationName)}
-				.iteratorTotal=${ifDefined(this._iteratorTotal)}
-				.iteratorIndex=${ifDefined(this._iteratorIndex)}
+				.assignmentName=${this._assignmentName}
+				.organizationName=${this._organizationName}
+				.iteratorTotal=${this._iteratorTotal}
+				.iteratorIndex=${this._iteratorIndex}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
