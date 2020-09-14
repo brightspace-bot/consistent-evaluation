@@ -10,19 +10,19 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
 			assignmentName: {
-				attribute: false,
+				attribute: 'assignment-name',
 				type: String
 			},
 			organizationName: {
-				attribute: false,
+				attribute: 'organization-name',
 				type: String
 			},
 			iteratorTotal: {
-				attribute: false,
+				attribute: 'iterator-total',
 				type: Number
 			},
 			iteratorIndex: {
-				attribute: false,
+				attribute: 'iterator-index',
 				type: Number
 			}
 		};
