@@ -42,10 +42,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
-		this._assignmentName = undefined;
-		this._organizationName = undefined;
-		this._iteratorTotal = undefined;
-		this._iteratorIndex = undefined;
 	}
 
 	async updated(changedProperties) {
