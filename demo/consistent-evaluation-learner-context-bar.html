@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 	<head>
 		<link rel="stylesheet" href="/node_modules/@brightspace-ui/core/components/demo/styles.css" type="text/css">
 		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -7,31 +7,23 @@
 			import '@brightspace-ui/core/components/demo/demo-page.js';
 			import '@brightspace-ui/core/components/typography/styles.js';
 			import '@brightspace-ui/core/components/typography/typography.js';
-			import '../components/right-panel/consistent-evaluation-feedback-actions.js';
+			import '../components/header/d2l-consistent-evaluation-learner-context-bar.js';
 		</script>
-		<title>d2l-consistent-evaluation-feedback-actions</title>
+		<title>d2l-consistent-evaluation-learner-context-bar</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta charset="UTF-8">
 	</head>
 	<body class="d2l-typography">
+		<d2l-demo-page page-title="d2l-consistent-evaluation-learner-context-bar">
 
-		<d2l-demo-page page-title="d2l-consistent-evaluation-feedback-actions">
-			<h2>d2l-consistent-evaluation</h2>
 			<d2l-demo-snippet>
-				All options visible
-				<d2l-consistent-evaluation-feedback-actions show-all></d2l-consistent-evaluation-feedback-actions>
+				<d2l-consistent-evaluation-learner-context-bar
+					href="data/user.json"
+					token="token"
+				></d2l-consistent-evaluation-learner-context-bar>
 			</d2l-demo-snippet>
-			<d2l-demo-snippet>
-				Some options visible
-				<d2l-consistent-evaluation-feedback-actions
-					can-add-file
-					can-add-google-drive-link
-					can-add-one-drive-link
-					can-record-video
-				></d2l-consistent-evaluation-feedback-actions>
-			</d2l-demo-snippet>
+
 		</d2l-demo-page>
-
 	</body>
 </html>
