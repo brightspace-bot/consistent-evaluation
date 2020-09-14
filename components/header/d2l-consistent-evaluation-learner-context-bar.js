@@ -1,4 +1,5 @@
 import './d2l-consistent-evaluation-lcb-user-context.js';
+import './d2l-consistent-evaluation-lcb-file-context.js';
 import { html, LitElement } from 'lit-element';
 
 export class ConsistentEvaluationLearnerContextBar extends LitElement {
@@ -6,6 +7,10 @@ export class ConsistentEvaluationLearnerContextBar extends LitElement {
 	static get properties() {
 		return {
 			userInfo: {
+				attribute: false,
+				type: Object
+			},
+			submissionInfo: {
 				attribute: false,
 				type: Object
 			}
@@ -28,6 +33,10 @@ export class ConsistentEvaluationLearnerContextBar extends LitElement {
 				last-name
 				colour-id
 			></d2l-consistent-evaluation-lcb-user-context>
+			<d2l-consistent-evaluation-lcb-file-context>
+			.submissionInfo="${this.submissionInfo}"
+			</d2l-consistent-evaluation-lcb-file-context>
+
 		`;
 	}
 }

@@ -311,6 +311,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				<div slot="header">
 					<d2l-consistent-evaluation-learner-context-bar
 						.userInfo=${this.userInfo}
+						.submissionInfo=${this.submissionInfo}
 					></d2l-consistent-evaluation-learner-context-bar>
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
