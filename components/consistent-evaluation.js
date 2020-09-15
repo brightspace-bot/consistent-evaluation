@@ -11,6 +11,14 @@ export class ConsistentEvaluation extends MobxLitElement {
 		return {
 			href: { type: String },
 			token: { type: String },
+			returnHref: {
+				attribute: 'return-href',
+				type: String
+			},
+			returnHrefText: {
+				attribute: 'return-href-text',
+				type: String
+			},
 			_rubricReadOnly: { type: Boolean },
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
@@ -19,7 +27,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_assignmentName: { type: String },
 			_organizationName: { type: String },
 			_iteratorTotal: { type: Number },
-			_iteratorIndex: {type: Number}
+			_iteratorIndex: { type: Number }
 		};
 	}
 
@@ -42,6 +50,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
+		this.returnHref = undefined;
+		this.returnHrefText = undefined;
 	}
 
 	async updated(changedProperties) {
@@ -76,6 +86,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
+				return-href=${this.returnHref}
+				return-href-text=${this.returnHrefText}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
 				.assignmentName=${this._assignmentName}

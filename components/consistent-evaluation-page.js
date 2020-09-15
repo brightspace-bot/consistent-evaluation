@@ -27,6 +27,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'next-student-href',
 				type: String
 			},
+			returnHref: {
+				attribute: 'return-href',
+				type: String
+			},
+			returnHrefText: {
+				attribute: 'return-href-text',
+				type: String
+			},
 			outcomesHref: {
 				attribute: 'outcomes-href',
 				type: String
@@ -334,6 +342,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
 				<div slot="header">
 					<d2l-consistent-evaluation-nav-bar
+						return-href=${this.returnHref}
+						return-href-text=${this.returnHrefText}
 						.assignmentName=${this.assignmentName}
 						.organizationName=${this.organizationName}
 						.iteratorIndex=${this.iteratorIndex}
