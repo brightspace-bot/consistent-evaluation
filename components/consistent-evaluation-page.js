@@ -240,13 +240,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		}));
 	}
 
-	_onBackButtonClick() {
-		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-back-button-click', {
-			composed: true,
-			bubbles: true
-		}));
-	}
-
 	_hideScrollbars() {
 		this._scrollbarStatus = 'hidden';
 	}
