@@ -142,4 +142,46 @@ export class ConsistentEvaluationHrefController {
 			gradeItemName
 		};
 	}
+
+	async getAssignmentOrganizationName(domainName) {
+		let domainRel;
+
+		switch (domainName) {
+			case 'assignment':
+				domainRel = Rels.assignment;
+				break;
+			case 'organization':
+				domainRel = Rels.organization;
+				break;
+			default:
+				return undefined;
+		}
+		const root = await this._getRootEntity(false);
+		if (root && root.entity) {
+			if (root.entity.hasLinkByRel(domainRel)) {
+				const domainLink = root.entity.getLinkByRel(domainRel).href;
+				const domainResponse = await this._getEntityFromHref(domainLink, false);
+
+				if (domainResponse && domainResponse.entity) {
+					return domainResponse.entity.properties.name;
+				}
+			}
+		}
+		return undefined;
+	}
+
+	async getIteratorInfo(iteratorProperty) {
+		const root = await this._getRootEntity(false);
+		if (root && root.entity) {
+			switch (iteratorProperty) {
+				case 'total':
+					return root.entity.properties.iteratorTotal;
+				case 'index':
+					return root.entity.properties.iteratorIndex;
+				default:
+					break;
+			}
+		}
+		return undefined;
+	}
 }

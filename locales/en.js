@@ -46,5 +46,7 @@ export const val = {
 	published:   'Evaluation published',
 	retracted:   'Evaluation retracted',
 	saved:  'Evaluation saved as draft',
-	updated:  'Evaluation updated'
+	updated:  'Evaluation updated',
+	user: 'User',
+	of: 'of'
 };
