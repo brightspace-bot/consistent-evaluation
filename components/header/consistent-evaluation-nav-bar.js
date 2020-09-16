@@ -69,7 +69,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			return html``;
 		}
 		else {
-			this.returnHrefText = (this.returnHrefText === undefined) ? undefined : `Back to ${this.returnHrefText}`;
+			this.returnHrefText = (this.returnHrefText === undefined) ? undefined : `${this.returnHrefText}`;
 
 			return html`
 				<d2l-navigation-link-back 
