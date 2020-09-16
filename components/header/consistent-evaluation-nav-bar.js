@@ -3,10 +3,10 @@ import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-iterato
 import 'd2l-navigation/d2l-navigation-link-back.js';
 
 import { css, html, LitElement } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
-
 
 class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	static get properties() {
@@ -65,14 +65,16 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
 
 	_renderBackButton() {
-		if (this.returnHref === 'undefined') {
+		if (this.returnHref === undefined) {
 			return html``;
 		}
 		else {
+			this.returnHrefText = (this.returnHrefText === undefined) ? undefined : `Back to ${this.returnHrefText}`;
+
 			return html`
 				<d2l-navigation-link-back 
 					href=${this.returnHref}
-					text=${(this.returnHrefText === 'undefined') ?  'Back' : this.returnHrefText} >
+					text=${ifDefined(this.returnHrefText)} >
 				</d2l-navigation-link-back>
 			`;
 		}

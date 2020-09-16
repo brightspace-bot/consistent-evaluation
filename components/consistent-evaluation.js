@@ -86,8 +86,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
-				return-href=${this.returnHref}
-				return-href-text=${this.returnHrefText}
+				return-href=${ifDefined(this.returnHref)}
+				return-href-text=${ifDefined(this.returnHrefText)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
 				.assignmentName=${this._assignmentName}
