@@ -1,7 +1,9 @@
 import 'd2l-navigation/d2l-navigation-immersive.js';
 import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-iterator.js';
+import 'd2l-navigation/d2l-navigation-link-back.js';
 
 import { css, html, LitElement } from 'lit-element';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
@@ -24,7 +26,15 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			iteratorIndex: {
 				attribute: 'iterator-index',
 				type: Number
-			}
+			},
+			returnHref: {
+				attribute: 'return-href',
+				type: String
+			},
+			returnHrefText: {
+				attribute: 'return-href-text',
+				type: String
+			},
 		};
 	}
 
@@ -54,10 +64,30 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-previous-student');}
 	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
 
+	_renderBackButton() {
+		if (this.returnHref === undefined) {
+			return html``;
+		}
+		else {
+			this.returnHrefText = (this.returnHrefText === undefined) ? undefined : `${this.returnHrefText}`;
+
+			return html`
+				<d2l-navigation-link-back 
+					href=${this.returnHref}
+					text=${ifDefined(this.returnHrefText)} >
+				</d2l-navigation-link-back>
+			`;
+		}
+	}
+
 	render() {
 		return html`
-			<d2l-navigation-immersive  
+			<d2l-navigation-immersive
 				width-type="fullscreen">
+
+				<div slot="left">
+					${this._renderBackButton()}
+				</div>
 
 				<div slot="middle">
 					<div class="d2l-heading-3">${this.assignmentName}</div>
