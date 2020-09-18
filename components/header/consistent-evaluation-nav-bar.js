@@ -1,6 +1,8 @@
+
 import 'd2l-navigation/d2l-navigation-immersive.js';
 import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-iterator.js';
 import 'd2l-navigation/d2l-navigation-link-back.js';
+import '@brightspace-ui/core/components/tooltip/tooltip.js';
 
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -47,6 +49,15 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			.d2l-heading-3 {
 				padding-top: 0.25rem;
 			}
+			.d2l-truncate {
+				-webkit-box-orient: vertical;
+				display: -webkit-box;
+				-webkit-line-clamp: 1;
+				overflow: hidden;
+				overflow-wrap: break-word;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
 		`];
 	}
 
@@ -90,8 +101,12 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				</div>
 
 				<div slot="middle">
-					<div class="d2l-heading-3">${this.assignmentName}</div>
-					<div class="d2l-label-text">${this.organizationName}</div>
+					<div id="assignmentName" class="d2l-heading-3 d2l-truncate">${this.assignmentName}</div>
+					<d2l-tooltip for="assignmentName">${this.assignmentName}</d2l-tooltip>
+
+					<div id="className" class="d2l-label-text d2l-truncate">{this.organizationName}</div>
+					<d2l-tooltip for="className">{this.organizationName}</d2l-tooltip>
+
 				</div>
 
 				<d2l-navigation-iterator 
