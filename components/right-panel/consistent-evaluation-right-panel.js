@@ -6,6 +6,7 @@ import { html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { Grade } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 
 export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
@@ -84,6 +85,19 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
+
+		this.addEventListener('d2l-rubric-total-score-changed',
+			e => {
+				let newScore = ( e.detail.score / e.detail.outOf ) * this.grade.outOf;
+				this.grade = new Grade(
+					this.grade.scoreType, 
+					newScore, 
+					this.grade.outOf,
+					this.grade.letterGrade, 
+					this.grade.letterGradeOptions, 
+					this.grade.entity
+				);
+			});
 	}
 
 	_renderRubric() {
