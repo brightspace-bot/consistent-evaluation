@@ -69,6 +69,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			},
 			token: {
 				type: String
+			},
+			eventcount:{
+				type: Number
 			}
 		};
 	}
@@ -84,11 +87,20 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideRubric = false;
 		this.hideGrade = false;
 		this.hideFeedback = false;
-		this.hideOutcomes = false;
+		this.hideOutcomes = false;	
+		this.eventcount = 0;	
 
 		this.addEventListener('d2l-rubric-total-score-changed',
-			e => {
-				let newScore = ( e.detail.score / e.detail.outOf ) * this.grade.outOf;
+		e => {
+
+			if(this.eventcount <= 1){
+				this.eventcount++;
+				return;
+			}
+
+			let newScore = ( e.detail.score / e.detail.outOf ) * this.grade.outOf;
+
+			if(newScore){
 				this.grade = new Grade(
 					this.grade.scoreType, 
 					newScore, 
@@ -97,7 +109,18 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					this.grade.letterGradeOptions, 
 					this.grade.entity
 				);
-			});
+
+				if(newScore){
+					this.dispatchEvent(new CustomEvent('on-d2l-consistent-eval-grade-changed', {
+						composed: true,
+						bubbles: true,
+						detail: {
+							grade: this.grade
+						}
+					}));
+				}
+			}
+		});
 	}
 
 	_renderRubric() {
