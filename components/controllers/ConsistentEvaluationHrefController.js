@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { actorRel, assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userRel, alignmentsRel, activityUsageRel } from './constants.js';
+import { actorRel, assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userRel, alignmentsRel } from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
