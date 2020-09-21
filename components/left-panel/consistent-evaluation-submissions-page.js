@@ -79,6 +79,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	}
 
 	async _initializeSubmissionEntities() {
+		this._submissionEntities = [];
 		if (this._submissionList !== undefined) {
 			for (const submissionLink of this._submissionList) {
 				if (submissionLink.href) {

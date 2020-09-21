@@ -182,6 +182,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_initializeSubmissionProperties() {
+		this._comment = '';
 		this._date = this.dateStr ? new Date(this.dateStr) : undefined;
 		const attachmentsListEntity = this.submissionEntity.getSubEntityByClass(Classes.assignments.attachmentList);
 		if (attachmentsListEntity) {
