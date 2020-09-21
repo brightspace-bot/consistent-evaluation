@@ -82,7 +82,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			<d2l-consistent-evaluation-page
 				rubric-href=${ifDefined(this._childHrefs && this._childHrefs.rubricHref)}
 				rubric-assessment-href=${ifDefined(this._childHrefs && this._childHrefs.rubricAssessmentHref)}
-				outcomes-href=${ifDefined((this._childHrefs && this._childHrefs.alignmentsHref) ? this.href : undefined)}
+				outcomes-href=${ifDefined(this._childHrefs && this._childHrefs.alignmentsHref)}
 				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
