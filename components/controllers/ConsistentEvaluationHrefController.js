@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { actorRel, assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userRel, alignmentsRel } from './constants.js';
+import { actorRel, alignmentsRel, assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userRel} from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
@@ -75,11 +75,11 @@ export class ConsistentEvaluationHrefController {
 					rubricHref = this._getHref(assessmentEntity.entity, rubricRel);
 				}
 			}
-			
-			if( alignmentsHref ) {
+
+			if (alignmentsHref) {
 				const alignmentsEntity = await this._getEntityFromHref(alignmentsHref, bypassCache);
-				if(alignmentsEntity && alignmentsEntity.entity) {
-					if(alignmentsEntity.entity.entities && alignmentsEntity.entity.entities.length > 0) {
+				if (alignmentsEntity && alignmentsEntity.entity) {
+					if (alignmentsEntity.entity.entities && alignmentsEntity.entity.entities.length > 0) {
 						alignmentsHref = actorHref;
 					} else {
 						alignmentsHref = undefined;
