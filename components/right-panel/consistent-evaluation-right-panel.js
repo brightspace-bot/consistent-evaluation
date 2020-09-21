@@ -70,8 +70,8 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			token: {
 				type: String
 			},
-			eventcount:{
-				type: Number
+			rubricFirstLoad:{
+				type: Boolean
 			}
 		};
 	}
@@ -88,13 +88,18 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;	
-		this.eventcount = 0;	
+		this.rubricFirstLoad = true;	
 
 		this.addEventListener('d2l-rubric-total-score-changed',
 		e => {
 
-			if(this.eventcount <= 1){
-				this.eventcount++;
+			if(!e.detail.score || !e.detail.outOf ){
+				console.log("Fake News");
+				return;
+			}
+
+			if( this.rubricFirstLoad ){
+				this.rubricFirstLoad = false;
 				return;
 			}
 
