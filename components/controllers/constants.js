@@ -14,6 +14,7 @@ export const assessmentRel = 'https://api.brightspace.com/rels/assessment';
 export const rubricRel = 'https://api.brightspace.com/rels/rubric';
 export const userRel = 'https://api.brightspace.com/rels/user';
 export const actorRel = 'https://activities.api.brightspace.com/rels/actor-activity-usage';
+export const alignmentsRel = 'https://alignments.api.brightspace.com/rels/alignments';
 export const nextRel = 'next';
 export const previousRel = 'previous';
 export const publishedState = 'Published';
