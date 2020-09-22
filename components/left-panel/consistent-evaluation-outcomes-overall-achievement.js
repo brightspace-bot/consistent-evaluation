@@ -1,4 +1,4 @@
-import 'd2l-outcomes-overall-achievement/src/primary-panel/primary-panel.js'
+import 'd2l-outcomes-overall-achievement/src/primary-panel/primary-panel.js';
 import { html, LitElement } from 'lit-element';
 
 export class ConsistentEvaluationOutcomesOverallAchievement extends LitElement {
