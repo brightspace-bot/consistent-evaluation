@@ -2,11 +2,11 @@ import './consistent-evaluation-feedback-presentational.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
+import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
-import { Grade } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 
 export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
@@ -87,45 +87,54 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideRubric = false;
 		this.hideGrade = false;
 		this.hideFeedback = false;
-		this.hideOutcomes = false;	
-		this.rubricFirstLoad = true;	
+		this.hideOutcomes = false;
+		this.rubricFirstLoad = true;
 
 		this.addEventListener('d2l-rubric-total-score-changed',
-		e => {
+			e => {
 
-			if(!e.detail.score || !e.detail.outOf ){
-				console.log("Fake News");
-				return;
-			}
+				if (!e.detail.score || !e.detail.outOf) {
+					return;
+				}
 
-			if( this.rubricFirstLoad ){
-				this.rubricFirstLoad = false;
-				return;
-			}
+				if (this.rubricFirstLoad) {
+					this.rubricFirstLoad = false;
+					return;
+				}
 
-			let newScore = ( e.detail.score / e.detail.outOf ) * this.grade.outOf;
+				let score = this.grade.score;
+				let letterGrade = this.grade.letterGrade;
+				if (this.grade.scoreType === GradeType.Letter && this.grade.entity.properties.letterGradeSchemeRanges) {
 
-			if(newScore){
+					const percentage = (e.detail.score / e.detail.outOf) * 100;
+					const map = this.grade.entity.properties.letterGradeSchemeRanges;
+					for (const [key, value] of Object.entries(map)) {
+						if (percentage >= value) {
+							letterGrade = key;
+							break;
+						}
+					}
+				} else {
+					score = (e.detail.score / e.detail.outOf) * this.grade.outOf;
+				}
+
 				this.grade = new Grade(
-					this.grade.scoreType, 
-					newScore, 
+					this.grade.scoreType,
+					score,
 					this.grade.outOf,
-					this.grade.letterGrade, 
-					this.grade.letterGradeOptions, 
+					letterGrade,
+					this.grade.letterGradeOptions,
 					this.grade.entity
 				);
 
-				if(newScore){
-					this.dispatchEvent(new CustomEvent('on-d2l-consistent-eval-grade-changed', {
-						composed: true,
-						bubbles: true,
-						detail: {
-							grade: this.grade
-						}
-					}));
-				}
-			}
-		});
+				this.dispatchEvent(new CustomEvent('on-d2l-consistent-eval-grade-changed', {
+					composed: true,
+					bubbles: true,
+					detail: {
+						grade: this.grade
+					}
+				}));
+			});
 	}
 
 	_renderRubric() {
