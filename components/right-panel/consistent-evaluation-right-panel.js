@@ -69,9 +69,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			},
 			token: {
 				type: String
-			},
-			rubricFirstLoad:{
-				type: Boolean
 			}
 		};
 	}
@@ -90,51 +87,23 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideOutcomes = false;
 		this.rubricFirstLoad = true;
 
-		this.addEventListener('d2l-rubric-total-score-changed',
-			e => {
 
-				if (!e.detail.score || !e.detail.outOf) {
-					return;
-				}
+	}
 
-				if (this.rubricFirstLoad) {
-					this.rubricFirstLoad = false;
-					return;
-				}
+	connectedCallback() {
+		super.connectedCallback();
+		window.addEventListener('d2l-rubric-total-score-changed',
+		e => {
+			this._syncRubricGrade(e);
+		});
+	}
 
-				let score = this.grade.score;
-				let letterGrade = this.grade.letterGrade;
-				if (this.grade.scoreType === GradeType.Letter && this.grade.entity.properties.letterGradeSchemeRanges) {
-
-					const percentage = (e.detail.score / e.detail.outOf) * 100;
-					const map = this.grade.entity.properties.letterGradeSchemeRanges;
-					for (const [key, value] of Object.entries(map)) {
-						if (percentage >= value) {
-							letterGrade = key;
-							break;
-						}
-					}
-				} else {
-					score = (e.detail.score / e.detail.outOf) * this.grade.outOf;
-				}
-
-				this.grade = new Grade(
-					this.grade.scoreType,
-					score,
-					this.grade.outOf,
-					letterGrade,
-					this.grade.letterGradeOptions,
-					this.grade.entity
-				);
-
-				this.dispatchEvent(new CustomEvent('on-d2l-consistent-eval-grade-changed', {
-					composed: true,
-					bubbles: true,
-					detail: {
-						grade: this.grade
-					}
-				}));
-			});
+	disconnectedCallback() {
+		window.removeEventListener('d2l-rubric-total-score-changed',
+		e => {
+			this._syncRubricGrade(e);
+		});
+		super.disconnectedCallback();
 	}
 
 	_renderRubric() {
@@ -204,6 +173,50 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			${this._renderFeedback()}
 			${this._renderOutcome()}
 		`;
+	}
+
+	_syncRubricGrade(e) {
+		if (!e.detail.score || !e.detail.outOf) {
+			return;
+		}
+
+		if (this.rubricFirstLoad) {
+			this.rubricFirstLoad = false;
+			return;
+		}
+
+		let score = this.grade.score;
+		let letterGrade = this.grade.letterGrade;
+		if (this.grade.scoreType === GradeType.Letter && this.grade.entity.properties.letterGradeSchemeRanges) {
+
+			const percentage = (e.detail.score / e.detail.outOf) * 100;
+			const map = this.grade.entity.properties.letterGradeSchemeRanges;
+			for (const [key, value] of Object.entries(map)) {
+				if (percentage >= value) {
+					letterGrade = key;
+					break;
+				}
+			}
+		} else {
+			score = (e.detail.score / e.detail.outOf) * this.grade.outOf;
+		}
+
+		this.grade = new Grade(
+			this.grade.scoreType,
+			score,
+			this.grade.outOf,
+			letterGrade,
+			this.grade.letterGradeOptions,
+			this.grade.entity
+		);
+
+		this.dispatchEvent(new CustomEvent('on-d2l-consistent-eval-grade-changed', {
+			composed: true,
+			bubbles: true,
+			detail: {
+				grade: this.grade
+			}
+		}));
 	}
 }
 
