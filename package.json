@@ -51,6 +51,7 @@
     "d2l-activity-alignments": "github:Brightspace/d2l-activity-alignments#semver:^2",
     "d2l-html-editor": "github:Brightspace/d2l-html-editor#semver:^2",
     "d2l-hypermedia-constants": "^6.36.0",
+    "d2l-outcomes-level-of-achievements": "github:Brightspace/outcomes-level-of-achievement-ui#semver:3",
     "d2l-outcomes-overall-achievement": "github:Brightspace/d2l-outcomes-overall-achievement",
     "d2l-rubric": "github:Brightspace/d2l-rubric#semver:^3",
     "d2l-tooltip": "github:BrightspaceUI/tooltip#semver:^3",
