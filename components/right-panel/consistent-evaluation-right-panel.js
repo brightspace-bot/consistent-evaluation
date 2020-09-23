@@ -86,24 +86,16 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
 		this.rubricFirstLoad = true;
+		this._syncRubricGrade = this._syncRubricGrade.bind(this);
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('d2l-rubric-total-score-changed',
-			e => {
-				this._syncRubricGrade(e);
-			}
-		);
+		window.addEventListener('d2l-rubric-total-score-changed', this._syncRubricGrade);
 	}
 
 	disconnectedCallback() {
-		window.removeEventListener('d2l-rubric-total-score-changed',
-			e => {
-				this._syncRubricGrade(e);
-			}
-		);
-
+		window.removeEventListener('d2l-rubric-total-score-changed',this._syncRubricGrade);
 		super.disconnectedCallback();
 	}
 
