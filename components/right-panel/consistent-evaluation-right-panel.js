@@ -95,7 +95,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	}
 
 	disconnectedCallback() {
-		window.removeEventListener('d2l-rubric-total-score-changed',this._syncRubricGrade);
+		window.removeEventListener('d2l-rubric-total-score-changed', this._syncRubricGrade);
 		super.disconnectedCallback();
 	}
 
