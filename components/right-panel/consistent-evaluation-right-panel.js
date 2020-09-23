@@ -86,7 +86,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
 		this.rubricFirstLoad = true;
-		this._syncRubricGrade = this._syncRubricGrade.bind(this);
 	}
 
 	_renderRubric() {
