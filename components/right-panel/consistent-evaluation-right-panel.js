@@ -89,16 +89,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this._syncRubricGrade = this._syncRubricGrade.bind(this);
 	}
 
-	connectedCallback() {
-		super.connectedCallback();
-		window.addEventListener('d2l-rubric-total-score-changed', this._syncRubricGrade);
-	}
-
-	disconnectedCallback() {
-		window.removeEventListener('d2l-rubric-total-score-changed', this._syncRubricGrade);
-		super.disconnectedCallback();
-	}
-
 	_renderRubric() {
 		if (!this.hideRubric) {
 			return html`
@@ -108,6 +98,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					assessment-href=${ifDefined(this.rubricAssessmentHref)}
 					.token=${this.token}
 					?read-only=${this.rubricReadOnly}
+					@d2l-rubric-total-score-changed=${this._syncRubricGrade}
 				></d2l-consistent-evaluation-rubric>
 			`;
 		}
