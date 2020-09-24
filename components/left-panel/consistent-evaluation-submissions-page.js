@@ -18,12 +18,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 			},
 			token: {
 				type: String
-			},
-			_comment: {
-				type: String
-			},
-			_attachments: {
-				type: Object
 			}
 		};
 	}
@@ -100,16 +94,19 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return await window.D2L.Siren.EntityStore.fetch(submissionHref, this._token, false);
 	}
 
-	_initializeSubmissionProperties(submissionEntity) {
-		this._comment = '';
-		this._attachments = [];
+	_getComment(submissionEntity) {
+		if (submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment)) {
+			return submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment).properties.html;
+		}
+		return '';
+	}
+
+	_getAttachments(submissionEntity) {
 		const attachmentsListEntity = submissionEntity.getSubEntityByClass(Classes.assignments.attachmentList);
 		if (attachmentsListEntity) {
-			this._attachments = attachmentsListEntity.getSubEntitiesByClass(Classes.assignments.attachment);
+			return attachmentsListEntity.getSubEntitiesByClass(Classes.assignments.attachment);
 		}
-		if (submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment)) {
-			this._comment = submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment).properties.html;
-		}
+		return [];
 	}
 
 	_renderListItems() {
@@ -121,7 +118,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 					const submissionDate = submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
 					const evaluationState = submissionEntity.properties.evaluationStatus;
 					const latenessTimespan = submissionEntity.properties.lateTimeSpan;
-					this._initializeSubmissionProperties(submissionEntity);
 					itemTemplate.push(html`
 						<d2l-consistent-evaluation-submission-item
 							date-str=${submissionDate}
@@ -129,8 +125,8 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							evaluation-state=${evaluationState}
 							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()}
 							submission-type=${this.submissionType}
-							comment=${this._comment}
-							.attachments=${this._attachments}
+							comment=${this._getComment(submissionEntity)}
+							.attachments=${this._getAttachments(submissionEntity)}
 							?late=${latenessTimespan !== undefined}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {

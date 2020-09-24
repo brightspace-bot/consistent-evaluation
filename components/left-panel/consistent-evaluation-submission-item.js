@@ -139,7 +139,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	constructor() {
 		super();
 		this.late = false;
-		this._date = undefined;
+		this.comment = '';
+		this.attachments = [];
 		this._updateFilenameTooltips = this._updateFilenameTooltips.bind(this);
 	}
 
@@ -232,13 +233,13 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_formatDateTime() {
-		this._date = this.dateStr ? new Date(this.dateStr) : undefined;
+		this.dateStr = this.dateStr ? new Date(this.dateStr) : undefined;
 
-		const formattedDate = (this._date) ? formatDate(
-			this._date,
+		const formattedDate = (this.dateStr) ? formatDate(
+			this.dateStr,
 			{format: 'full'}) : '';
-		const formattedTime = (this._date) ? formatTime(
-			this._date,
+		const formattedTime = (this.dateStr) ? formatTime(
+			this.dateStr,
 			{format: 'short'}) : '';
 		return `${formattedDate} ${formattedTime}`;
 	}
