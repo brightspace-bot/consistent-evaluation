@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { actorRel, alignmentsRel, assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userRel} from './constants.js';
+import { actorRel, alignmentsRel, assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userProgressOutcomeActivitiesRel, userProgressOutcomeRel, userRel} from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
@@ -57,6 +57,8 @@ export class ConsistentEvaluationHrefController {
 		let alignmentsHref = undefined;
 		let userHref = undefined;
 		let actorHref = undefined;
+		let userProgressOutcomeHref = undefined;
+		let coaDemonstrationHref = undefined;
 
 		if (root && root.entity) {
 			root = root.entity;
@@ -68,6 +70,7 @@ export class ConsistentEvaluationHrefController {
 			actorHref = this._getHref(root, actorRel);
 			userHref = this._getHref(root, userRel);
 			alignmentsHref = this._getHref(root, alignmentsRel);
+			userProgressOutcomeHref = this._getHref(root, userProgressOutcomeRel);
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
@@ -86,6 +89,28 @@ export class ConsistentEvaluationHrefController {
 					}
 				}
 			}
+
+			// TODO: Clean up
+			if (userProgressOutcomeHref) {
+				const userProgressOutcomeEntity = await this._getEntityFromHref(userProgressOutcomeHref, bypassCache);
+				if (userProgressOutcomeEntity && userProgressOutcomeEntity.entity) {
+					const userProgressOutcomeActivitiesHref = this._getHref(userProgressOutcomeEntity, userProgressOutcomeActivitiesRel);
+					if (userProgressOutcomeActivitiesHref) {
+						const userProgressOutcomeActivitiesEntity = await this._getEntityFromHref(userProgressOutcomeActivitiesHref, bypassCache);
+						if (userProgressOutcomeActivitiesEntity && userProgressOutcomeActivitiesEntity.entity) {
+							const checkpointActivityEntity = userProgressOutcomeActivitiesEntity.entity.getSubEntitiesByClass(Classes.userProgress.outcomes.activity).find((activityEntity) => {
+								return activityEntity.properties && activityEntity.properties.type === 'checkpoint-item';
+							});
+							if (checkpointActivityEntity) {
+								const demonstrationEntity = checkpointActivityEntity.getSubEntityByClass(Classes.outcomes.demonstration);
+								if (demonstrationEntity) {
+									coaDemonstrationHref = demonstrationEntity.getLinkByRel('self');
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		return {
@@ -96,7 +121,9 @@ export class ConsistentEvaluationHrefController {
 			previousHref,
 			rubricAssessmentHref,
 			rubricHref,
-			userHref
+			userHref,
+			userProgressOutcomeHref,
+			coaDemonstrationHref
 		};
 	}
 

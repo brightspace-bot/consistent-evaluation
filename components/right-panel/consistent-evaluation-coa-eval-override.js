@@ -1,5 +1,5 @@
 import './consistent-evaluation-right-panel-block';
-import 'd2l-outcomes-level-of-achievements/d2l-outcomes-coa-eval-override.js'
+import 'd2l-outcomes-level-of-achievements/d2l-outcomes-coa-eval-override.js';
 import { html, LitElement } from 'lit-element';
 
 class ConsistentEvaluationOutcomes extends LitElement {
