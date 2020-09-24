@@ -18,6 +18,12 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 			},
 			token: {
 				type: String
+			},
+			_comment: {
+				type: String
+			},
+			_attachments: {
+				type: Object
 			}
 		};
 	}
@@ -94,6 +100,18 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return await window.D2L.Siren.EntityStore.fetch(submissionHref, this._token, false);
 	}
 
+	_initializeSubmissionProperties(submissionEntity) {
+		this._comment = '';
+		this._attachments = [];
+		const attachmentsListEntity = submissionEntity.getSubEntityByClass(Classes.assignments.attachmentList);
+		if (attachmentsListEntity) {
+			this._attachments = attachmentsListEntity.getSubEntitiesByClass(Classes.assignments.attachment);
+		}
+		if (submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment)) {
+			this._comment = submissionEntity.getSubEntityByClass(Classes.assignments.submissionComment).properties.html;
+		}
+	}
+
 	_renderListItems() {
 		const itemTemplate = [];
 		for (let i = 0; i < this._submissionEntities.length; i++) {
@@ -103,6 +121,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 					const submissionDate = submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
 					const evaluationState = submissionEntity.properties.evaluationStatus;
 					const latenessTimespan = submissionEntity.properties.lateTimeSpan;
+					this._initializeSubmissionProperties(submissionEntity);
 					itemTemplate.push(html`
 						<d2l-consistent-evaluation-submission-item
 							date-str=${submissionDate}
@@ -110,7 +129,8 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							evaluation-state=${evaluationState}
 							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()}
 							submission-type=${this.submissionType}
-							.submissionEntity=${submissionEntity}
+							comment=${this._comment}
+							.attachments=${this._attachments}
 							?late=${latenessTimespan !== undefined}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
