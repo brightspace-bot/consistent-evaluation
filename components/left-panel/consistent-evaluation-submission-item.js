@@ -42,7 +42,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				type: String
 			},
 			attachments: {
-				type: Object
+				type: Array
 			},
 			comment: {
 				type: String
@@ -233,13 +233,13 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_formatDateTime() {
-		this.dateStr = this.dateStr ? new Date(this.dateStr) : undefined;
+		const date = this.dateStr ? new Date(this.dateStr) : undefined;
 
-		const formattedDate = (this.dateStr) ? formatDate(
-			this.dateStr,
+		const formattedDate = (date) ? formatDate(
+			date,
 			{format: 'full'}) : '';
-		const formattedTime = (this.dateStr) ? formatTime(
-			this.dateStr,
+		const formattedTime = (date) ? formatTime(
+			date,
 			{format: 'short'}) : '';
 		return `${formattedDate} ${formattedTime}`;
 	}
