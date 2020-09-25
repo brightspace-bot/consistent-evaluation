@@ -71,8 +71,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					display: none;
 				}
 				.d2l-iterator-space {
-					padding-left: 0.5rem;
-					padding-right: 0.5rem;
+					min-width: 1rem;
 				}
 				.d2l-short-back {
 					display: inline-block;
@@ -145,8 +144,9 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					?next-disabled=${(this.iteratorIndex === this.iteratorTotal || this.iteratorIndex === undefined || this.iteratorIndex === undefined)}
 					hide-text>
 
-					<div class="d2l-iterator-space"> </div>
-					<span class="d2l-iterator-text d2l-label-text">${this.localize('user')} ${this.iteratorIndex} ${this.localize('of')} ${this.iteratorTotal}</span>
+					<div class="d2l-iterator-space"> 
+						<span class="d2l-iterator-text d2l-label-text">${this.localize('user')} ${this.iteratorIndex} ${this.localize('of')} ${this.iteratorTotal}</span>
+					</div>
 
 				</d2l-navigation-iterator>
 
