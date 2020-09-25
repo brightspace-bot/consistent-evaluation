@@ -145,11 +145,11 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					hide-text>
 
 					<div class="d2l-iterator-space"> 
-						<span class="d2l-iterator-text d2l-label-text">${this.localize('user')} ${this.iteratorIndex} ${this.localize('of')} ${this.iteratorTotal}</span>
+						<span class="d2l-iterator-text d2l-label-text">${this.localize('iteratorText', { num: this.iteratorIndex, total: this.iteratorTotal }) }</span>
 					</div>
 
 				</d2l-navigation-iterator>
-
+				
 			</d2l-navigation-immersive>
 		`;
 	}
