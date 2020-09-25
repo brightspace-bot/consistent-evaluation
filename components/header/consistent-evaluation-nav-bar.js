@@ -118,8 +118,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 				<d2l-navigation-link-back 
 					class="d2l-short-back"
-					href=${this.returnHref}
-					text="Back">
+					href=${this.returnHref}>
 				</d2l-navigation-link-back>
 			`;
 		}
