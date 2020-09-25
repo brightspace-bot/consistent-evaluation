@@ -42,7 +42,10 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 	static get styles() {
 		return [labelStyles, css`
-			.d2l-student-iterator {
+			.d2l-short-back {
+				display: none;
+			}
+			.d2l-iterator-text {
 				padding-left: 4rem;
 				padding-right: 4rem;
 			}
@@ -58,6 +61,30 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
+
+			@media (max-width: 929px) {
+				.d2l-iterator-text {
+					padding-left: 1rem;
+					padding-right: 1rem;
+				}
+			}
+
+			@media (max-width: 556px) {
+				.d2l-iterator-text {
+					display: none;
+				}
+				.d2l-iterator-space {
+					padding-left: 0.5rem;
+					padding-right: 0.5rem;
+				}
+				.d2l-short-back {
+					display: inline-block;
+				}
+				.d2l-full-back {
+					display: none;
+				}
+			}
+
 		`];
 	}
 
@@ -84,8 +111,15 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 			return html`
 				<d2l-navigation-link-back 
+					class="d2l-full-back"
 					href=${this.returnHref}
 					text=${ifDefined(this.returnHrefText)} >
+				</d2l-navigation-link-back>
+
+				<d2l-navigation-link-back 
+					class="d2l-short-back"
+					href=${this.returnHref}
+					text="Back">
 				</d2l-navigation-link-back>
 			`;
 		}
@@ -102,11 +136,9 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 				<div slot="middle">
 					<div id="assignmentName" class="d2l-heading-3 d2l-truncate">${this.assignmentName}</div>
-					<d2l-tooltip for="assignmentName">${this.assignmentName}</d2l-tooltip>
-
-					<div id="className" class="d2l-label-text d2l-truncate">{this.organizationName}</div>
-					<d2l-tooltip for="className">{this.organizationName}</d2l-tooltip>
-
+					<div id="className" class="d2l-label-text d2l-truncate">${this.organizationName}</div>
+					<d2l-tooltip for="assignmentName"> ${this.assignmentName}</d2l-tooltip>
+					<d2l-tooltip for="className">${this.organizationName}</d2l-tooltip>
 				</div>
 
 				<d2l-navigation-iterator 
@@ -116,7 +148,10 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					?previous-disabled=${(this.iteratorIndex === 1 || this.iteratorIndex === undefined)}
 					?next-disabled=${(this.iteratorIndex === this.iteratorTotal || this.iteratorIndex === undefined || this.iteratorIndex === undefined)}
 					hide-text>
-					<span class="d2l-student-iterator d2l-label-text">${this.localize('user')} ${this.iteratorIndex} ${this.localize('of')} ${this.iteratorTotal}</span>
+
+					<div class="d2l-iterator-space"> </div>
+					<span class="d2l-iterator-text d2l-label-text">${this.localize('user')} ${this.iteratorIndex} ${this.localize('of')} ${this.iteratorTotal}</span>
+
 				</d2l-navigation-iterator>
 
 			</d2l-navigation-immersive>
