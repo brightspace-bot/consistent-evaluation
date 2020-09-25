@@ -53,9 +53,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				padding-top: 0.25rem;
 			}
 			.d2l-truncate {
-				-webkit-box-orient: vertical;
-				display: -webkit-box;
-				-webkit-line-clamp: 1;
 				overflow: hidden;
 				overflow-wrap: break-word;
 				text-overflow: ellipsis;
