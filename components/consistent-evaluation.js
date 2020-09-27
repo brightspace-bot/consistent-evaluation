@@ -15,7 +15,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
 			_submissionInfo: { type: Object },
-			_gradeItemInfo: { type: Object }
+			_gradeItemInfo: { type: Object },
+			_submissionFiles: {type: Object}
 		};
 	}
 

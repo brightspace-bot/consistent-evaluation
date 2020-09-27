@@ -117,6 +117,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
+		this._setSubmissionsView = this._setSubmissionsView.bind(this);
 	}
 
 	get evaluationEntity() {
@@ -185,6 +186,15 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			return this.evaluationEntity.getSubEntityByRel('grade');
 		}
 		return undefined;
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		window.addEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
+	}
+
+	disconnectedCallback() {
+		window.removeEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
 	}
 
 	async _initializeController() {
@@ -305,18 +315,18 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
 
+	async _setSubmissionsView() {
+		this.shadowRoot.querySelector('d2l-consistent-evaluation-left-panel').showSubmissionList();
+	}
+
 	render() {
 		return html`
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
 				<div slot="header">
 					<d2l-consistent-evaluation-learner-context-bar
-<<<<<<< HEAD
-						.userInfo=${this.userInfo}
-						.submissionInfo=${this.submissionInfo}
-=======
 						href=${ifDefined(this.userHref)}
 						.token=${this.token}
->>>>>>> master
+						.submissionInfo=${this.submissionInfo}
 					></d2l-consistent-evaluation-learner-context-bar>
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">

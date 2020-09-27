@@ -35,7 +35,7 @@ export class ConsistentEvaluationLcbUserContext extends RtlMixin(LitElement) {
 		return [bodyCompactStyles, css`
 			:host {
 				align-items: center;
-				display: flex;
+				display: inline-block;
 			}
 			.d2l-consistent-evaluation-lcb-user-name {
 				margin-left: 0.5rem;

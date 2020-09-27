@@ -100,8 +100,8 @@ export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(RtlMi
 				colour-id="${this._colourId}"
 				display-name="${ifDefined(this._displayName)}"
 			></d2l-consistent-evaluation-lcb-user-context>
-			<d2l-consistent-evaluation-lcb-file-context>
-			.submissionInfo="${this.submissionInfo}"
+			<d2l-consistent-evaluation-lcb-file-context
+			.submissionInfo="${this.submissionInfo}">
 			</d2l-consistent-evaluation-lcb-file-context>
 
 		`;

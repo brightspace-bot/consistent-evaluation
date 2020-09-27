@@ -104,7 +104,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		this.dispatchEvent(event);
 	}
 
-	_showSubmissionList() {
+	showSubmissionList() {
 		this._fileEvidenceUrl = undefined;
 		this._textEvidence = undefined;
 
@@ -119,7 +119,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		<d2l-consistent-evaluation-evidence-file
 			.url=${this._fileEvidenceUrl}
 			.token=${this.token}
-			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
+			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this.showSubmissionList}
 		></d2l-consistent-evaluation-evidence-file>`;
 	}
 
