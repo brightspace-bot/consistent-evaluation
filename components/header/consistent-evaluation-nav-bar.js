@@ -3,6 +3,8 @@ import 'd2l-navigation/d2l-navigation-immersive.js';
 import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-iterator.js';
 import 'd2l-navigation/d2l-navigation-link-back.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
+import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
+import '@brightspace-ui/core/components/button/button.js'
 
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -37,6 +39,18 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				attribute: 'return-href-text',
 				type: String
 			},
+			confirmUnsavedChanges: {
+				attribute: 'confirm-unsaved-changes',
+				type: Boolean
+			},
+			hasUnsavedChanges: {
+				attribute: 'has-unsaved-changes',
+				type: Boolean
+			},
+			_dialogOpened: {
+				attribute: false,
+				type: Boolean
+			}
 		};
 	}
 
@@ -88,6 +102,11 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 		return await loadLocalizationResources(langs);
 	}
 
+	constructor() {
+		super();
+		this._dialogOpened = false;
+	}
+
 	_dispatchButtonClickEvent(eventName) {
 		this.dispatchEvent(new CustomEvent(eventName, {
 			composed: true,
@@ -97,6 +116,20 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-previous-student');}
 	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
+
+	_showDialog(e) {
+		if (this.confirmUnsavedChanges && this.hasUnsavedChanges) {
+			this._dialogOpened = true;
+			e.preventDefault();
+		}
+	}
+
+	_onDialogClose(e) {
+		this._dialogOpened = false;
+		if (e.detail.action === 'leave') {
+			window.location = this.returnHref;
+		}
+	}
 
 	_renderBackButton() {
 		if (this.returnHref === undefined) {
@@ -109,7 +142,8 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				<d2l-navigation-link-back 
 					class="d2l-full-back"
 					href=${this.returnHref}
-					text=${ifDefined(this.returnHrefText)} >
+					text="${ifDefined(this.returnHrefText)}"
+					@click=${this._showDialog} >
 				</d2l-navigation-link-back>
 
 				<d2l-navigation-link-back 
@@ -151,6 +185,15 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				</d2l-navigation-iterator>
 				
 			</d2l-navigation-immersive>
+			<d2l-dialog-confirm	
+				title-text=${this.localize('unsavedChangesTitle')}
+				text=${this.localize('unsavedChangesBody')}
+				?opened=${this._dialogOpened}
+				@d2l-dialog-close=${this._onDialogClose}
+			>
+				<d2l-button slot="footer" primary data-dialog-action="leave">${this.localize('leaveBtn')}</d2l-button>
+				<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
+			</d2l-dialog-confirm>
 		`;
 	}
 }
