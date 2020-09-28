@@ -47,6 +47,5 @@ export const val = {
 	retracted:   'Evaluation retracted',
 	saved:  'Evaluation saved as draft',
 	updated:  'Evaluation updated',
-	user: 'User',
-	of: 'of'
+	iteratorText: 'User {num} of {total}',
 };
