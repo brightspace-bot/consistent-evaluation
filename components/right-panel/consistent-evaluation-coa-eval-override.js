@@ -2,7 +2,7 @@ import './consistent-evaluation-right-panel-block';
 import 'd2l-outcomes-level-of-achievements/d2l-outcomes-coa-eval-override.js';
 import { html, LitElement } from 'lit-element';
 
-class ConsistentEvaluationOutcomes extends LitElement {
+class ConsistentEvaluationCoaEvalOverride extends LitElement {
 	static get properties() {
 		return {
 			href: {
@@ -26,4 +26,4 @@ class ConsistentEvaluationOutcomes extends LitElement {
 	}
 }
 
-customElements.define('d2l-consistent-evaluation-coa-eval-override', ConsistentEvaluationOutcomes);
+customElements.define('d2l-consistent-evaluation-coa-eval-override', ConsistentEvaluationCoaEvalOverride);

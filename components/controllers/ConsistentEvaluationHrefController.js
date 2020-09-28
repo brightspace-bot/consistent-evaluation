@@ -94,16 +94,19 @@ export class ConsistentEvaluationHrefController {
 				const userProgressOutcomeEntity = await this._getEntityFromHref(userProgressOutcomeHref, bypassCache);
 				if (userProgressOutcomeEntity && userProgressOutcomeEntity.entity) {
 					const userProgressOutcomeActivitiesHref = this._getHref(userProgressOutcomeEntity.entity, userProgressOutcomeActivitiesRel);
+
 					if (userProgressOutcomeActivitiesHref) {
 						const userProgressOutcomeActivitiesEntity = await this._getEntityFromHref(userProgressOutcomeActivitiesHref, bypassCache);
+
 						if (userProgressOutcomeActivitiesEntity && userProgressOutcomeActivitiesEntity.entity) {
 							const checkpointActivityEntity = userProgressOutcomeActivitiesEntity.entity.getSubEntitiesByClass(Classes.userProgress.outcomes.activity).find((activityEntity) => {
 								return activityEntity.properties && activityEntity.properties.type === checkpointItemType;
 							});
+
 							if (checkpointActivityEntity) {
 								const demonstrationEntity = checkpointActivityEntity.getSubEntityByClass(Classes.outcomes.demonstration);
 								if (demonstrationEntity) {
-									coaDemonstrationHref = demonstrationEntity.href;
+									coaDemonstrationHref = this._getHref(demonstrationEntity, 'self');
 								}
 							}
 						}
