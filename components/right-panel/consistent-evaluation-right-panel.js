@@ -32,7 +32,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				type: Boolean
 			},
 			hideCoaOverride: {
-				attribute: 'hide-coa-override',
+				attribute: 'hide-coa-eval-override',
 				type: Boolean
 			},
 			hideFeedback: {
@@ -68,7 +68,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				type: String
 			},
 			coaOverrideHref: {
-				attribute: 'coa-override-href',
+				attribute: 'coa-eval-override-href',
 				type: String
 			},
 			rubricReadOnly: {
