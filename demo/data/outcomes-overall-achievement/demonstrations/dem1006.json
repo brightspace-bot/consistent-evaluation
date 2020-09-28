@@ -21,6 +21,26 @@
 			"properties": {
 				"levelId": "level10"
 			},
+			"actions": [
+                {
+                    "type": "application/json",
+                    "href": "#",
+                    "name": "select",
+                    "method": "POST",
+                    "fields": [
+                        {
+                            "type": "hidden",
+                            "name": "levelId",
+                            "value": "0"
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "select",
+                            "value": true
+                        }
+                    ]
+                }
+            ],
 			"links": [
 				{
 					"rel": [
@@ -40,6 +60,26 @@
 			"properties": {
 				"levelId": "level11"
 			},
+			"actions": [
+                {
+                    "type": "application/json",
+                    "href": "#",
+                    "name": "select",
+                    "method": "POST",
+                    "fields": [
+                        {
+                            "type": "hidden",
+                            "name": "levelId",
+                            "value": "1"
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "select",
+                            "value": true
+                        }
+                    ]
+                }
+            ],
 			"links": [
 				{
 					"rel": [
@@ -60,6 +100,26 @@
 			"properties": {
 				"levelId": "level12"
 			},
+			"actions": [
+                {
+                    "type": "application/json",
+                    "href": "#",
+                    "name": "select",
+                    "method": "POST",
+                    "fields": [
+                        {
+                            "type": "hidden",
+                            "name": "levelId",
+                            "value": "2"
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "select",
+                            "value": true
+                        }
+                    ]
+                }
+            ],
 			"links": [
 				{
 					"rel": [
@@ -79,6 +139,26 @@
 			"properties": {
 				"levelId": "level13"
 			},
+			"actions": [
+                {
+                    "type": "application/json",
+                    "href": "#",
+                    "name": "select",
+                    "method": "POST",
+                    "fields": [
+                        {
+                            "type": "hidden",
+                            "name": "levelId",
+                            "value": "3"
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "select",
+                            "value": true
+                        }
+                    ]
+                }
+            ],
 			"links": [
 				{
 					"rel": [
@@ -98,6 +178,26 @@
 			"properties": {
 				"levelId": "level14"
 			},
+			"actions": [
+                {
+                    "type": "application/json",
+                    "href": "#",
+                    "name": "select",
+                    "method": "POST",
+                    "fields": [
+                        {
+                            "type": "hidden",
+                            "name": "levelId",
+                            "value": "4"
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "select",
+                            "value": true
+                        }
+                    ]
+                }
+            ],
 			"links": [
 				{
 					"rel": [
