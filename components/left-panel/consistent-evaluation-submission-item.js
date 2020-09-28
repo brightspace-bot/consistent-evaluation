@@ -143,6 +143,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this._attachments = [];
 		this._comment = '';
 		this._updateFilenameTooltips = this._updateFilenameTooltips.bind(this);
+		this._dispatchRenderEvidence = this._dispatchRenderEvidence.bind(this);
+		this._handleRenderEvidence = this._handleRenderEvidence.bind(this);
 	}
 
 	get submissionEntity() {
@@ -161,11 +163,13 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	connectedCallback() {
 		super.connectedCallback();
 		window.addEventListener('load', this._updateFilenameTooltips);
+		window.addEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
 		this._resizeObserver = new ResizeObserver(this._updateFilenameTooltips);
 	}
 
 	disconnectedCallback() {
 		window.removeEventListener('load', this._updateFilenameTooltips);
+		window.removeEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
 		const filenames = this.shadowRoot.querySelectorAll('.d2l-truncate');
 		for (const filename of filenames) {
 			this._resizeObserver.unobserve(filename);
@@ -221,6 +225,10 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		} while (fileSizeBytes > 1024);
 		const unit = this.localize(byteUnits[i]);
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
+	}
+
+	_handleRenderEvidence(e) {
+		this._dispatchRenderEvidence(e.detail.extension, e.detail.fileViewer);
 	}
 
 	_dispatchRenderEvidence(extension, fileViewer) {

@@ -57,11 +57,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	getSubmissionFiles(submission) {
 		const attachments = submission.submissionFile.getSubEntityByRel('https://assignments.api.brightspace.com/rels/attachment-list');
 		return attachments.entities.map(sf => {
-			return {
-				href: sf.properties.href,
-				name: sf.properties.name,
-				fileViewer: sf.properties.fileViewer
-			};
+			return sf.properties;
 		});
 	}
 
@@ -74,16 +70,12 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			window.dispatchEvent(event);
 			return;
 		}
-		const eventDetails = {
-			name: e.target.getAttribute('data-name'),
-			type: 'String',
-			value: e.target.value
-		};
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-selected', {
-			detail: eventDetails,
+		const eventDetail = JSON.parse(e.target.value);
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence', {
+			detail: eventDetail,
 			composed: true
 		});
-		this.dispatchEvent(event);
+		window.dispatchEvent(event);
 	}
 
 	render() {
@@ -96,7 +88,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
                     ${this._files && this._files.map(submission => html`
 						<optgroup label=${`Submission ${submission.submissionNumber}`}>
 							${this.getSubmissionFiles(submission).map(sf => html`
-								<option value=${sf.href} label=${sf.name}></option>
+								<option value=${JSON.stringify(sf)} label=${sf.name}></option>
 							`)}
 						</optgroup>
                     `)};
