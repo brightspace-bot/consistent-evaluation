@@ -110,6 +110,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			},
 			_scrollbarStatus: {
 				attribute: false
+			},
+			_hasUnsavedChanges: {
+				attribute: false
 			}
 		};
 	}
@@ -142,6 +145,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
+		this._hasUnsavedChanges = false;
 	}
 
 	get evaluationEntity() {
