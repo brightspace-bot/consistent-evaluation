@@ -162,13 +162,11 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	connectedCallback() {
 		super.connectedCallback();
 		window.addEventListener('load', this._updateFilenameTooltips);
-		//window.addEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
 		this._resizeObserver = new ResizeObserver(this._updateFilenameTooltips);
 	}
 
 	disconnectedCallback() {
 		window.removeEventListener('load', this._updateFilenameTooltips);
-		//window.removeEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
 		const filenames = this.shadowRoot.querySelectorAll('.d2l-truncate');
 		for (const filename of filenames) {
 			this._resizeObserver.unobserve(filename);
@@ -227,12 +225,14 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_dispatchRenderEvidence(extension, fileViewer, name) {
-		if (extension === 'txt') {
+		this._dispatchRenderEvidenceFileEvent(fileViewer, name);
+
+/* 		if (extension === 'txt') {
 			this._dispatchRenderEvidenceTextEvent(name);
 		}
 		else if (fileViewer) {
 			this._dispatchRenderEvidenceFileEvent(fileViewer, name);
-		}
+		} */
 	}
 
 	_dispatchRenderEvidenceFileEvent(url, name) {

@@ -13,6 +13,7 @@ import { ConsistentEvaluationController } from './controllers/ConsistentEvaluati
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from './locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { submissions } from './controllers/constants';
 
 export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
 
@@ -200,15 +201,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		return undefined;
 	}
 
-	connectedCallback() {
-		super.connectedCallback();
-		//window.addEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
-	}
-
-	disconnectedCallback() {
-		//window.removeEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
-	}
-
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
@@ -330,7 +322,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	_setSubmissionsView() {
 		this._fileEvidenceUrl = undefined;
 		this._textEvidence = undefined;
-		this._selectedFile = 'a';
+		this._selectedFile = submissions;
 		this._showScrollbars();
 	}
 	_setFileEvidence(e) {

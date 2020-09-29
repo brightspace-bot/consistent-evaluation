@@ -1,11 +1,11 @@
 import '../../../d2l-polymer-siren-behaviors/store/entity-store.js';
 import { css, html, LitElement } from '../../../lit-element/lit-element.js';
-import { formatDate, formatTime } from '../../../@brightspace-ui/intl/lib/dateTime.js';
 import { Classes } from 'd2l-hypermedia-constants';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '../../../@brightspace-ui/core/mixins/localize-mixin.js';
 import { RtlMixin } from '../../../@brightspace-ui/core/mixins/rtl-mixin.js';
 import { selectStyles } from '../../../@brightspace-ui/core/components/inputs/input-select-styles.js';
+import { submissions } from '../controllers/constants';
 
 export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(LitElement)) {
 
@@ -31,9 +31,21 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			css`
 				:host {
 					display: inline-block;
+					margin-left: 0.7rem;
 				}
-				:host([overflow]) select {
-					max-width: 130px;
+				.d2l-input-select {
+					max-width: 15rem;
+				}
+				:host([dir="rtl"]) {
+					margin-left: 0;
+					margin-right: 0.7rem;
+				}
+				.select-option {
+					max-width: 20rem;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow:ellipsis;
+					display: flex;
 				}
 			`
 		];
@@ -50,17 +62,17 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		}
 
 	}
+
 	async getSubmissions() {
 		if (this.submissionInfo) {
-			const files = await this.submissionInfo.submissionList.map(async sub => {
-				return await window.D2L.Siren.EntityStore.fetch(sub.href, this.token, false);
-				return {
-					href: sub.href,
-					submissionFile: file.entity,
-					submissionNumber: sub.href.slice(-1)
-				};
+			let i = 1;
+			const submissionEntities = await this.submissionInfo.submissionList.map(async sub => {
+				const file = await window.D2L.Siren.EntityStore.fetch(sub.href, this.token, false);
+				file.submissionNumber = i;
+				i++;
+				return file;
 			});
-			return Promise.all(files);
+			return Promise.all(submissionEntities);
 		}
 
 	}
@@ -80,26 +92,16 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	_onSelectChange(e) {
-		if (e.target.value === 'User Submissions') {
+		if (e.target.value === submissions) {
 			const event = new Event('d2l-consistent-evaluation-evidence-back-to-user-submissions', {
 				composed: true,
 				bubbles: true
 			});
-			window.dispatchEvent(event);
+			this.dispatchEvent(event);
 			return;
 		}
 		const submissionFile = JSON.parse(e.target.value);
-		this._dispatchRenderEvidence(submissionFile);
-	}
-
-	//this is duplicated from submission item
-	_dispatchRenderEvidence(sf) {
-		if (sf.extension === 'txt') {
-			this._dispatchRenderEvidenceTextEvent(sf);
-		}
-		else if (sf.fileViewer) {
-			this._dispatchRenderEvidenceFileEvent(sf);
-		}
+		this._dispatchRenderEvidenceFileEvent(submissionFile);
 	}
 
 	_dispatchRenderEvidenceFileEvent(sf) {
@@ -114,45 +116,17 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		this.dispatchEvent(event);
 	}
 
-	_dispatchRenderEvidenceTextEvent(sf) {
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
-			detail: {
-				textSubmissionEvidence: {
-					title: `${this.localize('textSubmission')} ${sf.displayNumber}`,
-					name: sf.name,
-					date: this._formatDateTime(sf.date),
-					downloadUrl: sf.href,
-					content: sf.comment
-				}
-			},
-			composed: true,
-			bubbles: true
-		});
-		this.dispatchEvent(event);
-	}
-
-	_formatDateTime(date) {
-		date = new Date(date);
-		const formattedDate = (date) ? formatDate(
-			date,
-			{format: 'full'}) : '';
-		const formattedTime = (date) ? formatTime(
-			date,
-			{format: 'short'}) : '';
-		return `${formattedDate} ${formattedTime}`;
-	}
-
 	render() {
 		return html`
         <select
 		class="d2l-input-select"
 		@change=${this._onSelectChange}
 		>
-		<option label='User Submissions' value='User Submissions' ?selected=${this.selectedItemName === 'a'}></option>
+		<option label='User Submissions' value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
                     ${this._files && this._files.map(submission => html`
 						<optgroup label=${`Submission ${submission.submissionNumber}`}>
 							${this.getSubmissionFiles(submission).map(sf => html`
-								<option value=${JSON.stringify(sf)} label=${sf.name} ?selected=${sf.name === this.selectedItemName}></option>
+								<option value=${JSON.stringify(sf)} label=${sf.name} ?selected=${sf.name === this.selectedItemName} class="select-option"></option>
 							`)}
 						</optgroup>
                     `)};
