@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userRel } from './constants.js';
+import { actorRel, alignmentsRel, assessmentRel, evaluationRel, nextRel, previousRel, rubricRel, userRel} from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
@@ -56,6 +56,7 @@ export class ConsistentEvaluationHrefController {
 		let rubricHref = undefined;
 		let alignmentsHref = undefined;
 		let userHref = undefined;
+		let actorHref = undefined;
 
 		if (root && root.entity) {
 			root = root.entity;
@@ -64,8 +65,9 @@ export class ConsistentEvaluationHrefController {
 			nextHref = this._getHref(root, nextRel);
 			previousHref = this._getHref(root, previousRel);
 			rubricAssessmentHref = this._getHref(root, assessmentRel);
-			alignmentsHref = this._getHref(root, Rels.Alignments.alignments);
+			actorHref = this._getHref(root, actorRel);
 			userHref = this._getHref(root, userRel);
+			alignmentsHref = this._getHref(root, alignmentsRel);
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
@@ -73,9 +75,18 @@ export class ConsistentEvaluationHrefController {
 					rubricHref = this._getHref(assessmentEntity.entity, rubricRel);
 				}
 			}
-		}
 
-		// we still need the outcomes href
+			if (alignmentsHref) {
+				const alignmentsEntity = await this._getEntityFromHref(alignmentsHref, bypassCache);
+				if (alignmentsEntity && alignmentsEntity.entity) {
+					if (alignmentsEntity.entity.entities && alignmentsEntity.entity.entities.length > 0) {
+						alignmentsHref = actorHref;
+					} else {
+						alignmentsHref = undefined;
+					}
+				}
+			}
+		}
 
 		return {
 			root,
@@ -141,6 +152,48 @@ export class ConsistentEvaluationHrefController {
 			statsUrl,
 			gradeItemName
 		};
+	}
+
+	async getAssignmentOrganizationName(domainName) {
+		let domainRel;
+
+		switch (domainName) {
+			case 'assignment':
+				domainRel = Rels.assignment;
+				break;
+			case 'organization':
+				domainRel = Rels.organization;
+				break;
+			default:
+				return undefined;
+		}
+		const root = await this._getRootEntity(false);
+		if (root && root.entity) {
+			if (root.entity.hasLinkByRel(domainRel)) {
+				const domainLink = root.entity.getLinkByRel(domainRel).href;
+				const domainResponse = await this._getEntityFromHref(domainLink, false);
+
+				if (domainResponse && domainResponse.entity) {
+					return domainResponse.entity.properties.name;
+				}
+			}
+		}
+		return undefined;
+	}
+
+	async getIteratorInfo(iteratorProperty) {
+		const root = await this._getRootEntity(false);
+		if (root && root.entity) {
+			switch (iteratorProperty) {
+				case 'total':
+					return root.entity.properties.iteratorTotal;
+				case 'index':
+					return root.entity.properties.iteratorIndex;
+				default:
+					break;
+			}
+		}
+		return undefined;
 	}
 }
 

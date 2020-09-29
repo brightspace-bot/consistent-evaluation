@@ -3,6 +3,7 @@ import './left-panel/consistent-evaluation-left-panel.js';
 import './footer/consistent-evaluation-footer-presentational.js';
 import './right-panel/consistent-evaluation-right-panel.js';
 import './left-panel/consistent-evaluation-submissions-page.js';
+import './header/consistent-evaluation-nav-bar.js';
 import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
@@ -25,6 +26,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			},
 			nextStudentHref: {
 				attribute: 'next-student-href',
+				type: String
+			},
+			returnHref: {
+				attribute: 'return-href',
+				type: String
+			},
+			returnHrefText: {
+				attribute: 'return-href-text',
 				type: String
 			},
 			outcomesHref: {
@@ -62,6 +71,22 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			gradeItemInfo: {
 				attribute: false,
 				type: Object
+			},
+			assignmentName: {
+				attribute: false,
+				type: String
+			},
+			organizationName: {
+				attribute: false,
+				type: String
+			},
+			iteratorTotal: {
+				attribute: false,
+				type: Number
+			},
+			iteratorIndex: {
+				attribute: false,
+				type: Number
 			},
 			token: {
 				type: String
@@ -224,7 +249,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_onNextStudentClick() {
-		this.dispatchEvent(new CustomEvent('d2l-consistent-eval-next-student-click', {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
+			composed: true,
+			bubbles: true
+		}));
+	}
+
+	_onPreviousStudentClick() {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
 			composed: true,
 			bubbles: true
 		}));
@@ -346,6 +378,16 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
 			>
 				<div slot="header">
+					<d2l-consistent-evaluation-nav-bar
+						return-href=${ifDefined(this.returnHref)}
+						return-href-text=${ifDefined(this.returnHrefText)}
+						.assignmentName=${this.assignmentName}
+						.organizationName=${this.organizationName}
+						.iteratorIndex=${this.iteratorIndex}
+						.iteratorTotal=${this.iteratorTotal}
+						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
+						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
+					></d2l-consistent-evaluation-nav-bar>
 					<d2l-consistent-evaluation-learner-context-bar
 						href=${ifDefined(this.userHref)}
 						.token=${this.token}

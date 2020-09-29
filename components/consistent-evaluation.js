@@ -11,12 +11,25 @@ export class ConsistentEvaluation extends MobxLitElement {
 		return {
 			href: { type: String },
 			token: { type: String },
+			returnHref: {
+				attribute: 'return-href',
+				type: String
+			},
+			returnHrefText: {
+				attribute: 'return-href-text',
+				type: String
+			},
 			_rubricReadOnly: { type: Boolean },
 			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
 			_submissionInfo: { type: Object },
 			_gradeItemInfo: { type: Object },
-			_submissionFiles: {type: Object}
+			_submissionFiles: {type: Object},
+			_assignmentName: { type: String },
+			_organizationName: { type: String },
+			_iteratorTotal: { type: Number },
+			_iteratorIndex: { type: Number }
+
 		};
 	}
 
@@ -39,6 +52,8 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this._childHrefs = undefined;
 		this._submissionInfo = undefined;
 		this._gradeItemInfo = undefined;
+		this.returnHref = undefined;
+		this.returnHrefText = undefined;
 	}
 
 	async updated(changedProperties) {
@@ -49,12 +64,19 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._childHrefs = await controller.getHrefs();
 			this._submissionInfo = await controller.getSubmissionInfo();
 			this._gradeItemInfo = await controller.getGradeItemInfo();
+			this._assignmentName = await controller.getAssignmentOrganizationName('assignment');
+			this._organizationName = await controller.getAssignmentOrganizationName('organization');
+			this._iteratorTotal = await controller.getIteratorInfo('total');
+			this._iteratorIndex = await controller.getIteratorInfo('index');
 		}
-
 	}
 
-	onNextStudentClick() {
-		this.href = this._childHrefs.nextHref;
+	_onNextStudentClick() {
+		this.href = this._childHrefs?.nextHref;
+	}
+
+	_onPreviousStudentClick() {
+		this.href = this._childHrefs?.previousHref;
 	}
 
 	render() {
@@ -62,16 +84,23 @@ export class ConsistentEvaluation extends MobxLitElement {
 			<d2l-consistent-evaluation-page
 				rubric-href=${ifDefined(this._childHrefs && this._childHrefs.rubricHref)}
 				rubric-assessment-href=${ifDefined(this._childHrefs && this._childHrefs.rubricAssessmentHref)}
-				outcomes-href=${ifDefined((this._childHrefs && this._childHrefs.alignmentsHref) ? this.href : undefined)}
+				outcomes-href=${ifDefined(this._childHrefs && this._childHrefs.alignmentsHref)}
 				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
+				return-href=${ifDefined(this.returnHref)}
+				return-href-text=${ifDefined(this.returnHrefText)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
+				.assignmentName=${this._assignmentName}
+				.organizationName=${this._organizationName}
+				.iteratorTotal=${this._iteratorTotal}
+				.iteratorIndex=${this._iteratorIndex}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
-				@d2l-consistent-eval-next-student-click=${this.onNextStudentClick}
+				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
+				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
 			></d2l-consistent-evaluation-page>
 		`;
 	}

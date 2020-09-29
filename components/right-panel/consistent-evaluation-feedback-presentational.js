@@ -31,6 +31,9 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 			},
 			token: {
 				type: String
+			},
+			_key: {
+				type: String
 			}
 		};
 	}
@@ -95,6 +98,14 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		await this.shadowRoot.querySelector('d2l-activity-attachments-editor').save();
 	}
 
+	updated(changedProperties) {
+		super.updated(changedProperties);
+
+		if (changedProperties.has('feedbackText')) {
+			this._key = this.href;
+		}
+	}
+
 	render() {
 		if (this.href && this.token) {
 
@@ -102,6 +113,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 			<div class="d2l-evaluation-feedback-container">
 				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 					<d2l-activity-text-editor
+						.key="${this._key}"
 						.value="${this.feedbackText}"
 						.richtextEditorConfig="${this.richTextEditorConfig}"
 						@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
