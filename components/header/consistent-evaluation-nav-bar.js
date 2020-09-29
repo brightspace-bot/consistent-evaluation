@@ -12,6 +12,8 @@ import { labelStyles } from '@brightspace-ui/core/components/typography/styles.j
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
+const DIALOG_ACTION_LEAVE = 'leave';
+
 class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
@@ -38,10 +40,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			returnHrefText: {
 				attribute: 'return-href-text',
 				type: String
-			},
-			confirmUnsavedChanges: {
-				attribute: 'confirm-unsaved-changes',
-				type: Boolean
 			},
 			hasUnsavedChanges: {
 				attribute: 'has-unsaved-changes',
@@ -118,7 +116,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
 
 	_showDialog(e) {
-		if (this.confirmUnsavedChanges && this.hasUnsavedChanges) {
+		if (this.hasUnsavedChanges) {
 			this._dialogOpened = true;
 			e.preventDefault();
 		}
@@ -126,7 +124,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 	_onDialogClose(e) {
 		this._dialogOpened = false;
-		if (e.detail.action === 'leave') {
+		if (e.detail.action === DIALOG_ACTION_LEAVE) {
 			window.location = this.returnHref;
 		}
 	}
@@ -191,7 +189,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				?opened=${this._dialogOpened}
 				@d2l-dialog-close=${this._onDialogClose}
 			>
-				<d2l-button slot="footer" primary data-dialog-action="leave">${this.localize('leaveBtn')}</d2l-button>
+				<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_LEAVE}>${this.localize('leaveBtn')}</d2l-button>
 				<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
 			</d2l-dialog-confirm>
 		`;

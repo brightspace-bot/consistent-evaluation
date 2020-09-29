@@ -334,6 +334,21 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 	}
 
+	_confirmUnsavedChanges(e) {
+		e.preventDefault();
+		e.returnValue = '';
+	}
+
+	_onUnsavedChange() {
+		this._hasUnsavedChanges = true;
+		window.addEventListener('beforeunload', this._confirmUnsavedChanges);
+	}
+
+	_onSaveChanges() {
+		this._hasUnsavedChanges = false;
+		window.removeEventListener('beforeunload', this._confirmUnsavedChanges);
+	}
+
 	_renderToast() {
 		return html`<d2l-alert-toast 
 			?open=${this._displayToast} 
@@ -352,6 +367,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.organizationName=${this.organizationName}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
+						?has-unsaved-changes=${this._hasUnsavedChanges}
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
 					></d2l-consistent-evaluation-nav-bar>
