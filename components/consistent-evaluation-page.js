@@ -136,12 +136,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		super();
 		this._evaluationHref = undefined;
 		this._token = undefined;
-
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
+		this.allowEvaluationWrite = false;
+		this.allowEvaluationDelete = false;
 	}
 
 	get evaluationEntity() {
@@ -216,6 +217,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
 		this.evaluationState = this.evaluationEntity.properties.state;
+		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
+		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
 	}
 
@@ -365,7 +368,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
-					<consistent-evaluation-right-panel
+					<consistent-evaluation-right-panel						
 						evaluation-href=${this.evaluationHref}
 						.feedbackText=${this._feedbackText}
 						rubric-href=${ifDefined(this.rubricHref)}
@@ -380,7 +383,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?hide-rubric=${this.rubricHref === undefined}
 						?hide-grade=${this._noGradeComponent()}
 						?hide-outcomes=${this.outcomesHref === undefined}
-						?hide-feedback=${this._noFeedbackComponent()}
+						?hide-feedback=${this._noFeedbackComponent()}						
+						?allow-evaluation-write=${this.allowEvaluationWrite}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
@@ -390,6 +394,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-footer-presentational
 						next-student-href=${ifDefined(this.nextStudentHref)}
 						?published=${this._isEvaluationPublished()}
+						?allow-evaluation-write=${this.allowEvaluationWrite}						
+						?allow-evaluation-delete=${this.allowEvaluationDelete}
 						@d2l-consistent-evaluation-on-publish=${this._publishEvaluation}
 						@d2l-consistent-evaluation-on-save-draft=${this._saveEvaluation}
 						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}
