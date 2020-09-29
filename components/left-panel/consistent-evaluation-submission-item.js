@@ -144,7 +144,6 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this._comment = '';
 		this._updateFilenameTooltips = this._updateFilenameTooltips.bind(this);
 		this._dispatchRenderEvidence = this._dispatchRenderEvidence.bind(this);
-		this._handleRenderEvidence = this._handleRenderEvidence.bind(this);
 	}
 
 	get submissionEntity() {
@@ -163,13 +162,13 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	connectedCallback() {
 		super.connectedCallback();
 		window.addEventListener('load', this._updateFilenameTooltips);
-		window.addEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
+		//window.addEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
 		this._resizeObserver = new ResizeObserver(this._updateFilenameTooltips);
 	}
 
 	disconnectedCallback() {
 		window.removeEventListener('load', this._updateFilenameTooltips);
-		window.removeEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
+		//window.removeEventListener('d2l-consistent-evaluation-submission-item-render-evidence', this._handleRenderEvidence);
 		const filenames = this.shadowRoot.querySelectorAll('.d2l-truncate');
 		for (const filename of filenames) {
 			this._resizeObserver.unobserve(filename);
@@ -227,40 +226,40 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_handleRenderEvidence(e) {
-		this._dispatchRenderEvidence(e.detail.extension, e.detail.fileViewer);
-	}
-
-	_dispatchRenderEvidence(extension, fileViewer) {
+	_dispatchRenderEvidence(extension, fileViewer, name) {
 		if (extension === 'txt') {
-			this._dispatchRenderEvidenceTextEvent();
+			this._dispatchRenderEvidenceTextEvent(name);
 		}
 		else if (fileViewer) {
-			this._dispatchRenderEvidenceFileEvent(fileViewer);
+			this._dispatchRenderEvidenceFileEvent(fileViewer, name);
 		}
 	}
 
-	_dispatchRenderEvidenceFileEvent(url) {
+	_dispatchRenderEvidenceFileEvent(url, name) {
 		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-file', {
 			detail: {
-				url: url
+				url: url,
+				name: name
 			},
-			composed: true
+			composed: true,
+			bubbles: true
 		});
 		this.dispatchEvent(event);
 	}
 
-	_dispatchRenderEvidenceTextEvent() {
+	_dispatchRenderEvidenceTextEvent(name) {
 		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
 			detail: {
 				textSubmissionEvidence: {
 					title: `${this.localize('textSubmission')} ${this.displayNumber}`,
+					name: name,
 					date: this._formatDateTime(),
 					downloadUrl: this._attachments[0].properties.href,
 					content: this._comment
 				}
 			},
-			composed: true
+			composed: true,
+			bubbles: true
 		});
 		this.dispatchEvent(event);
 	}
@@ -371,7 +370,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				<d2l-list-item-content
 				@click="${
 	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderEvidence(extension, fileViewer)}">
+	() => this._dispatchRenderEvidence(extension, fileViewer, name)}">
 					<div class="truncate" aria-label="heading">${this._getFileTitle(name)}</div>
 					<div slot="supporting-info">
 						${this._renderFlaggedStatus(flagged)}

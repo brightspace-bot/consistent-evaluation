@@ -25,7 +25,12 @@ export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(RtlMi
 			_lastName: {
 				attribute: false,
 				type: String
+			},
+			selectedItemName: {
+				attribute: false,
+				type: String
 			}
+
 		};
 	}
 
@@ -101,7 +106,8 @@ export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(RtlMi
 				display-name="${ifDefined(this._displayName)}"
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
-			.submissionInfo="${this.submissionInfo}">
+			.submissionInfo="${this.submissionInfo}"
+			.selectedItemName=${this.selectedItemName}>
 			</d2l-consistent-evaluation-lcb-file-context>
 
 		`;

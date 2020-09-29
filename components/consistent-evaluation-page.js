@@ -85,7 +85,19 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			},
 			_scrollbarStatus: {
 				attribute: false
-			}
+			},
+			_fileEvidenceUrl: {
+				attribute: false,
+				type: String
+			},
+			_textEvidence: {
+				attribute: false,
+				type: Object
+			},
+			_selectedFile: {
+				attribute: false,
+				type: String
+			},
 		};
 	}
 
@@ -190,11 +202,11 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
+		//window.addEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
 	}
 
 	disconnectedCallback() {
-		window.removeEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
+		//window.removeEventListener('d2l-consistent-evaluation-evidence-back-to-user-submissions', this._setSubmissionsView);
 	}
 
 	async _initializeController() {
@@ -315,26 +327,46 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
 
-	async _setSubmissionsView() {
-		this.shadowRoot.querySelector('d2l-consistent-evaluation-left-panel').showSubmissionList();
+	_setSubmissionsView() {
+		this._fileEvidenceUrl = undefined;
+		this._textEvidence = undefined;
+		this._selectedFile = 'a';
+		this._showScrollbars();
+	}
+	_setFileEvidence(e) {
+		this._fileEvidenceUrl = e.detail.url;
+		this._selectedFile = e.detail.name;
+		this._textEvidence = undefined;
+		this._hideScrollbars();
+	}
+	_setTextEvidence(e) {
+		this._textEvidence = e.detail.textSubmissionEvidence;
+		this._selectedFile = e.detail.textSubmissionEvidence.name;
+		this._fileEvidenceUrl = undefined;
+		this._hideScrollbars();
 	}
 
 	render() {
 		return html`
-			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
+			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}"
+			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._setFileEvidence}
+			@d2l-consistent-evaluation-submission-item-render-evidence-text=${this._setTextEvidence}
+			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
+			>
 				<div slot="header">
 					<d2l-consistent-evaluation-learner-context-bar
 						href=${ifDefined(this.userHref)}
 						.token=${this.token}
 						.submissionInfo=${this.submissionInfo}
+						.selectedItemName=${this._selectedFile}
 					></d2l-consistent-evaluation-learner-context-bar>
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
-						@d2l-consistent-evaluation-left-panel-render-evidence=${this._hideScrollbars}
-						@d2l-consistent-evaluation-left-panel-render-submission-list=${this._showScrollbars}
+						.fileEvidenceUrl=${this._fileEvidenceUrl}
+						.textEvidence=${this._textEvidence}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">

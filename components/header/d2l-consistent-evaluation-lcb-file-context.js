@@ -1,8 +1,11 @@
-import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { css, html, LitElement } from 'lit-element';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
-import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
-import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
+import '../../../d2l-polymer-siren-behaviors/store/entity-store.js';
+import { css, html, LitElement } from '../../../lit-element/lit-element.js';
+import { formatDate, formatTime } from '../../../@brightspace-ui/intl/lib/dateTime.js';
+import { Classes } from 'd2l-hypermedia-constants';
+import { loadLocalizationResources } from '../locale.js';
+import { LocalizeMixin } from '../../../@brightspace-ui/core/mixins/localize-mixin.js';
+import { RtlMixin } from '../../../@brightspace-ui/core/mixins/rtl-mixin.js';
+import { selectStyles } from '../../../@brightspace-ui/core/components/inputs/input-select-styles.js';
 
 export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(LitElement)) {
 
@@ -15,6 +18,10 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			_files: {
 				attribute: false,
 				type: Array
+			},
+			selectedItemName: {
+				attribute: false,
+				type: String
 			}
 		};
 	}
@@ -31,6 +38,10 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			`
 		];
 	}
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
+	}
+
 	async updated(changedProperties) {
 		super.updated();
 
@@ -42,7 +53,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	async getSubmissions() {
 		if (this.submissionInfo) {
 			const files = await this.submissionInfo.submissionList.map(async sub => {
-				const file = await window.D2L.Siren.EntityStore.fetch(sub.href, this.token, false);
+				return await window.D2L.Siren.EntityStore.fetch(sub.href, this.token, false);
 				return {
 					href: sub.href,
 					submissionFile: file.entity,
@@ -55,8 +66,15 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	getSubmissionFiles(submission) {
-		const attachments = submission.submissionFile.getSubEntityByRel('https://assignments.api.brightspace.com/rels/attachment-list');
+		const attachments = submission.entity.getSubEntityByRel('https://assignments.api.brightspace.com/rels/attachment-list');
+		let displayNum = 0;
 		return attachments.entities.map(sf => {
+			displayNum += displayNum;
+			if (submission.entity.getSubEntityByClass(Classes.assignments.submissionComment)) {
+				sf.properties.comment = submission.entity.getSubEntityByClass(Classes.assignments.submissionComment).properties.html;
+			}
+			sf.properties.date = submission.entity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
+			sf.properties.displayNumber = displayNum;
 			return sf.properties;
 		});
 	}
@@ -70,12 +88,58 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			window.dispatchEvent(event);
 			return;
 		}
-		const eventDetail = JSON.parse(e.target.value);
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence', {
-			detail: eventDetail,
-			composed: true
+		const submissionFile = JSON.parse(e.target.value);
+		this._dispatchRenderEvidence(submissionFile);
+	}
+
+	//this is duplicated from submission item
+	_dispatchRenderEvidence(sf) {
+		if (sf.extension === 'txt') {
+			this._dispatchRenderEvidenceTextEvent(sf);
+		}
+		else if (sf.fileViewer) {
+			this._dispatchRenderEvidenceFileEvent(sf);
+		}
+	}
+
+	_dispatchRenderEvidenceFileEvent(sf) {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-file', {
+			detail: {
+				url: sf.fileViewer,
+				name: sf.name
+			},
+			composed: true,
+			bubbles: true
 		});
-		window.dispatchEvent(event);
+		this.dispatchEvent(event);
+	}
+
+	_dispatchRenderEvidenceTextEvent(sf) {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
+			detail: {
+				textSubmissionEvidence: {
+					title: `${this.localize('textSubmission')} ${sf.displayNumber}`,
+					name: sf.name,
+					date: this._formatDateTime(sf.date),
+					downloadUrl: sf.href,
+					content: sf.comment
+				}
+			},
+			composed: true,
+			bubbles: true
+		});
+		this.dispatchEvent(event);
+	}
+
+	_formatDateTime(date) {
+		date = new Date(date);
+		const formattedDate = (date) ? formatDate(
+			date,
+			{format: 'full'}) : '';
+		const formattedTime = (date) ? formatTime(
+			date,
+			{format: 'short'}) : '';
+		return `${formattedDate} ${formattedTime}`;
 	}
 
 	render() {
@@ -84,11 +148,11 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		class="d2l-input-select"
 		@change=${this._onSelectChange}
 		>
-		<option label='User Submissions' value='User Submissions'></option>
+		<option label='User Submissions' value='User Submissions' ?selected=${this.selectedItemName === 'a'}></option>
                     ${this._files && this._files.map(submission => html`
 						<optgroup label=${`Submission ${submission.submissionNumber}`}>
 							${this.getSubmissionFiles(submission).map(sf => html`
-								<option value=${JSON.stringify(sf)} label=${sf.name}></option>
+								<option value=${JSON.stringify(sf)} label=${sf.name} ?selected=${sf.name === this.selectedItemName}></option>
 							`)}
 						</optgroup>
                     `)};

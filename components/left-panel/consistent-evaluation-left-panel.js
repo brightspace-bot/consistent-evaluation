@@ -31,11 +31,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 				type: Object
 			},
 			token: { type: String },
-			_fileEvidenceUrl: {
+			fileEvidenceUrl: {
 				attribute: false,
 				type: String
 			},
-			_textEvidence: {
+			textEvidence: {
 				attribute: false,
 				type: Object
 			}
@@ -86,7 +86,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		return await loadLocalizationResources(langs);
 	}
 
-	_showFileEvidence(e) {
+/* 	_showFileEvidence(e) {
 		this._fileEvidenceUrl = e.detail.url;
 
 		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-evidence', {
@@ -102,9 +102,9 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			composed: true
 		});
 		this.dispatchEvent(event);
-	}
+	} */
 
-	showSubmissionList() {
+/* 	showSubmissionList() {
 		this._fileEvidenceUrl = undefined;
 		this._textEvidence = undefined;
 
@@ -112,12 +112,12 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			composed: true
 		});
 		this.dispatchEvent(event);
-	}
+	} */
 
 	_renderFileEvidence() {
 		return html`
 		<d2l-consistent-evaluation-evidence-file
-			.url=${this._fileEvidenceUrl}
+			.url=${this.fileEvidenceUrl}
 			.token=${this.token}
 			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this.showSubmissionList}
 		></d2l-consistent-evaluation-evidence-file>`;
@@ -144,19 +144,16 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
 			.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 			.token=${this.token}
-			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._showFileEvidence}
-			@d2l-consistent-evaluation-submission-item-render-evidence-text=${this._showTextEvidence}
 		></d2l-consistent-evaluation-submissions-page>`;
 	}
 
 	_renderTextEvidence() {
 		return html`
 		<d2l-consistent-evaluation-evidence-text
-			title=${this._textEvidence.title}
-			date=${this._textEvidence.date}
-			download-url=${this._textEvidence.downloadUrl}
-			.content=${this._textEvidence.content}
-			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
+			title=${this.textEvidence.title}
+			date=${this.textEvidence.date}
+			download-url=${this.textEvidence.downloadUrl}
+			.content=${this.textEvidence.content}
 		></d2l-consistent-evaluation-evidence-text>`;
 	}
 
@@ -169,11 +166,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			return this._renderNoSubmissions();
 		}
 
-		if (this._fileEvidenceUrl) {
+		if (this.fileEvidenceUrl) {
 			return this._renderFileEvidence();
 		}
 
-		if (this._textEvidence) {
+		if (this.textEvidence) {
 			return this._renderTextEvidence();
 		}
 
