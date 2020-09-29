@@ -40,13 +40,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 					margin-left: 0;
 					margin-right: 0.7rem;
 				}
-				.select-option {
-					max-width: 20rem;
-					overflow: hidden;
-					white-space: nowrap;
-					text-overflow:ellipsis;
-					display: flex;
-				}
 			`
 		];
 	}
