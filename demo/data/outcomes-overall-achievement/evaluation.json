@@ -1,0 +1,69 @@
+{
+    "class": [
+        "evaluation"
+    ],
+    "properties": {
+        "state": "Published"
+    },
+    "entities": [
+        {
+            "class": [
+                "evaluation-entity",
+                "annotated"
+            ],
+            "rel": [
+                "feedback"
+            ],
+            "properties": {
+                "text": "Good Job",
+                "html": "<p>Good Job</p>"
+            },
+            "entities": [
+                {
+                    "class": [
+                        "richtext-editor-config"
+                    ],
+                    "rel": [
+                        "https://api.brightspace.com/rels/richtext-editor-config"
+                    ],
+                    "properties": {
+                        "orgUnit": {
+                            "OrgId": "6606",
+                            "OrgUnitId": "6609"
+                        },
+                        "d2l_filter": {
+                            "endpoint": "/d2l/lp/htmleditor/converttoabsolute?ou=6609"
+                        },
+                        "d2l_isf": {
+                            "endpoint": "/d2l/common/dialogs/isf/selectItem.d2l?ou=6609&filterMode=Strict"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "links": [
+        {
+            "rel": [
+                "https://activities.api.brightspace.com/rels/attachments"
+            ],
+            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation/attachments"
+        },
+        {
+            "rel": [
+                "https://activities.api.brightspace.com/rels/evaluation",
+                "self"
+            ],
+            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation"
+        },
+        {
+            "rel": [
+                "https://activities.api.brightspace.com/rels/actor-activity-usage"
+            ],
+            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/actor/user_169"
+        }
+    ],
+    "rel": [
+        "https://assignments.api.brightspace.com/rels/evaluation"
+    ]
+}
