@@ -91,7 +91,6 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		<d2l-consistent-evaluation-evidence-file
 			.url=${this.fileEvidenceUrl}
 			.token=${this.token}
-			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this.showSubmissionList}
 		></d2l-consistent-evaluation-evidence-file>`;
 	}
 
