@@ -7,7 +7,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 
 	static get properties() {
 		return {
-      href: {
+			href: {
 				type: String
 			},
 			token: {
@@ -16,7 +16,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 			submissionInfo: {
 				attribute: false,
 				type: Object
-      },
+			},
 			selectedItemName: {
 				attribute: false,
 				type: String
