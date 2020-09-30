@@ -155,7 +155,30 @@ export class ConsistentEvaluationController {
 		if (!entity) {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
-		const config = entity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig).properties;
-		return config;
+
+		if (entity.getSubEntityByRel('feedback') && entity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig)) {
+			return entity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig).properties;
+		}
+
+		return null;
+	}
+
+	userHasWritePermission(entity) {
+		if (!entity) {
+			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
+		}
+
+		const hasWritePermission = (entity.hasActionByName(saveActionName) && entity.hasActionByName(publishActionName)) ||
+			entity.hasActionByName(updateActionName);
+
+		return hasWritePermission;
+	}
+
+	userHasDeletePermission(entity) {
+		if (!entity) {
+			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
+		}
+
+		return entity.hasActionByName(retractActionName);
 	}
 }
