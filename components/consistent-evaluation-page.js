@@ -261,7 +261,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _transientSaveFeedback(e) {
-		this._updateHasUnsavedChanges(true);
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		const newFeedbackVal = e.detail;
 		this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
@@ -339,6 +338,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 	}
 
+	_onUnsavedChange() {
+		this._updateHasUnsavedChanges(true);
+	}
+
 	_updateHasUnsavedChanges(value) {
 		this._hasUnsavedChanges = value;
 	}
@@ -396,6 +399,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?hide-outcomes=${this.outcomesHref === undefined}
 						?hide-feedback=${this._noFeedbackComponent()}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
+						@on-d2l-consistent-eval-feedback-text-editor-change=${this._onUnsavedChange}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
 				</div>
