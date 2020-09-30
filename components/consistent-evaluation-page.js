@@ -368,7 +368,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
-					<consistent-evaluation-right-panel						
+					<consistent-evaluation-right-panel
 						evaluation-href=${this.evaluationHref}
 						.feedbackText=${this._feedbackText}
 						rubric-href=${ifDefined(this.rubricHref)}

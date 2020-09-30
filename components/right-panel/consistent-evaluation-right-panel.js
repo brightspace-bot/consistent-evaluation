@@ -193,7 +193,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			}
 
 			score = (e.detail.score / outOf) * this.grade.outOf;
-			console.log(score);
 		}
 
 		this.grade = new Grade(
