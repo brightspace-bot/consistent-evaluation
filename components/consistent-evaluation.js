@@ -24,12 +24,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_childHrefs: { type: Object },
 			_submissionInfo: { type: Object },
 			_gradeItemInfo: { type: Object },
-			_submissionFiles: {type: Object},
 			_assignmentName: { type: String },
 			_organizationName: { type: String },
 			_iteratorTotal: { type: Number },
 			_iteratorIndex: { type: Number }
-
 		};
 	}
 

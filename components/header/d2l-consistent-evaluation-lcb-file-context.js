@@ -1,11 +1,11 @@
 import '../../../d2l-polymer-siren-behaviors/store/entity-store.js';
+import { attachmentListRel, submissions } from '../controllers/constants';
 import { css, html, LitElement } from '../../../lit-element/lit-element.js';
 import { Classes } from 'd2l-hypermedia-constants';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '../../../@brightspace-ui/core/mixins/localize-mixin.js';
 import { RtlMixin } from '../../../@brightspace-ui/core/mixins/rtl-mixin.js';
 import { selectStyles } from '../../../@brightspace-ui/core/components/inputs/input-select-styles.js';
-import { submissions } from '../controllers/constants';
 
 export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(LitElement)) {
 
@@ -71,7 +71,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	getSubmissionFiles(submission) {
-		const attachments = submission.entity.getSubEntityByRel('https://assignments.api.brightspace.com/rels/attachment-list');
+		const attachments = submission.entity.getSubEntityByRel(attachmentListRel);
 		let displayNum = 0;
 		return attachments.entities.map(sf => {
 			displayNum += displayNum;

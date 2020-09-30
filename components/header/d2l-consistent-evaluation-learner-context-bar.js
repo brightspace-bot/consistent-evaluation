@@ -66,8 +66,8 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 				.token="${this.token}"
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
-			.submissionInfo="${this.submissionInfo}"
-			.selectedItemName=${this.selectedItemName}>
+				.submissionInfo="${this.submissionInfo}"
+				.selectedItemName=${this.selectedItemName}>
 			</d2l-consistent-evaluation-lcb-file-context>
 
 		`;
