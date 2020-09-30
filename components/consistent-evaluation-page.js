@@ -7,6 +7,8 @@ import './header/consistent-evaluation-nav-bar.js';
 import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
+import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
+import '@brightspace-ui/core/components/button/button.js'
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
@@ -14,6 +16,8 @@ import { ConsistentEvaluationController } from './controllers/ConsistentEvaluati
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from './locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+
+const DIALOG_ACTION_LEAVE = 'leave';
 
 export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
 
@@ -112,6 +116,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: false
 			},
 			_hasUnsavedChanges: {
+				attribute: false
+			},
+			_dialogOpened: {
 				attribute: false
 			}
 		};
@@ -338,12 +345,33 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 	}
 
+	_showDialog() {
+		this._dialogOpened = true;
+	}
+
+	_onDialogClose(e) {
+		this._dialogOpened = false;
+		if (e.detail.action === DIALOG_ACTION_LEAVE) {
+			window.location = this.returnHref;
+		}
+	}
+
 	_onUnsavedChange() {
 		this._updateHasUnsavedChanges(true);
 	}
 
 	_updateHasUnsavedChanges(value) {
+		if (!this._hasUnsavedChanges && value) {
+			window.addEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+		} else if (this._hasUnsavedChanges && !value) {
+			window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+		}
 		this._hasUnsavedChanges = value;
+	}
+
+	_confirmUnsavedChangesBeforeUnload(e) {
+		e.preventDefault();
+		e.returnValue = 'Unsaved changes'; 
 	}
 
 	_renderToast() {
@@ -367,6 +395,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?has-unsaved-changes=${this._hasUnsavedChanges}
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
+						@d2l-consistent-evaluation-navigate-back-with-unsaved-changes=${this._showDialog}
 					></d2l-consistent-evaluation-nav-bar>
 					<d2l-consistent-evaluation-learner-context-bar
 						href=${ifDefined(this.userHref)}
@@ -416,6 +445,15 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-footer-presentational>
 				</div>
 			</d2l-template-primary-secondary>
+			<d2l-dialog-confirm	
+				title-text=${this.localize('unsavedChangesTitle')}
+				text=${this.localize('unsavedChangesBody')}
+				?opened=${this._dialogOpened}
+				@d2l-dialog-close=${this._onDialogClose}
+			>
+				<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_LEAVE}>${this.localize('leaveBtn')}</d2l-button>
+				<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
+			</d2l-dialog-confirm>
 		`;
 	}
 

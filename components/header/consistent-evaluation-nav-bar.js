@@ -3,16 +3,12 @@ import 'd2l-navigation/d2l-navigation-immersive.js';
 import 'd2l-navigation/components/d2l-navigation-iterator/d2l-navigation-iterator.js';
 import 'd2l-navigation/d2l-navigation-link-back.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
-import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
-import '@brightspace-ui/core/components/button/button.js'
 
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
-
-const DIALOG_ACTION_LEAVE = 'leave';
 
 class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	static get properties() {
@@ -115,17 +111,10 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-previous-student');}
 	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
 
-	_showDialog(e) {
+	_onNavigateBack(e) {
 		if (this.hasUnsavedChanges) {
-			this._dialogOpened = true;
 			e.preventDefault();
-		}
-	}
-
-	_onDialogClose(e) {
-		this._dialogOpened = false;
-		if (e.detail.action === DIALOG_ACTION_LEAVE) {
-			window.location = this.returnHref;
+			this._dispatchButtonClickEvent('d2l-consistent-evaluation-navigate-back-with-unsaved-changes');
 		}
 	}
 
@@ -141,13 +130,13 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					class="d2l-full-back"
 					href=${this.returnHref}
 					text="${ifDefined(this.returnHrefText)}"
-					@click=${this._showDialog} >
+					@click=${this._onNavigateBack} >
 				</d2l-navigation-link-back>
 
 				<d2l-navigation-link-back 
 					class="d2l-short-back"
 					href=${this.returnHref}
-					@click=${this._showDialog}>
+					@click=${this._onNavigateBack}>
 				</d2l-navigation-link-back>
 			`;
 		}
@@ -184,15 +173,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				</d2l-navigation-iterator>
 				
 			</d2l-navigation-immersive>
-			<d2l-dialog-confirm	
-				title-text=${this.localize('unsavedChangesTitle')}
-				text=${this.localize('unsavedChangesBody')}
-				?opened=${this._dialogOpened}
-				@d2l-dialog-close=${this._onDialogClose}
-			>
-				<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_LEAVE}>${this.localize('leaveBtn')}</d2l-button>
-				<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
-			</d2l-dialog-confirm>
 		`;
 	}
 }
