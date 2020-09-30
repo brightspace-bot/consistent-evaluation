@@ -261,6 +261,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _transientSaveFeedback(e) {
+		this._updateHasUnsavedChanges(true);
 		const entity = await this._controller.fetchEvaluationEntity(false);
 		const newFeedbackVal = e.detail;
 		this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
@@ -284,6 +285,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationEntity = await this._controller.save(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('saved'));
+			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('saveError'));
 		}
@@ -295,6 +297,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationEntity = await this._controller.update(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('updated'));
+			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('updatedError'));
 		}
@@ -307,6 +310,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationState = this.evaluationEntity.properties.state;
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('published'));
+			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('publishError'));
 		}
@@ -318,6 +322,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationEntity = await this._controller.retract(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('retracted'));
+			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('retractError'));
 		}
@@ -334,19 +339,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 	}
 
-	_confirmUnsavedChanges(e) {
-		e.preventDefault();
-		e.returnValue = '';
-	}
-
-	_onUnsavedChange() {
-		this._hasUnsavedChanges = true;
-		window.addEventListener('beforeunload', this._confirmUnsavedChanges);
-	}
-
-	_onSaveChanges() {
-		this._hasUnsavedChanges = false;
-		window.removeEventListener('beforeunload', this._confirmUnsavedChanges);
+	_updateHasUnsavedChanges(value) {
+		this._hasUnsavedChanges = value;
 	}
 
 	_renderToast() {
