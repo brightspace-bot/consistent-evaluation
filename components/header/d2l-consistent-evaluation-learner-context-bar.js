@@ -12,14 +12,6 @@ export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(RtlMi
 			_displayName: {
 				attribute: false,
 				type: String
-			},
-			_firstName: {
-				attribute: false,
-				type: String
-			},
-			_lastName: {
-				attribute: false,
-				type: String
 			}
 		};
 	}
@@ -78,22 +70,14 @@ export class ConsistentEvaluationLearnerContextBar extends (EntityMixinLit(RtlMi
 		}
 
 		this._displayName = userEntity.getDisplayName();
-		this._firstName = userEntity.getFirstName();
-		this._lastName = userEntity.getLastName();
-	}
-
-	get _colourId() {
-		return 9;
 	}
 
 	render() {
 		return html`
 			<d2l-consistent-evaluation-lcb-user-context
-				profile-image-href=""
-				first-name="${ifDefined(this._firstName)}"
-				last-name="${ifDefined(this._lastName)}"
-				colour-id="${this._colourId}"
+				profile-image-href="${this.href}"
 				display-name="${ifDefined(this._displayName)}"
+				.token="${this.token}"
 			></d2l-consistent-evaluation-lcb-user-context>
 		`;
 	}

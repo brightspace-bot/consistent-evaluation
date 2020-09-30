@@ -1,4 +1,4 @@
-import 'd2l-users/components/d2l-profile-image-base.js';
+import 'd2l-users/components/d2l-profile-image.js';
 import { css, html, LitElement } from 'lit-element';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -8,24 +8,15 @@ export class ConsistentEvaluationLcbUserContext extends RtlMixin(LitElement) {
 
 	static get properties() {
 		return {
+			displayName: {
+				attribute: 'display-name',
+				type: String
+			},
 			profileImageHref: {
 				attribute: 'profile-image-href',
 				type: String
 			},
-			firstName: {
-				attribute: 'first-name',
-				type: String
-			},
-			lastName: {
-				attribute: 'last-name',
-				type: String
-			},
-			colourId: {
-				attribute: 'colour-id',
-				type: String
-			},
-			displayName: {
-				attribute: 'display-name',
+			token: {
 				type: String
 			}
 		};
@@ -55,13 +46,11 @@ export class ConsistentEvaluationLcbUserContext extends RtlMixin(LitElement) {
 
 	render() {
 		return html`
-			<d2l-profile-image-base
+			<d2l-profile-image
 				href="${this.profileImageHref}"
-				first-name="${ifDefined(this.firstName)}"
-				last-name="${ifDefined(this.lastName)}"
-				colour-id="${this.colourId}"
+				token="${this.token}"
 				small
-			></d2l-profile-image-base>
+			></d2l-profile-image>
 			<span class="d2l-body-compact d2l-consistent-evaluation-lcb-user-name">${ifDefined(this.displayName)}</span>
 		`;
 	}
