@@ -27,7 +27,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 	static get styles() {
 		return css`
 			:host {
-				display: block;
+				display: flex;
 				height: 100%;
 				margin: 0.75rem 0 0.75rem 1.5rem;
 			}
