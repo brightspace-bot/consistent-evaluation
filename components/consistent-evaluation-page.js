@@ -8,7 +8,7 @@ import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
-import '@brightspace-ui/core/components/button/button.js'
+import '@brightspace-ui/core/components/button/button.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
@@ -379,7 +379,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	_confirmUnsavedChangesBeforeUnload(e) {
 		e.preventDefault();
-		e.returnValue = 'Unsaved changes'; 
+		e.returnValue = 'Unsaved changes';
 	}
 
 	_renderToast() {
