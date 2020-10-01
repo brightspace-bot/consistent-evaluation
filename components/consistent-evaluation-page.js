@@ -152,6 +152,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
 		this._hasUnsavedChanges = false;
+		this._dialogOpened = false;
 		this.allowEvaluationWrite = false;
 		this.allowEvaluationDelete = false;
 	}
