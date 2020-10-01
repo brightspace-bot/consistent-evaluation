@@ -40,10 +40,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			hasUnsavedChanges: {
 				attribute: 'has-unsaved-changes',
 				type: Boolean
-			},
-			_dialogOpened: {
-				attribute: false,
-				type: Boolean
 			}
 		};
 	}
@@ -94,11 +90,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 	static async getLocalizeResources(langs) {
 		return await loadLocalizationResources(langs);
-	}
-
-	constructor() {
-		super();
-		this._dialogOpened = false;
 	}
 
 	_dispatchButtonClickEvent(eventName) {
