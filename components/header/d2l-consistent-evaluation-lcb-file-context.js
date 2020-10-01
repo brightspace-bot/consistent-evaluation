@@ -42,6 +42,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			`
 		];
 	}
+
 	static async getLocalizeResources(langs) {
 		return await loadLocalizationResources(langs);
 	}
@@ -90,8 +91,13 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			this.dispatchEvent(event);
 			return;
 		}
-		const submissionFile = JSON.parse(e.target.value);
-		this._dispatchRenderEvidenceFileEvent(submissionFile);
+
+		const submission = JSON.parse(e.target.value);
+		if (submission.comment === undefined) {
+			this._dispatchRenderEvidenceFileEvent(submission);
+		} else {
+			this._dispatchRenderEvidenceTextEvent(submission);
+		}
 	}
 
 	_dispatchRenderEvidenceFileEvent(sf) {
@@ -99,6 +105,23 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			detail: {
 				url: sf.fileViewer,
 				name: sf.name
+			},
+			composed: true,
+			bubbles: true
+		});
+		this.dispatchEvent(event);
+	}
+
+	_dispatchRenderEvidenceTextEvent(sf) {
+		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
+			detail: {
+				textSubmissionEvidence: {
+					title: `${this.localize('textSubmission')} ${sf.displayNumber}`,
+					name: sf.name,
+					date: sf.date,
+					downloadUrl: sf.href,
+					content: sf.comment
+				}
 			},
 			composed: true,
 			bubbles: true
