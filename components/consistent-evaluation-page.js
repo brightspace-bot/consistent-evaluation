@@ -67,6 +67,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'user-href',
 				type: String
 			},
+			confirmUnsavedChanges: {
+				attribute: 'confirm-unsaved-changes',
+				type: Boolean
+			},
 			submissionInfo: {
 				attribute: false,
 				type: Object
@@ -332,7 +336,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationEntity = await this._controller.retract(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('retracted'));
-			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('retractError'));
 		}
@@ -365,6 +368,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_updateHasUnsavedChanges(value) {
+		if (!this.confirmUnsavedChanges) return;
 		if (!this._hasUnsavedChanges && value) {
 			window.addEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
 		} else if (this._hasUnsavedChanges && !value) {
