@@ -11,6 +11,10 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 			},
 			token: {
 				type: String
+			},
+			submissionInfo: {
+				attribute: false,
+				type: Object
 			}
 		};
 	}
@@ -55,6 +59,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 			<d2l-consistent-evaluation-lcb-user-context
 				href="${this.href}"
 				.token="${this.token}"
+				?is-exempt="${this.submissionInfo.isExempt}"
 			></d2l-consistent-evaluation-lcb-user-context>
 		`;
 	}

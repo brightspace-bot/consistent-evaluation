@@ -103,6 +103,7 @@ export class ConsistentEvaluationHrefController {
 	async getSubmissionInfo() {
 		let root = await this._getRootEntity(false);
 		let submissionList, evaluationState, submissionType;
+		let isExempt = false;
 		if (root && root.entity) {
 			root = root.entity;
 			if (root.getSubEntityByClass(Classes.assignments.submissionList)) {
@@ -118,11 +119,19 @@ export class ConsistentEvaluationHrefController {
 					submissionType = assignmentEntity.entity.properties.submissionType.title;
 				}
 			}
+			const evaluationHref = this._getHref(root, evaluationRel);
+			if (evaluationHref) {
+				const evaluationEntity = await this._getEntityFromHref(evaluationHref, false);
+				if (evaluationEntity && evaluationEntity.entity) {
+					isExempt = evaluationEntity.entity.properties.isExempt;
+				}
+			}
 		}
 		return {
 			submissionList,
 			evaluationState,
-			submissionType
+			submissionType,
+			isExempt
 		};
 	}
 

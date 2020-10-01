@@ -3,13 +3,19 @@ import { css, html, LitElement } from 'lit-element';
 import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { EntityMixinLit } from 'siren-sdk/src/mixin/entity-mixin-lit.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { loadLocalizationResources } from '../locale.js';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { UserEntity } from 'siren-sdk/src/users/UserEntity.js';
 
-export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(LitElement)) {
+export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(LocalizeMixin(LitElement))) {
 
 	static get properties() {
 		return {
+			isExempt: {
+				attribute: 'is-exempt',
+				type: Boolean
+			},
 			_displayName: {
 				attribute: false,
 				type: String
@@ -30,13 +36,24 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
-				width: 100%;
 			}
 			:host([dir="rtl"]) .d2l-consistent-evaluation-lcb-user-name {
 				margin-left: 0;
 				margin-right: 0.5rem;
 			}
+			.d2l-consistent-evaluation-lcb-is-exempt {
+				font-style: italic;
+				margin-left: 0.5rem;
+			}
+			:host([dir="rtl"]) .d2l-consistent-evaluation-lcb-is-exempt {
+				margin-left: 0;
+				margin-right: 0.5rem;
+			}
 		`];
+	}
+
+	static async getLocalizeResources(langs) {
+		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {
@@ -60,6 +77,14 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 		this._displayName = userEntity.getDisplayName();
 	}
 
+	_getExemptText() {
+		if (this.isExempt) {
+			return html`<span class="d2l-consistent-evaluation-lcb-is-exempt">(${this.localize('exempt')})</span>`;
+		} else {
+			return html``;
+		}
+	}
+
 	render() {
 		return html`
 			<d2l-profile-image
@@ -68,6 +93,7 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 				small
 			></d2l-profile-image>
 			<span class="d2l-body-compact d2l-consistent-evaluation-lcb-user-name">${ifDefined(this._displayName)}</span>
+			${this._getExemptText()}
 		`;
 	}
 }
