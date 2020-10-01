@@ -19,14 +19,6 @@ export class ConsistentEvaluationHrefController {
 			throw new Error(ConsistentEvaluationHrefControllerErrors.INVALID_TYPE_BASE_HREF);
 		}
 
-		if (!token) {
-			throw new Error(ConsistentEvaluationHrefControllerErrors.INVALID_TOKEN);
-		}
-
-		if (typeof token !== 'string') {
-			throw new Error(ConsistentEvaluationHrefControllerErrors.INVALID_TYPE_TOKEN);
-		}
-
 		this.baseHref = baseHref;
 		this.token = token;
 	}

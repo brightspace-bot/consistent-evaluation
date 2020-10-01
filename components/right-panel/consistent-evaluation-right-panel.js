@@ -72,7 +72,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				type: Boolean
 			},
 			token: {
-				type: String
+				type: Object
 			}
 		};
 	}

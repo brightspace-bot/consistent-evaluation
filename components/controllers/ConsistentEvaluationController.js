@@ -29,14 +29,6 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_TYPE_EVALUATION_HREF);
 		}
 
-		if (!token) {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_TOKEN);
-		}
-
-		if (typeof token !== 'string') {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_TYPE_TOKEN);
-		}
-
 		this.evaluationHref = evaluationHref;
 		this.token = token;
 	}
