@@ -78,7 +78,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 	}
 
 	_shouldConfirmUnsavedChanges() {
-		return true;
+		return false;
 	}
 
 	render() {
