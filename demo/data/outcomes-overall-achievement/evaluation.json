@@ -42,6 +42,30 @@
             ]
         }
     ],
+    "actions": [
+        {
+            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation?action=update",
+            "name": "update",
+            "method": "PUT",
+            "fields": [
+                {
+                    "type": "hidden",
+                    "name": "currentState"
+                }
+            ]
+        },
+        {
+            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation?action=retract",
+            "name": "retract",
+            "method": "PUT",
+            "fields": [
+                {
+                    "type": "hidden",
+                    "name": "currentState"
+                }
+            ]
+        }
+    ],
     "links": [
         {
             "rel": [
