@@ -79,9 +79,9 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 
 	_getExemptText() {
 		if (this.isExempt) {
-			return html`<span class="d2l-consistent-evaluation-lcb-is-exempt">(${this.localize('exempt')})</span>`;
+			return html`<span class="d2l-body-standard d2l-consistent-evaluation-lcb-is-exempt">(${this.localize('exempt')})</span>`;
 		} else {
-			return html``;
+			return null;
 		}
 	}
 
