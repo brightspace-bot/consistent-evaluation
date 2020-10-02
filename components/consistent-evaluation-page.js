@@ -64,6 +64,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'user-href',
 				type: String
 			},
+			userProgressOutcomeHref: {
+				attribute: 'user-progress-outcome-href',
+				type: String
+			},
+			coaDemonstrationHref: {
+				attribute: 'coa-demonstration-href',
+				type: String
+			},
 			submissionInfo: {
 				attribute: false,
 				type: Object
@@ -404,6 +412,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.token=${this.token}
 						.fileEvidenceUrl=${this._fileEvidenceUrl}
 						.textEvidence=${this._textEvidence}
+						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
@@ -413,6 +422,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						rubric-href=${ifDefined(this.rubricHref)}
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
 						outcomes-href=${ifDefined(this.outcomesHref)}
+						coa-eval-override-href=${ifDefined(this.coaDemonstrationHref)}
 						.richTextEditorConfig=${this.richtextEditorConfig}
 						.grade=${this._grade}
 						.gradeItemInfo=${this.gradeItemInfo}
@@ -422,7 +432,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?hide-rubric=${this.rubricHref === undefined}
 						?hide-grade=${this._noGradeComponent()}
 						?hide-outcomes=${this.outcomesHref === undefined}
-						?hide-feedback=${this._noFeedbackComponent()}						
+						?hide-feedback=${this._noFeedbackComponent()}
+						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
 						?allow-evaluation-write=${this.allowEvaluationWrite}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
