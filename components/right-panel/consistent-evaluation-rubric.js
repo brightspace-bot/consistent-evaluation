@@ -16,7 +16,7 @@ class ConsistentEvaluationRubric extends LitElement {
 				type: String
 			},
 			token: {
-				type: String
+				type: Object
 			},
 			readonly: {
 				attribute: 'read-only',

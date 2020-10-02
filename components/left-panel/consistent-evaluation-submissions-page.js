@@ -17,7 +17,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 				type: String
 			},
 			token: {
-				type: String
+				type: Object
 			}
 		};
 	}
