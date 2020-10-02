@@ -1,6 +1,6 @@
 import 'd2l-users/components/d2l-profile-image.js';
+import { bodyCompactStyles, bodyStandardStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
-import { bodyCompactStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { EntityMixinLit } from 'siren-sdk/src/mixin/entity-mixin-lit.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from '../locale.js';
@@ -24,7 +24,7 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 	}
 
 	static get styles() {
-		return [bodyCompactStyles, css`
+		return [bodyCompactStyles, bodyStandardStyles, css`
 			:host {
 				align-items: center;
 				display: flex;
