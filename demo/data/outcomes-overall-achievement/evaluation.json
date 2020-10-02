@@ -44,7 +44,7 @@
     ],
     "actions": [
         {
-            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation?action=update",
+            "href": "unused",
             "name": "update",
             "method": "PUT",
             "fields": [
@@ -55,7 +55,7 @@
             ]
         },
         {
-            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation?action=retract",
+            "href": "unused",
             "name": "retract",
             "method": "PUT",
             "fields": [
@@ -71,20 +71,20 @@
             "rel": [
                 "https://activities.api.brightspace.com/rels/attachments"
             ],
-            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation/attachments"
+            "href": "unused"
         },
         {
             "rel": [
                 "https://activities.api.brightspace.com/rels/evaluation",
                 "self"
             ],
-            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/users/user_169/evaluation"
+            "href": "data/outcomes-overall-achievement/evaluation.json"
         },
         {
             "rel": [
                 "https://activities.api.brightspace.com/rels/actor-activity-usage"
             ],
-            "href": "https://42a19097-12f4-4fa9-9739-146012e13bce.activities.api.proddev.d2l/activities/6606_2000_3/usages/6609/actor/user_169"
+            "href": "unused"
         }
     ],
     "rel": [
