@@ -393,9 +393,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-nav-bar>
 					<d2l-consistent-evaluation-learner-context-bar
 						href=${ifDefined(this.userHref)}
+						selected-item-name=${this._selectedFile}
 						.token=${this.token}
 						.submissionInfo=${this.submissionInfo}
-						.selectedItemName=${this._selectedFile}
 					></d2l-consistent-evaluation-learner-context-bar>
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">

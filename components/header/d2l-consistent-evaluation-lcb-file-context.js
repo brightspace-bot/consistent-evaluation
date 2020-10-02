@@ -1,11 +1,11 @@
-import '../../../d2l-polymer-siren-behaviors/store/entity-store.js';
+import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import { attachmentListRel, submissions } from '../controllers/constants';
-import { css, html, LitElement } from '../../../lit-element/lit-element.js';
+import { css, html, LitElement } from 'lit-element';
 import { Classes } from 'd2l-hypermedia-constants';
 import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '../../../@brightspace-ui/core/mixins/localize-mixin.js';
-import { RtlMixin } from '../../../@brightspace-ui/core/mixins/rtl-mixin.js';
-import { selectStyles } from '../../../@brightspace-ui/core/components/inputs/input-select-styles.js';
+import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
+import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 
 export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(LitElement)) {
 
@@ -20,7 +20,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				type: Array
 			},
 			selectedItemName: {
-				attribute: false,
+				attribute: 'selected-item-name',
 				type: String
 			}
 		};
@@ -48,7 +48,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	async updated(changedProperties) {
-		super.updated();
+		super.updated(changedProperties);
 
 		if (changedProperties.has('submissionInfo')) {
 			this._files = await this.getSubmissions();
