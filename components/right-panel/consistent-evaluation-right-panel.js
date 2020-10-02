@@ -13,6 +13,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 
 	static get properties() {
 		return {
+			allowEvaluationWrite: {
+				attribute: 'allow-evaluation-write',
+				type: Boolean
+			},
 			feedbackText: {
 				attribute: false
 			},
@@ -96,6 +100,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideOutcomes = false;
 		this.hideCoaOverride = false;
 		this.rubricFirstLoad = true;
+		this.allowEvaluationWrite = false;
 	}
 
 	_renderRubric() {
@@ -121,6 +126,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-grade-result
 					.grade=${this.grade}
 					.gradeItemInfo=${this.gradeItemInfo}
+					?read-only=${!this.allowEvaluationWrite}
 				></d2l-consistent-evaluation-grade-result>
 			`;
 		}
@@ -145,7 +151,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				<d2l-consistent-evaluation-feedback-presentational
 					.href=${this.evaluationHref}
 					.token=${this.token}
-					can-edit-feedback
+					?can-edit-feedback=${this.allowEvaluationWrite}
 					.feedbackText=${this.feedbackText}
 					.richTextEditorConfig=${this.richTextEditorConfig}
 				></d2l-consistent-evaluation-feedback-presentational>
@@ -181,7 +187,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	}
 
 	_syncRubricGrade(e) {
-		if (!e.detail.score || !e.detail.outOf) {
+		if (e.detail.score === null || !this.allowEvaluationWrite) {
 			return;
 		}
 
@@ -203,7 +209,12 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				}
 			}
 		} else {
-			score = (e.detail.score / e.detail.outOf) * this.grade.outOf;
+			let outOf = 100;
+			if (e.detail.outOf) {
+				outOf = e.detail.outOf;
+			}
+
+			score = (e.detail.score / outOf) * this.grade.outOf;
 		}
 
 		this.grade = new Grade(
