@@ -8,6 +8,8 @@
 			import '@brightspace-ui/core/components/typography/styles.js';
 			import '@brightspace-ui/core/components/typography/typography.js';
 			import '../components/header/d2l-consistent-evaluation-learner-context-bar.js';
+			const lcbIsExempt = document.getElementById('lcb-is-exempt');
+			lcbIsExempt.submissionInfo = {'isExempt': 'true'};
 		</script>
 		<title>d2l-consistent-evaluation-learner-context-bar</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +21,13 @@
 
 			<d2l-demo-snippet>
 				<d2l-consistent-evaluation-learner-context-bar
+					href="data/user.json"
+					token="token"
+				></d2l-consistent-evaluation-learner-context-bar>
+			</d2l-demo-snippet>
+
+			<d2l-demo-snippet>
+				<d2l-consistent-evaluation-learner-context-bar id="lcb-is-exempt"
 					href="data/user.json"
 					token="token"
 				></d2l-consistent-evaluation-learner-context-bar>

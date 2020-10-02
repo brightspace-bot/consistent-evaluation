@@ -54,12 +54,20 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 		`;
 	}
 
+	_getIsExempt() {
+		if (this.submissionInfo && this.submissionInfo.isExempt) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	render() {
 		return html`
 			<d2l-consistent-evaluation-lcb-user-context
 				href="${this.href}"
 				.token="${this.token}"
-				?is-exempt="${this.submissionInfo.isExempt}"
+				?is-exempt="${this._getIsExempt()}"
 			></d2l-consistent-evaluation-lcb-user-context>
 		`;
 	}
