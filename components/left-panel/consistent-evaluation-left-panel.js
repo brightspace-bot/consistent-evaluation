@@ -147,7 +147,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		return html`
 			<d2l-consistent-evaluation-outcomes-overall-achievement
 				href=${this.userProgressOutcomeHref}
-				token=${this.token}
+				.token=${this.token}
 			></d2l-consistent-evaluation-outcomes-overall-achievement>
 		`;
 	}

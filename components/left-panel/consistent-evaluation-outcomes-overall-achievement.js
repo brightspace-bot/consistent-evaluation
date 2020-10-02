@@ -14,7 +14,7 @@ export class ConsistentEvaluationOutcomesOverallAchievement extends LitElement {
 		return html`
             <d2l-coa-primary-panel
                 href=${this.href}
-                token=${this.token}
+                .token=${this.token}
             >
             </d2l-coa-primary-panel>
 		`;

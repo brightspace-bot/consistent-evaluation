@@ -19,7 +19,7 @@ class ConsistentEvaluationCoaEvalOverride extends LitElement {
 			<d2l-consistent-evaluation-right-panel-block no-title>
 				<d2l-outcomes-coa-eval-override
 					href=${this.href}
-					token=${this.token}>
+					.token=${this.token}>
 				</d2l-outcomes-coa-eval-override>
 			</d2l-consistent-evaluation-right-panel-block>
 		`;

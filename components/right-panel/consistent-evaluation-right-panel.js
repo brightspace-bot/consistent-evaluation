@@ -139,7 +139,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			return html`
 				<d2l-consistent-evaluation-coa-eval-override
 					href=${this.coaOverrideHref}
-					token=${this.token}
+					.token=${this.token}
 				></d2l-consistent-evaluation-coa-eval-override>
 			`;
 		}
