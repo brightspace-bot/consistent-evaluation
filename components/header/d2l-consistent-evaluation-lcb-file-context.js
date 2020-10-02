@@ -57,11 +57,9 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 	async getSubmissions() {
 		if (this.submissionInfo) {
-			let i = 1;
-			const submissionEntities = await this.submissionInfo.submissionList.map(async sub => {
+			const submissionEntities = await this.submissionInfo.submissionList.map(async(sub, index) => {
 				const file = await window.D2L.Siren.EntityStore.fetch(sub.href, this.token, false);
-				file.submissionNumber = i;
-				i++;
+				file.submissionNumber = index + 1;
 				return file;
 			});
 			return Promise.all(submissionEntities);
