@@ -365,6 +365,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-learner-context-bar
 						href=${ifDefined(this.userHref)}
 						.token=${this.token}
+						.submissionInfo=${this.submissionInfo}
 					></d2l-consistent-evaluation-learner-context-bar>
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
