@@ -4,9 +4,7 @@ import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
 	INVALID_BASE_HREF: 'baseHref was not defined when initializing ConsistentEvaluationHrefController',
-	INVALID_TYPE_BASE_HREF: 'baseHref must be a string when initializing ConsistentEvaluationHrefController',
-	INVALID_TOKEN: 'token was not defined when initializing ConsistentEvaluationHrefController',
-	INVALID_TYPE_TOKEN: 'token must be a string when initializing ConsistentEvaluationHrefController'
+	INVALID_TYPE_BASE_HREF: 'baseHref must be a string when initializing ConsistentEvaluationHrefController'
 };
 
 export class ConsistentEvaluationHrefController {
