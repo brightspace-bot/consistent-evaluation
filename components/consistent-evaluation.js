@@ -10,7 +10,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 	static get properties() {
 		return {
 			href: { type: String },
-			token: { type: String },
+			token: { type: Object },
 			returnHref: {
 				attribute: 'return-href',
 				type: String

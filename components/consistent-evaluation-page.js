@@ -96,7 +96,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				type: Number
 			},
 			token: {
-				type: String
+				type: Object
 			},
 			_displayToast: {
 				type: Boolean

@@ -30,7 +30,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 				type: Object
 			},
 			token: {
-				type: String
+				type: Object
 			},
 			_key: {
 				type: String
