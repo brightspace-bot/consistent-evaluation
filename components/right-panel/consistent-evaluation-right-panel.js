@@ -2,6 +2,7 @@ import './consistent-evaluation-feedback-presentational.js';
 import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
+import './consistent-evaluation-coa-eval-override.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -33,6 +34,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 			},
 			hideGrade: {
 				attribute: 'hide-grade',
+				type: Boolean
+			},
+			hideCoaOverride: {
+				attribute: 'hide-coa-eval-override',
 				type: Boolean
 			},
 			hideFeedback: {
@@ -67,6 +72,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				attribute: 'evaluation-href',
 				type: String
 			},
+			coaOverrideHref: {
+				attribute: 'coa-eval-override-href',
+				type: String
+			},
 			rubricReadOnly: {
 				attribute: 'rubric-read-only',
 				type: Boolean
@@ -89,6 +98,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideGrade = false;
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
+		this.hideCoaOverride = false;
 		this.rubricFirstLoad = true;
 		this.allowEvaluationWrite = false;
 	}
@@ -122,6 +132,17 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		}
 
 		return html``;
+	}
+
+	_renderCoaOverride() {
+		if (!this.hideCoaOverride) {
+			return html`
+				<d2l-consistent-evaluation-coa-eval-override
+					href=${this.coaOverrideHref}
+					.token=${this.token}
+				></d2l-consistent-evaluation-coa-eval-override>
+			`;
+		}
 	}
 
 	_renderFeedback() {
@@ -159,6 +180,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		return html`
 			${this._renderRubric()}
 			${this._renderGrade()}
+			${this._renderCoaOverride()}
 			${this._renderFeedback()}
 			${this._renderOutcome()}
 		`;
