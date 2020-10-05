@@ -367,7 +367,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	_onDialogClose(e) {
 		this._dialogOpened = false;
 		if (e.detail.action === DIALOG_ACTION_LEAVE) {
-			window.location = this.returnHref;
+			if (this._hasUnsavedChanges) {
+				window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+			}
+			window.location.assign(this.returnHref);
 		}
 	}
 
@@ -450,6 +453,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-feedback-text-editor-change=${this._onUnsavedChange}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
+						@on-d2l-consistent-eval-coa-eval-override-changed=${this._onUnsavedChange}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">

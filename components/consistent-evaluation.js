@@ -78,7 +78,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 	}
 
 	_shouldConfirmUnsavedChanges() {
-		return false;
+		return (this._childHrefs && this._childHrefs.userProgressOutcomeHref) !== undefined;
 	}
 
 	render() {
