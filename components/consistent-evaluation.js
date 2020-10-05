@@ -26,6 +26,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_gradeItemInfo: { type: Object },
 			_assignmentName: { type: String },
 			_organizationName: { type: String },
+			_userName: { type: String },
 			_iteratorTotal: { type: Number },
 			_iteratorIndex: { type: Number }
 		};
@@ -64,6 +65,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._gradeItemInfo = await controller.getGradeItemInfo();
 			this._assignmentName = await controller.getAssignmentOrganizationName('assignment');
 			this._organizationName = await controller.getAssignmentOrganizationName('organization');
+			this._userName = await controller.getUserName();
 			this._iteratorTotal = await controller.getIteratorInfo('total');
 			this._iteratorIndex = await controller.getIteratorInfo('index');
 		}
@@ -94,6 +96,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.gradeItemInfo=${this._gradeItemInfo}
 				.assignmentName=${this._assignmentName}
 				.organizationName=${this._organizationName}
+				.userName=${this._userName}
 				.iteratorTotal=${this._iteratorTotal}
 				.iteratorIndex=${this._iteratorIndex}
 				.token=${this.token}

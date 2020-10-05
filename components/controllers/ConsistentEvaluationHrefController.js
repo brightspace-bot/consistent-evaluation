@@ -219,6 +219,22 @@ export class ConsistentEvaluationHrefController {
 		return undefined;
 	}
 
+	async getUserName() {
+		const root = await this._getRootEntity(false);
+		if (root && root.entity) {
+			if (root.entity.hasLinkByRel(Rels.user)) {
+				const domainLink = root.entity.getLinkByRel(Rels.user).href;
+				const domainResponse = await this._getEntityFromHref(domainLink, false);
+
+				if (domainResponse && domainResponse.entity) {
+					const displayEntity = domainResponse.entity.getSubEntityByRel(Rels.displayName);
+					return displayEntity && displayEntity.properties && displayEntity.properties.name;
+				}
+			}
+		}
+		return undefined;
+	}
+
 	async getIteratorInfo(iteratorProperty) {
 		const root = await this._getRootEntity(false);
 		if (root && root.entity) {

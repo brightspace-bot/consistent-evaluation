@@ -87,6 +87,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: false,
 				type: String
 			},
+			userName: {
+				attribute: false,
+				type: String
+			},
 			iteratorTotal: {
 				attribute: false,
 				type: Number
@@ -355,7 +359,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-nav-bar
 						return-href=${ifDefined(this.returnHref)}
 						return-href-text=${ifDefined(this.returnHrefText)}
-						.assignmentName=${this.assignmentName}
+						.assignmentName=${this.assignmentName || this.userName}
 						.organizationName=${this.organizationName}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
