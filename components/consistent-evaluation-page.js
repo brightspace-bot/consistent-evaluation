@@ -318,6 +318,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			this._showToast(this.localize('publishError'));
 		}
 		this.submissionInfo.evaluationState = publishedState;
+		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 	}
 
 	async _retractEvaluation() {
@@ -330,6 +331,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
+		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 	}
 
 	_showToast(message) {
