@@ -402,7 +402,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
-						.fileEvidenceUrl=${this._fileEvidenceUrl}
+						file-evidence-url=${ifDefined(this._fileEvidenceUrl)}
 						.textEvidence=${this._textEvidence}
 					></d2l-consistent-evaluation-left-panel>
 				</div>

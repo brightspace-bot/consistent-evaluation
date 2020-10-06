@@ -32,7 +32,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			},
 			token: { type: String },
 			fileEvidenceUrl: {
-				attribute: false,
+				attribute: 'file-evidence-url',
 				type: String
 			},
 			textEvidence: {
@@ -89,7 +89,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 	_renderFileEvidence() {
 		return html`
 		<d2l-consistent-evaluation-evidence-file
-			.url=${this.fileEvidenceUrl}
+			url=${this.fileEvidenceUrl}
 			.token=${this.token}
 		></d2l-consistent-evaluation-evidence-file>`;
 	}
