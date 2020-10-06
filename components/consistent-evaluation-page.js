@@ -16,6 +16,7 @@ import { ConsistentEvaluationController } from './controllers/ConsistentEvaluati
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from './locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { submissions } from './controllers/constants';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
@@ -127,6 +128,18 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			_scrollbarStatus: {
 				attribute: false
 			},
+			_fileEvidenceUrl: {
+				attribute: false,
+				type: String
+			},
+			_textEvidence: {
+				attribute: false,
+				type: Object
+			},
+			_selectedFile: {
+				attribute: false,
+				type: String
+			},
 			_hasUnsavedChanges: {
 				attribute: false
 			},
@@ -163,6 +176,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
+		this._setSubmissionsView = this._setSubmissionsView.bind(this);
 		this._hasUnsavedChanges = false;
 		this._dialogOpened = false;
 		this.allowEvaluationWrite = false;
@@ -400,9 +414,32 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
 
+	_setSubmissionsView() {
+		this._fileEvidenceUrl = undefined;
+		this._textEvidence = undefined;
+		this._selectedFile = submissions;
+		this._showScrollbars();
+	}
+	_setFileEvidence(e) {
+		this._fileEvidenceUrl = e.detail.url;
+		this._selectedFile = e.detail.name;
+		this._textEvidence = undefined;
+		this._hideScrollbars();
+	}
+	_setTextEvidence(e) {
+		this._textEvidence = e.detail.textSubmissionEvidence;
+		this._selectedFile = e.detail.textSubmissionEvidence.name;
+		this._fileEvidenceUrl = undefined;
+		this._hideScrollbars();
+	}
+
 	render() {
 		return html`
-			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
+			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}"
+			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._setFileEvidence}
+			@d2l-consistent-evaluation-submission-item-render-evidence-text=${this._setTextEvidence}
+			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
+			>
 				<div slot="header">
 					<d2l-consistent-evaluation-nav-bar
 						return-href=${ifDefined(this.returnHref)}
@@ -418,6 +455,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-nav-bar>
 					<d2l-consistent-evaluation-learner-context-bar
 						href=${ifDefined(this.userHref)}
+						selected-item-name=${this._selectedFile}
 						.token=${this.token}
 						.submissionInfo=${this.submissionInfo}
 					></d2l-consistent-evaluation-learner-context-bar>
@@ -426,9 +464,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
+						file-evidence-url=${ifDefined(this._fileEvidenceUrl)}
+						.textEvidence=${this._textEvidence}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
-						@d2l-consistent-evaluation-left-panel-render-evidence=${this._hideScrollbars}
-						@d2l-consistent-evaluation-left-panel-render-submission-list=${this._showScrollbars}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
