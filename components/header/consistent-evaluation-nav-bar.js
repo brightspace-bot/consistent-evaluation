@@ -120,6 +120,26 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 		}
 	}
 
+	_renderIteratorButtons() {
+		if (this.iteratorIndex !== undefined || this.iteratorTotal !== undefined) {
+			return html`
+				<d2l-navigation-iterator 
+					slot="right"
+					@previous-click=${this._emitPreviousStudentEvent} 
+					@next-click=${this._emitNextStudentEvent}
+					?previous-disabled=${(this.iteratorIndex === 1 || this.iteratorIndex === undefined)}
+					?next-disabled=${(this.iteratorIndex === this.iteratorTotal || this.iteratorIndex === undefined || this.iteratorIndex === undefined)}
+					hide-text>
+
+					<div class="d2l-iterator-space"> 
+						<span class="d2l-iterator-text d2l-label-text">${this.localize('iteratorText', { num: this.iteratorIndex, total: this.iteratorTotal }) }</span>
+					</div>
+
+				</d2l-navigation-iterator>
+			`
+		}
+	}
+
 	render() {
 		return html`
 			<d2l-navigation-immersive
@@ -136,19 +156,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					<d2l-tooltip for="className">${this.organizationName}</d2l-tooltip>
 				</div>
 
-				<d2l-navigation-iterator 
-					slot="right"
-					@previous-click=${this._emitPreviousStudentEvent} 
-					@next-click=${this._emitNextStudentEvent}
-					?previous-disabled=${(this.iteratorIndex === 1 || this.iteratorIndex === undefined)}
-					?next-disabled=${(this.iteratorIndex === this.iteratorTotal || this.iteratorIndex === undefined || this.iteratorIndex === undefined)}
-					hide-text>
-
-					<div class="d2l-iterator-space"> 
-						<span class="d2l-iterator-text d2l-label-text">${this.localize('iteratorText', { num: this.iteratorIndex, total: this.iteratorTotal }) }</span>
-					</div>
-
-				</d2l-navigation-iterator>
+				${this._renderIteratorButtons()}
 				
 			</d2l-navigation-immersive>
 		`;

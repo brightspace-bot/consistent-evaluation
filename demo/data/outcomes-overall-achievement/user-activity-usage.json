@@ -3,10 +3,6 @@
 		"user-assignment-activity",
 		"activity"
     ],
-    "properties": {
-        "iteratorTotal": "1",
-        "iteratorIndex": "1"
-	},
 	"links": [
 		{
 			"rel": [
