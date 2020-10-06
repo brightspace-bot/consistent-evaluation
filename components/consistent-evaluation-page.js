@@ -245,6 +245,12 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		return undefined;
 	}
 
+	get _navBarTitleText() {
+		if (this.assignmentName) return this.assignmentName;
+
+		return this.userName;
+	}
+
 	get _navBarSubtitleText() {
 		if (this.userProgressOutcomeHref) {
 			return this.localize('overallAchievement');
@@ -434,7 +440,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-nav-bar
 						return-href=${ifDefined(this.returnHref)}
 						return-href-text=${ifDefined(this.returnHrefText)}
-						.titleName=${this.assignmentName || this.userName}
+						.titleName=${this._navBarTitleText}
 						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
