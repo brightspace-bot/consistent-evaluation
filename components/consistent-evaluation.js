@@ -79,6 +79,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 		this.href = this._childHrefs?.previousHref;
 	}
 
+	_shouldHideLearnerContextBar() {
+		return this._childHrefs && this._childHrefs.userProgressOutcomeHref;
+	}
+
 	render() {
 		return html`
 			<d2l-consistent-evaluation-page
@@ -102,6 +106,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
+				?hide-learner-context-bar=${this._shouldHideLearnerContextBar()}
 				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
 				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
 			></d2l-consistent-evaluation-page>

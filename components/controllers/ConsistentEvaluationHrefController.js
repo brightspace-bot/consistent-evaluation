@@ -240,9 +240,9 @@ export class ConsistentEvaluationHrefController {
 		if (root && root.entity) {
 			switch (iteratorProperty) {
 				case 'total':
-					return root.entity.properties.iteratorTotal;
+					return root.entity.properties?.iteratorTotal;
 				case 'index':
-					return root.entity.properties.iteratorIndex;
+					return root.entity.properties?.iteratorIndex;
 				default:
 					break;
 			}

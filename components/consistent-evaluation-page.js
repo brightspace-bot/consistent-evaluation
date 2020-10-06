@@ -71,6 +71,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'coa-demonstration-href',
 				type: String
 			},
+			hideLearnerContextBar: {
+				attribute: 'hide-learner-context-bar',
+				type: Boolean
+			},
 			submissionInfo: {
 				attribute: false,
 				type: Object
@@ -352,6 +356,18 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
 
+	_renderLearnerContextBar() {
+		if (!this.hideLearnerContextBar) {
+			return html`
+				<d2l-consistent-evaluation-learner-context-bar
+					href=${ifDefined(this.userHref)}
+					.token=${this.token}
+					.submissionInfo=${this.submissionInfo}
+				></d2l-consistent-evaluation-learner-context-bar>
+			`
+		}
+	}
+
 	render() {
 		return html`
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}">
@@ -366,11 +382,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
 					></d2l-consistent-evaluation-nav-bar>
-					<d2l-consistent-evaluation-learner-context-bar
-						href=${ifDefined(this.userHref)}
-						.token=${this.token}
-						.submissionInfo=${this.submissionInfo}
-					></d2l-consistent-evaluation-learner-context-bar>
+					${this._renderLearnerContextBar()}
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
