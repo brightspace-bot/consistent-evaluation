@@ -255,7 +255,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		if (this.userProgressOutcomeHref) {
 			return this.localize('overallAchievement');
 		}
-		return organizationName;
+		return this.organizationName;
 	}
 
 	async _initializeController() {
