@@ -229,6 +229,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		return undefined;
 	}
 
+	get _navBarSubtitleText() {
+		if (this.userProgressOutcomeHref) {
+			return this.localize('overallAchievement');
+		}
+		return organizationName;
+	}
+
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
@@ -375,8 +382,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-nav-bar
 						return-href=${ifDefined(this.returnHref)}
 						return-href-text=${ifDefined(this.returnHrefText)}
-						.assignmentName=${this.assignmentName || this.userName}
-						.organizationName=${this.organizationName}
+						.titleName=${this.assignmentName || this.userName}
+						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
