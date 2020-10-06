@@ -82,7 +82,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 	_shouldHideLearnerContextBar() {
 		return this._childHrefs && this._childHrefs.userProgressOutcomeHref;
 	}
-	
+
 	_shouldConfirmUnsavedChanges() {
 		return (this._childHrefs && this._childHrefs.userProgressOutcomeHref) !== undefined;
 	}

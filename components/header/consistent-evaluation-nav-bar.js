@@ -149,7 +149,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					</div>
 
 				</d2l-navigation-iterator>
-			`
+			`;
 		}
 	}
 

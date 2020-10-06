@@ -446,7 +446,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					.token=${this.token}
 					.submissionInfo=${this.submissionInfo}
 				></d2l-consistent-evaluation-learner-context-bar>
-			`
+			`;
 		}
 	}
 
