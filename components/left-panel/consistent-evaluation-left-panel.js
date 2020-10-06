@@ -31,7 +31,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 				attribute: false,
 				type: Object
 			},
-			token: { type: String },
+			token: { type: Object },
 			fileEvidenceUrl: {
 				attribute: 'file-evidence-url',
 				type: String

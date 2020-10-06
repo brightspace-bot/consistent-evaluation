@@ -6,7 +6,7 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 	static get properties() {
 		return {
 			url: { type: String },
-			token: { type: String }
+			token: { type: Object }
 		};
 	}
 
