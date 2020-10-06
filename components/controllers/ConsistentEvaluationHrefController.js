@@ -49,6 +49,7 @@ export class ConsistentEvaluationHrefController {
 		let actorHref = undefined;
 		let userProgressOutcomeHref = undefined;
 		let coaDemonstrationHref = undefined;
+		let specialAcessHref = undefined;
 
 		if (root && root.entity) {
 			root = root.entity;
@@ -61,6 +62,7 @@ export class ConsistentEvaluationHrefController {
 			userHref = this._getHref(root, userRel);
 			alignmentsHref = this._getHref(root, alignmentsRel);
 			userProgressOutcomeHref = this._getHref(root, userProgressOutcomeRel);
+			specialAcessHref = 'this._getHref(root, alignmentsRel)';
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
@@ -115,7 +117,8 @@ export class ConsistentEvaluationHrefController {
 			rubricHref,
 			userHref,
 			userProgressOutcomeHref,
-			coaDemonstrationHref
+			coaDemonstrationHref,
+			specialAcessHref
 		};
 	}
 

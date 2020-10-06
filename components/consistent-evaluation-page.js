@@ -44,6 +44,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'outcomes-href',
 				type: String
 			},
+			specialAccessHref: {
+				attribute: 'special-access-href',
+				type: String
+			},
 			richTextEditorDisabled: {
 				attribute: 'rich-text-editor-disabled',
 				type: Boolean
@@ -455,6 +459,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-nav-bar>
 					<d2l-consistent-evaluation-learner-context-bar
 						href=${ifDefined(this.userHref)}
+						special-access-href=${ifDefined(this.specialAccessHref)}
 						selected-item-name=${this._selectedFile}
 						.token=${this.token}
 						.submissionInfo=${this.submissionInfo}

@@ -10,6 +10,10 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 			href: {
 				type: String
 			},
+			specialAccessHref: {
+				attribute: 'special-access-href',
+				type: String
+			},
 			token: {
 				type: String
 			},
@@ -76,6 +80,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
 				selected-item-name=${this.selectedItemName}
+				special-access-href=${this.specialAccessHref}
 				.submissionInfo="${this.submissionInfo}">
 			</d2l-consistent-evaluation-lcb-file-context>
 
