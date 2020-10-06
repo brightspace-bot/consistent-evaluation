@@ -7,6 +7,8 @@ import './header/consistent-evaluation-nav-bar.js';
 import '@brightspace-ui/core/components/alert/alert-toast.js';
 import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
+import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
+import '@brightspace-ui/core/components/button/button.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
@@ -14,6 +16,8 @@ import { ConsistentEvaluationController } from './controllers/ConsistentEvaluati
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from './locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+
+const DIALOG_ACTION_LEAVE = 'leave';
 
 export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
 
@@ -63,6 +67,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'user-href',
 				type: String
 			},
+			confirmUnsavedChanges: {
+				attribute: 'confirm-unsaved-changes',
+				type: Boolean
+			},
 			userProgressOutcomeHref: {
 				attribute: 'user-progress-outcome-href',
 				type: String
@@ -104,7 +112,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				type: Number
 			},
 			token: {
-				type: String
+				type: Object
 			},
 			_displayToast: {
 				type: Boolean
@@ -125,6 +133,12 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: false
 			},
 			_scrollbarStatus: {
+				attribute: false
+			},
+			_hasUnsavedChanges: {
+				attribute: false
+			},
+			_dialogOpened: {
 				attribute: false
 			}
 		};
@@ -157,6 +171,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
+		this._hasUnsavedChanges = false;
+		this._dialogOpened = false;
 		this.allowEvaluationWrite = false;
 		this.allowEvaluationDelete = false;
 	}
@@ -306,6 +322,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationEntity = await this._controller.save(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('saved'));
+			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('saveError'));
 		}
@@ -317,6 +334,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationEntity = await this._controller.update(entity);
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('updated'));
+			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('updatedError'));
 		}
@@ -329,6 +347,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.evaluationState = this.evaluationEntity.properties.state;
 		if (!(this.evaluationEntity instanceof Error)) {
 			this._showToast(this.localize('published'));
+			this._updateHasUnsavedChanges(false);
 		} else {
 			this._showToast(this.localize('publishError'));
 		}
@@ -354,6 +373,39 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	_onToastClose() {
 		this._displayToast = false;
+	}
+
+	_showDialog() {
+		this._dialogOpened = true;
+	}
+
+	_onDialogClose(e) {
+		this._dialogOpened = false;
+		if (e.detail.action === DIALOG_ACTION_LEAVE) {
+			if (this._hasUnsavedChanges) {
+				window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+			}
+			window.location.assign(this.returnHref);
+		}
+	}
+
+	_onUnsavedChange() {
+		this._updateHasUnsavedChanges(true);
+	}
+
+	_updateHasUnsavedChanges(value) {
+		if (!this.confirmUnsavedChanges) return;
+		if (!this._hasUnsavedChanges && value) {
+			window.addEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+		} else if (this._hasUnsavedChanges && !value) {
+			window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+		}
+		this._hasUnsavedChanges = value;
+	}
+
+	_confirmUnsavedChangesBeforeUnload(e) {
+		e.preventDefault();
+		e.returnValue = 'Unsaved changes';
 	}
 
 	_renderToast() {
@@ -386,8 +438,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
+						?has-unsaved-changes=${this._hasUnsavedChanges}
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
+						@d2l-consistent-evaluation-navigate-back-with-unsaved-changes=${this._showDialog}
 					></d2l-consistent-evaluation-nav-bar>
 					${this._renderLearnerContextBar()}
 				</div>
@@ -421,7 +475,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
 						?allow-evaluation-write=${this.allowEvaluationWrite}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
+						@on-d2l-consistent-eval-feedback-text-editor-change=${this._onUnsavedChange}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
+						@on-d2l-consistent-eval-coa-eval-override-changed=${this._onUnsavedChange}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
@@ -439,6 +495,15 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					></d2l-consistent-evaluation-footer-presentational>
 				</div>
 			</d2l-template-primary-secondary>
+			<d2l-dialog-confirm	
+				title-text=${this.localize('unsavedChangesTitle')}
+				text=${this.localize('unsavedChangesBody')}
+				?opened=${this._dialogOpened}
+				@d2l-dialog-close=${this._onDialogClose}
+			>
+				<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_LEAVE}>${this.localize('leaveBtn')}</d2l-button>
+				<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
+			</d2l-dialog-confirm>
 		`;
 	}
 

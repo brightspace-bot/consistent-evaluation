@@ -6,9 +6,7 @@ import { Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationControllerErrors = {
 	INVALID_EVALUATION_HREF: 'evaluationHref was not defined when initializing ConsistentEvaluationController',
-	INVALID_TOKEN: 'token was not defined when initializing ConsistentEvaluationController',
 	INVALID_TYPE_EVALUATION_HREF: 'evaluationHref must be a string when initializing ConsistentEvaluationController',
-	INVALID_TYPE_TOKEN: 'token must be a string when initializing ConsistentEvaluationontroller',
 	INVALID_EVALUATION_ENTITY: 'Invalid entity provided for evaluation',
 	INVALID_FEEDBACK_TEXT: 'Feedback text must be a string (empty string permitted) to update feedback text.',
 	ERROR_FETCHING_ENTITY: 'Error while fetching evaluation entity.',
@@ -27,14 +25,6 @@ export class ConsistentEvaluationController {
 
 		if (typeof evaluationHref !== 'string') {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_TYPE_EVALUATION_HREF);
-		}
-
-		if (!token) {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_TOKEN);
-		}
-
-		if (typeof token !== 'string') {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_TYPE_TOKEN);
 		}
 
 		this.evaluationHref = evaluationHref;
