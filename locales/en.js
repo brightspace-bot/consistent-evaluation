@@ -44,7 +44,7 @@ export const val = {
 	unflag: 'Unflag',
 	unsavedChangesBody: 'Are you sure you want to leave without saving changes?',
 	unsavedChangesTitle: 'Unsaved changes',
-  userSubmissions: 'User Submissions',
+	userSubmissions: 'User Submissions',
 	viewFullSubmission: 'View Full Submission',
 	kB: ' KB',
 	MB: ' MB',
