@@ -164,7 +164,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	render() {
 		if (this._showFiles) {
 			return html`
-				<select class="d2l-input-select" @change=${this._onSelectChange}>
+				<select class="d2l-input-select" label=${this.localize('userSubmissions')} @change=${this._onSelectChange}>
 					<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
 					${this._files && this._files.map(submission => html`
 						<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
