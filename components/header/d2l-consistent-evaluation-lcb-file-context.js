@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { attachmentListRel, fileSubmission, observedInPerson, onPaperSubmission, submissions, textSubmission } from '../controllers/constants';
+import { attachmentListRel, submissions } from '../controllers/constants';
 import { css, html, LitElement } from 'lit-element';
 import { Classes } from 'd2l-hypermedia-constants';
 import { loadLocalizationResources } from '../locale.js';
@@ -69,22 +69,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			this._files = await this.getSubmissions();
 		}
 
-		if (this.submissionInfo && this.submissionInfo.submissionType) {
-			switch (this.submissionInfo.submissionType) {
-				case fileSubmission:
-				case textSubmission:
-					if (this._files && this._files.length > 0) {
-						this._showFiles = true;
-					} else {
-						this._showFiles = false;
-					}
-					break;
-				case observedInPerson:
-				case onPaperSubmission:
-				default:
-					this._showFiles = false;
-			}
-		}
+		this._showFiles = (this._files && this._files.length > 0);
 	}
 
 	async getSubmissions() {
