@@ -1,6 +1,7 @@
 import './consistent-evaluation-evidence-file.js';
 import './consistent-evaluation-evidence-text.js';
 import './consistent-evaluation-submissions-page.js';
+import './consistent-evaluation-outcomes-overall-achievement.js';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
 import { fileSubmission, observedInPerson, onPaperSubmission, submissionTypesWithNoEvidence, textSubmission } from '../controllers/constants';
@@ -30,14 +31,18 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 				attribute: false,
 				type: Object
 			},
-			token: { type: String },
-			_fileEvidenceUrl: {
-				attribute: false,
+			token: { type: Object },
+			fileEvidenceUrl: {
+				attribute: 'file-evidence-url',
 				type: String
 			},
-			_textEvidence: {
+			textEvidence: {
 				attribute: false,
 				type: Object
+			},
+			userProgressOutcomeHref: {
+				attribute: 'user-progress-outcome-href',
+				type: String
 			}
 		};
 	}
@@ -86,40 +91,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		return await loadLocalizationResources(langs);
 	}
 
-	_showFileEvidence(e) {
-		this._fileEvidenceUrl = e.detail.url;
-
-		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-evidence', {
-			composed: true
-		});
-		this.dispatchEvent(event);
-	}
-
-	_showTextEvidence(e) {
-		this._textEvidence = e.detail.textSubmissionEvidence;
-
-		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-evidence', {
-			composed: true
-		});
-		this.dispatchEvent(event);
-	}
-
-	_showSubmissionList() {
-		this._fileEvidenceUrl = undefined;
-		this._textEvidence = undefined;
-
-		const event = new CustomEvent('d2l-consistent-evaluation-left-panel-render-submission-list', {
-			composed: true
-		});
-		this.dispatchEvent(event);
-	}
-
 	_renderFileEvidence() {
 		return html`
 		<d2l-consistent-evaluation-evidence-file
-			.url=${this._fileEvidenceUrl}
+			url=${this.fileEvidenceUrl}
 			.token=${this.token}
-			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
 		></d2l-consistent-evaluation-evidence-file>`;
 	}
 
@@ -138,29 +114,39 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		</div>`;
 	}
 
+	_renderOverallAchievement() {
+		return html`
+			<d2l-consistent-evaluation-outcomes-overall-achievement
+				href=${this.userProgressOutcomeHref}
+				.token=${this.token}
+			></d2l-consistent-evaluation-outcomes-overall-achievement>
+		`;
+	}
+
 	_renderSubmissionList() {
 		return html`
 		<d2l-consistent-evaluation-submissions-page
 			submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
 			.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 			.token=${this.token}
-			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._showFileEvidence}
-			@d2l-consistent-evaluation-submission-item-render-evidence-text=${this._showTextEvidence}
 		></d2l-consistent-evaluation-submissions-page>`;
 	}
 
 	_renderTextEvidence() {
 		return html`
 		<d2l-consistent-evaluation-evidence-text
-			title=${this._textEvidence.title}
-			date=${this._textEvidence.date}
-			download-url=${this._textEvidence.downloadUrl}
-			.content=${this._textEvidence.content}
-			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._showSubmissionList}
+			title=${this.textEvidence.title}
+			date=${this.textEvidence.date}
+			download-url=${this.textEvidence.downloadUrl}
+			.content=${this.textEvidence.content}
 		></d2l-consistent-evaluation-evidence-text>`;
 	}
 
 	render() {
+		if (this.userProgressOutcomeHref) {
+			return this._renderOverallAchievement();
+		}
+
 		if (submissionTypesWithNoEvidence.includes(this.submissionInfo.submissionType)) {
 			return this._renderNoEvidenceSubmissionType();
 		}
@@ -169,11 +155,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			return this._renderNoSubmissions();
 		}
 
-		if (this._fileEvidenceUrl) {
+		if (this.fileEvidenceUrl) {
 			return this._renderFileEvidence();
 		}
 
-		if (this._textEvidence) {
+		if (this.textEvidence) {
 			return this._renderTextEvidence();
 		}
 

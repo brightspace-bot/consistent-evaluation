@@ -4,7 +4,7 @@ import 'd2l-activities/components/d2l-activity-editor/d2l-activity-attachments/d
 import './consistent-evaluation-right-panel-block';
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 
-import { html, LitElement } from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 import { AttachmentCollectionEntity } from 'siren-sdk/src/activities/AttachmentCollectionEntity.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { loadLocalizationResources } from '../locale.js';
@@ -30,9 +30,20 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 				type: Object
 			},
 			token: {
+				type: Object
+			},
+			_key: {
 				type: String
 			}
 		};
+	}
+
+	static get styles() {
+		return css`
+			.d2l-evaluation-feedback-container {
+				margin-top: 0.3rem;
+			}
+		`;
 	}
 
 	static async getLocalizeResources(langs) {
@@ -72,7 +83,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 	_saveOnFeedbackChange(e) {
 		const feedback = e.detail.content;
-
+		this._emitFeedbackTextEditorChangeEvent();
 		this._debounceJobs.feedback = Debouncer.debounce(
 			this._debounceJobs.feedback,
 			timeOut.after(800),
@@ -87,6 +98,14 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 			detail: feedback
 		}));
 	}
+
+	_emitFeedbackTextEditorChangeEvent() {
+		this.dispatchEvent(new CustomEvent('on-d2l-consistent-eval-feedback-text-editor-change', {
+			composed: true,
+			bubbles: true
+		}));
+	}
+
 	async saveAttachment(e) {
 		const files = e.detail.files;
 		for (let i = 0; files.length > i; i++) {
@@ -107,31 +126,40 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		await this.shadowRoot.querySelector('d2l-activity-attachments-editor').save();
 	}
 
+	updated(changedProperties) {
+		super.updated(changedProperties);
+
+		if (changedProperties.has('feedbackText')) {
+			this._key = this.href;
+		}
+	}
+
 	render() {
 		if (this.href && this.token) {
 
 			return html`
-			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
-				<d2l-activity-text-editor
-					.value="${this.feedbackText}"
-					.richtextEditorConfig="${this.richTextEditorConfig}"
-					@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
-					ariaLabel="${this.localize('overallFeedback')}"
-					?hidden="${!this.canEditFeedback}">
-				</d2l-activity-text-editor>
-
-				<div>
-					<d2l-activity-attachments-editor
-						.href="${this.href}/attachments"
-						.token="${this.token}"
-						@d2l-activity-attachments-picker-files-uploaded="${this.saveAttachment}"
-						@d2l-activity-attachments-picker-video-uploaded="${this.saveAttachment}"
-						@d2l-activity-attachments-picker-audio-uploaded="${this.saveAttachment}"
-						@d2l-attachment-removed="${this.deleteAttachment}"
-						?disabled="${!this.canEditFeedback}">
-					</d2l-activity-attachments-editor>
-				</div>
-			</d2l-consistent-evaluation-right-panel-block>
+			<div class="d2l-evaluation-feedback-container">
+				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
+					<d2l-activity-text-editor
+						.key="${this._key}"
+						.value="${this.feedbackText}"
+						.richtextEditorConfig="${this.richTextEditorConfig}"
+						@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
+						ariaLabel="${this.localize('overallFeedback')}">
+					</d2l-activity-text-editor>
+					<div>
+						<d2l-activity-attachments-editor
+							.href="${this.href}/attachments"
+							.token="${this.token}"
+							@d2l-activity-attachments-picker-files-uploaded="${this.saveAttachment}"
+							@d2l-activity-attachments-picker-video-uploaded="${this.saveAttachment}"
+							@d2l-activity-attachments-picker-audio-uploaded="${this.saveAttachment}"
+							@d2l-attachment-removed="${this.deleteAttachment}"
+							?disabled="${!this.canEditFeedback}">
+						</d2l-activity-attachments-editor>
+					</div>
+				</d2l-consistent-evaluation-right-panel-block>
+			</div>
 		`;
 		} else {
 			return html``;
