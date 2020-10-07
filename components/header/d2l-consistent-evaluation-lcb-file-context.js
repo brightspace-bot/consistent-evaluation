@@ -127,6 +127,15 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		this.dispatchEvent(event);
 	}
 
+	_truncateFileName(fileName) {
+		const ext = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
+		const maxFileLength = 25;
+		if (fileName.length <= maxFileLength) {
+			return fileName;
+		}
+		return  `${fileName.substring(0, maxFileLength)  }...${  ext}`;
+	}
+
 	render() {
 		return html`
 			<select class="d2l-input-select" @change=${this._onSelectChange}>
@@ -134,7 +143,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				${this._files && this._files.map(submission => html`
 					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
 						${this.getSubmissionFiles(submission).map(sf => html`
-							<option value=${JSON.stringify(sf)} label=${sf.name} ?selected=${sf.name === this.selectedItemName} class="select-option"></option>
+							<option value=${JSON.stringify(sf)} label=${this._truncateFileName(sf.name)} ?selected=${sf.name === this.selectedItemName} class="select-option"></option>
 						`)}
 					</optgroup>
 				`)};
