@@ -39,6 +39,12 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 					margin-left: 0;
 					margin-right: 0.7rem;
 				}
+				.d2l-truncate {
+					overflow: hidden;
+					overflow-wrap: break-word;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 			`
 		];
 	}
@@ -129,7 +135,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 	_truncateFileName(fileName) {
 		const ext = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
-		const maxFileLength = 25;
+		const maxFileLength = 50;
 		if (fileName.length <= maxFileLength) {
 			return fileName;
 		}
@@ -138,7 +144,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 	render() {
 		return html`
-			<select class="d2l-input-select" @change=${this._onSelectChange}>
+			<select class="d2l-input-select d2l-truncate" @change=${this._onSelectChange}>
 				<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
 				${this._files && this._files.map(submission => html`
 					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
