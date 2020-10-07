@@ -27,7 +27,7 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 
 		window.addEventListener('message', e => {
 			if (e.data.type === 'token-request') {
-				if(typeof this.token === 'string'){
+				if (typeof this.token === 'string') {
 					this._postMessage(e, this.token);
 				} else {
 					this.token().then(token => {
@@ -38,7 +38,7 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 		});
 	}
 
-	_postMessage(e, token){
+	_postMessage(e, token) {
 		e.source.postMessage({
 			type: 'token-response',
 			token: token
