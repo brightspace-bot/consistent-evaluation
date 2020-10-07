@@ -134,12 +134,13 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	_truncateFileName(fileName) {
-		const ext = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
 		const maxFileLength = 50;
 		if (fileName.length <= maxFileLength) {
 			return fileName;
 		}
-		return  `${fileName.substring(0, maxFileLength)  }...${  ext}`;
+
+		const ext = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length);
+		return  `${fileName.substring(0, maxFileLength)}…${ext}`;
 	}
 
 	render() {
