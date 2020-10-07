@@ -27,10 +27,12 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 
 		window.addEventListener('message', e => {
 			if (e.data.type === 'token-request') {
-				e.source.postMessage({
-					type: 'token-response',
-					token: this.token
-				}, 'https://s.brightspace.com');
+				this.token().then(token => {
+					e.source.postMessage({
+						type: 'token-response',
+						token: token
+					}, 'https://s.brightspace.com');
+				});
 			}
 		});
 	}
