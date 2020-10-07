@@ -147,20 +147,20 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	render() {
-		if (this._showFiles) {
-			return html`
-				<select class="d2l-input-select" label=${this.localize('userSubmissions')} @change=${this._onSelectChange}>
-					<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
-					${this._files && this._files.map(submission => html`
-						<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
-							${this.getSubmissionFiles(submission).map(sf => html`
-								<option value=${JSON.stringify(sf)} label=${sf.name} ?selected=${sf.name === this.selectedItemName} class="select-option"></option>
-							`)}
-						</optgroup>
-					`)};
-				</select>
-			`;
-		}
+		if (!this._showFiles) return;
+
+		return html`
+			<select class="d2l-input-select" aria-label=${this.localize('userSubmissions')} @change=${this._onSelectChange}>
+				<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
+				${this._files && this._files.map(submission => html`
+					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
+						${this.getSubmissionFiles(submission).map(sf => html`
+							<option value=${JSON.stringify(sf)} label=${sf.name} ?selected=${sf.name === this.selectedItemName} class="select-option"></option>
+						`)}
+					</optgroup>
+				`)};
+			</select>
+		`;
 	}
 }
 
