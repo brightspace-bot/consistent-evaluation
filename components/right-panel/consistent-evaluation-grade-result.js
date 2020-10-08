@@ -61,6 +61,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		this._gradeButtonUrl = '';
 		this._reportsButtonUrl = '';
 		this._debounceJobs = {};
+		this.flush = this.flush.bind(this);
 
 		// hard coded as disabled as not yet supported by API
 		this._manuallyOverriddenGrade = undefined;
@@ -72,12 +73,12 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('d2l-flush', this.flush.bind(this));
+		window.addEventListener('d2l-flush', this.flush);
 	}
 
 	disconnectedCallback() {
+		window.removeEventListener('d2l-flush', this.flush);
 		super.disconnectedCallback();
-		window.removeEventListener('d2l-flush', this.flush.bind(this));
 	}
 
 	flush() {

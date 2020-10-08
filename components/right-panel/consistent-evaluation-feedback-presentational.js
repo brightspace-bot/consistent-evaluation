@@ -55,24 +55,25 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 		this.canEditFeedback = false;
 		this._debounceJobs = {};
+		this.flush = this.flush.bind(this);
+	}
+
+	htmlEditorEnabled(e) {
+		if (e.detail.key === 'd2l-provider-html-editor-enabled') {
+			e.detail.provider = true;
+		}
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
-		this.addEventListener('d2l-request-provider',
-			e => {
-				if (e.detail.key === 'd2l-provider-html-editor-enabled') e.detail.provider = true;
-			});
-		window.addEventListener('d2l-flush', this.flush.bind(this));
+		this.addEventListener('d2l-request-provider', this.htmlEditorEnabled);
+		window.addEventListener('d2l-flush', this.flush);
 	}
 
 	disconnectedCallback() {
+		this.removeEventListener('d2l-request-provider', this.htmlEditorEnabled);
+		window.removeEventListener('d2l-flush', this.flush);
 		super.disconnectedCallback();
-		this.removeEventListener('d2l-request-provider',
-			e => {
-				if (e.detail.key === 'd2l-provider-html-editor-enabled') e.detail.provider = true;
-			});
-		window.removeEventListener('d2l-flush', this.flush.bind(this));
 	}
 
 	flush() {
