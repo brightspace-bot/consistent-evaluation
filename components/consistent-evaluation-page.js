@@ -278,18 +278,22 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		return this.evaluationEntity.properties.state === publishedState;
 	}
 
-	_onNextStudentClick() {
+	async _onNextStudentClick() {
+		const unlock = await this._mutex.lock();
 		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
 			composed: true,
 			bubbles: true
 		}));
+		unlock();
 	}
 
-	_onPreviousStudentClick() {
+	async _onPreviousStudentClick() {
+		const unlock = await this._mutex.lock();
 		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
 			composed: true,
 			bubbles: true
 		}));
+		unlock();
 	}
 
 	_hideScrollbars() {
