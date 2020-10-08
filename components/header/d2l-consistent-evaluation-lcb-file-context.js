@@ -42,7 +42,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				:host([dir="rtl"]) {
 					margin-left: 0;
 					margin-right: 0.7rem;
-				}}
+				}
 				.d2l-truncate {
 					overflow: hidden;
 					overflow-wrap: break-word;
@@ -52,7 +52,8 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				@media (max-width: 930px) {
 					:host {
 						display: none;
-        }
+					}
+				}
 			`
 		];
 	}
