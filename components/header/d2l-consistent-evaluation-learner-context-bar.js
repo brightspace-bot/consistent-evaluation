@@ -11,7 +11,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 				type: String
 			},
 			token: {
-				type: String
+				type: Object
 			},
 			submissionInfo: {
 				attribute: false,
