@@ -14,4 +14,13 @@ export class Awaiter {
 			begin = res;
 		});
 	}
+
+	async dispatch(fn) {
+		const unlock = await this.lock();
+		try {
+			return await fn();
+		} finally {
+			unlock();
+		}
+	}
 }

@@ -279,21 +279,21 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _onNextStudentClick() {
-		const unlock = await this._mutex.lock();
-		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
-			composed: true,
-			bubbles: true
-		}));
-		unlock();
+		await this._mutex.dispatch(
+			() => this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
+				composed: true,
+				bubbles: true
+			}))
+		);
 	}
 
 	async _onPreviousStudentClick() {
-		const unlock = await this._mutex.lock();
-		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
-			composed: true,
-			bubbles: true
-		}));
-		unlock();
+		await this._mutex.dispatch(
+			() => this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
+				composed: true,
+				bubbles: true
+			}))
+		);
 	}
 
 	_hideScrollbars() {
@@ -305,29 +305,31 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _transientSaveFeedback(e) {
-		const unlock = await this._mutex.lock();
-		const entity = await this._controller.fetchEvaluationEntity(false);
-		const newFeedbackVal = e.detail;
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				const newFeedbackVal = e.detail;
 
-		this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
-
-		unlock();
+				this.evaluationEntity = await this._controller.transientSaveFeedback(entity, newFeedbackVal);
+			}
+		);
 	}
 
 	async _transientSaveGrade(e) {
-		const unlock = await this._mutex.lock();
-		const entity = await this._controller.fetchEvaluationEntity(false);
-		let newGradeVal;
-		const type = e.detail.grade.scoreType;
-		if (type === GradeType.Letter) {
-			newGradeVal = e.detail.grade.letterGrade;
-		}
-		else if (type === GradeType.Number) {
-			newGradeVal = e.detail.grade.score;
-		}
-		this.evaluationEntity = await this._controller.transientSaveGrade(entity, newGradeVal);
-
-		unlock();
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				let newGradeVal;
+				const type = e.detail.grade.scoreType;
+				if (type === GradeType.Letter) {
+					newGradeVal = e.detail.grade.letterGrade;
+				}
+				else if (type === GradeType.Number) {
+					newGradeVal = e.detail.grade.score;
+				}
+				this.evaluationEntity = await this._controller.transientSaveGrade(entity, newGradeVal);
+			}
+		);
 	}
 
 	async _saveEvaluation() {
@@ -336,17 +338,19 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			bubbles: true
 		}));
 
-		const unlock = await this._mutex.lock();
-		const entity = await this._controller.fetchEvaluationEntity(false);
-		this.evaluationEntity = await this._controller.save(entity);
-		if (!(this.evaluationEntity instanceof Error)) {
-			this._showToast(this.localize('saved'));
-			this._updateHasUnsavedChanges(false);
-		} else {
-			this._showToast(this.localize('saveError'));
-		}
-		this.evaluationState = this.evaluationEntity.properties.state;
-		unlock();
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.save(entity);
+				if (!(this.evaluationEntity instanceof Error)) {
+					this._showToast(this.localize('saved'));
+					this._updateHasUnsavedChanges(false);
+				} else {
+					this._showToast(this.localize('saveError'));
+				}
+				this.evaluationState = this.evaluationEntity.properties.state;
+			}
+		);
 	}
 
 	async _updateEvaluation() {
@@ -355,17 +359,19 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			bubbles: true
 		}));
 
-		const unlock = await this._mutex.lock();
-		const entity = await this._controller.fetchEvaluationEntity(false);
-		this.evaluationEntity = await this._controller.update(entity);
-		if (!(this.evaluationEntity instanceof Error)) {
-			this._showToast(this.localize('updated'));
-			this._updateHasUnsavedChanges(false);
-		} else {
-			this._showToast(this.localize('updatedError'));
-		}
-		this.evaluationState = this.evaluationEntity.properties.state;
-		unlock();
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.update(entity);
+				if (!(this.evaluationEntity instanceof Error)) {
+					this._showToast(this.localize('updated'));
+					this._updateHasUnsavedChanges(false);
+				} else {
+					this._showToast(this.localize('updatedError'));
+				}
+				this.evaluationState = this.evaluationEntity.properties.state;
+			}
+		);
 	}
 
 	async _publishEvaluation() {
@@ -374,19 +380,21 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			bubbles: true
 		}));
 
-		const unlock = await this._mutex.lock();
-		const entity = await this._controller.fetchEvaluationEntity(false);
-		this.evaluationEntity = await this._controller.publish(entity);
-		this.evaluationState = this.evaluationEntity.properties.state;
-		if (!(this.evaluationEntity instanceof Error)) {
-			this._showToast(this.localize('published'));
-			this._updateHasUnsavedChanges(false);
-		} else {
-			this._showToast(this.localize('publishError'));
-		}
-		this.submissionInfo.evaluationState = publishedState;
-		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
-		unlock();
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.publish(entity);
+				this.evaluationState = this.evaluationEntity.properties.state;
+				if (!(this.evaluationEntity instanceof Error)) {
+					this._showToast(this.localize('published'));
+					this._updateHasUnsavedChanges(false);
+				} else {
+					this._showToast(this.localize('publishError'));
+				}
+				this.submissionInfo.evaluationState = publishedState;
+				this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
+			}
+		);
 	}
 
 	async _retractEvaluation() {
@@ -395,18 +403,20 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			bubbles: true
 		}));
 
-		const unlock = await this._mutex.lock();
-		const entity = await this._controller.fetchEvaluationEntity(false);
-		this.evaluationEntity = await this._controller.retract(entity);
-		if (!(this.evaluationEntity instanceof Error)) {
-			this._showToast(this.localize('retracted'));
-		} else {
-			this._showToast(this.localize('retractError'));
-		}
-		this.evaluationState = this.evaluationEntity.properties.state;
-		this.submissionInfo.evaluationState = draftState;
-		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
-		unlock();
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.retract(entity);
+				if (!(this.evaluationEntity instanceof Error)) {
+					this._showToast(this.localize('retracted'));
+				} else {
+					this._showToast(this.localize('retractError'));
+				}
+				this.evaluationState = this.evaluationEntity.properties.state;
+				this.submissionInfo.evaluationState = draftState;
+				this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
+			}
+		);
 	}
 
 	_showToast(message) {
