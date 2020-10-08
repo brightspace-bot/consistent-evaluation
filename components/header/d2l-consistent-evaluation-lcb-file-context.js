@@ -147,7 +147,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	render() {
-		if (!this._showFiles) return;
+		if (!this._showFiles) return html ``;
 
 		return html`
 			<select class="d2l-input-select" aria-label=${this.localize('userSubmissions')} @change=${this._onSelectChange}>
