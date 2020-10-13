@@ -32,10 +32,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			_submissionLateness: {
 				attribute: false,
 				type: Number
-			},
-			_showDialog: {
-				attribute: false,
-				type: Boolean
 			}
 		};
 	}
@@ -63,7 +59,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 	constructor() {
 		super();
-		this._showDialog = false;
 		/* global moment:false */
 		moment.relativeTimeThreshold('s', 60);
 		moment.relativeTimeThreshold('m', 60);
