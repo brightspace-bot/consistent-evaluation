@@ -1,7 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import '@brightspace-ui/core/components/button/button-subtle.js';
-import 'd2l-activities/components/d2l-activity-editor/d2l-activity-special-access-editor.js';
-import '@brightspace-ui/core/components/dialog/dialog.js';
 import { attachmentListRel, submissions } from '../controllers/constants';
 import { css, html, LitElement } from 'lit-element';
 import { Classes } from 'd2l-hypermedia-constants';
@@ -175,13 +173,56 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				<d2l-button-subtle
 					text="${moment.duration(Number(this._submissionLateness), 'seconds').humanize()} ${this.localize('late')}"
 					icon="tier1:access-special"
-					@click="${this._specialAccessClicked}"
+					@click="${this._openSpecialAccessDialog}"
 				></d2l-button-subtle>`;
 		}
 	}
 
-	_specialAccessClicked() {
-		this._showDialog = true;
+	_openSpecialAccessDialog() {
+		const specialAccess = this.specialAccessHref;
+
+		if (!specialAccess) {
+			console.error('Consistent-Eval: Expected special access item dialog URL, but none found');
+			return;
+		}
+
+		const location = new D2L.LP.Web.Http.UrlLocation(specialAccess);
+
+		const buttons = [
+			{
+				Key: 'save',
+				Text: this.localize('saveBtn'),
+				ResponseType: 1, // D2L.Dialog.ResponseType.Positive
+				IsPrimary: true,
+				IsEnabled: true
+			},
+			{
+				Text: this.localize('cancelBtn'),
+				ResponseType: 2, // D2L.Dialog.ResponseType.Negative
+				IsPrimary: false,
+				IsEnabled: true
+			}
+		];
+
+		const delayedResult = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
+			/*               opener: */ document.body,
+			/*             location: */ location,
+			/*          srcCallback: */ 'SrcCallback',
+			/*       resizeCallback: */ '',
+			/*      responseDataKey: */ 'result',
+			/*                width: */ 1920,
+			/*               height: */ 1080,
+			/*            closeText: */ this.localize('closeBtn'),
+			/*              buttons: */ buttons,
+			/* forceTriggerOnCancel: */ false
+		);
+
+		// "X" abort handler
+		// refetch special access in case the user count has changed
+		delayedResult.AddReleaseListener(() => specialAccess);
+
+		// Save or Cancel button handler
+		delayedResult.AddListener(() => specialAccess);
 	}
 
 	render() {
@@ -197,16 +238,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				`)};
 			</select>
 			${this._renderLateButton()}
-			<d2l-dialog 
-				title-text="Special Access - AssignmentName - CourseName"
-				?opened="${this._showDialog}">
-				
-				<div class="d2l-heading-2">User - StudentName</div>
-				<div class="d2l-heading-2">This should be filled with properties</div>
-
-				<d2l-button slot="footer" primary data-dialog-action="done">Save</d2l-button>
-				<d2l-button slot="footer" data-dialog-action>Cancel</d2l-button>
-			</d2l-dialog>
  		`;
 	}
 }
