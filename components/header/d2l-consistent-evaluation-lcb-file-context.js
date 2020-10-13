@@ -3,7 +3,6 @@ import '@brightspace-ui/core/components/button/button-subtle.js';
 import { attachmentListRel, submissions } from '../controllers/constants';
 import { css, html, LitElement } from 'lit-element';
 import { Classes } from 'd2l-hypermedia-constants';
-import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
@@ -37,7 +36,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	static get styles() {
-		return [labelStyles, selectStyles,
+		return [selectStyles,
 			css`
 				:host {
 					margin-left: 0.7rem;
