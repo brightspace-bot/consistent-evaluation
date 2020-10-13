@@ -98,7 +98,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			if (submission.entity.getSubEntityByClass(Classes.assignments.submissionDate)) {
 				sf.properties.latenessTimespan = submission.entity.properties.lateTimeSpan;
 			}
-			// this is when the assignment was submitted
+
 			sf.properties.date = submission.entity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
 			sf.properties.displayNumber = displayNum;
 			return sf.properties;
