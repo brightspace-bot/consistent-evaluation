@@ -84,6 +84,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'coa-demonstration-href',
 				type: String
 			},
+			hideLearnerContextBar: {
+				attribute: 'hide-learner-context-bar',
+				type: Boolean
+			},
 			submissionInfo: {
 				attribute: false,
 				type: Object
@@ -97,6 +101,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				type: String
 			},
 			organizationName: {
+				attribute: false,
+				type: String
+			},
+			userName: {
 				attribute: false,
 				type: String
 			},
@@ -255,9 +263,23 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		return undefined;
 	}
 
+	get _navBarTitleText() {
+		if (this.assignmentName) return this.assignmentName;
+
+		return this.userName;
+	}
+
+	get _navBarSubtitleText() {
+		if (this.userProgressOutcomeHref) {
+			return this.localize('overallAchievement');
+		}
+		return this.organizationName;
+	}
+
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
-		this.evaluationEntity = await this._controller.fetchEvaluationEntity();
+		const bypassCache = true;
+		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
@@ -355,6 +377,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			this._showToast(this.localize('publishError'));
 		}
 		this.submissionInfo.evaluationState = publishedState;
+		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 	}
 
 	async _retractEvaluation() {
@@ -367,6 +390,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		}
 		this.evaluationState = this.evaluationEntity.properties.state;
 		this.submissionInfo.evaluationState = draftState;
+		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 	}
 
 	_showToast(message) {
@@ -418,6 +442,20 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			@d2l-alert-toast-close=${this._onToastClose}>${this._toastMessage}</d2l-alert-toast>`;
 	}
 
+	_renderLearnerContextBar() {
+		if (!this.hideLearnerContextBar) {
+			return html`
+				<d2l-consistent-evaluation-learner-context-bar
+					href=${ifDefined(this.userHref)}
+					selected-item-name=${this._selectedFile}
+					special-access-href=${ifDefined(this.specialAccessHref)}
+					.token=${this.token}
+					.submissionInfo=${this.submissionInfo}
+				></d2l-consistent-evaluation-learner-context-bar>
+			`;
+		}
+	}
+
 	_setSubmissionsView() {
 		this._fileEvidenceUrl = undefined;
 		this._textEvidence = undefined;
@@ -448,8 +486,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-nav-bar
 						return-href=${ifDefined(this.returnHref)}
 						return-href-text=${ifDefined(this.returnHrefText)}
-						.assignmentName=${this.assignmentName}
-						.organizationName=${this.organizationName}
+						.titleName=${this._navBarTitleText}
+						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
 						?has-unsaved-changes=${this._hasUnsavedChanges}
@@ -457,13 +495,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
 						@d2l-consistent-evaluation-navigate-back-with-unsaved-changes=${this._showDialog}
 					></d2l-consistent-evaluation-nav-bar>
-					<d2l-consistent-evaluation-learner-context-bar
-						href=${ifDefined(this.userHref)}
-						special-access-href=${ifDefined(this.specialAccessHref)}
-						selected-item-name=${this._selectedFile}
-						.token=${this.token}
-						.submissionInfo=${this.submissionInfo}
-					></d2l-consistent-evaluation-learner-context-bar>
+					${this._renderLearnerContextBar()}
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
