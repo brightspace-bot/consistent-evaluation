@@ -55,10 +55,31 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 		this.canEditFeedback = false;
 		this._debounceJobs = {};
-		this.addEventListener('d2l-request-provider',
-			e => {
-				if (e.detail.key === 'd2l-provider-html-editor-enabled') e.detail.provider = true;
-			});
+		this.flush = this.flush.bind(this);
+	}
+
+	htmlEditorEnabled(e) {
+		if (e.detail.key === 'd2l-provider-html-editor-enabled') {
+			e.detail.provider = true;
+		}
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this.addEventListener('d2l-request-provider', this.htmlEditorEnabled);
+		window.addEventListener('d2l-flush', this.flush);
+	}
+
+	disconnectedCallback() {
+		this.removeEventListener('d2l-request-provider', this.htmlEditorEnabled);
+		window.removeEventListener('d2l-flush', this.flush);
+		super.disconnectedCallback();
+	}
+
+	flush() {
+		if (this._debounceJobs.feedback && this._debounceJobs.feedback.isActive()) {
+			this._debounceJobs.feedback.flush();
+		}
 	}
 
 	_saveOnFeedbackChange(e) {
