@@ -181,6 +181,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	constructor() {
 		super();
+		/* global moment:false */
+		moment.relativeTimeThreshold('s', 60);
+		moment.relativeTimeThreshold('m', 60);
+		moment.relativeTimeThreshold('h', 24);
+		moment.relativeTimeThreshold('d', Number.MAX_SAFE_INTEGER);
+		moment.relativeTimeRounding(Math.floor);
+
 		this._evaluationHref = undefined;
 		this._token = undefined;
 		this._controller = undefined;

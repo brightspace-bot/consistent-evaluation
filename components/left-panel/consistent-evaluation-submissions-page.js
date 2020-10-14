@@ -44,11 +44,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		this._token = undefined;
 		this._submissionEntities = [];
 		/* global moment:false */
-		moment.relativeTimeThreshold('s', 60);
-		moment.relativeTimeThreshold('m', 60);
-		moment.relativeTimeThreshold('h', 24);
-		moment.relativeTimeThreshold('d', Number.MAX_SAFE_INTEGER);
-		moment.relativeTimeRounding(Math.floor);
 	}
 
 	get submissionList() {

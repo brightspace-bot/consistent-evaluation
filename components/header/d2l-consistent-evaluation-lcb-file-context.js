@@ -74,12 +74,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	constructor() {
 		super();
 		/* global moment:false */
-		moment.relativeTimeThreshold('s', 60);
-		moment.relativeTimeThreshold('m', 60);
-		moment.relativeTimeThreshold('h', 24);
-		moment.relativeTimeThreshold('d', Number.MAX_SAFE_INTEGER);
-		moment.relativeTimeRounding(Math.floor);
-
 		this._showFiles = false;
 	}
 
@@ -144,11 +138,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			this._dispatchRenderEvidenceTextEvent(submission);
 		}
 
-		if (submission.latenessTimespan !== undefined) {
-			this._submissionLateness = submission.latenessTimespan;
-		} else {
-			this._submissionLateness = undefined;
-		}
+		this._submissionLateness = submission.latenessTimespan;
 	}
 
 	_dispatchRenderEvidenceFileEvent(sf) {
