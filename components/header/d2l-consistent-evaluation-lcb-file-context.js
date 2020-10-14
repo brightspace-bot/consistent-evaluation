@@ -177,6 +177,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		} else {
 			return html`
 				<d2l-button-subtle
+					id="lateButton"
 					text="${moment.duration(Number(this._submissionLateness), 'seconds').humanize()} ${this.localize('late')}"
 					icon="tier1:access-special"
 					@click="${this._openSpecialAccessDialog}"
@@ -211,7 +212,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		];
 
 		const delayedResult = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
-			/*               opener: */ document.body,
+			/*               opener: */ this.shadowRoot.querySelector('d2l-button-subtle'),
 			/*             location: */ location,
 			/*          srcCallback: */ 'SrcCallback',
 			/*       resizeCallback: */ '',
