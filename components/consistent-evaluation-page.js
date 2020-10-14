@@ -311,6 +311,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		}));
 	}
 
+	_resetEvidence() {
+		this.submissionInfo = undefined;
+		this._fileEvidenceUrl = undefined;
+		this._textEvidence = undefined;
+		this.userProgressOutcomeHref = undefined;
+	}
+
 	_hideScrollbars() {
 		this._scrollbarStatus = 'hidden';
 	}
