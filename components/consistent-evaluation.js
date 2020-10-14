@@ -68,6 +68,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._userName = await controller.getUserName();
 			this._iteratorTotal = await controller.getIteratorInfo('total');
 			this._iteratorIndex = await controller.getIteratorInfo('index');
+			this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._resetEvidence();
 		}
 	}
 
