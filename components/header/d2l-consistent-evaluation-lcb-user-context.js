@@ -64,17 +64,17 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 
 	set _entity(entity) {
 		if (this._entityHasChanged(entity)) {
-			this._onUserEntityChanged(entity);
+			this._onActorEntityChanged(entity);
 			super._entity = entity;
 		}
 	}
 
-	_onUserEntityChanged(userEntity, error) {
-		if (error || userEntity === null) {
+	_onActorEntityChanged(actorEntity, error) {
+		if (error || actorEntity === null) {
 			return;
 		}
 
-		this._displayName = userEntity.getDisplayName();
+		this._displayName = actorEntity.getDisplayName();
 	}
 
 	_getExemptText() {
