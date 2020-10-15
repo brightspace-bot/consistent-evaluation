@@ -8,7 +8,12 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 
 	static get properties() {
 		return {
-			href: {
+			userHref: {
+				attribute: 'user-href',
+				type: String
+			},
+			groupHref: {
+				attribute: 'group-href',
 				type: String
 			},
 			token: {
@@ -69,17 +74,22 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 		}
 	}
 
+	_getActorHref() {
+		return  this.userHref ? this.userHref : this.groupHref;
+	}
+
 	render() {
 		return html`
 			<d2l-consistent-evaluation-lcb-user-context
-				href="${this.href}"
+				href="${this._getActorHref()}"
 				.token="${this.token}"
 				?is-exempt="${this._getIsExempt()}"
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
 				selected-item-name=${this.selectedItemName}
-				.submissionInfo="${this.submissionInfo}">
-			</d2l-consistent-evaluation-lcb-file-context>
+				.submissionInfo="${this.submissionInfo}"
+				?is-group-activity="${this.groupHref}"
+			></d2l-consistent-evaluation-lcb-file-context>
 
 		`;
 	}

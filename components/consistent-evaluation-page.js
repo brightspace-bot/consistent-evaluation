@@ -69,6 +69,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'user-href',
 				type: String
 			},
+			groupHref: {
+				attribute: 'group-href',
+				type: String
+			},
 			confirmUnsavedChanges: {
 				attribute: 'confirm-unsaved-changes',
 				type: Boolean
@@ -500,7 +504,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		if (!this.hideLearnerContextBar) {
 			return html`
 				<d2l-consistent-evaluation-learner-context-bar
-					href=${ifDefined(this.userHref)}
+					user-href=${ifDefined(this.userHref)}
+					group-href=${ifDefined(this.groupHref)}
 					selected-item-name=${this._selectedFile}
 					.token=${this.token}
 					.submissionInfo=${this.submissionInfo}
@@ -543,7 +548,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
-						?has-unsaved-changes=${this._hasUnsavedChanges}
+						?has-unsaved-changes=${this._hasUnsavedChanges}						
+						?is-group-activity="${this.groupHref}"
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
 						@d2l-consistent-evaluation-navigate-back-with-unsaved-changes=${this._showDialog}

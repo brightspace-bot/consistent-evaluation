@@ -97,6 +97,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
+				group-href=${ifDefined(this._childHrefs && this._childHrefs.groupHref)}
 				user-progress-outcome-href=${ifDefined(this._childHrefs && this._childHrefs.userProgressOutcomeHref)}
 				coa-demonstration-href=${ifDefined(this._childHrefs && this._childHrefs.coaDemonstrationHref)}
 				return-href=${ifDefined(this.returnHref)}
