@@ -3,7 +3,9 @@ import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
+import { toggleFlagActionName, toggleIsReadActionName } from '../controllers/constants.js';
 import { Classes } from 'd2l-hypermedia-constants';
+import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get properties() {
@@ -91,7 +93,8 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	}
 
 	async _getSubmissionEntity(submissionHref) {
-		return await window.D2L.Siren.EntityStore.fetch(submissionHref, this._token, false);
+		const byPassCache = true;
+		return await window.D2L.Siren.EntityStore.fetch(submissionHref, this._token, byPassCache);
 	}
 
 	_getComment(submissionEntity) {
@@ -107,6 +110,30 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 			return attachmentsListEntity.getSubEntitiesByClass(Classes.assignments.attachment);
 		}
 		return [];
+	}
+
+	async _toggleFileIsReadStatus(e) {
+		const attachmentEntity = e.detail.attachmentEntity;
+		if (!attachmentEntity) {
+			throw new Error('Invalid entity provided for attachment');
+		}
+
+		const action = attachmentEntity.getActionByName(toggleIsReadActionName);
+		await performSirenAction(this.token, action, undefined, true);
+		await this._initializeSubmissionEntities();
+		await this.requestUpdate();
+	}
+
+	async _toggleFileFlagStatus(e) {
+		const attachmentEntity = e.detail.attachmentEntity;
+		if (!attachmentEntity) {
+			throw new Error('Invalid entity provided for attachment');
+		}
+
+		const action = attachmentEntity.getActionByName(toggleFlagActionName);
+		await performSirenAction(this.token, action, undefined, true);
+		await this._initializeSubmissionEntities();
+		await this.requestUpdate();
 	}
 
 	_renderListItems() {
@@ -128,6 +155,8 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							comment=${this._getComment(submissionEntity)}
 							.attachments=${this._getAttachments(submissionEntity)}
 							?late=${latenessTimespan !== undefined}
+							@d2l-consistent-evaluation-evidence-toggle-file-read=${this._toggleFileIsReadStatus}
+							@d2l-consistent-evaluation-evidence-toggle-file-flag=${this._toggleFileFlagStatus}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
 					console.warn('Consistent Evaluation submission date property not found');

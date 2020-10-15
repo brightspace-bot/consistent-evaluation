@@ -6,6 +6,7 @@ import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/list/list-item-content.js';
 import '@brightspace-ui/core/components/menu/menu.js';
+import '@brightspace-ui/core/components/menu/menu-item.js';
 import '@brightspace-ui/core/components/menu/menu-item-link.js';
 import '@brightspace-ui/core/components/more-less/more-less.js';
 import '@brightspace-ui/core/components/status-indicator/status-indicator.js';
@@ -143,6 +144,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this.attachments = [];
 		this._updateFilenameTooltips = this._updateFilenameTooltips.bind(this);
 		this._dispatchRenderEvidence = this._dispatchRenderEvidence.bind(this);
+		this._dispatchToggleFileIsReadStatusEvent = this._dispatchToggleFileIsReadStatusEvent.bind(this);
+		this._dispatchToggleFileIsReadStatusEvent = this._dispatchToggleFileIsReadStatusEvent.bind(this);
 	}
 
 	connectedCallback() {
@@ -225,6 +228,28 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 					downloadUrl: this.attachments[0].properties.href,
 					content: this.comment
 				}
+			},
+			composed: true,
+			bubbles: true
+		});
+		this.dispatchEvent(event);
+	}
+
+	_dispatchToggleFileIsReadStatusEvent(attachmentEntity) {
+		const event = new CustomEvent('d2l-consistent-evaluation-evidence-toggle-file-read', {
+			detail: {
+				attachmentEntity: attachmentEntity
+			},
+			composed: true,
+			bubbles: true
+		});
+		this.dispatchEvent(event);
+	}
+
+	_dispatchToggleFileFlagStatusEvent(attachmentEntity) {
+		const event = new CustomEvent('d2l-consistent-evaluation-evidence-toggle-file-flag', {
+			detail: {
+				attachmentEntity: attachmentEntity
 			},
 			composed: true,
 			bubbles: true
@@ -349,7 +374,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 						${this._getReadableFileSizeString(size)}
 					</div>
 				</d2l-list-item-content>
-				${this._addMenuOptions(read, flagged, href)}
+				${this._addMenuOptions(read, flagged, href, file)}
 			</d2l-list-item>`;
 		})}`;
 	}
@@ -369,25 +394,26 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		});
 	}
 
-	_addMenuOptions(read, flagged, downloadHref) {
-		// Placeholder for menu presentational
+	_addMenuOptions(read, flagged, downloadHref, attachmentEntity) {
 		const oppositeReadState = read ? this.localize('markUnread') : this.localize('markRead');
+		const toggleIsReadStatusOnClick = () => this._dispatchToggleFileIsReadStatusEvent(attachmentEntity);
 		const oppositeFlagState = flagged ? this.localize('unflag') : this.localize('flag');
+		const toggleFlagStatusOnClick = () => this._dispatchToggleFileFlagStatusEvent(attachmentEntity);
 		return html`<div slot="actions" style="z-index: inherit;">
-			<d2l-dropdown-more text="More Options">
+			<d2l-dropdown-more text="${this.localize('moreOptions')}">
 			<d2l-dropdown-menu id="dropdown" boundary="{&quot;right&quot;:10}">
-				<d2l-menu label="More Options">
-				${this.submissionType === textSubmission ? html`
+				<d2l-menu label="${this.localize('moreOptions')}">
+					${this.submissionType === textSubmission ? html`
 						<d2l-menu-item-link text="${this.localize('viewFullSubmission')}"
 							href="javascript:void(0);"
-							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null }
+							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null}
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
-					<d2l-menu-item-link text="${oppositeReadState}" href="#"></d2l-menu-item-link>
-					<d2l-menu-item-link text="${oppositeFlagState}" href="#"></d2l-menu-item-link>
+					<d2l-menu-item text="${oppositeReadState}" href="javascript:void(0);" @click="${toggleIsReadStatusOnClick}"></d2l-menu-item>
+					<d2l-menu-item text="${oppositeFlagState}" href="javascript:void(0);" @click="${toggleFlagStatusOnClick}"></d2l-menu-item>
 				</d2l-menu>
 			</d2l-dropdown-menu>
 			</d2l-dropdown-more>
-			</div>`;
+		</div>`;
 	}
 
 	_renderComment() {
