@@ -112,8 +112,22 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return [];
 	}
 
+	_getAttachmentEntity(fileId) {
+		for (let i = 0;i < this._submissionEntities.length; i++) {
+			const submissionEntity = this._submissionEntities[i].entity;
+			const attachments = this._getAttachments(submissionEntity);
+			for (let y = 0;y < attachments.length; y++) {
+				if (attachments[y].properties.name === fileId) {
+					return attachments[y];
+				}
+			}
+		}
+		return null;
+	}
+
 	async _toggleFileIsReadStatus(e) {
-		const attachmentEntity = e.detail.attachmentEntity;
+		const fileId = e.detail.fileId;
+		const attachmentEntity = this._getAttachmentEntity(fileId);
 		if (!attachmentEntity) {
 			throw new Error('Invalid entity provided for attachment');
 		}
@@ -125,7 +139,8 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	}
 
 	async _toggleFileFlagStatus(e) {
-		const attachmentEntity = e.detail.attachmentEntity;
+		const fileId = e.detail.fileId;
+		const attachmentEntity = this._getAttachmentEntity(fileId);
 		if (!attachmentEntity) {
 			throw new Error('Invalid entity provided for attachment');
 		}
