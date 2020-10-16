@@ -43,7 +43,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		this._submissionList = [];
 		this._token = undefined;
 		this._submissionEntities = [];
-		/* global moment:false */
 	}
 
 	get submissionList() {
@@ -118,7 +117,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							date-str=${submissionDate}
 							display-number=${this._submissionEntities.length - i}
 							evaluation-state=${evaluationState}
-							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()}
+							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()/* eslint-disable-line no-undef */}
 							submission-type=${this.submissionType}
 							comment=${this._getComment(submissionEntity)}
 							.attachments=${this._getAttachments(submissionEntity)}
