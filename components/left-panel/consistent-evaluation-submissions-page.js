@@ -171,7 +171,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		attachmentEntity.properties.flagged = !attachmentEntity.properties.flagged;
 
 		this._updateAttachmentEntity(attachmentEntity) ;
-		//await this._initializeSubmissionEntities();
 		await this.requestUpdate();
 	}
 
