@@ -234,7 +234,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_dispatchToggleFileIsReadStatusEvent(e) {
-		const fileId = e.target.getAttribute('id');
+		const fileId = e.target.getAttribute('data-key');
 		const event = new CustomEvent('d2l-consistent-evaluation-evidence-toggle-file-read', {
 			detail: {
 				fileId: fileId
@@ -246,7 +246,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	}
 
 	_dispatchToggleFileFlagStatusEvent(e) {
-		const fileId = e.target.getAttribute('id');
+		const fileId = e.target.getAttribute('data-key');
 		const event = new CustomEvent('d2l-consistent-evaluation-evidence-toggle-file-flag', {
 			detail: {
 				fileId: fileId
@@ -353,7 +353,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	_renderAttachments() {
 		return html`${this.attachments.map((file) => {
-			const {name, size, extension, flagged, read, href, fileViewer} = file.properties;
+			const {id, name, size, extension, flagged, read, href, fileViewer} = file.properties;
 			return html`
 			<d2l-list-item>
 				<div slot="illustration" class="d2l-submission-attachment-icon-container">
@@ -374,7 +374,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 						${this._getReadableFileSizeString(size)}
 					</div>
 				</d2l-list-item-content>
-				${this._addMenuOptions(read, flagged, href, name)}
+				${this._addMenuOptions(read, flagged, href, id)}
 			</d2l-list-item>`;
 		})}`;
 	}
@@ -394,7 +394,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		});
 	}
 
-	_addMenuOptions(read, flagged, downloadHref, name) {
+	_addMenuOptions(read, flagged, downloadHref, id) {
 		const oppositeReadState = read ? this.localize('markUnread') : this.localize('markRead');
 		const oppositeFlagState = flagged ? this.localize('unflag') : this.localize('flag');
 		return html`<div slot="actions" style="z-index: inherit;">
@@ -406,8 +406,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 							href="javascript:void(0);"
 							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null}
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
-					<d2l-menu-item text="${oppositeReadState}" id="${name}" @d2l-menu-item-select="${this._dispatchToggleFileIsReadStatusEvent}"></d2l-menu-item>
-					<d2l-menu-item text="${oppositeFlagState}" id="${name}" @d2l-menu-item-select="${this._dispatchToggleFileFlagStatusEvent}"></d2l-menu-item>
+					<d2l-menu-item text="${oppositeReadState}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleFileIsReadStatusEvent}"></d2l-menu-item>
+					<d2l-menu-item text="${oppositeFlagState}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleFileFlagStatusEvent}"></d2l-menu-item>
 				</d2l-menu>
 			</d2l-dropdown-menu>
 			</d2l-dropdown-more>

@@ -114,15 +114,32 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 
 	_getAttachmentEntity(fileId) {
 		for (let i = 0;i < this._submissionEntities.length; i++) {
-			const submissionEntity = this._submissionEntities[i].entity;
-			const attachments = this._getAttachments(submissionEntity);
+			const attachments = this._getAttachments(this._submissionEntities[i].entity);
 			for (let y = 0;y < attachments.length; y++) {
-				if (attachments[y].properties.name === fileId) {
+				if (attachments[y].properties.id === fileId) {
 					return attachments[y];
 				}
 			}
 		}
 		return null;
+	}
+
+	_updateAttachmentEntity(attachmentEntity) {
+		for (let i = 0;i < this._submissionEntities.length; i++) {
+			const attachments = this._getAttachments(this._submissionEntities[i].entity);
+			for (let y = 0;y < attachments.length; y++) {
+				if (attachments[y].properties.id === attachmentEntity.properties.id) {
+					attachments[y] = attachmentEntity;
+					for (let e = 0;e < this._submissionEntities[i].entity.entities.length; e++) {
+						if (this._submissionEntities[i].entity.entities[e].class.includes(Classes.assignments.attachmentList)) {
+							this._submissionEntities[i].entity.entities[e].entities = attachments;
+							break;
+						}
+					}
+					return;
+				}
+			}
+		}
 	}
 
 	async _toggleFileIsReadStatus(e) {
@@ -134,7 +151,10 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 
 		const action = attachmentEntity.getActionByName(toggleIsReadActionName);
 		await performSirenAction(this.token, action, undefined, true);
-		await this._initializeSubmissionEntities();
+
+		attachmentEntity.properties.read = !attachmentEntity.properties.read;
+
+		this._updateAttachmentEntity(attachmentEntity) ;
 		await this.requestUpdate();
 	}
 
@@ -147,7 +167,11 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 
 		const action = attachmentEntity.getActionByName(toggleFlagActionName);
 		await performSirenAction(this.token, action, undefined, true);
-		await this._initializeSubmissionEntities();
+
+		attachmentEntity.properties.flagged = !attachmentEntity.properties.flagged;
+
+		this._updateAttachmentEntity(attachmentEntity) ;
+		//await this._initializeSubmissionEntities();
 		await this.requestUpdate();
 	}
 
