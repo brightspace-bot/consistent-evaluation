@@ -286,6 +286,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
+		console.log(this.evaluationEntity);
 	}
 
 	_noFeedbackComponent() {
@@ -489,8 +490,11 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_confirmUnsavedChangesBeforeUnload(e) {
-		e.preventDefault();
-		e.returnValue = 'Unsaved changes';
+		if(this.evaluationEntity.hasClass('unsaved')) {
+			this._showDialog();
+			e.preventDefault();
+			e.returnValue = 'Unsaved changes';
+		}
 	}
 
 	_renderToast() {
@@ -531,6 +535,16 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._selectedFile = e.detail.textSubmissionEvidence.name;
 		this._fileEvidenceUrl = undefined;
 		this._hideScrollbars();
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		window.addEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload.bind(this));
+	}
+
+	disconnectedCallback() {
+		window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload.bind(this));
+		super.disconnectedCallback();
 	}
 
 	render() {
