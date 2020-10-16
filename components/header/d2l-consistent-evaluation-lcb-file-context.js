@@ -4,7 +4,6 @@ import '@brightspace-ui/core/components/button/button-subtle.js';
 import { attachmentListRel, submissions } from '../controllers/constants';
 import { css, html, LitElement } from 'lit-element';
 import { Classes } from 'd2l-hypermedia-constants';
-import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
@@ -176,10 +175,8 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		{
 			return html``;
 		} else {
-			const uniqueId = getUniqueId();
 			return html`
 				<d2l-button-subtle
-					id="${uniqueId}"
 					text="${moment.duration(Number(this._submissionLateness), 'seconds').humanize()} ${this.localize('late')}"
 					icon="tier1:access-special"
 					@click="${this._openSpecialAccessDialog}"
