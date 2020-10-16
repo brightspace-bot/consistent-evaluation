@@ -1,3 +1,4 @@
+/* global moment:false */
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import { attachmentListRel, submissions } from '../controllers/constants';
@@ -179,7 +180,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			return html`
 				<d2l-button-subtle
 					id="${uniqueId}"
-					text="${moment.duration(Number(this._submissionLateness), 'seconds').humanize()/* eslint-disable-line no-undef */} ${this.localize('late')}"
+					text="${moment.duration(Number(this._submissionLateness), 'seconds').humanize()} ${this.localize('late')}"
 					icon="tier1:access-special"
 					@click="${this._openSpecialAccessDialog}"
 				></d2l-button-subtle>`;
@@ -212,7 +213,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			}
 		];
 
-		const delayedResult = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
+		D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
 			/*               opener: */ this.shadowRoot.querySelector('d2l-button-subtle'),
 			/*             location: */ location,
 			/*          srcCallback: */ 'SrcCallback',
@@ -224,9 +225,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			/*              buttons: */ buttons,
 			/* forceTriggerOnCancel: */ false
 		);
-
-		// Save or Cancel button handler
-		delayedResult.AddListener(() => specialAccess);
 	}
 
 	_truncateFileName(fileName) {

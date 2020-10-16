@@ -1,3 +1,4 @@
+/* global moment:false */
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/colors/colors.js';
@@ -117,7 +118,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 							date-str=${submissionDate}
 							display-number=${this._submissionEntities.length - i}
 							evaluation-state=${evaluationState}
-							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()/* eslint-disable-line no-undef */}
+							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()}
 							submission-type=${this.submissionType}
 							comment=${this._getComment(submissionEntity)}
 							.attachments=${this._getAttachments(submissionEntity)}
