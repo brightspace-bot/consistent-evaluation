@@ -1,5 +1,5 @@
 /* eslint-disable prefer-arrow-callback */
-import '../components/footer/consistent-evaluation-footer-presentational.js';
+import '../components/footer/consistent-evaluation-footer.js';
 import { expect, fixture, html } from '@open-wc/testing';
 
 const getButton = (el, id) => el.shadowRoot.querySelector(`#${id}`);
@@ -15,30 +15,30 @@ const getUpdateButton = (el) => getButton(el, 'consistent-evaluation-footer-upda
 const getNextStudentButton = (el) => getButton(el, 'consistent-evaluation-footer-next-student');
 
 const defaultComponent = html`
-	<d2l-consistent-evaluation-footer-presentational 
+	<d2l-consistent-evaluation-footer 
 		allow-evaluation-write 
 		allow-evaluation-delete
-	></d2l-consistent-evaluation-footer-presentational>
+	></d2l-consistent-evaluation-footer>
 `;
 
 const publishedComponent = html`
-	<d2l-consistent-evaluation-footer-presentational 
+	<d2l-consistent-evaluation-footer 
 		allow-evaluation-write 
 		allow-evaluation-delete
 		published
-	></d2l-consistent-evaluation-footer-presentational>
+	></d2l-consistent-evaluation-footer>
 `;
 
 const noPermissionNotPublishedComponent = html`
-	<d2l-consistent-evaluation-footer-presentational></d2l-consistent-evaluation-footer-presentational>
+	<d2l-consistent-evaluation-footer></d2l-consistent-evaluation-footer>
 `;
 
 const noPermissionPublishedComponent = html`
-	<d2l-consistent-evaluation-footer-presentational published></d2l-consistent-evaluation-footer-presentational>
+	<d2l-consistent-evaluation-footer published></d2l-consistent-evaluation-footer>
 `;
 
 const nextStudentComponent = html`
-	<d2l-consistent-evaluation-footer-presentational show-next-student></d2l-consistent-evaluation-footer-presentational>
+	<d2l-consistent-evaluation-footer show-next-student></d2l-consistent-evaluation-footer>
 `;
 
 const eventTimeoutMS = 1000;
