@@ -286,7 +286,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
-		console.log(this.evaluationEntity);
 	}
 
 	_noFeedbackComponent() {
@@ -315,10 +314,12 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	async _onPreviousStudentClick() {
 		await this._mutex.dispatch(
-			() => this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
-				composed: true,
-				bubbles: true
-			}))
+			() => {
+				this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
+					composed: true,
+					bubbles: true
+				}))
+			}
 		);
 	}
 
@@ -377,7 +378,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.save(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('saved'));
-					this._updateHasUnsavedChanges(false);
 				} else {
 					this._showToast(this.localize('saveError'));
 				}
@@ -398,7 +398,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.update(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('updated'));
-					this._updateHasUnsavedChanges(false);
 				} else {
 					this._showToast(this.localize('updatedError'));
 				}
@@ -461,37 +460,41 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 	}
 
-	_showDialog() {
-		this._dialogOpened = true;
+	_showDialog(e) {
+		this.navigationTarget = e.detail.key;
+		if(this.evaluationEntity.hasClass('unsaved')) {
+			this._dialogOpened = true;
+		} else {
+			this._navigate();
+		}
 	}
 
 	_onDialogClose(e) {
 		this._dialogOpened = false;
-		if (e.detail.action === DIALOG_ACTION_LEAVE) {
-			if (this._hasUnsavedChanges) {
-				window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
-			}
-			window.location.assign(this.returnHref);
+		if (e.detail.action === DIALOG_ACTION_LEAVE) {					
+			this._navigate();
 		}
 	}
 
-	_onUnsavedChange() {
-		this._updateHasUnsavedChanges(true);
-	}
-
-	_updateHasUnsavedChanges(value) {
-		if (!this.confirmUnsavedChanges) return;
-		if (!this._hasUnsavedChanges && value) {
-			window.addEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
-		} else if (this._hasUnsavedChanges && !value) {
-			window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+	_navigate() {
+		switch(this.navigationTarget){
+			case 'back':
+				if (this.evaluationEntity.hasClass('unsaved')) {	
+					window.removeEventListener('beforeunload', this.unsavedChangesHandler);
+				}
+				window.location.assign(this.returnHref);
+				break;
+			case 'next':
+				this._onNextStudentClick();
+				break;
+			case 'previous':
+				this._onPreviousStudentClick();
+				break;
 		}
-		this._hasUnsavedChanges = value;
 	}
 
 	_confirmUnsavedChangesBeforeUnload(e) {
 		if(this.evaluationEntity.hasClass('unsaved')) {
-			this._showDialog();
 			e.preventDefault();
 			e.returnValue = 'Unsaved changes';
 		}
@@ -537,13 +540,15 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._hideScrollbars();
 	}
 
+
 	connectedCallback() {
 		super.connectedCallback();
-		window.addEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload.bind(this));
+		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
+		window.addEventListener('beforeunload', this.unsavedChangesHandler);
 	}
 
 	disconnectedCallback() {
-		window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload.bind(this));
+		window.removeEventListener('beforeunload', this.unsavedChangesHandler);
 		super.disconnectedCallback();
 	}
 
@@ -561,8 +566,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.titleName=${this._navBarTitleText}
 						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
-						.iteratorTotal=${this.iteratorTotal}
-						?has-unsaved-changes=${this._hasUnsavedChanges}						
+						.iteratorTotal=${this.iteratorTotal}					
 						?is-group-activity="${this.groupHref}"
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
@@ -600,9 +604,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
 						?allow-evaluation-write=${this.allowEvaluationWrite}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
-						@on-d2l-consistent-eval-feedback-text-editor-change=${this._onUnsavedChange}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
-						@on-d2l-consistent-eval-coa-eval-override-changed=${this._onUnsavedChange}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">

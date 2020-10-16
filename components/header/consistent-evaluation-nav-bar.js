@@ -37,10 +37,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				attribute: 'return-href-text',
 				type: String
 			},
-			hasUnsavedChanges: {
-				attribute: 'has-unsaved-changes',
-				type: Boolean
-			},
 			isGroupActivity: {
 				attribute: 'is-group-activity',
 				type: Boolean
@@ -97,20 +93,20 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	}
 
 	_dispatchButtonClickEvent(eventName) {
-		this.dispatchEvent(new CustomEvent(eventName, {
+		console.log(eventName);
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-navigate-back-with-unsaved-changes', {
+			detail: { key: eventName} ,
 			composed: true,
 			bubbles: true
 		}));
 	}
 
-	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-previous-student');}
-	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
+	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('previous');}
+	_emitNextStudentEvent() { this._dispatchButtonClickEvent('next'); }
 
 	_onNavigateBack(e) {
-		if (this.hasUnsavedChanges) {
-			e.preventDefault();
-			this._dispatchButtonClickEvent('d2l-consistent-evaluation-navigate-back-with-unsaved-changes');
-		}
+		e.preventDefault();
+		this._dispatchButtonClickEvent('back');		
 	}
 
 	_renderBackButton() {
