@@ -15,7 +15,6 @@ export const val = {
 	fileSubmission: 'File Submission',
 	flagged: 'Flagged',
 	groupIteratorText: 'Group {num} of {total}',
-	groupSubmissions: 'Group Submissions',
 	exempt: 'Exempt',
 	late: 'late',
 	leaveBtn: 'Leave',
