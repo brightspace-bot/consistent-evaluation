@@ -19,10 +19,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				attribute: false,
 				type: Object
 			},
-			isGroupActivity: {
-				attribute: 'is-group-activity',
-				type: Boolean
-			},
 			_files: {
 				attribute: false,
 				type: Array
@@ -168,11 +164,9 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 	render() {
 		if (!this._showFiles) return html ``;
-		const actorSubmissions = this.isGroupActivity ? 'groupSubmissions' : 'userSubmissions';
-
 		return html`
-			<select class="d2l-input-select d2l-truncate" aria-label=${this.localize(actorSubmissions)} @change=${this._onSelectChange}>
-				<option label=${this.localize(actorSubmissions)} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
+			<select class="d2l-input-select d2l-truncate" aria-label=${this.localize('userSubmissions')} @change=${this._onSelectChange}>
+				<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
 				${this._files && this._files.map(submission => html`
 					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
 						${this.getSubmissionFiles(submission).map(sf => html`

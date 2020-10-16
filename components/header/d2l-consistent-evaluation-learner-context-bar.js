@@ -75,7 +75,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 	}
 
 	_getActorHref() {
-		return  this.userHref ? this.userHref : this.groupHref;
+		return this.userHref ? this.userHref : this.groupHref;
 	}
 
 	render() {
@@ -84,13 +84,12 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 				href="${this._getActorHref()}"
 				.token="${this.token}"
 				?is-exempt="${this._getIsExempt()}"
+				?is-group-activity="${this.groupHref}"
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
 				selected-item-name=${this.selectedItemName}
 				.submissionInfo="${this.submissionInfo}"
-				?is-group-activity="${this.groupHref}"
 			></d2l-consistent-evaluation-lcb-file-context>
-
 		`;
 	}
 }
