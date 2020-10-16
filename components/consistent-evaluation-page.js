@@ -1,6 +1,6 @@
 import './header/d2l-consistent-evaluation-learner-context-bar.js';
 import './left-panel/consistent-evaluation-left-panel.js';
-import './footer/consistent-evaluation-footer-presentational.js';
+import './footer/consistent-evaluation-footer.js';
 import './right-panel/consistent-evaluation-right-panel.js';
 import './left-panel/consistent-evaluation-submissions-page.js';
 import './header/consistent-evaluation-nav-bar.js';
@@ -529,7 +529,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				</div>
 				<div slot="footer">
 					${this._renderToast()}
-					<d2l-consistent-evaluation-footer-presentational
+					<d2l-consistent-evaluation-footer
 						next-student-href=${ifDefined(this.nextStudentHref)}
 						?published=${this._isEvaluationPublished()}
 						?allow-evaluation-write=${this.allowEvaluationWrite}						
@@ -539,7 +539,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}
 						@d2l-consistent-evaluation-on-update=${this._updateEvaluation}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
-					></d2l-consistent-evaluation-footer-presentational>
+					></d2l-consistent-evaluation-footer>
 				</div>
 			</d2l-template-primary-secondary>
 			<d2l-dialog-confirm	

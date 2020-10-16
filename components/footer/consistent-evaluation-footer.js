@@ -4,7 +4,7 @@ import { css, html, LitElement } from 'lit-element';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
 
-export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationFooter extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
 			published: {
@@ -122,4 +122,4 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 	}
 }
 
-customElements.define('d2l-consistent-evaluation-footer-presentational', ConsistentEvaluationFooterPresentational);
+customElements.define('d2l-consistent-evaluation-footer', ConsistentEvaluationFooter);

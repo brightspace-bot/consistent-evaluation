@@ -147,4 +147,4 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 	}
 }
 
-customElements.define('d2l-consistent-evaluation-feedback-presentational', ConsistentEvaluationFeedbackPresentational);
+customElements.define('d2l-consistent-evaluation-feedback', ConsistentEvaluationFeedbackPresentational);
