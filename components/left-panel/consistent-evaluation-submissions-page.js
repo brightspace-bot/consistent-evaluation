@@ -1,3 +1,4 @@
+/* global moment:false */
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import '@brightspace-ui/core/components/list/list.js';
 import '@brightspace-ui/core/components/colors/colors.js';
@@ -43,12 +44,6 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		this._submissionList = [];
 		this._token = undefined;
 		this._submissionEntities = [];
-		/* global moment:false */
-		moment.relativeTimeThreshold('s', 60);
-		moment.relativeTimeThreshold('m', 60);
-		moment.relativeTimeThreshold('h', 24);
-		moment.relativeTimeThreshold('d', Number.MAX_SAFE_INTEGER);
-		moment.relativeTimeRounding(Math.floor);
 	}
 
 	get submissionList() {

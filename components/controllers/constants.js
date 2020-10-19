@@ -17,6 +17,7 @@ export const userRel = 'https://api.brightspace.com/rels/user';
 export const actorRel = 'https://activities.api.brightspace.com/rels/actor-activity-usage';
 export const alignmentsRel = 'https://alignments.api.brightspace.com/rels/alignments';
 export const attachmentListRel = 'https://assignments.api.brightspace.com/rels/attachment-list';
+export const editSpecialAccessApplicationRel = 'https://assignments.api.brightspace.com/rels/edit-special-access-application';
 export const userProgressOutcomeRel = 'user-progress-outcome';
 export const userProgressOutcomeActivitiesRel = 'https://user-progress.api.brightspace.com/rels/outcome-activities';
 export const nextRel = 'next';

@@ -45,6 +45,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'outcomes-href',
 				type: String
 			},
+			specialAccessHref: {
+				attribute: 'special-access-href',
+				type: String
+			},
 			richTextEditorDisabled: {
 				attribute: 'rich-text-editor-disabled',
 				type: Boolean
@@ -182,6 +186,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	constructor() {
 		super();
+		/* global moment:false */
+		moment.relativeTimeThreshold('s', 60);
+		moment.relativeTimeThreshold('m', 60);
+		moment.relativeTimeThreshold('h', 24);
+		moment.relativeTimeThreshold('d', Number.MAX_SAFE_INTEGER);
+		moment.relativeTimeRounding(Math.floor);
+
 		this._evaluationHref = undefined;
 		this._token = undefined;
 		this._controller = undefined;
@@ -507,6 +518,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					user-href=${ifDefined(this.userHref)}
 					group-href=${ifDefined(this.groupHref)}
 					selected-item-name=${this._selectedFile}
+					special-access-href=${ifDefined(this.specialAccessHref)}
 					.token=${this.token}
 					.submissionInfo=${this.submissionInfo}
 				></d2l-consistent-evaluation-learner-context-bar>
