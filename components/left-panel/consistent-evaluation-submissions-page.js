@@ -123,7 +123,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return null;
 	}
 
-	async _updateAttachmentEntity(submissionEntity, submissionSelfLinkHref) {
+	async _updateSubmissionEntity(submissionEntity, submissionSelfLinkHref) {
 		for (let i = 0;i < this._submissionEntities.length; i++) {
 			const oldSubmissionEntity = await this._submissionEntities[i].entity.getLinkByRel('self');
 
@@ -147,7 +147,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		const newSubmissionEntity = await performSirenAction(this.token, action, undefined, true);
 
 		const submissionSelfLink = newSubmissionEntity.getLinkByRel('self');
-		await this._updateAttachmentEntity(newSubmissionEntity, submissionSelfLink.href) ;
+		await this._updateSubmissionEntity(newSubmissionEntity, submissionSelfLink.href) ;
 		await this.requestUpdate();
 	}
 
