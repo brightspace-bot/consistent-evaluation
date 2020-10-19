@@ -14,6 +14,7 @@ import { bodySmallStyles, heading3Styles, labelStyles } from '@brightspace-ui/co
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
+import { toggleFlagActionName, toggleIsReadActionName } from '../controllers/constants.js';
 import { getFileIconTypeFromExtension } from '@brightspace-ui/core/components/icons/getFileIconType';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
@@ -233,23 +234,13 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		this.dispatchEvent(event);
 	}
 
-	_dispatchToggleFileIsReadStatusEvent(e) {
+	_dispatchToggleEvent(e) {
+		const action = e.target.getAttribute('data-action');
 		const fileId = e.target.getAttribute('data-key');
-		const event = new CustomEvent('d2l-consistent-evaluation-evidence-toggle-file-read', {
+		const event = new CustomEvent('d2l-consistent-evaluation-evidence-toggle-action', {
 			detail: {
-				fileId: fileId
-			},
-			composed: true,
-			bubbles: true
-		});
-		this.dispatchEvent(event);
-	}
-
-	_dispatchToggleFileFlagStatusEvent(e) {
-		const fileId = e.target.getAttribute('data-key');
-		const event = new CustomEvent('d2l-consistent-evaluation-evidence-toggle-file-flag', {
-			detail: {
-				fileId: fileId
+				fileId: fileId,
+				action: action
 			},
 			composed: true,
 			bubbles: true
@@ -374,7 +365,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 						${this._getReadableFileSizeString(size)}
 					</div>
 				</d2l-list-item-content>
-				${this._addMenuOptions(read, flagged, href, id)}
+				${this._addMenuOptions(read, flagged, href, id, name)}
 			</d2l-list-item>`;
 		})}`;
 	}
@@ -394,7 +385,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		});
 	}
 
-	_addMenuOptions(read, flagged, downloadHref, id) {
+	_addMenuOptions(read, flagged, downloadHref, id, name) {
 		const oppositeReadState = read ? this.localize('markUnread') : this.localize('markRead');
 		const oppositeFlagState = flagged ? this.localize('unflag') : this.localize('flag');
 		return html`<div slot="actions" style="z-index: inherit;">
@@ -406,8 +397,8 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 							href="javascript:void(0);"
 							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null}
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
-					<d2l-menu-item text="${oppositeReadState}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleFileIsReadStatusEvent}"></d2l-menu-item>
-					<d2l-menu-item text="${oppositeFlagState}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleFileFlagStatusEvent}"></d2l-menu-item>
+					<d2l-menu-item text="${oppositeReadState}" data-action="${toggleIsReadActionName}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleEvent}"></d2l-menu-item>
+					<d2l-menu-item text="${oppositeFlagState}" data-action="${toggleFlagActionName}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleEvent}"></d2l-menu-item>
 				</d2l-menu>
 			</d2l-dropdown-menu>
 			</d2l-dropdown-more>
