@@ -151,11 +151,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			if (submissionTypesWithNoEvidence.includes(this.submissionInfo.submissionType)) {
 				return this._renderNoEvidenceSubmissionType();
 			}
-	
+
 			if (this.submissionInfo.submissionList === undefined) {
 				return this._renderNoSubmissions();
 			}
-		}		
+		}
 
 		if (this.fileEvidenceUrl) {
 			return this._renderFileEvidence();
