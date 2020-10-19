@@ -73,10 +73,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'group-href',
 				type: String
 			},
-			confirmUnsavedChanges: {
-				attribute: 'confirm-unsaved-changes',
-				type: Boolean
-			},
 			userProgressOutcomeHref: {
 				attribute: 'user-progress-outcome-href',
 				type: String
@@ -318,7 +314,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
 					composed: true,
 					bubbles: true
-				}))
+				}));
 			}
 		);
 	}
@@ -462,7 +458,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	_showDialog(e) {
 		this.navigationTarget = e.detail.key;
-		if(this.evaluationEntity.hasClass('unsaved')) {
+		if (this.evaluationEntity.hasClass('unsaved')) {
 			this._dialogOpened = true;
 		} else {
 			this._navigate();
@@ -471,15 +467,15 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	_onDialogClose(e) {
 		this._dialogOpened = false;
-		if (e.detail.action === DIALOG_ACTION_LEAVE) {					
+		if (e.detail.action === DIALOG_ACTION_LEAVE) {
 			this._navigate();
 		}
 	}
 
 	_navigate() {
-		switch(this.navigationTarget){
+		switch (this.navigationTarget) {
 			case 'back':
-				if (this.evaluationEntity.hasClass('unsaved')) {	
+				if (this.evaluationEntity.hasClass('unsaved')) {
 					window.removeEventListener('beforeunload', this.unsavedChangesHandler);
 				}
 				window.location.assign(this.returnHref);
@@ -494,7 +490,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_confirmUnsavedChangesBeforeUnload(e) {
-		if(this.evaluationEntity.hasClass('unsaved')) {
+		if (this.evaluationEntity.hasClass('unsaved')) {
 			e.preventDefault();
 			e.returnValue = 'Unsaved changes';
 		}
@@ -539,7 +535,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._fileEvidenceUrl = undefined;
 		this._hideScrollbars();
 	}
-
 
 	connectedCallback() {
 		super.connectedCallback();

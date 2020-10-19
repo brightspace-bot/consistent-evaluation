@@ -84,10 +84,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 		return this._childHrefs && this._childHrefs.userProgressOutcomeHref;
 	}
 
-	_shouldConfirmUnsavedChanges() {
-		return true//(this._childHrefs && this._childHrefs.userProgressOutcomeHref) !== undefined;
-	}
-
 	render() {
 		return html`
 			<d2l-consistent-evaluation-page
@@ -113,7 +109,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
 				?hide-learner-context-bar=${this._shouldHideLearnerContextBar()}
-				?confirm-unsaved-changes=${this._shouldConfirmUnsavedChanges()}
 				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
 				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
 			></d2l-consistent-evaluation-page>
