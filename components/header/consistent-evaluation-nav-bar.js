@@ -93,8 +93,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 	}
 
 	_dispatchButtonClickEvent(eventName) {
-		console.log(eventName);
-		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-navigate-back-with-unsaved-changes', {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-navigate', {
 			detail: { key: eventName},
 			composed: true,
 			bubbles: true

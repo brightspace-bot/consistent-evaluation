@@ -565,7 +565,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?is-group-activity="${this.groupHref}"
 						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
 						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
-						@d2l-consistent-evaluation-navigate-back-with-unsaved-changes=${this._showDialog}
+						@d2l-consistent-evaluation-navigate=${this._showDialog}
 					></d2l-consistent-evaluation-nav-bar>
 					${this._renderLearnerContextBar()}
 				</div>
