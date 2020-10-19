@@ -365,7 +365,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 						${this._getReadableFileSizeString(size)}
 					</div>
 				</d2l-list-item-content>
-				${this._addMenuOptions(read, flagged, href, id, name)}
+				${this._addMenuOptions(read, flagged, href, id)}
 			</d2l-list-item>`;
 		})}`;
 	}
@@ -385,7 +385,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		});
 	}
 
-	_addMenuOptions(read, flagged, downloadHref, id, name) {
+	_addMenuOptions(read, flagged, downloadHref, id) {
 		const oppositeReadState = read ? this.localize('markUnread') : this.localize('markRead');
 		const oppositeFlagState = flagged ? this.localize('unflag') : this.localize('flag');
 		return html`<div slot="actions" style="z-index: inherit;">
