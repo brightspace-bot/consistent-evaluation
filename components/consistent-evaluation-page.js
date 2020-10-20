@@ -297,21 +297,17 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _onNextStudentClick() {
-		await this._mutex.dispatch(
-			() => this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
-				composed: true,
-				bubbles: true
-			}))
-		);
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	async _onPreviousStudentClick() {
-		await this._mutex.dispatch(
-			() => this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
-				composed: true,
-				bubbles: true
-			}))
-		);
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	_resetEvidence() {
@@ -566,8 +562,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}					
 						?is-group-activity="${this.groupHref}"
-						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
-						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
 						@d2l-consistent-evaluation-navigate=${this._showDialog}
 					></d2l-consistent-evaluation-nav-bar>
 					${this._renderLearnerContextBar()}
@@ -608,7 +602,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				<div slot="footer">
 					${this._renderToast()}
 					<d2l-consistent-evaluation-footer-presentational
-						next-student-href=${ifDefined(this.nextStudentHref)}
+						?show-next-student=${this.nextStudentHref !== undefined}
 						?published=${this._isEvaluationPublished()}
 						?allow-evaluation-write=${this.allowEvaluationWrite}
 						?allow-evaluation-delete=${this.allowEvaluationDelete}
@@ -616,7 +610,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						@d2l-consistent-evaluation-on-save-draft=${this._saveEvaluation}
 						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}
 						@d2l-consistent-evaluation-on-update=${this._updateEvaluation}
-						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
+						@d2l-consistent-evaluation-navigate=${this._showDialog}
 					></d2l-consistent-evaluation-footer-presentational>
 				</div>
 			</d2l-template-primary-secondary>

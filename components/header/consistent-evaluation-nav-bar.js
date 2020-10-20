@@ -92,7 +92,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 		return await loadLocalizationResources(langs);
 	}
 
-	_dispatchButtonClickEvent(eventName) {
+	_dispatchButtonClickNavigationEvent(eventName) {
 		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-navigate', {
 			detail: { key: eventName},
 			composed: true,
@@ -100,12 +100,12 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 		}));
 	}
 
-	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('previous');}
-	_emitNextStudentEvent() { this._dispatchButtonClickEvent('next'); }
+	_emitPreviousStudentEvent() { this._dispatchButtonClickNavigationEvent('previous');}
+	_emitNextStudentEvent() { this._dispatchButtonClickNavigationEvent('next'); }
 
 	_onNavigateBack(e) {
 		e.preventDefault();
-		this._dispatchButtonClickEvent('back');
+		this._dispatchButtonClickNavigationEvent('back');
 	}
 
 	_renderBackButton() {
