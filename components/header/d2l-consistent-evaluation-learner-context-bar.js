@@ -1,5 +1,6 @@
 import './d2l-consistent-evaluation-lcb-user-context.js';
 import './d2l-consistent-evaluation-lcb-file-context.js';
+import '@brightspace-ui/core/components/colors/colors.js';
 import { css, html, LitElement } from 'lit-element';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 
@@ -7,11 +8,20 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 
 	static get properties() {
 		return {
-			href: {
+			userHref: {
+				attribute: 'user-href',
+				type: String
+			},
+			groupHref: {
+				attribute: 'group-href',
+				type: String
+			},
+			specialAccessHref: {
+				attribute: 'special-access-href',
 				type: String
 			},
 			token: {
-				type: String
+				type: Object
 			},
 			submissionInfo: {
 				attribute: false,
@@ -27,33 +37,34 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 	static get styles() {
 		return css`
 			:host {
+				border-bottom: 0.05rem solid var(--d2l-color-gypsum);
 				display: flex;
 				height: 100%;
-				margin: 0.75rem 0 0.75rem 1.5rem;
+				padding: 0.75rem 0 0.75rem 1.5rem;
 			}
 			:host([hidden]) {
 				display: none;
 			}
 			:host([dir="rtl"]) {
-				margin-left: 0;
-				margin-right: 1.5rem;
+				padding-left: 0;
+				padding-right: 1.5rem;
 			}
 			@media (max-width: 929px) and (min-width: 768px) {
 				:host {
-					margin-left: 1.2rem;
+					padding-left: 1.2rem;
 				}
 				:host([dir="rtl"]) {
-					margin-left: 0;
-					margin-right: 1.2rem;
+					padding-left: 0;
+					padding-right: 1.2rem;
 				}
 			}
 			@media (max-width: 767px) {
 				:host {
-					margin-left: 0.9rem;
+					padding-left: 0.9rem;
 				}
 				:host([dir="rtl"]) {
-					margin-left: 0;
-					margin-right: 0.9rem;
+					padding-left: 0;
+					padding-right: 0.9rem;
 				}
 			}
 		`;
@@ -67,18 +78,23 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 		}
 	}
 
+	_getActorHref() {
+		return this.userHref ? this.userHref : this.groupHref;
+	}
+
 	render() {
 		return html`
 			<d2l-consistent-evaluation-lcb-user-context
-				href="${this.href}"
+				href="${this._getActorHref()}"
 				.token="${this.token}"
 				?is-exempt="${this._getIsExempt()}"
+				?is-group-activity="${this.groupHref}"
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
 				selected-item-name=${this.selectedItemName}
+				special-access-href=${this.specialAccessHref}
 				.submissionInfo="${this.submissionInfo}">
 			</d2l-consistent-evaluation-lcb-file-context>
-
 		`;
 	}
 }

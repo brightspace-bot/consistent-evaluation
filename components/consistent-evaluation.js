@@ -68,6 +68,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._userName = await controller.getUserName();
 			this._iteratorTotal = await controller.getIteratorInfo('total');
 			this._iteratorIndex = await controller.getIteratorInfo('index');
+			this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._resetEvidence();
 		}
 	}
 
@@ -83,10 +84,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 		return this._childHrefs && this._childHrefs.userProgressOutcomeHref;
 	}
 
-	_shouldConfirmUnsavedChanges() {
-		return (this._childHrefs && this._childHrefs.userProgressOutcomeHref) !== undefined;
-	}
-
 	render() {
 		return html`
 			<d2l-consistent-evaluation-page
@@ -96,8 +93,10 @@ export class ConsistentEvaluation extends MobxLitElement {
 				evaluation-href=${ifDefined(this._childHrefs && this._childHrefs.evaluationHref)}
 				next-student-href=${ifDefined(this._childHrefs && this._childHrefs.nextHref)}
 				user-href=${ifDefined(this._childHrefs && this._childHrefs.userHref)}
+				group-href=${ifDefined(this._childHrefs && this._childHrefs.groupHref)}
 				user-progress-outcome-href=${ifDefined(this._childHrefs && this._childHrefs.userProgressOutcomeHref)}
 				coa-demonstration-href=${ifDefined(this._childHrefs && this._childHrefs.coaDemonstrationHref)}
+				special-access-href=${ifDefined(this._childHrefs && this._childHrefs.specialAccessHref)}
 				return-href=${ifDefined(this.returnHref)}
 				return-href-text=${ifDefined(this.returnHrefText)}
 				.submissionInfo=${this._submissionInfo}
@@ -111,7 +110,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
 				?hide-learner-context-bar=${this._shouldHideLearnerContextBar()}
-				?confirm-unsaved-changes=${this._shouldConfirmUnsavedChanges()}
 				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
 				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
 			></d2l-consistent-evaluation-page>

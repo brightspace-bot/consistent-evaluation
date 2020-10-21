@@ -1,4 +1,6 @@
+/* global moment:false */
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
+import '@brightspace-ui/core/components/button/button-subtle.js';
 import { attachmentListRel, submissions } from '../controllers/constants';
 import { css, html, LitElement } from 'lit-element';
 import { Classes } from 'd2l-hypermedia-constants';
@@ -11,6 +13,10 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 	static get properties() {
 		return {
+			selectedItemName: {
+				attribute: 'selected-item-name',
+				type: String
+			},
 			submissionInfo: {
 				attribute: false,
 				type: Object
@@ -19,9 +25,17 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				attribute: false,
 				type: Array
 			},
-			selectedItemName: {
-				attribute: 'selected-item-name',
+			specialAccessHref: {
+				attribute: 'special-access-href',
 				type: String
+			},
+			_submissionLateness: {
+				attribute: false,
+				type: Number
+			},
+			_showFiles: {
+				attribute: false,
+				type: Boolean
 			}
 		};
 	}
@@ -45,6 +59,11 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 					text-overflow: ellipsis;
 					white-space: nowrap;
 				}
+				@media (max-width: 930px) {
+					:host {
+						display: none;
+					}
+				}
 			`
 		];
 	}
@@ -53,19 +72,30 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		return await loadLocalizationResources(langs);
 	}
 
+	constructor() {
+		super();
+		this._showFiles = false;
+	}
+
 	async updated(changedProperties) {
 		super.updated(changedProperties);
 
 		if (changedProperties.has('submissionInfo')) {
 			this._files = await this.getSubmissions();
 		}
+
+		this._showFiles = (this._files && this._files.length > 0);
 	}
 
 	async getSubmissions() {
-		if (this.submissionInfo) {
+		this._submissionLateness = undefined;
+
+		if (this.submissionInfo && this. submissionInfo.submissionList) {
+			const totalSubmissions = this.submissionInfo.submissionList.length;
+
 			const submissionEntities = this.submissionInfo.submissionList.map(async(sub, index) => {
 				const file = await window.D2L.Siren.EntityStore.fetch(sub.href, this.token, false);
-				file.submissionNumber = index + 1;
+				file.submissionNumber = totalSubmissions - index;
 				return file;
 			});
 			return Promise.all(submissionEntities);
@@ -74,14 +104,17 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 	getSubmissionFiles(submission) {
 		const attachments = submission.entity.getSubEntityByRel(attachmentListRel);
-		let displayNum = 0;
 		return attachments.entities.map(sf => {
-			displayNum += displayNum;
 			if (submission.entity.getSubEntityByClass(Classes.assignments.submissionComment)) {
 				sf.properties.comment = submission.entity.getSubEntityByClass(Classes.assignments.submissionComment).properties.html;
 			}
+
+			if (submission.entity.getSubEntityByClass(Classes.assignments.submissionDate)) {
+				sf.properties.latenessTimespan = submission.entity.properties.lateTimeSpan;
+			}
+
 			sf.properties.date = submission.entity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
-			sf.properties.displayNumber = displayNum;
+			sf.properties.displayNumber = submission.submissionNumber;
 			return sf.properties;
 		});
 	}
@@ -102,6 +135,8 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		} else {
 			this._dispatchRenderEvidenceTextEvent(submission);
 		}
+
+		this._submissionLateness = submission.latenessTimespan;
 	}
 
 	_dispatchRenderEvidenceFileEvent(sf) {
@@ -133,6 +168,60 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		this.dispatchEvent(event);
 	}
 
+	_renderLateButton() {
+		if (this.selectedItemName === submissions || !this._submissionLateness)
+		{
+			return html``;
+		} else {
+			return html`
+				<d2l-button-subtle
+					text="${moment.duration(Number(this._submissionLateness), 'seconds').humanize()} ${this.localize('late')}"
+					icon="tier1:access-special"
+					@click="${this._openSpecialAccessDialog}"
+				></d2l-button-subtle>`;
+		}
+	}
+
+	_openSpecialAccessDialog() {
+		const specialAccess = this.specialAccessHref;
+
+		if (!specialAccess) {
+			console.error('Consistent-Eval: Expected special access item dialog URL, but none found');
+			return;
+		}
+
+		const location = new D2L.LP.Web.Http.UrlLocation(specialAccess);
+
+		const buttons = [
+			{
+				Key: 'save',
+				Text: this.localize('saveBtn'),
+				ResponseType: 1, // D2L.Dialog.ResponseType.Positive
+				IsPrimary: true,
+				IsEnabled: true
+			},
+			{
+				Text: this.localize('cancelBtn'),
+				ResponseType: 2, // D2L.Dialog.ResponseType.Negative
+				IsPrimary: false,
+				IsEnabled: true
+			}
+		];
+
+		D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
+			/*               opener: */ this.shadowRoot.querySelector('d2l-button-subtle'),
+			/*             location: */ location,
+			/*          srcCallback: */ 'SrcCallback',
+			/*       resizeCallback: */ '',
+			/*      responseDataKey: */ 'result',
+			/*                width: */ 1920,
+			/*               height: */ 1080,
+			/*            closeText: */ this.localize('closeBtn'),
+			/*              buttons: */ buttons,
+			/* forceTriggerOnCancel: */ false
+		);
+	}
+
 	_truncateFileName(fileName) {
 		const maxFileLength = 50;
 		if (fileName.length <= maxFileLength) {
@@ -144,8 +233,9 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 	}
 
 	render() {
+		if (!this._showFiles) return html ``;
 		return html`
-			<select class="d2l-input-select d2l-truncate" @change=${this._onSelectChange}>
+			<select class="d2l-input-select d2l-truncate" aria-label=${this.localize('userSubmissions')} @change=${this._onSelectChange}>
 				<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
 				${this._files && this._files.map(submission => html`
 					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
@@ -155,6 +245,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 					</optgroup>
 				`)};
 			</select>
+			${this._renderLateButton()}
  		`;
 	}
 }

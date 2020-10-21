@@ -37,8 +37,8 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				attribute: 'return-href-text',
 				type: String
 			},
-			hasUnsavedChanges: {
-				attribute: 'has-unsaved-changes',
+			isGroupActivity: {
+				attribute: 'is-group-activity',
 				type: Boolean
 			}
 		};
@@ -92,21 +92,20 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 		return await loadLocalizationResources(langs);
 	}
 
-	_dispatchButtonClickEvent(eventName) {
-		this.dispatchEvent(new CustomEvent(eventName, {
+	_dispatchButtonClickNavigationEvent(eventName) {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-navigate', {
+			detail: { key: eventName},
 			composed: true,
 			bubbles: true
 		}));
 	}
 
-	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-previous-student');}
-	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
+	_emitPreviousStudentEvent() { this._dispatchButtonClickNavigationEvent('previous');}
+	_emitNextStudentEvent() { this._dispatchButtonClickNavigationEvent('next'); }
 
 	_onNavigateBack(e) {
-		if (this.hasUnsavedChanges) {
-			e.preventDefault();
-			this._dispatchButtonClickEvent('d2l-consistent-evaluation-navigate-back-with-unsaved-changes');
-		}
+		e.preventDefault();
+		this._dispatchButtonClickNavigationEvent('back');
 	}
 
 	_renderBackButton() {
@@ -135,6 +134,9 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 
 	_renderIteratorButtons() {
 		if (this.iteratorIndex !== undefined || this.iteratorTotal !== undefined) {
+
+			const iteratorText = this.isGroupActivity ? 'groupIteratorText' : 'userIteratorText';
+
 			return html`
 				<d2l-navigation-iterator 
 					slot="right"
@@ -145,7 +147,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 					hide-text>
 
 					<div class="d2l-iterator-space"> 
-						<span class="d2l-iterator-text d2l-label-text">${this.localize('iteratorText', { num: this.iteratorIndex, total: this.iteratorTotal }) }</span>
+						<span class="d2l-iterator-text d2l-label-text">${this.localize(iteratorText, { num: this.iteratorIndex, total: this.iteratorTotal }) }</span>
 					</div>
 
 				</d2l-navigation-iterator>
