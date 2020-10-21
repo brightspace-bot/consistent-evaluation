@@ -465,8 +465,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 		await this._mutex.dispatch(
 			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
 				this.navigationTarget = e.detail.key;
-				if (this.evaluationEntity.hasClass('unsaved')) {
+				if (entity.hasClass('unsaved')) {
 					this._dialogOpened = true;
 				} else {
 					this._navigate();
