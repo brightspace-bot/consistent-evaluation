@@ -327,7 +327,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.submissionInfo = undefined;
 		this._fileEvidenceUrl = undefined;
 		this._textEvidence = undefined;
-		this.userProgressOutcomeHref = undefined;
 	}
 
 	_hideScrollbars() {
@@ -551,6 +550,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._hideScrollbars();
 	}
 
+	_handleAnnotationsUpdate() {
+		// purposefully empty for now
+	}
+
 	connectedCallback() {
 		super.connectedCallback();
 		window.addEventListener('beforeunload', this.unsavedChangesHandler);
@@ -575,7 +578,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.titleName=${this._navBarTitleText}
 						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
-						.iteratorTotal=${this.iteratorTotal}					
+						.iteratorTotal=${this.iteratorTotal}
 						?is-group-activity="${this.groupHref}"
 						@d2l-consistent-evaluation-navigate=${this._showDialog}
 					></d2l-consistent-evaluation-nav-bar>
@@ -588,6 +591,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						file-evidence-url=${ifDefined(this._fileEvidenceUrl)}
 						.textEvidence=${this._textEvidence}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
+						@d2l-consistent-eval-annotations-update=${this._handleAnnotationsUpdate}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
