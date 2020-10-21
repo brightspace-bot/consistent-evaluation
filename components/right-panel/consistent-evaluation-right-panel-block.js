@@ -1,5 +1,7 @@
+import '@brightspace-ui/core/components/colors/colors.js';
+import './consistent-evaluation-accordion-collapse.js';
 import { css, html, LitElement } from 'lit-element';
-import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { heading4Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 
 class ConsistentEvaluationRightPanelBlock extends LitElement {
 	static get properties() {
@@ -10,19 +12,29 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 			noTitle: {
 				attribute: 'no-title',
 				type: Boolean
+			},
+			isMobile: {
+				attribute: 'is-mobile',
+				type: Boolean
 			}
 		};
 	}
 
 	static get styles() {
-		return [labelStyles, css`
+		return [labelStyles, heading4Styles, css`
 			.d2l-block {
 				margin-top: 1.35rem;
 				padding-left: 0.75rem;
 				padding-right: 0.75rem;
 			}
 			.d2l-label-text {
-				margin-bottom: 0.4rem;
+				margin-bottom: 0.0rem;
+			}
+			.d2l-accordion {
+				padding: 20px;
+				padding-top: 0px;
+				border-top: 1px solid var(--d2l-color-mica);
+				border-width: 1px;
 			}
 		`];
 	}
@@ -30,6 +42,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	constructor() {
 		super();
 		this.noTitle = false;
+		this.isMobile = false;
 	}
 
 	_getTitle() {
@@ -37,11 +50,23 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	render() {
-		return html`
+		return this.isMobile ? html`
 			<div class="d2l-block">
 				${this._getTitle()}
 				<slot></slot>
 			</div>
+		` : html` 
+			<d2l-consistent-evaluation-accordion-collapse
+				?has-errors=false
+				class="d2l-accordion">
+				<span slot="header">
+					${this._getTitle()}
+				</span>
+				<li slot="summary-items">Something about ${this.title}</li>
+				<span slot="components">
+					<slot></slot>
+				</span>
+			</d2l-consistent-evaluation-accordion-collapse>
 		`;
 	}
 }
