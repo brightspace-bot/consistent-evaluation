@@ -99,8 +99,8 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
 		this.hideCoaOverride = false;
-		this.rubricFirstLoad = true;
 		this.allowEvaluationWrite = false;
+		this.rubricOpen = false;
 	}
 
 	_renderRubric() {
@@ -113,6 +113,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					.token=${this.token}
 					?read-only=${this.rubricReadOnly}
 					@d2l-rubric-total-score-changed=${this._syncRubricGrade}
+					@d2l-rubric-compact-expanded-changed=${this._updateRubricOpenState}
 				></d2l-consistent-evaluation-rubric>
 			`;
 		}
@@ -186,13 +187,27 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		`;
 	}
 
+	_updateRubricOpenState(e) {
+		if (e.detail && e.detail.expanded) {
+			this.rubricOpen = e.detail.expanded;
+		}
+	}
+
+	_hasNavigated() {
+		this.hasNavigated = true;
+	}
+
 	_syncRubricGrade(e) {
+		if (this.hasNavigated) {
+			this.hasNavigated = false;
+			return;
+		}
+
 		if (e.detail.score === null || !this.allowEvaluationWrite) {
 			return;
 		}
 
-		if (this.rubricFirstLoad) {
-			this.rubricFirstLoad = false;
+		if (!this.rubricOpen) {
 			return;
 		}
 
