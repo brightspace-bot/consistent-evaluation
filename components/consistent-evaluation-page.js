@@ -11,6 +11,7 @@ import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/button/button.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { draftState, publishedState } from './controllers/constants.js';
+import {getSubmissionFiles, getSubmissions} from './helpers/submissionsAndFilesHelpers.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
@@ -88,6 +89,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			hideLearnerContextBar: {
 				attribute: 'hide-learner-context-bar',
 				type: Boolean
+			},
+			currentFileId: {
+				attribute: 'current-file-id',
+				type: String
 			},
 			submissionInfo: {
 				attribute: false,
@@ -282,6 +287,14 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		return this.organizationName;
 	}
 
+	async updated(changedProperties) {
+		super.updated(changedProperties);
+
+		if (changedProperties.has('submissionInfo') && this.token) {
+			await this.setSubmissionViewFromUrl();
+		}
+	}
+
 	async _initializeController() {
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		const bypassCache = true;
@@ -290,6 +303,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
+
 	}
 
 	_noFeedbackComponent() {
@@ -548,6 +562,38 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._hideScrollbars();
 	}
 
+	async setSubmissionViewFromUrl() {
+
+		const submissions = await getSubmissions(this.submissionInfo, this.token);
+		if (this.currentFileId && submissions) {
+			submissions.forEach(file => {
+				const fileProps = getSubmissionFiles(file);
+				for (const sf of fileProps) {
+					if (sf.id === this.currentFileId) {
+						if (sf.comment === undefined) {
+							this._setFileEvidence({
+								detail: {
+									url: sf.fileViewer,
+									name: sf.name
+								}
+							});
+						} else {
+							this._setTextEvidence({
+								detail: {
+									textSubmissionEvidence: {
+										title: `${this.localize('textSubmission')} ${sf.displayNumber}`,
+										name: sf.name,
+										date: sf.date,
+										downloadUrl: sf.href,
+										content: sf.comment
+									}
+								}});
+						}
+					}
+				}
+			});
+		}
+	}
 	_handleAnnotationsUpdate() {
 		// purposefully empty for now
 	}
