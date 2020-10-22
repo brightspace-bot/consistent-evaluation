@@ -190,6 +190,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 	_updateRubricOpenState(e) {
 		if (e.detail && e.detail.expanded) {
 			this.rubricOpen = e.detail.expanded;
+			this.hasNavigated = false;
 		}
 	}
 
