@@ -322,6 +322,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_resetEvidence() {
+		this._selectedFile = submissions;
 		this.submissionInfo = undefined;
 		this._fileEvidenceUrl = undefined;
 		this._textEvidence = undefined;
