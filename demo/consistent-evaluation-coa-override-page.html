@@ -21,7 +21,16 @@
 			<d2l-demo-snippet>
 				<d2l-consistent-evaluation
 					id='consistent-eval'
-					href='data/outcomes-overall-achievement/user-activity-usage.json'
+					href='data/outcomes-overall-achievement/actor-activity-usage.json'
+					return-href-text='Back to Mastery View'
+					return-href='/demo/'
+				></d2l-consistent-evaluation>
+			</d2l-demo-snippet>
+			<h2>d2l-coa-override-page</h2>
+			<d2l-demo-snippet>
+				<d2l-consistent-evaluation
+					id='consistent-eval-2'
+					href='data/outcomes-overall-achievement/user-activity-usage_published.json'
 					return-href-text='Back to Mastery View'
 					return-href='/demo/'
 				></d2l-consistent-evaluation>
@@ -31,6 +40,8 @@
 		<script>
 			const element = document.getElementById('consistent-eval');
 			element.token = async() => { return 'token'; };
+			const element2 = document.getElementById('consistent-eval-2');
+			element2.token = async() => { return 'token2'; };
 		</script>
 	</body>
 </html>
