@@ -199,16 +199,16 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		}
 		try {
 			const accordionCollapse = this.shadowRoot.querySelector('d2l-consistent-evaluation-rubric')
-			.shadowRoot.querySelector('d2l-consistent-evaluation-right-panel-block d2l-rubric')
-			.shadowRoot.querySelector('d2l-rubric-adapter')
-			.shadowRoot.querySelector('div d2l-labs-accordion d2l-labs-accordion-collapse');
+				.shadowRoot.querySelector('d2l-consistent-evaluation-right-panel-block d2l-rubric')
+				.shadowRoot.querySelector('d2l-rubric-adapter')
+				.shadowRoot.querySelector('div d2l-labs-accordion d2l-labs-accordion-collapse');
 			const rubricCollapse = accordionCollapse
 				.shadowRoot.querySelector('div.content iron-collapse');
 			accordionCollapse.removeAttribute('opened');
 			rubricCollapse.opened = false;
 		} catch (err) {
 			console.log('Unable to close rubric');
-		}		
+		}
 	}
 
 	_syncRubricGrade(e) {
