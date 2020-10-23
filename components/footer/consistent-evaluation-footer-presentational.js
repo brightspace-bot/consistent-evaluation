@@ -106,6 +106,7 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 	_getNextStudentButton() {
 		return this.showNextStudent ? html`
 			<d2l-navigation-button
+				id="consistent-evaluation-footer-next-student"
 				hide-highlight
 				title="${this.localize('nextStudent')}"
 				@click="${this._emitNextStudentEvent}"
