@@ -17,7 +17,6 @@ import { ConsistentEvaluationController } from './controllers/ConsistentEvaluati
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { loadLocalizationResources } from './locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
-import { submissions } from './controllers/constants';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
@@ -144,18 +143,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			},
 			_scrollbarStatus: {
 				attribute: false
-			},
-			_fileEvidenceUrl: {
-				attribute: false,
-				type: String
-			},
-			_textEvidence: {
-				attribute: false,
-				type: Object
-			},
-			_selectedFile: {
-				attribute: false,
-				type: String
 			},
 			_dialogOpened: {
 				attribute: false
@@ -325,13 +312,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			composed: true,
 			bubbles: true
 		}));
-	}
-
-	_resetEvidence() {
-		this._selectedFile = submissions;
-		this.submissionInfo = undefined;
-		this._fileEvidenceUrl = undefined;
-		this._textEvidence = undefined;
 	}
 
 	_hideScrollbars() {
@@ -527,7 +507,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				<d2l-consistent-evaluation-learner-context-bar
 					user-href=${ifDefined(this.userHref)}
 					group-href=${ifDefined(this.groupHref)}
-					selected-item-name=${this._selectedFile}
 					special-access-href=${ifDefined(this.specialAccessHref)}
 					.token=${this.token}
 					.currentFileId=${this.currentFileId}
@@ -537,29 +516,18 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		}
 	}
 
+	_selectFile(e) {
+		this.currentFileId = e.detail.fileId;
+		this._hideScrollbars();
+	}
+
 	_setSubmissionsView() {
 		this.currentFileId = undefined;
-	}
-	_setFileEvidence(e) {
-		this._fileEvidenceUrl = e.detail.url;
-		this._selectedFile = e.detail.name;
-		this._textEvidence = undefined;
-		this._hideScrollbars();
-	}
-	_setTextEvidence(e) {
-		this._textEvidence = e.detail.textSubmissionEvidence;
-		this._selectedFile = e.detail.textSubmissionEvidence.name;
-		this._fileEvidenceUrl = undefined;
-		this._hideScrollbars();
+		this._showScrollbars();
 	}
 
 	async _handleAnnotationsUpdate() {
 
-	}
-
-	_selectFile(e) {
-		console.log(e);
-		this.currentFileId = e.detail.fileId;
 	}
 
 	connectedCallback() {
@@ -595,8 +563,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
-						file-evidence-url=${ifDefined(this._fileEvidenceUrl)}
-						.textEvidence=${this._textEvidence}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
 						.currentFileId=${this.currentFileId}
 						@d2l-consistent-eval-annotations-update=${this._handleAnnotationsUpdate}

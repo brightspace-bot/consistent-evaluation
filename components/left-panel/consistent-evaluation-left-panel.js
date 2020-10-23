@@ -5,7 +5,7 @@ import './consistent-evaluation-outcomes-overall-achievement.js';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
 import { fileSubmission, observedInPerson, onPaperSubmission, submissionTypesWithNoEvidence, textSubmission } from '../controllers/constants';
-import { getSubmissionFiles, getSubmissions } from '../helpers/submissionsAndFilesHelpers.js';
+import { findFile, getSubmissions } from '../helpers/submissionsAndFilesHelpers.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 
@@ -112,23 +112,9 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 	}
 
-	findFile(fileId, submissions) {
-		for (let i = 0; i < submissions.length; i++) {
-			const submission = submissions[i];
-			const files = getSubmissionFiles(submission);
-			for (let j = 0; j < files.length; j++) {
-				const submissionFile = files[j];
-				if (submissionFile.id === fileId) {
-					return submissionFile;
-				}
-			}
-		}
-
-	}
-
 	async getFileFromId() {
 		const submissions = await getSubmissions(this.submissionInfo, this.token);
-		const currentFile = this.findFile(this.currentFileId, submissions);
+		const currentFile = findFile(this.currentFileId, submissions);
 
 		if (!currentFile) {
 			console.error(`Cannot find fileId ${this.currentFileId}`);
