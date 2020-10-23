@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { actorRel, alignmentsRel, assessmentRel, checkpointItemType, demonstrationRel, editSpecialAccessApplicationRel, evaluationRel, groupRel, nextRel, previousRel, rubricRel, userProgressOutcomeRel, userRel } from './constants.js';
+import { actorRel, alignmentsRel, assessmentRel, demonstrationRel, editSpecialAccessApplicationRel, evaluationRel, groupRel, nextRel, previousRel, rubricRel, userProgressOutcomeRel, userRel } from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
@@ -64,9 +64,7 @@ export class ConsistentEvaluationHrefController {
 			alignmentsHref = this._getHref(root, alignmentsRel);
 			groupHref = this._getHref(root, groupRel);
 
-			if (root.hasClass(checkpointItemType)) {
-				userProgressOutcomeHref = this._getHref(root, userProgressOutcomeRel);
-			}
+			userProgressOutcomeHref = this._getHref(root, userProgressOutcomeRel);
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
@@ -78,7 +76,7 @@ export class ConsistentEvaluationHrefController {
 			if (alignmentsHref) {
 				const alignmentsEntity = await this._getEntityFromHref(alignmentsHref, bypassCache);
 				if (alignmentsEntity && alignmentsEntity.entity) {
-					if (root.hasClass(checkpointItemType)) {
+					if (userProgressOutcomeHref) {
 						alignmentsHref = undefined;
 						const referencedAlignmentEntity = alignmentsEntity.entity.getSubEntityByRel('item');
 						if (referencedAlignmentEntity) {
