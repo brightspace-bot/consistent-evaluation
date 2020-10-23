@@ -322,6 +322,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _onNextStudentClick() {
+		this.shadowRoot.querySelector('consistent-evaluation-right-panel')._closeRubric();
 		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
 			composed: true,
 			bubbles: true
@@ -329,6 +330,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _onPreviousStudentClick() {
+		this.shadowRoot.querySelector('consistent-evaluation-right-panel')._closeRubric();
 		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
 			composed: true,
 			bubbles: true

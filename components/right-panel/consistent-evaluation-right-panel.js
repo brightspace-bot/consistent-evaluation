@@ -99,8 +99,8 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
 		this.hideCoaOverride = false;
-		this.rubricFirstLoad = true;
 		this.allowEvaluationWrite = false;
+		this.rubricOpen = false;
 	}
 
 	_renderRubric() {
@@ -113,6 +113,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					.token=${this.token}
 					?read-only=${this.rubricReadOnly}
 					@d2l-rubric-total-score-changed=${this._syncRubricGrade}
+					@d2l-rubric-compact-expanded-changed=${this._updateRubricOpenState}
 				></d2l-consistent-evaluation-rubric>
 			`;
 		}
@@ -186,13 +187,36 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		`;
 	}
 
+	_updateRubricOpenState(e) {
+		if (e.detail) {
+			this.rubricOpen = e.detail.expanded;
+		}
+	}
+
+	_closeRubric() {
+		if (this.hideRubric) {
+			return;
+		}
+		try {
+			const accordionCollapse = this.shadowRoot.querySelector('d2l-consistent-evaluation-rubric')
+				.shadowRoot.querySelector('d2l-consistent-evaluation-right-panel-block d2l-rubric')
+				.shadowRoot.querySelector('d2l-rubric-adapter')
+				.shadowRoot.querySelector('div d2l-labs-accordion d2l-labs-accordion-collapse');
+			const rubricCollapse = accordionCollapse
+				.shadowRoot.querySelector('div.content iron-collapse');
+			accordionCollapse.removeAttribute('opened');
+			rubricCollapse.opened = false;
+		} catch (err) {
+			console.log('Unable to close rubric');
+		}
+	}
+
 	_syncRubricGrade(e) {
 		if (e.detail.score === null || !this.allowEvaluationWrite) {
 			return;
 		}
 
-		if (this.rubricFirstLoad) {
-			this.rubricFirstLoad = false;
+		if (!this.rubricOpen) {
 			return;
 		}
 
