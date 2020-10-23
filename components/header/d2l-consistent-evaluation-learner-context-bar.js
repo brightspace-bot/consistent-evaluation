@@ -32,7 +32,6 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 				type: String
 			},
 			currentFileId: {
-				attribute: 'current-file-id',
 				type: String
 			}
 		};
@@ -91,9 +90,8 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 				?is-group-activity="${this.groupHref}"
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
-				selected-item-name=${this.selectedItemName}
 				special-access-href=${this.specialAccessHref}
-				current-file-id=${this.currentFileId}
+				.currentFileId=${this.currentFileId}
 				.submissionInfo="${this.submissionInfo}">
 			</d2l-consistent-evaluation-lcb-file-context>
 		`;

@@ -2,6 +2,20 @@ import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import { attachmentListRel } from '../controllers/constants';
 import { Classes } from 'd2l-hypermedia-constants';
 
+export function findFile(fileId, submissions) {
+	for (let i = 0; i < submissions.length; i++) {
+		const submission = submissions[i];
+		const files = getSubmissionFiles(submission);
+		for (let j = 0; j < files.length; j++) {
+			const submissionFile = files[j];
+			if (submissionFile.id === fileId) {
+				return submissionFile;
+			}
+		}
+	}
+
+}
+
 export function getSubmissionFiles(submission) {
 	const attachments = submission.entity.getSubEntityByRel(attachmentListRel);
 	return attachments.entities.map(sf => {
@@ -30,4 +44,3 @@ export async function getSubmissions(submissionInfo, token) {
 		return Promise.all(submissionEntities);
 	}
 }
-

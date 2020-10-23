@@ -530,7 +530,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					selected-item-name=${this._selectedFile}
 					special-access-href=${ifDefined(this.specialAccessHref)}
 					.token=${this.token}
-					current-file-id=${this.currentFileId}
+					.currentFileId=${this.currentFileId}
 					.submissionInfo=${this.submissionInfo}
 				></d2l-consistent-evaluation-learner-context-bar>
 			`;

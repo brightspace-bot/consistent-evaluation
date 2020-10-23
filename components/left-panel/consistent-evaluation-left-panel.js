@@ -98,7 +98,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 	async updated(changedProperties) {
 		super.updated();
-		console.log(this.currentFileId);
+
 		if ((changedProperties.has('currentFileId') || changedProperties.has('token') || changedProperties.has('submissionInfo'))
 			&& this.currentFileId
 			&& this.token
@@ -129,6 +129,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 	async getFileFromId() {
 		const submissions = await getSubmissions(this.submissionInfo, this.token);
 		const currentFile = this.findFile(this.currentFileId, submissions);
+
+		if (!currentFile) {
+			console.error(`Cannot find fileId ${this.currentFileId}`);
+			return;
+		}
 
 		if (this.submissionInfo.submissionType === fileSubmission) {
 			this.fileEvidenceUrl = currentFile.fileViewer;
