@@ -112,7 +112,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				special-access-href=${ifDefined(this._childHrefs && this._childHrefs.specialAccessHref)}
 				return-href=${ifDefined(this.returnHref)}
 				return-href-text=${ifDefined(this.returnHrefText)}
-				current-file-id=${ifDefined(this.fileId !== null && this.fileId)}
+				current-file-id=${ifDefined(this.fileId)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
 				.assignmentName=${this._assignmentName}

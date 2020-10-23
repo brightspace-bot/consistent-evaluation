@@ -30,6 +30,10 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 			selectedItemName: {
 				attribute: 'selected-item-name',
 				type: String
+			},
+			currentFileId: {
+				attribute: 'current-file-id',
+				type: String
 			}
 		};
 	}
@@ -71,11 +75,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 	}
 
 	_getIsExempt() {
-		if (this.submissionInfo && this.submissionInfo.isExempt) {
-			return true;
-		} else {
-			return false;
-		}
+		return this.submissionInfo && this.submissionInfo.isExempt;
 	}
 
 	_getActorHref() {
@@ -93,6 +93,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 			<d2l-consistent-evaluation-lcb-file-context
 				selected-item-name=${this.selectedItemName}
 				special-access-href=${this.specialAccessHref}
+				current-file-id=${this.currentFileId}
 				.submissionInfo="${this.submissionInfo}">
 			</d2l-consistent-evaluation-lcb-file-context>
 		`;

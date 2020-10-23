@@ -36,6 +36,10 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 			_showFiles: {
 				attribute: false,
 				type: Boolean
+			},
+			currentFileId: {
+				attribute: 'current-file-id',
+				type: String
 			}
 		};
 	}
@@ -99,13 +103,24 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		}
 
 		const submission = JSON.parse(e.target.value);
-		if (submission.comment === undefined) {
+		/*if (submission.comment === undefined) {
 			this._dispatchRenderEvidenceFileEvent(submission);
 		} else {
 			this._dispatchRenderEvidenceTextEvent(submission);
-		}
+		}*/
+		this._dispatchFileSelectedEvent(submission.id);
 
 		this._submissionLateness = submission.latenessTimespan;
+	}
+
+	_dispatchFileSelectedEvent(fileId) {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-file-selected', {
+			detail: {
+				fileId: fileId
+			},
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	_dispatchRenderEvidenceFileEvent(sf) {
@@ -206,10 +221,10 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		return html`
 			<select class="d2l-input-select d2l-truncate" aria-label=${this.localize('userSubmissions')} @change=${this._onSelectChange}>
 				<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${this.selectedItemName === submissions}></option>
-				${this._files && this._files.map(submission => html`
+				${this._files.map(submission => html`
 					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
 						${getSubmissionFiles(submission, this.token).map(sf => html`
-							<option value=${JSON.stringify(sf)} label=${this._truncateFileName(sf.name)} ?selected=${sf.name === this.selectedItemName} class="select-option"></option>
+							<option value=${JSON.stringify(sf)} label=${this._truncateFileName(sf.name)} ?selected=${sf.id === this.currentFileId} class="select-option"></option>
 						`)}
 					</optgroup>
 				`)};

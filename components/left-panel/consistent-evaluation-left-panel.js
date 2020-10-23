@@ -5,6 +5,7 @@ import './consistent-evaluation-outcomes-overall-achievement.js';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
 import { fileSubmission, observedInPerson, onPaperSubmission, submissionTypesWithNoEvidence, textSubmission } from '../controllers/constants';
+import { getSubmissionFiles, getSubmissions } from '../helpers/submissionsAndFilesHelpers.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 
@@ -42,6 +43,10 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			},
 			userProgressOutcomeHref: {
 				attribute: 'user-progress-outcome-href',
+				type: String
+			},
+			currentFileId: {
+				attribute: 'current-file-id',
 				type: String
 			}
 		};
@@ -89,6 +94,57 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 
 	static async getLocalizeResources(langs) {
 		return await loadLocalizationResources(langs);
+	}
+
+	async updated(changedProperties) {
+		super.updated();
+		console.log(this.currentFileId);
+		if ((changedProperties.has('currentFileId') || changedProperties.has('token') || changedProperties.has('submissionInfo'))
+			&& this.currentFileId
+			&& this.token
+			&& this.submissionInfo
+		) {
+			await this.getFileFromId();
+		} else if (changedProperties.has('currentFileId') && !this.currentFileId) {
+			this.textEvidence = undefined;
+			this.fileEvidenceUrl = undefined;
+		}
+
+	}
+
+	findFile(fileId, submissions) {
+		for (let i = 0; i < submissions.length; i++) {
+			const submission = submissions[i];
+			const files = getSubmissionFiles(submission);
+			for (let j = 0; j < files.length; j++) {
+				const submissionFile = files[j];
+				if (submissionFile.id === fileId) {
+					return submissionFile;
+				}
+			}
+		}
+
+	}
+
+	async getFileFromId() {
+		const submissions = await getSubmissions(this.submissionInfo, this.token);
+		const currentFile = this.findFile(this.currentFileId, submissions);
+
+		if (this.submissionInfo.submissionType === fileSubmission) {
+			this.fileEvidenceUrl = currentFile.fileViewer;
+			this.textEvidence = undefined;
+		} else if (this.submissionInfo.submissionType === textSubmission) {
+			this.fileEvidenceUrl = undefined;
+			this.textEvidence = {
+				title: `${this.localize('textSubmission')} ${currentFile.displayNumber}`,
+				date: currentFile.date,
+				downloadUrl: currentFile.href,
+				content: currentFile.comment
+			};
+		} else {
+			this.textEvidence = undefined;
+			this.fileEvidenceUrl = undefined;
+		}
 	}
 
 	_renderFileEvidence() {

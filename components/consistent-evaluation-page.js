@@ -11,7 +11,6 @@ import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/button/button.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { draftState, publishedState } from './controllers/constants.js';
-import {getSubmissionFiles, getSubmissions} from './helpers/submissionsAndFilesHelpers.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
@@ -199,7 +198,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
 		this._mutex = new Awaiter();
-		this._setSubmissionsView = this._setSubmissionsView.bind(this);
 		this._dialogOpened = false;
 		this.allowEvaluationWrite = false;
 		this.allowEvaluationDelete = false;
@@ -285,14 +283,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			return this.localize('overallAchievement');
 		}
 		return this.organizationName;
-	}
-
-	async updated(changedProperties) {
-		super.updated(changedProperties);
-
-		if (changedProperties.has('submissionInfo') && this.token) {
-			await this.setSubmissionViewFromUrl();
-		}
 	}
 
 	async _initializeController() {
@@ -540,6 +530,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					selected-item-name=${this._selectedFile}
 					special-access-href=${ifDefined(this.specialAccessHref)}
 					.token=${this.token}
+					current-file-id=${this.currentFileId}
 					.submissionInfo=${this.submissionInfo}
 				></d2l-consistent-evaluation-learner-context-bar>
 			`;
@@ -547,10 +538,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	_setSubmissionsView() {
-		this._fileEvidenceUrl = undefined;
-		this._textEvidence = undefined;
-		this._selectedFile = submissions;
-		this._showScrollbars();
+		this.currentFileId = undefined;
 	}
 	_setFileEvidence(e) {
 		this._fileEvidenceUrl = e.detail.url;
@@ -565,40 +553,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._hideScrollbars();
 	}
 
-	async setSubmissionViewFromUrl() {
+	async _handleAnnotationsUpdate() {
 
-		const submissions = await getSubmissions(this.submissionInfo, this.token);
-		if (this.currentFileId && submissions) {
-			submissions.forEach(file => {
-				const fileProps = getSubmissionFiles(file);
-				for (const sf of fileProps) {
-					if (sf.id === this.currentFileId) {
-						if (sf.comment === undefined) {
-							this._setFileEvidence({
-								detail: {
-									url: sf.fileViewer,
-									name: sf.name
-								}
-							});
-						} else {
-							this._setTextEvidence({
-								detail: {
-									textSubmissionEvidence: {
-										title: `${this.localize('textSubmission')} ${sf.displayNumber}`,
-										name: sf.name,
-										date: sf.date,
-										downloadUrl: sf.href,
-										content: sf.comment
-									}
-								}});
-						}
-					}
-				}
-			});
-		}
 	}
-	_handleAnnotationsUpdate() {
-		// purposefully empty for now
+
+	_selectFile(e) {
+		console.log(e);
+		this.currentFileId = e.detail.fileId;
 	}
 
 	connectedCallback() {
@@ -614,9 +575,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	render() {
 		return html`
 			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}"
-			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._setFileEvidence}
-			@d2l-consistent-evaluation-submission-item-render-evidence-text=${this._setTextEvidence}
 			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
+			@d2l-consistent-evaluation-file-selected=${this._selectFile}
 			>
 				<div slot="header">
 					<d2l-consistent-evaluation-nav-bar
@@ -638,6 +598,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						file-evidence-url=${ifDefined(this._fileEvidenceUrl)}
 						.textEvidence=${this._textEvidence}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
+						.currentFileId=${this.currentFileId}
 						@d2l-consistent-eval-annotations-update=${this._handleAnnotationsUpdate}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
