@@ -24,6 +24,7 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 			}
 		};
 	}
+
 	static get styles() {
 		return css`
 			#footer-container {
@@ -104,13 +105,16 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 
 	_getNextStudentButton() {
 		return this.showNextStudent ? html`
-			<d2l-button-icon
-				id="consistent-evaluation-footer-next-student"
-				icon="tier3:chevron-right-circle"
-				@click=${this._emitNextStudentEvent}
-				aria-label="Next Student"
-			></d2l-button-icon>
-		` : html``;
+			<d2l-navigation-button
+				hide-highlight
+				title="${this.localize('nextStudent')}"
+				@click="${this._emitNextStudentEvent}"
+				ariaDescribedbyText="${this.localize('nextStudent')}">
+				<div>
+					<d2l-icon icon="d2l-tier3:chevron-right-circle"></d2l-icon>
+				</div>
+			</d2l-navigation-button>`
+			: null;
 	}
 
 	render() {
