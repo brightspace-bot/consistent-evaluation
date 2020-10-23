@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { actorRel, alignmentsRel, assessmentRel, checkpointItemType, editSpecialAccessApplicationRel, evaluationRel, groupRel, nextRel, previousRel, rubricRel, userProgressOutcomeActivitiesRel, userProgressOutcomeRel, userRel} from './constants.js';
+import { actorRel, alignmentsRel, assessmentRel, checkpointItemType, demonstrationRel, editSpecialAccessApplicationRel, evaluationRel, groupRel, nextRel, previousRel, rubricRel, userProgressOutcomeActivitiesRel, userProgressOutcomeRel, userRel } from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
@@ -75,10 +75,21 @@ export class ConsistentEvaluationHrefController {
 			if (alignmentsHref) {
 				const alignmentsEntity = await this._getEntityFromHref(alignmentsHref, bypassCache);
 				if (alignmentsEntity && alignmentsEntity.entity) {
-					if (alignmentsEntity.entity.entities && alignmentsEntity.entity.entities.length > 0) {
-						alignmentsHref = actorHref;
-					} else {
+					if (userProgressOutcomeHref) {
 						alignmentsHref = undefined;
+						const referencedAlignmentEntity = alignmentsEntity.entity.getSubEntityByRel("item");
+						if (referencedAlignmentEntity) {
+							const alignmentEntity = await this._getEntityFromHref(referencedAlignmentEntity.href, bypassCache);
+							if (alignmentEntity && alignmentEntity.entity) {
+								coaDemonstrationHref = alignmentEntity.entity.getLinkByRel(demonstrationRel)?.href;
+							}
+						}
+					} else {
+						if (alignmentsEntity.entity.entities && alignmentsEntity.entity.entities.length > 0) {
+							alignmentsHref = actorHref;
+						} else {
+							alignmentsHref = undefined;
+						}
 					}
 				}
 			}
@@ -175,9 +186,9 @@ export class ConsistentEvaluationHrefController {
 					const gradeLink = activityUsageResponse.entity.getLinkByRel(Rels.Grades.grade).href;
 					const gradeResponse = await this._getEntityFromHref(gradeLink, false);
 
-					if (gradeResponse && gradeResponse.entity  && gradeResponse.entity.properties) {
+					if (gradeResponse && gradeResponse.entity && gradeResponse.entity.properties) {
 						evaluationUrl = gradeResponse.entity.properties.evaluationUrl;
-						statsUrl  = gradeResponse.entity.properties.statsUrl;
+						statsUrl = gradeResponse.entity.properties.statsUrl;
 						gradeItemName = gradeResponse.entity.properties.name;
 					}
 				}

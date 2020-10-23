@@ -20,6 +20,7 @@ export const attachmentListRel = 'https://assignments.api.brightspace.com/rels/a
 export const editSpecialAccessApplicationRel = 'https://assignments.api.brightspace.com/rels/edit-special-access-application';
 export const userProgressOutcomeRel = 'user-progress-outcome';
 export const userProgressOutcomeActivitiesRel = 'https://user-progress.api.brightspace.com/rels/outcome-activities';
+export const demonstrationRel = 'https://achievements.api.brightspace.com/rels/demonstration';
 export const nextRel = 'next';
 export const previousRel = 'previous';
 export const itemRel = 'item';
