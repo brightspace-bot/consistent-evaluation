@@ -1,5 +1,5 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { actorRel, alignmentsRel, assessmentRel, checkpointItemType, demonstrationRel, editSpecialAccessApplicationRel, evaluationRel, groupRel, nextRel, previousRel, rubricRel, userProgressOutcomeActivitiesRel, userProgressOutcomeRel, userRel } from './constants.js';
+import { actorRel, alignmentsRel, assessmentRel, checkpointItemType, demonstrationRel, editSpecialAccessApplicationRel, evaluationRel, groupRel, nextRel, previousRel, rubricRel, userProgressOutcomeRel, userRel } from './constants.js';
 import { Classes, Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationHrefControllerErrors = {
@@ -62,8 +62,11 @@ export class ConsistentEvaluationHrefController {
 			actorHref = this._getHref(root, actorRel);
 			userHref = this._getHref(root, userRel);
 			alignmentsHref = this._getHref(root, alignmentsRel);
-			userProgressOutcomeHref = this._getHref(root, userProgressOutcomeRel);
 			groupHref = this._getHref(root, groupRel);
+
+			if (root.hasClass(checkpointItemType)) {
+				userProgressOutcomeHref = this._getHref(root, userProgressOutcomeRel);
+			}
 
 			if (rubricAssessmentHref) {
 				const assessmentEntity = await this._getEntityFromHref(rubricAssessmentHref, bypassCache);
@@ -75,9 +78,9 @@ export class ConsistentEvaluationHrefController {
 			if (alignmentsHref) {
 				const alignmentsEntity = await this._getEntityFromHref(alignmentsHref, bypassCache);
 				if (alignmentsEntity && alignmentsEntity.entity) {
-					if (userProgressOutcomeHref) {
+					if (root.hasClass(checkpointItemType)) {
 						alignmentsHref = undefined;
-						const referencedAlignmentEntity = alignmentsEntity.entity.getSubEntityByRel("item");
+						const referencedAlignmentEntity = alignmentsEntity.entity.getSubEntityByRel('item');
 						if (referencedAlignmentEntity) {
 							const alignmentEntity = await this._getEntityFromHref(referencedAlignmentEntity.href, bypassCache);
 							if (alignmentEntity && alignmentEntity.entity) {
@@ -89,30 +92,6 @@ export class ConsistentEvaluationHrefController {
 							alignmentsHref = actorHref;
 						} else {
 							alignmentsHref = undefined;
-						}
-					}
-				}
-			}
-
-			if (userProgressOutcomeHref) {
-				const userProgressOutcomeEntity = await this._getEntityFromHref(userProgressOutcomeHref, bypassCache);
-				if (userProgressOutcomeEntity && userProgressOutcomeEntity.entity) {
-					const userProgressOutcomeActivitiesHref = this._getHref(userProgressOutcomeEntity.entity, userProgressOutcomeActivitiesRel);
-
-					if (userProgressOutcomeActivitiesHref) {
-						const userProgressOutcomeActivitiesEntity = await this._getEntityFromHref(userProgressOutcomeActivitiesHref, bypassCache);
-
-						if (userProgressOutcomeActivitiesEntity && userProgressOutcomeActivitiesEntity.entity) {
-							const checkpointActivityEntity = userProgressOutcomeActivitiesEntity.entity.getSubEntitiesByClass(Classes.userProgress.outcomes.activity).find((activityEntity) => {
-								return activityEntity.properties && activityEntity.properties.type === checkpointItemType;
-							});
-
-							if (checkpointActivityEntity) {
-								const demonstrationEntity = checkpointActivityEntity.getSubEntityByClass(Classes.outcomes.demonstration);
-								if (demonstrationEntity) {
-									coaDemonstrationHref = this._getHref(demonstrationEntity, 'self');
-								}
-							}
 						}
 					}
 				}
