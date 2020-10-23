@@ -178,7 +178,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				<option label=${this.localize('userSubmissions')} value=${submissions} ?selected=${!this.currentFileId}></option>
 				${this._files.map(submission => html`
 					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
-						${getSubmissionFiles(submission, this.token).map(sf => html`
+						${getSubmissionFiles(submission).map(sf => html`
 							<option value=${sf.id} label=${this._truncateFileName(sf.name)} ?selected=${sf.id === this.currentFileId} class="select-option"></option>
 						`)}
 					</optgroup>

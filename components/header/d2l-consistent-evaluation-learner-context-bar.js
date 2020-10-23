@@ -27,10 +27,6 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 				attribute: false,
 				type: Object
 			},
-			selectedItemName: {
-				attribute: 'selected-item-name',
-				type: String
-			},
 			currentFileId: {
 				type: String
 			}
@@ -90,6 +86,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 				?is-group-activity="${this.groupHref}"
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
+				.token="${this.token}"
 				special-access-href=${this.specialAccessHref}
 				.currentFileId=${this.currentFileId}
 				.submissionInfo="${this.submissionInfo}">
