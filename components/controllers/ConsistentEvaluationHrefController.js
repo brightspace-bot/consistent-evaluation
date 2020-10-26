@@ -144,7 +144,7 @@ export class ConsistentEvaluationHrefController {
 			if (assignmentHref) {
 				const assignmentEntity = await this._getEntityFromHref(assignmentHref, false);
 				if (assignmentEntity && assignmentEntity.entity) {
-					submissionType = assignmentEntity.entity.properties.submissionType.title;
+					submissionType = assignmentEntity.entity.properties.submissionType.value.toString();
 				}
 			}
 			const evaluationHref = this._getHref(root, evaluationRel);
