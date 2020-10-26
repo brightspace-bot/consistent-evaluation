@@ -57,7 +57,6 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 			</div>
 		` : html` 
 			<d2l-consistent-evaluation-accordion-collapse
-				?has-errors=false
 				class="d2l-accordion">
 				<span slot="header">
 					${this._getTitle()}

@@ -1,5 +1,8 @@
 import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui-labs/accordion/accordion-collapse.js';
+import 'd2l-navigation/d2l-navigation-immersive.js';
+import 'd2l-navigation/d2l-navigation-link-back.js';
+
 import { bodySmallStyles, heading4Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
@@ -7,7 +10,6 @@ import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton
 class ConsistentEvaluationAccordionCollapse extends SkeletonMixin(LitElement) {
 	static get properties() {
 		return {
-			hasErrors: { type: Boolean, attribute: 'has-errors' },
 			_opened: { type: Boolean }
 		};
 	}
@@ -20,7 +22,6 @@ class ConsistentEvaluationAccordionCollapse extends SkeletonMixin(LitElement) {
 			css`
 				:host {
 					display: block;
-                    scroll-behavior: smooth;
 				}
 
 				:host([hidden]) {
@@ -47,9 +48,8 @@ class ConsistentEvaluationAccordionCollapse extends SkeletonMixin(LitElement) {
 				ul.d2l-activity-summarizer-summary > li:last-child {
 					margin-bottom: 0;
 				}
-                #accordion {
-                }
-                #accordion.fullscreen{
+                .fullscreen{
+                    background: white;
                     z-index: 9999; 
                     width: 100%; 
                     height: 100%; 
@@ -73,31 +73,44 @@ class ConsistentEvaluationAccordionCollapse extends SkeletonMixin(LitElement) {
 	render() {
 		return html`
             <d2l-labs-accordion-collapse
-                id="accordion"
-                no-animation
-				?opened=${this._isOpened()}
+				?opened=${this._opened}
 				no-icons=true
 				@d2l-labs-accordion-collapse-state-changed=${this._onAccordionStateChange}>
 
+                <d2l-navigation-immersive>
+                    <d2l-navigation-link-back
+                        slot="left"
+                        @click=${this._onBackPress}>
+                    </d2l-navigation-link-back>
+                </d2l-navigation-immersive>
+
 				<h3 class="d2l-heading-4 d2l-activity-summarizer-header d2l-skeletize" slot="header">
 					<slot name="header"></slot>
-				</h3>
+                </h3>
+
 				<ul class="d2l-body-small d2l-activity-summarizer-summary" slot="summary">
-					<slot name="summary-items"></slot>
-				</ul>
+                    <slot name="summary-items">
+                    </slot>
+                </ul>
+                
 				<slot name="components"></slot>
 			</d2l-labs-accordion-collapse>
 		`;
 	}
 
-	_isOpened() {
-		return this._opened || this.hasErrors;
+	_onBackPress() {
+		this._opened = false;
+		this.shadowRoot.querySelector('d2l-labs-accordion-collapse').toggleClass('fullscreen');
 	}
+
 	_onAccordionStateChange(e) {
-		if (this.opened) {
-			this.shadowRoot.querySelector('#accordion').toggleClass('fullscreen');}
-		this.shadowRoot.querySelector('#accordion').scrollIntoView({ behavior: 'smooth'});
+		if (this._opened) {
+			this.shadowRoot.querySelector('d2l-labs-accordion-collapse').toggleClass('fullscreen');
+		}
+
+		this.shadowRoot.querySelector('d2l-labs-accordion-collapse').scrollIntoView({ behavior: 'smooth'});
 		this._opened = e.detail.opened;
+
 	}
 }
 
