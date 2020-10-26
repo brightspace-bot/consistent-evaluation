@@ -19,18 +19,29 @@
 		<d2l-demo-page page-title="d2l-consistent-evaluation-footer">
 			<h2>Not published</h2>
 			<d2l-demo-snippet>
-				<d2l-consistent-evaluation-footer-presentational></d2l-consistent-evaluation-footer-presentational>
+				<d2l-consistent-evaluation-footer-presentational allow-evaluation-write allow-evaluation-delete></d2l-consistent-evaluation-footer-presentational>
 			</d2l-demo-snippet>
 
 			<h2>Published</h2>
 			<d2l-demo-snippet>
-				<d2l-consistent-evaluation-footer-presentational published></d2l-consistent-evaluation-footer-presentational>
+				<d2l-consistent-evaluation-footer-presentational published allow-evaluation-write allow-evaluation-delete></d2l-consistent-evaluation-footer-presentational>
+			</d2l-demo-snippet>
+
+			<h2>Published, no delete permissions</h2>
+			<d2l-demo-snippet>
+				<d2l-consistent-evaluation-footer-presentational published allow-evaluation-write></d2l-consistent-evaluation-footer-presentational>
+			</d2l-demo-snippet>
+
+			<h2>Not published, no write permissions</h2>
+			<d2l-demo-snippet>
+				<d2l-consistent-evaluation-footer-presentational></d2l-consistent-evaluation-footer-presentational>
 			</d2l-demo-snippet>
 
 			<h2>Next Student Available</h2>
 			<d2l-demo-snippet>
-				<d2l-consistent-evaluation-footer-presentational published show-next-student></d2l-consistent-evaluation-footer-presentational>
+				<d2l-consistent-evaluation-footer-presentational published show-next-student allow-evaluation-write allow-evaluation-delete></d2l-consistent-evaluation-footer-presentational>
 			</d2l-demo-snippet>
+
 		</d2l-demo-page>
 
 	</body>
