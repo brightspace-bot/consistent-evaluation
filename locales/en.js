@@ -22,6 +22,7 @@ export const val = {
 	markRead: 'Mark as Read',
 	markUnread: 'Mark as Unread',
 	moreOptions: 'More Options',
+	nextStudent: 'Next Student',
 	noEvidence: 'There is no evidence uploaded for this submission type',
 	noSubmissions: 'No submissions made for this assignment',
 	observedInPerson: 'Observed In Person',
