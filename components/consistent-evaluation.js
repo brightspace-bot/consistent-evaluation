@@ -32,6 +32,9 @@ export class ConsistentEvaluation extends MobxLitElement {
 			fileId: {
 				attribute: 'file-id',
 				type: String
+			},
+			currentFileId: {
+				type: String
 			}
 		};
 	}
@@ -72,17 +75,26 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._userName = await controller.getUserName();
 			this._iteratorTotal = await controller.getIteratorInfo('total');
 			this._iteratorIndex = await controller.getIteratorInfo('index');
-			this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
-			this._stripFileIdFromUrl();
+			const stripped = this._stripFileIdFromUrl();
+			if (!stripped) {
+				this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
+			}
 		}
 	}
 
 	_stripFileIdFromUrl() {
-		const fileIdQueryName = 'fileId';
 		if (this.fileId) {
+			const fileIdQueryName = 'fileId';
 			const urlWithoutFileQuery = window.location.href.replace(`&${fileIdQueryName}=${this.fileId}`, '');
 			history.replaceState({}, document.title, urlWithoutFileQuery);
+
+			this.currentFileId = this.fileId;
+			this.fileId = undefined;
+
+			return true;
 		}
+
+		return false;
 	}
 
 	_onNextStudentClick() {
@@ -112,7 +124,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				special-access-href=${ifDefined(this._childHrefs && this._childHrefs.specialAccessHref)}
 				return-href=${ifDefined(this.returnHref)}
 				return-href-text=${ifDefined(this.returnHrefText)}
-				current-file-id=${ifDefined(this.fileId)}
+				current-file-id=${ifDefined(this.currentFileId)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
 				.assignmentName=${this._assignmentName}
