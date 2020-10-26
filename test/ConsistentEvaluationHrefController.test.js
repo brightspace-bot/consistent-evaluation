@@ -128,7 +128,7 @@ describe('ConsistentEvaluationHrefController', () => {
 			const assignmentHref = 'expected_assignment_href';
 			const expectedSubmissions = ['link1', 'link2'];
 			const expectedEvaluationState = 'Draft';
-			const expectedSubmissionType = 'File Submission';
+			const expectedSubmissionType = 0;
 
 			const controller = new ConsistentEvaluationHrefController('href', 'token');
 			sinon.stub(controller, '_getRootEntity').returns({
@@ -141,7 +141,7 @@ describe('ConsistentEvaluationHrefController', () => {
 			});
 			sinon.stub(controller, '_getEntityFromHref').returns({
 				entity: {
-					properties: {submissionType: {title: expectedSubmissionType}}
+					properties: {submissionType: {title: 'File Submission', value : expectedSubmissionType}}
 				}
 			});
 			const submissionInfo = await controller.getSubmissionInfo();
