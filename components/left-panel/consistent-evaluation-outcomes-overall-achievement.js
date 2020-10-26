@@ -24,10 +24,10 @@ export class ConsistentEvaluationOutcomesOverallAchievement extends LitElement {
 	render() {
 		return html`
 		<div style="margin: 36px ${this._hMargin};">
-            <d2l-coa-primary-panel
-                href=${this.href}
+			<d2l-coa-primary-panel
+				href=${this.href}
 				.token=${this.token}
-            >
+			>
 			</d2l-coa-primary-panel>
 		</div>
 		`;
