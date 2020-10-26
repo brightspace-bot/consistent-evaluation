@@ -72,7 +72,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._userName = await controller.getUserName();
 			this._iteratorTotal = await controller.getIteratorInfo('total');
 			this._iteratorIndex = await controller.getIteratorInfo('index');
-			this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._resetEvidence();
+			this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
 			this._stripFileIdFromUrl();
 		}
 	}
@@ -112,7 +112,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				special-access-href=${ifDefined(this._childHrefs && this._childHrefs.specialAccessHref)}
 				return-href=${ifDefined(this.returnHref)}
 				return-href-text=${ifDefined(this.returnHrefText)}
-				current-file-id=${ifDefined(this.fileId !== null && this.fileId)}
+				current-file-id=${ifDefined(this.fileId)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
 				.assignmentName=${this._assignmentName}
