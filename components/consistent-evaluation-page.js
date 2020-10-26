@@ -542,9 +542,11 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 
 	render() {
 		return html`
-			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}"
-			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
-			@d2l-consistent-evaluation-file-selected=${this._selectFile}
+			<d2l-template-primary-secondary
+				resizable
+				primary-overflow="${this._scrollbarStatus}"
+				@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
+				@d2l-consistent-evaluation-file-selected=${this._selectFile}
 			>
 				<div slot="header">
 					<d2l-consistent-evaluation-nav-bar
