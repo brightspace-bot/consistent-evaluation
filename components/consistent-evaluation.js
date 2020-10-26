@@ -1,11 +1,9 @@
 import './consistent-evaluation-page.js';
-import { css, html } from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 import { ConsistentEvaluationHrefController } from './controllers/ConsistentEvaluationHrefController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import RootStore from './stores/root.js';
 
-export class ConsistentEvaluation extends MobxLitElement {
+export class ConsistentEvaluation extends LitElement {
 
 	static get properties() {
 		return {
@@ -46,7 +44,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	constructor() {
 		super();
-		this.store = new RootStore();
 
 		this.href = undefined;
 		this.token = undefined;
