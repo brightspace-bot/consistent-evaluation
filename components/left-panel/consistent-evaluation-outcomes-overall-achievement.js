@@ -10,6 +10,10 @@ export class ConsistentEvaluationOutcomesOverallAchievement extends LitElement {
 		};
 	}
 
+	refreshOverallAchievementActivities() {
+		this.shadowRoot.querySelector('d2l-coa-primary-panel').refreshOverallAchievementActivities();
+	}
+
 	render() {
 		return html`
             <d2l-coa-primary-panel

@@ -142,6 +142,10 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		></d2l-consistent-evaluation-evidence-text>`;
 	}
 
+	refreshOverallAchievementActivities() {
+		this.shadowRoot.querySelector('d2l-consistent-evaluation-outcomes-overall-achievement').refreshOverallAchievementActivities();
+	}
+
 	render() {
 		if (this.userProgressOutcomeHref) {
 			return this._renderOverallAchievement();

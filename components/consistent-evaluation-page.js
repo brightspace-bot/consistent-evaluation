@@ -375,6 +375,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.save(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('saved'));
+					if (this.userProgressOutcomeHref) {
+						this._refreshOverallAchievementActivities();
+					}
 				} else {
 					this._showToast(this.localize('saveError'));
 				}
@@ -395,6 +398,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.update(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('updated'));
+					if (this.userProgressOutcomeHref) {
+						this._refreshOverallAchievementActivities();
+					}
 				} else {
 					this._showToast(this.localize('updatedError'));
 				}
@@ -416,6 +422,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationState = this.evaluationEntity.properties.state;
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('published'));
+					if (this.userProgressOutcomeHref) {
+						this._refreshOverallAchievementActivities();
+					}
 				} else {
 					this._showToast(this.localize('publishError'));
 				}
@@ -560,6 +569,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	disconnectedCallback() {
 		window.removeEventListener('beforeunload', this.unsavedChangesHandler);
 		super.disconnectedCallback();
+	}
+
+	_refreshOverallAchievementActivities() {
+		this.shadowRoot.querySelector('d2l-consistent-evaluation-left-panel').refreshOverallAchievementActivities();
 	}
 
 	render() {
