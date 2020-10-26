@@ -668,7 +668,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				<div slot="footer">
 					${this._renderToast()}
 					<d2l-consistent-evaluation-footer-presentational
-						?show-next-student=${this.nextStudentHref !== undefined && this.nextStudentHref !== null}
+						?show-next-student=${this.nextStudentHref}
 						?published=${this._isEvaluationPublished()}
 						?allow-evaluation-write=${this.allowEvaluationWrite}
 						?allow-evaluation-delete=${this.allowEvaluationDelete}
