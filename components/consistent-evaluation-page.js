@@ -433,6 +433,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.retract(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('retracted'));
+					if (this.userProgressOutcomeHref) {
+						this._refreshOverallAchievementActivities();
+					}
 				} else {
 					this._showToast(this.localize('retractError'));
 				}
