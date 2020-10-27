@@ -80,16 +80,16 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 	render() {
 		return html`
 			<d2l-consistent-evaluation-lcb-user-context
-				href="${this._getActorHref()}"
-				.token="${this.token}"
-				?is-exempt="${this._getIsExempt()}"
-				?is-group-activity="${this.groupHref}"
+				href=${this._getActorHref()}
+				.token=${this.token}
+				?is-exempt=${this._getIsExempt()}
+				?is-group-activity=${this.groupHref}
 			></d2l-consistent-evaluation-lcb-user-context>
 			<d2l-consistent-evaluation-lcb-file-context
-				.token="${this.token}"
+				.token=${this.token}
 				special-access-href=${this.specialAccessHref}
 				.currentFileId=${this.currentFileId}
-				.submissionInfo="${this.submissionInfo}">
+				.submissionInfo=${this.submissionInfo}>
 			</d2l-consistent-evaluation-lcb-file-context>
 		`;
 	}
