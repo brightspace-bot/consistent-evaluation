@@ -21,10 +21,6 @@ export class ConsistentEvaluationOutcomesOverallAchievement extends LitElement {
 		window.addEventListener('resize', this._onWindowResize.bind(this));
 	}
 
-	refreshOverallAchievementActivities() {
-		this.shadowRoot.querySelector('d2l-coa-primary-panel').refreshOverallAchievementActivities();
-	}
-
 	render() {
 		return html`
 		<div style="margin: 36px ${this._hMargin};">
