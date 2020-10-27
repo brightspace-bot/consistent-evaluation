@@ -124,9 +124,11 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 		}
 
 		const action = currentFile.getActionByName(toggleIsReadActionName);
-		if (action.fields[0].value) {
-			// If the action value is true it means it can be call to set the IsRead value to true, otherwise it is already read and we dont want to unread it
-			performSirenAction(this.token, action, undefined, true);
+		for (let i = 0; i < action.fields.length; i++) {
+			if (action.fields[i].name === 'isRead' && action.fields[i].value) {
+				// If the action value is true it means it can be called to set the IsRead value to true, otherwise it is already read and we dont want to unread it
+				performSirenAction(this.token, action, undefined, true);
+			}
 		}
 
 		if (this.submissionInfo.submissionType === fileSubmission) {
