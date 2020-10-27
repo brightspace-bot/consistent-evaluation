@@ -82,7 +82,10 @@ export class ConsistentEvaluationHrefController {
 						if (referencedAlignmentEntity) {
 							const alignmentEntity = await this._getEntityFromHref(referencedAlignmentEntity.href, bypassCache);
 							if (alignmentEntity && alignmentEntity.entity) {
-								coaDemonstrationHref = alignmentEntity.entity.getLinkByRel(demonstrationRel)?.href;
+								const demonstrationLink = alignmentEntity.entity.getLinkByRel(demonstrationRel);
+								if (demonstrationLink) {
+									coaDemonstrationHref = demonstrationLink.href;
+								}
 							}
 						}
 					} else {
