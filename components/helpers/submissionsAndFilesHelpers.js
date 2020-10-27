@@ -5,14 +5,7 @@ import { Classes } from 'd2l-hypermedia-constants';
 export function findFile(fileId, submissions) {
 	for (let i = 0; i < submissions.length; i++) {
 		const submission = submissions[i];
-		if (!submission.entity) {
-			continue;
-		}
-		const attachmentList = submission.entity.getSubEntityByRel(attachmentListRel);
-		if (!attachmentList || !attachmentList.entities) {
-			continue;
-		}
-		const files = attachmentList.entities;
+		const files = getSubmissionFiles(submission);
 		for (let j = 0; j < files.length; j++) {
 			const submissionFile = files[j];
 			if (submissionFile.properties.id === fileId) {
@@ -35,7 +28,7 @@ export function getSubmissionFiles(submission) {
 		}
 		sf.properties.date = submission.entity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
 		sf.properties.displayNumber = submission.submissionNumber;
-		return sf.properties;
+		return sf;
 	});
 }
 
