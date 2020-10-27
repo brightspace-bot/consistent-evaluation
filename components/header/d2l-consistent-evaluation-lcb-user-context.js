@@ -12,7 +12,7 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 
 	static get properties() {
 		return {
-			href: { 
+			href: {
 				attribute: false,
 				type: String
 			},
