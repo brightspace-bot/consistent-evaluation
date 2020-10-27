@@ -17,10 +17,24 @@
 	<body class="d2l-typography">
 		<d2l-demo-page page-title="consistent-evaluation-feedback-presentational">
 
+			<h2>Standard</h2>
 			<d2l-demo-snippet>
 				<d2l-consistent-evaluation-feedback-presentational
 					can-edit-feedback
 					feedback-text="This is where you can add feedback!"
+					href="data/grade/evaluationEntity.json"
+					token='"abc123"'
+					attachments-href="data/grade/attachments.json"
+				></d2l-consistent-evaluation-feedback-presentational>
+			</d2l-demo-snippet>
+
+			<h2>No Attachments</h2>
+			<d2l-demo-snippet>
+				<d2l-consistent-evaluation-feedback-presentational
+					can-edit-feedback
+					feedback-text="This is where you can add feedback!"
+					href="data/grade/evaluationEntity.json"
+					token='"abc123"'
 				></d2l-consistent-evaluation-feedback-presentational>
 			</d2l-demo-snippet>
 

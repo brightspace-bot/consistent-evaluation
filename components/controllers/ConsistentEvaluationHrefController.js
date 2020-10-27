@@ -106,10 +106,10 @@ export class ConsistentEvaluationHrefController {
 					}
 				}
 			}
-		}
 
-		if (root.hasSubEntityByRel(editSpecialAccessApplicationRel)) {
-			specialAccessHref = root.getSubEntityByRel(editSpecialAccessApplicationRel).properties.path;
+			if (root.hasSubEntityByRel(editSpecialAccessApplicationRel)) {
+				specialAccessHref = root.getSubEntityByRel(editSpecialAccessApplicationRel).properties.path;
+			}
 		}
 
 		return {

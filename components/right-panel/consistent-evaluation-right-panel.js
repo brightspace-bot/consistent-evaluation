@@ -17,6 +17,10 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				attribute: 'allow-evaluation-write',
 				type: Boolean
 			},
+			attachmentsHref: {
+				attribute: 'attachments-href',
+				type: String
+			},
 			feedbackText: {
 				attribute: false
 			},
@@ -101,6 +105,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideCoaOverride = false;
 		this.allowEvaluationWrite = false;
 		this.rubricOpen = false;
+		this.attachmentsHref = null;
 	}
 
 	_renderRubric() {
@@ -155,6 +160,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					?can-edit-feedback=${this.allowEvaluationWrite}
 					.feedbackText=${this.feedbackText}
 					.richTextEditorConfig=${this.richTextEditorConfig}
+					attachments-href=${ifDefined(this.attachmentsHref)}
 				></d2l-consistent-evaluation-feedback-presentational>
 			`;
 		}
