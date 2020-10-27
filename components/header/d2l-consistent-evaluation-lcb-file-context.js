@@ -77,7 +77,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 		if ((changedProperties.has('currentFileId') || changedProperties.has('submissionInfo')) && this._files) {
 			const currentFile = findFile(this.currentFileId, this._files);
 			if (currentFile) {
-				this._submissionLateness = currentFile.latenessTimespan;
+				this._submissionLateness = currentFile.properties.latenessTimespan;
 			}
 		}
 	}

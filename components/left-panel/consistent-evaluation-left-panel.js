@@ -8,6 +8,8 @@ import { fileSubmission, observedInPerson, onPaperSubmission, submissionTypesWit
 import { findFile, getSubmissions } from '../helpers/submissionsAndFilesHelpers.js';
 import { loadLocalizationResources } from '../locale.js';
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
+import { toggleIsReadActionName } from '../controllers/constants.js';
 
 function getSubmissionTypeName(type) {
 	switch (type) {
@@ -121,16 +123,22 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 			return;
 		}
 
+		const action = currentFile.getActionByName(toggleIsReadActionName);
+		if (action.fields[0].value) {
+			// If the action value is true it means it can be call to set the IsRead value to true, otherwise it is already read and we dont want to unread it
+			performSirenAction(this.token, action, undefined, true);
+		}
+
 		if (this.submissionInfo.submissionType === fileSubmission) {
-			this.fileEvidenceUrl = currentFile.fileViewer;
+			this.fileEvidenceUrl = currentFile.properties.fileViewer;
 			this.textEvidence = undefined;
 		} else if (this.submissionInfo.submissionType === textSubmission) {
 			this.fileEvidenceUrl = undefined;
 			this.textEvidence = {
-				title: `${this.localize('textSubmission')} ${currentFile.displayNumber}`,
-				date: currentFile.date,
-				downloadUrl: currentFile.href,
-				content: currentFile.comment
+				title: `${this.localize('textSubmission')} ${currentFile.properties.displayNumber}`,
+				date: currentFile.properties.date,
+				downloadUrl: currentFile.properties.href,
+				content: currentFile.properties.comment
 			};
 		} else {
 			this.textEvidence = undefined;
