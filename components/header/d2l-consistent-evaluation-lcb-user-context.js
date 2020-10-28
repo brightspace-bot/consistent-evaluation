@@ -12,10 +12,6 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 
 	static get properties() {
 		return {
-			href: {
-				attribute: false,
-				type: String
-			},
 			isExempt: {
 				attribute: 'is-exempt',
 				type: Boolean
