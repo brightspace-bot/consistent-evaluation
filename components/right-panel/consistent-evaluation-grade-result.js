@@ -26,16 +26,14 @@ export class ConsistentEvaluationGradeResult extends LocalizeConsistentEvaluatio
 				attribute:'custom-manual-override-clear-text',
 				type: String
 			},
-			labelText: {
-				attribute: 'label-text',
-				type: String },
 			readOnly: {
 				attribute: 'read-only',
-				type: Boolean },
+				type: Boolean
+			},
 			hideTitle: {
 				attribute: 'hide-title',
-				type: Boolean },
-
+				type: Boolean
+			},
 			_manuallyOverriddenGrade: { type: Object },
 			_hasUnsavedChanged: { type: Boolean },
 			_gradeButtonTooltip: { type: String },
@@ -51,7 +49,6 @@ export class ConsistentEvaluationGradeResult extends LocalizeConsistentEvaluatio
 		this.customManualOverrideText = undefined;
 		this.customManualOverrideClearText = undefined;
 		this.readOnly = false;
-		this.labelText = '';
 		this.hideTitle = false;
 		this._gradeButtonUrl = '';
 		this._reportsButtonUrl = '';
@@ -117,7 +114,6 @@ export class ConsistentEvaluationGradeResult extends LocalizeConsistentEvaluatio
 		return html`
 			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallGrade')}">
 			<d2l-labs-d2l-grade-result-presentational
-				labelText=${this.labelText || this.localize('overallGrade')}
 				.gradeType=${gradeType}
 				scoreNumerator=${score}
 				scoreDenominator=${scoreOutOf}

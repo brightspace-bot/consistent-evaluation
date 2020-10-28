@@ -35,6 +35,7 @@ export default {
 	"overallAchievement": "Overall Achievement",
 	"overallAverage": "Overall Average",
 	"overallFeedback": "Overall Feedback",
+	"overallGrade": "Overall Grade",
 	"publish": "Publish",
 	"published":   "Evaluation published",
 	"recordAudio": "Record Audio",
