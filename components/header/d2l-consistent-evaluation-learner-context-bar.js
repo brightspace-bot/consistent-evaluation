@@ -3,8 +3,9 @@ import './d2l-consistent-evaluation-lcb-file-context.js';
 import '@brightspace-ui/core/components/colors/colors.js';
 import { css, html, LitElement } from 'lit-element';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
+import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
-export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) {
+export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixin(LitElement)) {
 
 	static get properties() {
 		return {
@@ -33,8 +34,46 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 		};
 	}
 
+	constructor() {
+		super();
+		this.skeleton = true;
+	}
+
 	static get styles() {
-		return css`
+		return [super.styles, css`
+			:host([skeleton]) .skeleton-user-profile-image {
+				display: inline;
+				height: 1.8rem;
+				width: 1.8rem;
+				float: left;
+			}
+
+			:host([skeleton]) .skeleton-user-display-name {
+				display: inline;
+				height: 1rem;
+				width: 7rem;
+				float: left;
+				margin-left: 0.5rem;
+				top: 0.4rem;
+			}
+
+			:host([skeleton]) .skeleton-submission-select {
+				display: inline;
+				height: 1rem;
+				width: 7rem;
+				float: left;
+				margin-left: 0.5rem;
+				top: 0.4rem;
+			}
+
+			:host([skeleton]) .consistent-evaluation-learner-context-bar {
+				display:none;
+			}
+
+			.consistent-evaluation-learner-context-bar{
+				display:flex;
+			}
+
 			:host {
 				border-bottom: 0.05rem solid var(--d2l-color-gypsum);
 				display: flex;
@@ -66,7 +105,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 					padding-right: 0.9rem;
 				}
 			}
-		`;
+		`];
 	}
 
 	_getIsExempt() {
@@ -77,20 +116,32 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 		return this.userHref ? this.userHref : this.groupHref;
 	}
 
+	handleComponentReady(e) {
+		this.skeleton = false;
+	}
+
 	render() {
 		return html`
-			<d2l-consistent-evaluation-lcb-user-context
-				.href=${this._getActorHref()}
-				.token=${this.token}
-				?is-exempt=${this._getIsExempt()}
-				?is-group-activity=${this.groupHref}
-			></d2l-consistent-evaluation-lcb-user-context>
-			<d2l-consistent-evaluation-lcb-file-context
-				.token=${this.token}
-				special-access-href=${this.specialAccessHref}
-				.currentFileId=${this.currentFileId}
-				.submissionInfo=${this.submissionInfo}>
-			</d2l-consistent-evaluation-lcb-file-context>
+			<div class="skeleton-learner-context-bar">
+				<div class="skeleton-user-profile-image d2l-skeletize"></div>
+				<div class="skeleton-user-display-name d2l-skeletize"></div>
+				<div class="skeleton-submission-select d2l-skeletize"></div>
+			</div>
+			<div class="consistent-evaluation-learner-context-bar">
+				<d2l-consistent-evaluation-lcb-user-context
+					.href=${this._getActorHref()}
+					.token=${this.token}
+					?is-exempt=${this._getIsExempt()}
+					?is-group-activity=${this.groupHref}
+				></d2l-consistent-evaluation-lcb-user-context>
+				<d2l-consistent-evaluation-lcb-file-context
+					@d2l-consistent-evaluation-submission-list-ready=${this.handleComponentReady}
+					.token=${this.token}
+					special-access-href=${this.specialAccessHref}
+					.currentFileId=${this.currentFileId}
+					.submissionInfo=${this.submissionInfo}
+				></d2l-consistent-evaluation-lcb-file-context>
+			</div>	
 		`;
 	}
 }
