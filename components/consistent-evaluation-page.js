@@ -363,6 +363,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.save(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('saved'));
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('saveError'));
 				}
@@ -383,6 +384,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.update(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('updated'));
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('updatedError'));
 				}
@@ -404,6 +406,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationState = this.evaluationEntity.properties.state;
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('published'));
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('publishError'));
 				}
@@ -425,6 +428,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.retract(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('retracted'));
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('retractError'));
 				}
@@ -539,6 +543,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	disconnectedCallback() {
 		window.removeEventListener('beforeunload', this.unsavedChangesHandler);
 		super.disconnectedCallback();
+	}
+
+	_fireSaveEvaluationEvent() {
+		window.dispatchEvent(new CustomEvent('d2l-save-evaluation', {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	render() {
