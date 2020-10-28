@@ -90,8 +90,8 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 		} else {
 			return html `
 			<d2l-profile-image
-				href="${this.href}"
-				.token="${this.token}"
+				href=${this.href}
+				.token=${this.token}
 				small
 			></d2l-profile-image>`;
 		}

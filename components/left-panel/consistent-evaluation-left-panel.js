@@ -7,6 +7,8 @@ import { css, html, LitElement } from 'lit-element';
 import { fileSubmission, observedInPerson, onPaperSubmission, submissionTypesWithNoEvidence, textSubmission } from '../controllers/constants';
 import { findFile, getSubmissions } from '../helpers/submissionsAndFilesHelpers.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
+import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
+import { toggleIsReadActionName } from '../controllers/constants.js';
 
 function getSubmissionTypeName(type) {
 	switch (type) {
@@ -116,16 +118,22 @@ export class ConsistentEvaluationLeftPanel extends LocalizeConsistentEvaluation(
 			return;
 		}
 
+		const action = currentFile.getActionByName(toggleIsReadActionName);
+		if (action.fields.some(f => f.name === 'isRead' && f.value)) {
+			// If the action value is true it means it can be called to set the IsRead value to true, otherwise it is already read and we dont want to unread it
+			await performSirenAction(this.token, action, undefined, true);
+		}
+
 		if (this.submissionInfo.submissionType === fileSubmission) {
-			this.fileEvidenceUrl = currentFile.fileViewer;
+			this.fileEvidenceUrl = currentFile.properties.fileViewer;
 			this.textEvidence = undefined;
 		} else if (this.submissionInfo.submissionType === textSubmission) {
 			this.fileEvidenceUrl = undefined;
 			this.textEvidence = {
-				title: `${this.localize('textSubmission')} ${currentFile.displayNumber}`,
-				date: currentFile.date,
-				downloadUrl: currentFile.href,
-				content: currentFile.comment
+				title: `${this.localize('textSubmission')} ${currentFile.properties.displayNumber}`,
+				date: currentFile.properties.date,
+				downloadUrl: currentFile.properties.href,
+				content: currentFile.properties.comment
 			};
 		} else {
 			this.textEvidence = undefined;
