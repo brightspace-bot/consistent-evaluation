@@ -76,8 +76,8 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 
 		if ((changedProperties.has('currentFileId') || changedProperties.has('submissionInfo')) && this._files) {
 			const currentFile = findFile(this.currentFileId, this._files);
-			if (currentFile) {
-				this._submissionLateness = currentFile.latenessTimespan;
+			if (currentFile && currentFile.properties) {
+				this._submissionLateness = currentFile.properties.latenessTimespan;
 			}
 		}
 	}
@@ -179,7 +179,7 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				${this._files.map(submission => html`
 					<optgroup label=${this.localize('submissionNumber', 'number', submission.submissionNumber)}>
 						${getSubmissionFiles(submission).map(sf => html`
-							<option value=${sf.id} label=${this._truncateFileName(sf.name)} ?selected=${sf.id === this.currentFileId} class="select-option"></option>
+							<option value=${sf.properties.id} label=${this._truncateFileName(sf.properties.name)} ?selected=${sf.properties.id === this.currentFileId} class="select-option"></option>
 						`)}
 					</optgroup>
 				`)};
