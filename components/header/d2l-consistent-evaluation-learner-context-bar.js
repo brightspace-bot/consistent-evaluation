@@ -80,7 +80,7 @@ export class ConsistentEvaluationLearnerContextBar extends RtlMixin(LitElement) 
 	render() {
 		return html`
 			<d2l-consistent-evaluation-lcb-user-context
-				href=${this._getActorHref()}
+				.href=${this._getActorHref()}
 				.token=${this.token}
 				?is-exempt=${this._getIsExempt()}
 				?is-group-activity=${this.groupHref}
