@@ -37,9 +37,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 	static get styles() {
 		return css`
-			.d2l-evaluation-feedback-container {
-				margin-top: 0.3rem;
-			}
 		`;
 	}
 
@@ -116,7 +113,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		if (this.href && this.token) {
 
 			return html`
-			<div class="d2l-evaluation-feedback-container">
 				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
 					<d2l-activity-text-editor
 						.key="${this._key}"
@@ -134,7 +130,6 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 						</d2l-consistent-evaluation-attachments-editor>
 					</div>
 				</d2l-consistent-evaluation-right-panel-block>
-			</div>
 		`;
 		} else {
 			return html``;
