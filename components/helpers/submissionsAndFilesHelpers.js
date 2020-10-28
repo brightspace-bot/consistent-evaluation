@@ -8,7 +8,7 @@ export function findFile(fileId, submissions) {
 		const files = getSubmissionFiles(submission);
 		for (let j = 0; j < files.length; j++) {
 			const submissionFile = files[j];
-			if (submissionFile.id === fileId) {
+			if (submissionFile.properties.id === fileId) {
 				return submissionFile;
 			}
 		}
@@ -28,7 +28,7 @@ export function getSubmissionFiles(submission) {
 		}
 		sf.properties.date = submission.entity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
 		sf.properties.displayNumber = submission.submissionNumber;
-		return sf.properties;
+		return sf;
 	});
 }
 
