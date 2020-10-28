@@ -15,12 +15,11 @@ import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controll
 import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { loadLocalizationResources } from './locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
-export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
+export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
@@ -162,10 +161,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				height: 100%;
 			}
 		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {

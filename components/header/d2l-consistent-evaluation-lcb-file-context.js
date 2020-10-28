@@ -3,13 +3,12 @@ import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import { css, html, LitElement } from 'lit-element';
 import { findFile, getSubmissionFiles, getSubmissions } from '../helpers/submissionsAndFilesHelpers.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { selectStyles } from '@brightspace-ui/core/components/inputs/input-select-styles.js';
 import { submissions } from '../controllers/constants';
 
-export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(LitElement)) {
+export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeConsistentEvaluation(LitElement)) {
 
 	static get properties() {
 		return {
@@ -61,10 +60,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeMixin(L
 				}
 			`
 		];
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	async updated(changedProperties) {

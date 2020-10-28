@@ -7,10 +7,9 @@ import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
+class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement) {
 	static get properties() {
 		return {
 			titleName: {
@@ -86,10 +85,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			}
 
 		`];
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	_dispatchButtonClickNavigationEvent(eventName) {

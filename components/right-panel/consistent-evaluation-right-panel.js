@@ -6,10 +6,9 @@ import './consistent-evaluation-coa-eval-override.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
@@ -84,10 +83,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 				type: Object
 			}
 		};
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {

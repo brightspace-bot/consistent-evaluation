@@ -4,9 +4,9 @@ import '@brightspace-ui/core/components/colors/colors';
 import '@brightspace-ui/core/components/tooltip/tooltip';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { getUniqueId } from '@brightspace-ui/core/helpers/uniqueId';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-class FeedbackActions extends LocalizeMixin(LitElement) {
+class FeedbackActions extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
@@ -59,26 +59,6 @@ class FeedbackActions extends LocalizeMixin(LitElement) {
 				display: inline-block;
 			}
 		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		for await (const lang of langs) {
-			let translations;
-			switch (lang) {
-				case 'en':
-					translations = await import('../../locales/en.js');
-					break;
-			}
-
-			if (translations && translations.val) {
-				return {
-					language: lang,
-					resources: translations.val
-				};
-			}
-		}
-
-		return null;
 	}
 
 	constructor() {
