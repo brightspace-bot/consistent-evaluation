@@ -188,6 +188,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._dialogOpened = false;
 		this.allowEvaluationWrite = false;
 		this.allowEvaluationDelete = false;
+		this.attachmentsHref = null;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
 	}
 
@@ -280,7 +281,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
-
+		this.attachmentsHref = this._controller.getAttachmentsHref(this.evaluationEntity);
 	}
 
 	_noFeedbackComponent() {
@@ -578,6 +579,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
 						outcomes-href=${ifDefined(this.outcomesHref)}
 						coa-eval-override-href=${ifDefined(this.coaDemonstrationHref)}
+						attachments-href=${ifDefined(this.attachmentsHref)}
 						.richTextEditorConfig=${this.richtextEditorConfig}
 						.grade=${this._grade}
 						.gradeItemInfo=${this.gradeItemInfo}

@@ -12,6 +12,10 @@ import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
 	static get properties() {
 		return {
+			attachmentsHref: {
+				attribute: 'attachments-href',
+				type: String
+			},
 			canEditFeedback: {
 				attribute: 'can-edit-feedback',
 				type: Boolean
@@ -53,6 +57,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		this.canEditFeedback = false;
 		this._debounceJobs = {};
 		this.flush = this.flush.bind(this);
+		this.attachmentsHref = null;
 	}
 
 	htmlEditorEnabled(e) {
@@ -114,28 +119,32 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 	render() {
 		if (this.href && this.token) {
-
-			return html`
-			<div class="d2l-evaluation-feedback-container">
-				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
-					<d2l-activity-text-editor
-						.key="${this._key}"
-						.value="${this.feedbackText}"
-						.richtextEditorConfig="${this.richTextEditorConfig}"
-						@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
-						ariaLabel="${this.localize('overallFeedback')}">
-					</d2l-activity-text-editor>
+			const attachments = this.attachmentsHref !== null
+				? html`
 					<div>
 						<d2l-consistent-evaluation-attachments-editor
-							href="${this.href}/attachments"
+							href=${this.attachmentsHref}
 							.token="${this.token}"
 							destinationHref="${this.href}"
 							.canEditFeedback="${this.canEditFeedback}">
 						</d2l-consistent-evaluation-attachments-editor>
-					</div>
-				</d2l-consistent-evaluation-right-panel-block>
-			</div>
-		`;
+					</div>`
+				: null;
+
+			return html`
+				<div class="d2l-evaluation-feedback-container">
+					<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
+						<d2l-activity-text-editor
+							.key="${this._key}"
+							.value="${this.feedbackText}"
+							.richtextEditorConfig="${this.richTextEditorConfig}"
+							@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
+							ariaLabel="${this.localize('overallFeedback')}">
+						</d2l-activity-text-editor>
+						${attachments}
+					</d2l-consistent-evaluation-right-panel-block>
+				</div>
+			`;
 		} else {
 			return html``;
 		}
