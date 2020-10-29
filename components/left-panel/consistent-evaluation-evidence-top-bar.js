@@ -1,9 +1,8 @@
 import '@brightspace-ui/core/components/button/button-subtle.js';
 import { css, html, LitElement } from 'lit-element';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-export class ConsistentEvaluationEvidenceTopBar extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationEvidenceTopBar extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get styles() {
 		return css`
@@ -15,10 +14,6 @@ export class ConsistentEvaluationEvidenceTopBar extends LocalizeMixin(LitElement
 				justify-content: space-between;
 			}
 		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	_dispatchBackToUserSubmissionsEvent() {

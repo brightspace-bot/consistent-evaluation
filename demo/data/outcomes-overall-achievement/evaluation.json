@@ -3,7 +3,7 @@
         "evaluation"
     ],
     "properties": {
-        "state": "Published"
+        "state": "Not published"
     },
     "entities": [
         {
@@ -45,6 +45,28 @@
     "actions": [
         {
             "href": "unused",
+            "name": "publish",
+            "method": "PUT",
+            "fields": [
+                {
+                    "type": "hidden",
+                    "name": "currentState"
+                }
+            ]
+        },
+        {
+            "href": "unused",
+            "name": "save-draft",
+            "method": "PUT",
+            "fields": [
+                {
+                    "type": "hidden",
+                    "name": "currentState"
+                }
+            ]
+        },
+        {
+            "href": "unused",
             "name": "update",
             "method": "PUT",
             "fields": [
@@ -84,7 +106,7 @@
             "rel": [
                 "https://activities.api.brightspace.com/rels/actor-activity-usage"
             ],
-            "href": "unused"
+            "href": "data/outcomes-overall-achievement/actor-activity-usage.json"
         }
     ],
     "rel": [

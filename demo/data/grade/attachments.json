@@ -1,0 +1,78 @@
+{
+    "class": [
+        "collection",
+        "attachments"
+    ],
+    "links": [
+        {
+            "rel": [
+                "https://files.api.brightspace.com/rels/files"
+            ],
+            "href": "about:blank"
+        }
+    ],
+    "actions": [
+        {
+            "class": [
+                "add-feedback-attachment"
+            ],
+            "title": "Add file",
+            "href": "about:blank",
+            "name": "add-file",
+            "method": "PATCH",
+            "fields": [
+                {
+                    "type": "hidden",
+                    "name": "provider",
+                    "value": "feedback-attachments"
+                },
+                {
+                    "type": "hidden",
+                    "name": "type",
+                    "value": "add-file"
+                },
+                {
+                    "type": "text",
+                    "title": "add-file",
+                    "name": "value",
+                    "value": "{\"FileSystemType\":\"{fileSystemType}\",\"FileId\":\"{fileId}\"}"
+                },
+                {
+                    "type": "hidden",
+                    "name": "currentState"
+                }
+            ]
+        },
+        {
+            "class": [
+                "add-feedback-text-attachment"
+            ],
+            "title": "Add Text file",
+            "href": "about:blank",
+            "name": "add-text-file",
+            "method": "PATCH",
+            "fields": [
+                {
+                    "type": "hidden",
+                    "name": "provider",
+                    "value": "feedback-attachments"
+                },
+                {
+                    "type": "hidden",
+                    "name": "type",
+                    "value": "add-text-file"
+                },
+                {
+                    "type": "text",
+                    "title": "add-text-file",
+                    "name": "value",
+                    "value": "{\"FileName\":\"{fileName}\",\"FileContents\":\"{fileContents}\"}"
+                },
+                {
+                    "type": "hidden",
+                    "name": "currentState"
+                }
+            ]
+        }
+    ]
+}

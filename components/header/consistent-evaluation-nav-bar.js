@@ -7,10 +7,9 @@ import '@brightspace-ui/core/components/tooltip/tooltip.js';
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
+class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement) {
 	static get properties() {
 		return {
 			titleName: {
@@ -36,10 +35,6 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			returnHrefText: {
 				attribute: 'return-href-text',
 				type: String
-			},
-			hasUnsavedChanges: {
-				attribute: 'has-unsaved-changes',
-				type: Boolean
 			},
 			isGroupActivity: {
 				attribute: 'is-group-activity',
@@ -92,25 +87,20 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 		`];
 	}
 
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
-	}
-
-	_dispatchButtonClickEvent(eventName) {
-		this.dispatchEvent(new CustomEvent(eventName, {
+	_dispatchButtonClickNavigationEvent(eventName) {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-navigate', {
+			detail: { key: eventName},
 			composed: true,
 			bubbles: true
 		}));
 	}
 
-	_emitPreviousStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-previous-student');}
-	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
+	_emitPreviousStudentEvent() { this._dispatchButtonClickNavigationEvent('previous');}
+	_emitNextStudentEvent() { this._dispatchButtonClickNavigationEvent('next'); }
 
 	_onNavigateBack(e) {
-		if (this.hasUnsavedChanges) {
-			e.preventDefault();
-			this._dispatchButtonClickEvent('d2l-consistent-evaluation-navigate-back-with-unsaved-changes');
-		}
+		e.preventDefault();
+		this._dispatchButtonClickNavigationEvent('back');
 	}
 
 	_renderBackButton() {
@@ -121,14 +111,14 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			this.returnHrefText = (this.returnHrefText === undefined) ? undefined : `${this.returnHrefText}`;
 
 			return html`
-				<d2l-navigation-link-back 
+				<d2l-navigation-link-back
 					class="d2l-full-back"
 					href=${this.returnHref}
 					text="${ifDefined(this.returnHrefText)}"
 					@click=${this._onNavigateBack} >
 				</d2l-navigation-link-back>
 
-				<d2l-navigation-link-back 
+				<d2l-navigation-link-back
 					class="d2l-short-back"
 					href=${this.returnHref}
 					@click=${this._onNavigateBack}>
@@ -143,15 +133,15 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 			const iteratorText = this.isGroupActivity ? 'groupIteratorText' : 'userIteratorText';
 
 			return html`
-				<d2l-navigation-iterator 
+				<d2l-navigation-iterator
 					slot="right"
-					@previous-click=${this._emitPreviousStudentEvent} 
+					@previous-click=${this._emitPreviousStudentEvent}
 					@next-click=${this._emitNextStudentEvent}
 					?previous-disabled=${(this.iteratorIndex === 1 || this.iteratorIndex === undefined)}
 					?next-disabled=${(this.iteratorIndex === this.iteratorTotal || this.iteratorIndex === undefined || this.iteratorIndex === undefined)}
 					hide-text>
 
-					<div class="d2l-iterator-space"> 
+					<div class="d2l-iterator-space">
 						<span class="d2l-iterator-text d2l-label-text">${this.localize(iteratorText, { num: this.iteratorIndex, total: this.iteratorTotal }) }</span>
 					</div>
 
@@ -177,7 +167,7 @@ class ConsistentEvaluationNavBar extends LocalizeMixin(LitElement) {
 				</div>
 
 				${this._renderIteratorButtons()}
-				
+
 			</d2l-navigation-immersive>
 		`;
 	}

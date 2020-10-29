@@ -6,16 +6,19 @@ import './consistent-evaluation-coa-eval-override.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
 			allowEvaluationWrite: {
 				attribute: 'allow-evaluation-write',
 				type: Boolean
+			},
+			attachmentsHref: {
+				attribute: 'attachments-href',
+				type: String
 			},
 			feedbackText: {
 				attribute: false
@@ -86,10 +89,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		};
 	}
 
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
-	}
-
 	constructor() {
 		super();
 
@@ -99,8 +98,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		this.hideFeedback = false;
 		this.hideOutcomes = false;
 		this.hideCoaOverride = false;
-		this.rubricFirstLoad = true;
 		this.allowEvaluationWrite = false;
+		this.rubricOpen = false;
+		this.attachmentsHref = null;
 	}
 
 	_renderRubric() {
@@ -113,6 +113,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					.token=${this.token}
 					?read-only=${this.rubricReadOnly}
 					@d2l-rubric-total-score-changed=${this._syncRubricGrade}
+					@d2l-rubric-compact-expanded-changed=${this._updateRubricOpenState}
 				></d2l-consistent-evaluation-rubric>
 			`;
 		}
@@ -154,6 +155,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 					?can-edit-feedback=${this.allowEvaluationWrite}
 					.feedbackText=${this.feedbackText}
 					.richTextEditorConfig=${this.richTextEditorConfig}
+					attachments-href=${ifDefined(this.attachmentsHref)}
 				></d2l-consistent-evaluation-feedback-presentational>
 			`;
 		}
@@ -186,13 +188,36 @@ export class ConsistentEvaluationRightPanel extends LocalizeMixin(LitElement) {
 		`;
 	}
 
+	_updateRubricOpenState(e) {
+		if (e.detail) {
+			this.rubricOpen = e.detail.expanded;
+		}
+	}
+
+	_closeRubric() {
+		if (this.hideRubric) {
+			return;
+		}
+		try {
+			const accordionCollapse = this.shadowRoot.querySelector('d2l-consistent-evaluation-rubric')
+				.shadowRoot.querySelector('d2l-consistent-evaluation-right-panel-block d2l-rubric')
+				.shadowRoot.querySelector('d2l-rubric-adapter')
+				.shadowRoot.querySelector('div d2l-labs-accordion d2l-labs-accordion-collapse');
+			const rubricCollapse = accordionCollapse
+				.shadowRoot.querySelector('div.content iron-collapse');
+			accordionCollapse.removeAttribute('opened');
+			rubricCollapse.opened = false;
+		} catch (err) {
+			console.log('Unable to close rubric');
+		}
+	}
+
 	_syncRubricGrade(e) {
 		if (e.detail.score === null || !this.allowEvaluationWrite) {
 			return;
 		}
 
-		if (this.rubricFirstLoad) {
-			this.rubricFirstLoad = false;
+		if (!this.rubricOpen) {
 			return;
 		}
 

@@ -15,15 +15,15 @@ const getUpdateButton = (el) => getButton(el, 'consistent-evaluation-footer-upda
 const getNextStudentButton = (el) => getButton(el, 'consistent-evaluation-footer-next-student');
 
 const defaultComponent = html`
-	<d2l-consistent-evaluation-footer-presentational 
-		allow-evaluation-write 
+	<d2l-consistent-evaluation-footer-presentational
+		allow-evaluation-write
 		allow-evaluation-delete
 	></d2l-consistent-evaluation-footer-presentational>
 `;
 
 const publishedComponent = html`
-	<d2l-consistent-evaluation-footer-presentational 
-		allow-evaluation-write 
+	<d2l-consistent-evaluation-footer-presentational
+		allow-evaluation-write
 		allow-evaluation-delete
 		published
 	></d2l-consistent-evaluation-footer-presentational>
@@ -93,10 +93,10 @@ describe('d2l-consistent-evaluation-footer event tests', () => {
 		});
 	});
 
-	it('should emit a next student event', function() {
+	it('should emit a d2l-consistent-evaluation-navigate event', function() {
 		return new Promise((resolve, reject) => {
 			fixture(nextStudentComponent).then(el => {
-				const event = 'd2l-consistent-evaluation-on-next-student';
+				const event = 'd2l-consistent-evaluation-navigate';
 				el.addEventListener(event, resolve);
 				getNextStudentButton(el).click();
 				setTimeout(() => reject(`timeout waiting for ${event} event`), eventTimeoutMS);

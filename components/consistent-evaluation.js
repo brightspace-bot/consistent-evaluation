@@ -1,11 +1,9 @@
 import './consistent-evaluation-page.js';
-import { css, html } from 'lit-element';
+import { css, html, LitElement } from 'lit-element';
 import { ConsistentEvaluationHrefController } from './controllers/ConsistentEvaluationHrefController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import RootStore from './stores/root.js';
 
-export class ConsistentEvaluation extends MobxLitElement {
+export class ConsistentEvaluation extends LitElement {
 
 	static get properties() {
 		return {
@@ -28,7 +26,14 @@ export class ConsistentEvaluation extends MobxLitElement {
 			_organizationName: { type: String },
 			_userName: { type: String },
 			_iteratorTotal: { type: Number },
-			_iteratorIndex: { type: Number }
+			_iteratorIndex: { type: Number },
+			fileId: {
+				attribute: 'file-id',
+				type: String
+			},
+			currentFileId: {
+				type: String
+			}
 		};
 	}
 
@@ -42,7 +47,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	constructor() {
 		super();
-		this.store = new RootStore();
 
 		this.href = undefined;
 		this.token = undefined;
@@ -68,8 +72,26 @@ export class ConsistentEvaluation extends MobxLitElement {
 			this._userName = await controller.getUserName();
 			this._iteratorTotal = await controller.getIteratorInfo('total');
 			this._iteratorIndex = await controller.getIteratorInfo('index');
-			this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._resetEvidence();
+			const stripped = this._stripFileIdFromUrl();
+			if (!stripped) {
+				this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
+			}
 		}
+	}
+
+	_stripFileIdFromUrl() {
+		if (this.fileId) {
+			const fileIdQueryName = 'fileId';
+			const urlWithoutFileQuery = window.location.href.replace(`&${fileIdQueryName}=${this.fileId}`, '');
+			history.replaceState({}, document.title, urlWithoutFileQuery);
+
+			this.currentFileId = this.fileId;
+			this.fileId = undefined;
+
+			return true;
+		}
+
+		return false;
 	}
 
 	_onNextStudentClick() {
@@ -82,10 +104,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 
 	_shouldHideLearnerContextBar() {
 		return this._childHrefs && this._childHrefs.userProgressOutcomeHref;
-	}
-
-	_shouldConfirmUnsavedChanges() {
-		return (this._childHrefs && this._childHrefs.userProgressOutcomeHref) !== undefined;
 	}
 
 	render() {
@@ -103,6 +121,7 @@ export class ConsistentEvaluation extends MobxLitElement {
 				special-access-href=${ifDefined(this._childHrefs && this._childHrefs.specialAccessHref)}
 				return-href=${ifDefined(this.returnHref)}
 				return-href-text=${ifDefined(this.returnHrefText)}
+				current-file-id=${ifDefined(this.currentFileId)}
 				.submissionInfo=${this._submissionInfo}
 				.gradeItemInfo=${this._gradeItemInfo}
 				.assignmentName=${this._assignmentName}
@@ -114,7 +133,6 @@ export class ConsistentEvaluation extends MobxLitElement {
 				?rubric-read-only=${this._rubricReadOnly}
 				?rich-text-editor-disabled=${this._richTextEditorDisabled}
 				?hide-learner-context-bar=${this._shouldHideLearnerContextBar()}
-				?confirm-unsaved-changes=${this._shouldConfirmUnsavedChanges()}
 				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
 				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
 			></d2l-consistent-evaluation-page>

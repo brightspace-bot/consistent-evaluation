@@ -1,10 +1,9 @@
 import '@brightspace-ui/core/components/button/button.js';
 import '@brightspace-ui/core/components/button/button-icon.js';
 import { css, html, LitElement } from 'lit-element';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationFooterPresentational extends LocalizeConsistentEvaluation(LitElement) {
 	static get properties() {
 		return {
 			published: {
@@ -24,6 +23,7 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 			}
 		};
 	}
+
 	static get styles() {
 		return css`
 			#footer-container {
@@ -35,10 +35,6 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 				margin: 0 0.3rem;
 			}
 		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {
@@ -56,11 +52,19 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 		}));
 	}
 
+	_dispatchButtonClickNavigationEvent(eventName) {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-navigate', {
+			detail: { key: eventName},
+			composed: true,
+			bubbles: true
+		}));
+	}
+
 	_emitPublishEvent()     { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-publish'); }
 	_emitRetractEvent()     { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-retract'); }
 	_emitUpdateEvent()      { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-update'); }
 	_emitSaveDraftEvent()   { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-save-draft'); }
-	_emitNextStudentEvent() { this._dispatchButtonClickEvent('d2l-consistent-evaluation-on-next-student'); }
+	_emitNextStudentEvent() { this._dispatchButtonClickNavigationEvent('next'); }
 
 	_getPublishOrUpdateButton() {
 		const text = this.published ? this.localize('update') : this.localize('publish');
@@ -96,13 +100,17 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 
 	_getNextStudentButton() {
 		return this.showNextStudent ? html`
-			<d2l-button-icon
+			<d2l-navigation-button
 				id="consistent-evaluation-footer-next-student"
-				icon="tier3:chevron-right-circle"
-				@click=${this._emitNextStudentEvent}
-				aria-label="Next Student"
-			></d2l-button-icon>
-		` : html``;
+				hide-highlight
+				text="${this.localize('nextStudent')}"
+				@click="${this._emitNextStudentEvent}"
+				ariaDescribedbyText="${this.localize('nextStudent')}">
+				<div>
+					<d2l-icon icon="d2l-tier3:chevron-right-circle"></d2l-icon>
+				</div>
+			</d2l-navigation-button>`
+			: null;
 	}
 
 	render() {

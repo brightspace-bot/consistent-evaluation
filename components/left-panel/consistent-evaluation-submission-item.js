@@ -16,13 +16,12 @@ import { fileSubmission, textSubmission } from '../controllers/constants';
 import { formatDate, formatTime } from '@brightspace-ui/intl/lib/dateTime.js';
 import { toggleFlagActionName, toggleIsReadActionName } from '../controllers/constants.js';
 import { getFileIconTypeFromExtension } from '@brightspace-ui/core/components/icons/getFileIconType';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import ResizeObserver from 'resize-observer-polyfill/dist/ResizeObserver.es.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
-export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(LitElement)) {
+export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsistentEvaluation(LitElement)) {
 	static get properties() {
 		return {
 			dateStr : {
@@ -134,17 +133,12 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 	`];
 	}
 
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
-	}
-
 	constructor() {
 		super();
 		this.late = false;
 		this.comment = '';
 		this.attachments = [];
 		this._updateFilenameTooltips = this._updateFilenameTooltips.bind(this);
-		this._dispatchRenderEvidence = this._dispatchRenderEvidence.bind(this);
 	}
 
 	connectedCallback() {
@@ -201,37 +195,14 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
-	_dispatchRenderEvidence(extension, fileViewer, name) {
-		this._dispatchRenderEvidenceFileEvent(fileViewer, name);
-	}
-
-	_dispatchRenderEvidenceFileEvent(url, name) {
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-file', {
+	_dispatchFileSelectedEvent(fileId) {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-file-selected', {
 			detail: {
-				url: url,
-				name: name
+				fileId: fileId
 			},
 			composed: true,
 			bubbles: true
-		});
-		this.dispatchEvent(event);
-	}
-
-	_dispatchRenderEvidenceTextEvent(name) {
-		const event = new CustomEvent('d2l-consistent-evaluation-submission-item-render-evidence-text', {
-			detail: {
-				textSubmissionEvidence: {
-					title: `${this.localize('textSubmission')} ${this.displayNumber}`,
-					name: name,
-					date: this._formatDateTime(),
-					downloadUrl: this.attachments[0].properties.href,
-					content: this.comment
-				}
-			},
-			composed: true,
-			bubbles: true
-		});
-		this.dispatchEvent(event);
+		}));
 	}
 
 	_dispatchToggleEvent(e) {
@@ -286,6 +257,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 		const flagged = file.properties.flagged;
 		const read = file.properties.read;
 		const href = file.properties.href;
+		const id = file.properties.id;
 		return html`
 		<d2l-list-item>
 		<d2l-list-item-content>
@@ -300,7 +272,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				<span class="d2l-body-small">${this._formatDateTime()}</span>
 			</div>
 		</d2l-list-item-content>
-		${this._addMenuOptions(read, flagged, href)}
+		${this._addMenuOptions(read, flagged, href, id)}
 		</d2l-list-item>`;
 	}
 
@@ -344,7 +316,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 
 	_renderAttachments() {
 		return html`${this.attachments.map((file) => {
-			const {id, name, size, extension, flagged, read, href, fileViewer} = file.properties;
+			const {id, name, size, extension, flagged, read, href} = file.properties;
 			return html`
 			<d2l-list-item>
 				<div slot="illustration" class="d2l-submission-attachment-icon-container">
@@ -356,7 +328,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 				<d2l-list-item-content
 				@click="${
 	// eslint-disable-next-line lit/no-template-arrow
-	() => this._dispatchRenderEvidence(extension, fileViewer, name)}">
+	() => this._dispatchFileSelectedEvent(id)}">
 					<div class="truncate" aria-label="heading">${this._getFileTitle(name)}</div>
 					<div slot="supporting-info">
 						${this._renderFlaggedStatus(flagged)}
@@ -395,7 +367,9 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeMixin(L
 					${this.submissionType === textSubmission ? html`
 						<d2l-menu-item-link text="${this.localize('viewFullSubmission')}"
 							href="javascript:void(0);"
-							@click="${this._dispatchRenderEvidenceTextEvent}"></d2l-menu-item-link>` : null}
+							@click="${
+	// eslint-disable-next-line lit/no-template-arrow
+	() => this._dispatchFileSelectedEvent(id)}"></d2l-menu-item-link>` : null}
 					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
 					<d2l-menu-item text="${oppositeReadState}" data-action="${toggleIsReadActionName}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleEvent}"></d2l-menu-item>
 					<d2l-menu-item text="${oppositeFlagState}" data-action="${toggleFlagActionName}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleEvent}"></d2l-menu-item>

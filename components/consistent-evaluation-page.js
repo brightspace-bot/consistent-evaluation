@@ -15,13 +15,11 @@ import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controll
 import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { loadLocalizationResources } from './locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
-import { submissions } from './controllers/constants';
+import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
-export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) {
+export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
@@ -77,10 +75,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				attribute: 'group-href',
 				type: String
 			},
-			confirmUnsavedChanges: {
-				attribute: 'confirm-unsaved-changes',
-				type: Boolean
-			},
 			userProgressOutcomeHref: {
 				attribute: 'user-progress-outcome-href',
 				type: String
@@ -92,6 +86,10 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			hideLearnerContextBar: {
 				attribute: 'hide-learner-context-bar',
 				type: Boolean
+			},
+			currentFileId: {
+				attribute: 'current-file-id',
+				type: String
 			},
 			submissionInfo: {
 				attribute: false,
@@ -145,21 +143,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 			_scrollbarStatus: {
 				attribute: false
 			},
-			_fileEvidenceUrl: {
-				attribute: false,
-				type: String
-			},
-			_textEvidence: {
-				attribute: false,
-				type: Object
-			},
-			_selectedFile: {
-				attribute: false,
-				type: String
-			},
-			_hasUnsavedChanges: {
-				attribute: false
-			},
 			_dialogOpened: {
 				attribute: false
 			}
@@ -180,10 +163,6 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		`;
 	}
 
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
-	}
-
 	constructor() {
 		super();
 		/* global moment:false */
@@ -201,11 +180,11 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._toastMessage = '';
 		this._scrollbarStatus = 'default';
 		this._mutex = new Awaiter();
-		this._setSubmissionsView = this._setSubmissionsView.bind(this);
-		this._hasUnsavedChanges = false;
 		this._dialogOpened = false;
 		this.allowEvaluationWrite = false;
 		this.allowEvaluationDelete = false;
+		this.attachmentsHref = null;
+		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
 	}
 
 	get evaluationEntity() {
@@ -297,6 +276,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
+		this.attachmentsHref = this._controller.getAttachmentsHref(this.evaluationEntity);
 	}
 
 	_noFeedbackComponent() {
@@ -315,28 +295,19 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 	}
 
 	async _onNextStudentClick() {
-		await this._mutex.dispatch(
-			() => this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
-				composed: true,
-				bubbles: true
-			}))
-		);
+		this.shadowRoot.querySelector('consistent-evaluation-right-panel')._closeRubric();
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-next-student-click', {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	async _onPreviousStudentClick() {
-		await this._mutex.dispatch(
-			() => this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
-				composed: true,
-				bubbles: true
-			}))
-		);
-	}
-
-	_resetEvidence() {
-		this.submissionInfo = undefined;
-		this._fileEvidenceUrl = undefined;
-		this._textEvidence = undefined;
-		this.userProgressOutcomeHref = undefined;
+		this.shadowRoot.querySelector('consistent-evaluation-right-panel')._closeRubric();
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-previous-student-click', {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	_hideScrollbars() {
@@ -387,7 +358,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.save(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('saved'));
-					this._updateHasUnsavedChanges(false);
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('saveError'));
 				}
@@ -408,7 +379,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.update(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('updated'));
-					this._updateHasUnsavedChanges(false);
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('updatedError'));
 				}
@@ -430,7 +401,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationState = this.evaluationEntity.properties.state;
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('published'));
-					this._updateHasUnsavedChanges(false);
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('publishError'));
 				}
@@ -452,6 +423,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				this.evaluationEntity = await this._controller.retract(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('retracted'));
+					this._fireSaveEvaluationEvent();
 				} else {
 					this._showToast(this.localize('retractError'));
 				}
@@ -471,37 +443,55 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 		this._displayToast = false;
 	}
 
-	_showDialog() {
-		this._dialogOpened = true;
+	async _showDialog(e) {
+		window.dispatchEvent(new CustomEvent('d2l-flush', {
+			composed: true,
+			bubbles: true
+		}));
+
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.navigationTarget = e.detail.key;
+				if (entity.hasClass('unsaved')) {
+					this._dialogOpened = true;
+				} else {
+					this._navigate();
+				}
+			}
+		);
 	}
 
 	_onDialogClose(e) {
 		this._dialogOpened = false;
 		if (e.detail.action === DIALOG_ACTION_LEAVE) {
-			if (this._hasUnsavedChanges) {
-				window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
-			}
-			window.location.assign(this.returnHref);
+			this._navigate();
 		}
 	}
 
-	_onUnsavedChange() {
-		this._updateHasUnsavedChanges(true);
-	}
-
-	_updateHasUnsavedChanges(value) {
-		if (!this.confirmUnsavedChanges) return;
-		if (!this._hasUnsavedChanges && value) {
-			window.addEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
-		} else if (this._hasUnsavedChanges && !value) {
-			window.removeEventListener('beforeunload', this._confirmUnsavedChangesBeforeUnload);
+	async _navigate() {
+		switch (this.navigationTarget) {
+			case 'back':
+				if (this.evaluationEntity.hasClass('unsaved')) {
+					window.removeEventListener('beforeunload', this.unsavedChangesHandler);
+				}
+				window.location.assign(this.returnHref);
+				break;
+			case 'next':
+				await this._onNextStudentClick();
+				break;
+			case 'previous':
+				await this._onPreviousStudentClick();
+				break;
 		}
-		this._hasUnsavedChanges = value;
 	}
 
 	_confirmUnsavedChangesBeforeUnload(e) {
-		e.preventDefault();
-		e.returnValue = 'Unsaved changes';
+		if (this.evaluationEntity.hasClass('unsaved')) {
+			//Triggers the native browser confirmation dialog
+			e.preventDefault();
+			e.returnValue = 'Unsaved changes';
+		}
 	}
 
 	_renderToast() {
@@ -517,40 +507,53 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 				<d2l-consistent-evaluation-learner-context-bar
 					user-href=${ifDefined(this.userHref)}
 					group-href=${ifDefined(this.groupHref)}
-					selected-item-name=${this._selectedFile}
 					special-access-href=${ifDefined(this.specialAccessHref)}
 					.token=${this.token}
+					.currentFileId=${this.currentFileId}
 					.submissionInfo=${this.submissionInfo}
 				></d2l-consistent-evaluation-learner-context-bar>
 			`;
 		}
 	}
 
+	_selectFile(e) {
+		this.currentFileId = e.detail.fileId;
+		this._hideScrollbars();
+	}
+
 	_setSubmissionsView() {
-		this._fileEvidenceUrl = undefined;
-		this._textEvidence = undefined;
-		this._selectedFile = submissions;
+		this.currentFileId = undefined;
 		this._showScrollbars();
 	}
-	_setFileEvidence(e) {
-		this._fileEvidenceUrl = e.detail.url;
-		this._selectedFile = e.detail.name;
-		this._textEvidence = undefined;
-		this._hideScrollbars();
+
+	async _handleAnnotationsUpdate() {
+
 	}
-	_setTextEvidence(e) {
-		this._textEvidence = e.detail.textSubmissionEvidence;
-		this._selectedFile = e.detail.textSubmissionEvidence.name;
-		this._fileEvidenceUrl = undefined;
-		this._hideScrollbars();
+
+	connectedCallback() {
+		super.connectedCallback();
+		window.addEventListener('beforeunload', this.unsavedChangesHandler);
+	}
+
+	disconnectedCallback() {
+		window.removeEventListener('beforeunload', this.unsavedChangesHandler);
+		super.disconnectedCallback();
+	}
+
+	_fireSaveEvaluationEvent() {
+		window.dispatchEvent(new CustomEvent('d2l-save-evaluation', {
+			composed: true,
+			bubbles: true
+		}));
 	}
 
 	render() {
 		return html`
-			<d2l-template-primary-secondary primary-overflow="${this._scrollbarStatus}"
-			@d2l-consistent-evaluation-submission-item-render-evidence-file=${this._setFileEvidence}
-			@d2l-consistent-evaluation-submission-item-render-evidence-text=${this._setTextEvidence}
-			@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
+			<d2l-template-primary-secondary
+				resizable
+				primary-overflow="${this._scrollbarStatus}"
+				@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
+				@d2l-consistent-evaluation-file-selected=${this._selectFile}
 			>
 				<div slot="header">
 					<d2l-consistent-evaluation-nav-bar
@@ -560,11 +563,8 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						.subtitleName=${this._navBarSubtitleText}
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
-						?has-unsaved-changes=${this._hasUnsavedChanges}						
 						?is-group-activity="${this.groupHref}"
-						@d2l-consistent-evaluation-on-previous-student=${this._onPreviousStudentClick}
-						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
-						@d2l-consistent-evaluation-navigate-back-with-unsaved-changes=${this._showDialog}
+						@d2l-consistent-evaluation-navigate=${this._showDialog}
 					></d2l-consistent-evaluation-nav-bar>
 					${this._renderLearnerContextBar()}
 				</div>
@@ -572,9 +572,9 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 					<d2l-consistent-evaluation-left-panel
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
-						file-evidence-url=${ifDefined(this._fileEvidenceUrl)}
-						.textEvidence=${this._textEvidence}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
+						.currentFileId=${this.currentFileId}
+						@d2l-consistent-eval-annotations-update=${this._handleAnnotationsUpdate}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
@@ -585,6 +585,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
 						outcomes-href=${ifDefined(this.outcomesHref)}
 						coa-eval-override-href=${ifDefined(this.coaDemonstrationHref)}
+						attachments-href=${ifDefined(this.attachmentsHref)}
 						.richTextEditorConfig=${this.richtextEditorConfig}
 						.grade=${this._grade}
 						.gradeItemInfo=${this.gradeItemInfo}
@@ -598,15 +599,13 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
 						?allow-evaluation-write=${this.allowEvaluationWrite}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
-						@on-d2l-consistent-eval-feedback-text-editor-change=${this._onUnsavedChange}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
-						@on-d2l-consistent-eval-coa-eval-override-changed=${this._onUnsavedChange}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
 					${this._renderToast()}
 					<d2l-consistent-evaluation-footer-presentational
-						next-student-href=${ifDefined(this.nextStudentHref)}
+						?show-next-student=${this.nextStudentHref}
 						?published=${this._isEvaluationPublished()}
 						?allow-evaluation-write=${this.allowEvaluationWrite}
 						?allow-evaluation-delete=${this.allowEvaluationDelete}
@@ -614,7 +613,7 @@ export default class ConsistentEvaluationPage extends LocalizeMixin(LitElement) 
 						@d2l-consistent-evaluation-on-save-draft=${this._saveEvaluation}
 						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}
 						@d2l-consistent-evaluation-on-update=${this._updateEvaluation}
-						@d2l-consistent-evaluation-on-next-student=${this._onNextStudentClick}
+						@d2l-consistent-evaluation-navigate=${this._showDialog}
 					></d2l-consistent-evaluation-footer-presentational>
 				</div>
 			</d2l-template-primary-secondary>

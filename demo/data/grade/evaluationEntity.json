@@ -93,7 +93,7 @@
       "rel": [
         "https://activities.api.brightspace.com/rels/attachments"
       ],
-      "href": "https://41c25168-e162-4d7c-b031-5a30e2dda04a.activities.api.proddev.d2l/activities/6606_2000_1/usages/6609/users/user_10183/evaluation/attachments"
+      "href": "/demo/data/grade/attachments.json"
     },
     {
       "rel": [

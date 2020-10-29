@@ -2,16 +2,18 @@ import 'd2l-activities/components/d2l-activity-editor/d2l-activity-text-editor.j
 import './consistent-evaluation-right-panel-block';
 import './consistent-evaluation-attachments-editor.js';
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-
 import { css, html, LitElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
-class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElement) {
+class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvaluation(LitElement) {
 	static get properties() {
 		return {
+			attachmentsHref: {
+				attribute: 'attachments-href',
+				type: String
+			},
 			canEditFeedback: {
 				attribute: 'can-edit-feedback',
 				type: Boolean
@@ -37,11 +39,10 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 	static get styles() {
 		return css`
+			.d2l-evaluation-feedback-container {
+				margin-top: 0.3rem;
+			}
 		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {
@@ -50,6 +51,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 		this.canEditFeedback = false;
 		this._debounceJobs = {};
 		this.flush = this.flush.bind(this);
+		this.attachmentsHref = null;
 	}
 
 	htmlEditorEnabled(e) {
@@ -111,26 +113,32 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeMixin(LitElemen
 
 	render() {
 		if (this.href && this.token) {
-
-			return html`
-				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
-					<d2l-activity-text-editor
-						.key="${this._key}"
-						.value="${this.feedbackText}"
-						.richtextEditorConfig="${this.richTextEditorConfig}"
-						@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
-						ariaLabel="${this.localize('overallFeedback')}">
-					</d2l-activity-text-editor>
+			const attachments = this.attachmentsHref !== null
+				? html`
 					<div>
 						<d2l-consistent-evaluation-attachments-editor
-							href="${this.href}/attachments"
+							href=${this.attachmentsHref}
 							.token="${this.token}"
 							destinationHref="${this.href}"
 							.canEditFeedback="${this.canEditFeedback}">
 						</d2l-consistent-evaluation-attachments-editor>
-					</div>
-				</d2l-consistent-evaluation-right-panel-block>
-		`;
+					</div>`
+				: null;
+
+			return html`
+				<div class="d2l-evaluation-feedback-container">
+					<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
+						<d2l-activity-text-editor
+							.key="${this._key}"
+							.value="${this.feedbackText}"
+							.richtextEditorConfig="${this.richTextEditorConfig}"
+							@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
+							ariaLabel="${this.localize('overallFeedback')}">
+						</d2l-activity-text-editor>
+						${attachments}
+					</d2l-consistent-evaluation-right-panel-block>
+				</div>
+			`;
 		} else {
 			return html``;
 		}
