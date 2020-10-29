@@ -6,8 +6,7 @@ import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/compone
 import { css, html, LitElement } from 'lit-element';
 import { fileSubmission, observedInPerson, onPaperSubmission, submissionTypesWithNoEvidence, textSubmission } from '../controllers/constants';
 import { findFile, getSubmissions } from '../helpers/submissionsAndFilesHelpers.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 import { toggleIsReadActionName } from '../controllers/constants.js';
 
@@ -26,7 +25,7 @@ function getSubmissionTypeName(type) {
 	}
 }
 
-export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationLeftPanel extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
@@ -92,10 +91,6 @@ export class ConsistentEvaluationLeftPanel extends LocalizeMixin(LitElement) {
 				width: 100%;
 			}
 		`];
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	async updated(changedProperties) {

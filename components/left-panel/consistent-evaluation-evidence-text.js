@@ -1,11 +1,10 @@
 import './consistent-evaluation-evidence-top-bar.js';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
-export class ConsistentEvaluationEvidenceText extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationEvidenceText extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
@@ -36,10 +35,6 @@ export class ConsistentEvaluationEvidenceText extends LocalizeMixin(LitElement) 
 				margin-bottom: 2rem;
 			}
 		`];
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	render() {
