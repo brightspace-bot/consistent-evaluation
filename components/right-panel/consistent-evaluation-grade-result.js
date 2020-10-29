@@ -3,11 +3,10 @@ import './consistent-evaluation-right-panel-block';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
-export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationGradeResult extends LocalizeConsistentEvaluation(LitElement) {
 
 	static get properties() {
 		return {
@@ -27,26 +26,20 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 				attribute:'custom-manual-override-clear-text',
 				type: String
 			},
-			labelText: {
-				attribute: 'label-text',
-				type: String },
 			readOnly: {
 				attribute: 'read-only',
-				type: Boolean },
+				type: Boolean
+			},
 			hideTitle: {
 				attribute: 'hide-title',
-				type: Boolean },
-
+				type: Boolean
+			},
 			_manuallyOverriddenGrade: { type: Object },
 			_hasUnsavedChanged: { type: Boolean },
 			_gradeButtonTooltip: { type: String },
 			_reportsButtonTooltip: { type: String },
 			_isGradeAutoCompleted: { type: Boolean }
 		};
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {
@@ -56,7 +49,6 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		this.customManualOverrideText = undefined;
 		this.customManualOverrideClearText = undefined;
 		this.readOnly = false;
-		this.labelText = '';
 		this.hideTitle = false;
 		this._gradeButtonUrl = '';
 		this._reportsButtonUrl = '';
@@ -120,9 +112,8 @@ export class ConsistentEvaluationGradeResult extends LocalizeMixin(LitElement) {
 		}
 
 		return html`
-			<d2l-consistent-evaluation-right-panel-block title="Overall Grade">
+			<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallGrade')}">
 			<d2l-labs-d2l-grade-result-presentational
-				labelText=${this.labelText || this.localize('overallGrade')}
 				.gradeType=${gradeType}
 				scoreNumerator=${score}
 				scoreDenominator=${scoreOutOf}

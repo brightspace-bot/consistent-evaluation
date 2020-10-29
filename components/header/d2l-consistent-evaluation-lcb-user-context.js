@@ -3,12 +3,11 @@ import { bodyCompactStyles, bodyStandardStyles } from '@brightspace-ui/core/comp
 import { css, html, LitElement } from 'lit-element';
 import { EntityMixinLit } from 'siren-sdk/src/mixin/entity-mixin-lit.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { UserEntity } from 'siren-sdk/src/users/UserEntity.js';
 
-export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(LocalizeMixin(LitElement))) {
+export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(LocalizeConsistentEvaluation(LitElement))) {
 
 	static get properties() {
 		return {
@@ -54,10 +53,6 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 				margin-right: 0.5rem;
 			}
 		`];
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {

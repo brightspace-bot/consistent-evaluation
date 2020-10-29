@@ -1,10 +1,9 @@
 import '@brightspace-ui/core/components/button/button.js';
 import '@brightspace-ui/core/components/button/button-icon.js';
 import { css, html, LitElement } from 'lit-element';
-import { loadLocalizationResources } from '../locale.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitElement) {
+export class ConsistentEvaluationFooterPresentational extends LocalizeConsistentEvaluation(LitElement) {
 	static get properties() {
 		return {
 			published: {
@@ -36,10 +35,6 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 				margin: 0 0.3rem;
 			}
 		`;
-	}
-
-	static async getLocalizeResources(langs) {
-		return await loadLocalizationResources(langs);
 	}
 
 	constructor() {
@@ -108,7 +103,7 @@ export class ConsistentEvaluationFooterPresentational extends LocalizeMixin(LitE
 			<d2l-navigation-button
 				id="consistent-evaluation-footer-next-student"
 				hide-highlight
-				title="${this.localize('nextStudent')}"
+				text="${this.localize('nextStudent')}"
 				@click="${this._emitNextStudentEvent}"
 				ariaDescribedbyText="${this.localize('nextStudent')}">
 				<div>
