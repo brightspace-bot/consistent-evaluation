@@ -16,7 +16,6 @@ import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
-import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
@@ -347,6 +346,18 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 		);
 	}
 
+	async _transientSaveAnnotations(e) {
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				const annotationsData = e.detail;
+				const fileId = this.currentFileId;
+
+				this.evaluationEntity = await this._controller.transientSaveAnnotations(entity, annotationsData, fileId);
+			}
+		);
+	}
+
 	async _saveEvaluation() {
 		window.dispatchEvent(new CustomEvent('d2l-flush', {
 			composed: true,
@@ -527,25 +538,6 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 		this._showScrollbars();
 	}
 
-	async _handleAnnotationsUpdate(e) {
-		const entity = await this._controller.fetchEvaluationEntity(false);
-		const annotationsEntity = entity.getSubEntityByRel('annotations');
-		const saveAnnotationsAction = annotationsEntity.getActionByName('SaveAnnotations');
-
-		const annotationsData = e.detail;
-		const encodedAnnotationsData = {
-			FileId: this.currentFileId,
-			AnnotationsData: JSON.stringify(annotationsData)
-		};
-
-		const fields = [{
-			name: 'value',
-			value: JSON.stringify(encodedAnnotationsData)
-		}];
-
-		this.evaluationEntity = await performSirenAction(this.token, saveAnnotationsAction, fields, true);
-	}
-
 	connectedCallback() {
 		super.connectedCallback();
 		window.addEventListener('beforeunload', this.unsavedChangesHandler);
@@ -590,7 +582,7 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 						.token=${this.token}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
 						.currentFileId=${this.currentFileId}
-						@d2l-consistent-eval-annotations-update=${this._handleAnnotationsUpdate}
+						@d2l-consistent-eval-annotations-update=${this._transientSaveAnnotations}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">

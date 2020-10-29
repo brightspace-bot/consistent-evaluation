@@ -110,6 +110,23 @@ export class ConsistentEvaluationController {
 		return await this._performAction(targetEntity, saveGradeActionName, saveGradeFieldName, gradeValue);
 	}
 
+	async transientSaveAnnotations(evaluationEntity, annotationsData, fileId) {
+		const annotationsEntity = evaluationEntity.getSubEntityByRel('annotations');
+		const saveAnnotationsAction = annotationsEntity.getActionByName('SaveAnnotations');
+
+		const encodedAnnotationsData = {
+			FileId: fileId,
+			AnnotationsData: JSON.stringify(annotationsData)
+		};
+
+		const fields = [{
+			name: 'value',
+			value: JSON.stringify(encodedAnnotationsData)
+		}];
+
+		return await performSirenAction(this.token, saveAnnotationsAction, fields, true);
+	}
+
 	async save(evaluationEntity) {
 		if (!evaluationEntity) {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
