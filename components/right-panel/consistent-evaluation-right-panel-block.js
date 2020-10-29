@@ -2,6 +2,7 @@ import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/list/list-item-content.js';
 import '@brightspace-ui/core/components/expand-collapse/expand-collapse-content.js';
+import '@brightspace-ui/core/components/dialog/dialog-fullscreen.js';
 
 import { css, html, LitElement } from 'lit-element';
 import { heading4Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
@@ -18,6 +19,9 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 			},
 			supportingInfo: {
 				type: String
+			},
+			_opened: {
+				type: Boolean
 			}
 		};
 	}
@@ -34,16 +38,6 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 			}
 			.d2l-list-item {
 				display: none;
-			}
-			.fullscreen {
-				display: flex !important;
-				background: white;
-				z-index: 9999; 
-				width: 100%; 
-				height: 100%; 
-				position: fixed; 
-				top: 0; 
-				left: 0; 
 			}
 			@media (max-width: 556px) {
 				.d2l-label-text {
@@ -69,8 +63,8 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 
 	constructor() {
 		super();
+		this._opened = false;
 		this.noTitle = false;
-		this.supportingInfo = `supporting asdfasdfsadfsafsadfsad info for ${this.title}`;
 	}
 
 	_getTitle() {
@@ -78,9 +72,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	_onListItemClick() {
-		const content = this.shadowRoot.querySelector('d2l-expand-collapse-content');
-		content.style.display = 'block';
-		content.expanded = !content.expanded;
+		this._opened = !this._opened;
 	}
 
 	_renderListItems() {
@@ -89,7 +81,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 				@click=${this._onListItemClick}>
 				<d2l-list-item-content class="no-border">
 					${this._getTitle()}
-					<div  slot="supporting-info">${this.supportingInfo}</div>
+					<div  slot="supporting-info"> supporting info for ${this.title}</div>
 				</d2l-list-item-content>
 			</d2l-list-item>
 		`;
@@ -98,6 +90,10 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	render() {
 		return html`
 			${this._renderListItems()}
+
+			<d2l-dialog-fullscreen ?opened=${this._opened} title-text=${this.title}>
+				<slot></slot>
+			</d2l-dialog-fullscreen>
 
 			<d2l-expand-collapse-content class="d2l-block" expanded>
 				${this._getTitle()}
