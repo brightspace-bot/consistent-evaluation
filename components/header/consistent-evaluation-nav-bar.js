@@ -111,14 +111,14 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 			this.returnHrefText = (this.returnHrefText === undefined) ? undefined : `${this.returnHrefText}`;
 
 			return html`
-				<d2l-navigation-link-back 
+				<d2l-navigation-link-back
 					class="d2l-full-back"
 					href=${this.returnHref}
 					text="${ifDefined(this.returnHrefText)}"
 					@click=${this._onNavigateBack} >
 				</d2l-navigation-link-back>
 
-				<d2l-navigation-link-back 
+				<d2l-navigation-link-back
 					class="d2l-short-back"
 					href=${this.returnHref}
 					@click=${this._onNavigateBack}>
@@ -133,15 +133,15 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 			const iteratorText = this.isGroupActivity ? 'groupIteratorText' : 'userIteratorText';
 
 			return html`
-				<d2l-navigation-iterator 
+				<d2l-navigation-iterator
 					slot="right"
-					@previous-click=${this._emitPreviousStudentEvent} 
+					@previous-click=${this._emitPreviousStudentEvent}
 					@next-click=${this._emitNextStudentEvent}
 					?previous-disabled=${(this.iteratorIndex === 1 || this.iteratorIndex === undefined)}
 					?next-disabled=${(this.iteratorIndex === this.iteratorTotal || this.iteratorIndex === undefined || this.iteratorIndex === undefined)}
 					hide-text>
 
-					<div class="d2l-iterator-space"> 
+					<div class="d2l-iterator-space">
 						<span class="d2l-iterator-text d2l-label-text">${this.localize(iteratorText, { num: this.iteratorIndex, total: this.iteratorTotal }) }</span>
 					</div>
 
@@ -167,7 +167,7 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 				</div>
 
 				${this._renderIteratorButtons()}
-				
+
 			</d2l-navigation-immersive>
 		`;
 	}

@@ -15,15 +15,15 @@ const getUpdateButton = (el) => getButton(el, 'consistent-evaluation-footer-upda
 const getNextStudentButton = (el) => getButton(el, 'consistent-evaluation-footer-next-student');
 
 const defaultComponent = html`
-	<d2l-consistent-evaluation-footer-presentational 
-		allow-evaluation-write 
+	<d2l-consistent-evaluation-footer-presentational
+		allow-evaluation-write
 		allow-evaluation-delete
 	></d2l-consistent-evaluation-footer-presentational>
 `;
 
 const publishedComponent = html`
-	<d2l-consistent-evaluation-footer-presentational 
-		allow-evaluation-write 
+	<d2l-consistent-evaluation-footer-presentational
+		allow-evaluation-write
 		allow-evaluation-delete
 		published
 	></d2l-consistent-evaluation-footer-presentational>
