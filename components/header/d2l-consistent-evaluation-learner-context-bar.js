@@ -70,7 +70,7 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 				display:none;
 			}
 
-			.consistent-evaluation-learner-context-bar{
+			.consistent-evaluation-learner-context-bar {
 				display:flex;
 			}
 
@@ -122,7 +122,7 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 
 	render() {
 		return html`
-			<div class="skeleton-learner-context-bar">
+			<div class="skeleton-learner-context-bar" aria-hidden="true">
 				<div class="skeleton-user-profile-image d2l-skeletize"></div>
 				<div class="skeleton-user-display-name d2l-skeletize"></div>
 				<div class="skeleton-submission-select d2l-skeletize"></div>

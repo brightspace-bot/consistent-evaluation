@@ -6,8 +6,9 @@ import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { Classes } from 'd2l-hypermedia-constants';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
+import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
-export class ConsistentEvaluationSubmissionsPage extends LitElement {
+export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElement) {
 	static get properties() {
 		return {
 			submissionList: {
@@ -25,7 +26,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	}
 
 	static get styles() {
-		return css`
+		return [super.styles, css`
 			:host {
 				background-color: var(--d2l-color-sylvite);
 				display: inline-block;
@@ -37,7 +38,70 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 				margin: 0.5rem;
 				padding: 0.5rem;
 			}
-		`;
+			.d2l-consistent-evaluation-submission-list-view-skeleton {
+				background-color: white;
+				border-radius: 6px;
+				margin: 0.5rem;
+				padding: 0.5rem;
+			}
+			.d2l-consistent-evaluation-submission-list-item-skeleton {
+				height:100%;
+				width:100%;
+				display:block;
+				margin-top:0.5rem;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-list-item-submission-skeleton {
+				margin-left: 1rem;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-title-skeleton {
+				height: 0.65rem;
+				width: 5rem;
+				margin-bottom:0.5rem;
+				float: left;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-body-skeleton {
+				height: 0.55rem;
+				width: 7rem;
+				margin-top:0.5rem;
+				clear: left;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-footer-title-skeleton {
+				height: 0.65rem;
+				width: 6rem;
+				display: block;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-image-skeleton {
+				height: 1.8rem;
+				width: 1.8rem;
+				bottom:0.5rem;
+				display: block;
+				float:left;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-name-skeleton {
+				height: 1rem;
+				width: 12rem;
+				bottom:0.5rem;
+				display: block;
+				margin: 0rem 0rem 0rem 0.7rem;
+				float:left;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-information-skeleton {
+				height: .8rem;
+				width: 5rem;
+				bottom:0.5rem;
+				display: block;
+				margin: 1rem 0rem 0rem 2.5rem;
+				clear:left;
+			}
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-separator-skeleton {
+				height: 0.1rem;
+				width: 100%%;
+				margin: 0.4rem 0rem 1.0rem 0rem;
+			}
+			:host([skeleton]) {
+				height: 100%;
+			}
+		`];
 	}
 
 	constructor() {
@@ -45,6 +109,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		this._submissionList = [];
 		this._token = undefined;
 		this._submissionEntities = [];
+		this.skeleton = true;
 	}
 
 	get submissionList() {
@@ -74,6 +139,10 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		}
 	}
 
+	updated() {
+		this.shadowRoot.getElementById('d2l-consistent-evaluation-submission-list-view-skeleton').hidden = !this.skeleton;
+	};
+
 	async _initializeSubmissionEntities() {
 		this._submissionEntities = [];
 		if (this._submissionList !== undefined) {
@@ -81,6 +150,7 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 				if (submissionLink.href) {
 					const submission = await this._getSubmissionEntity(submissionLink.href);
 					this._submissionEntities.push(submission);
+					this.skeleton = false;
 				}
 			}
 		}
@@ -175,10 +245,43 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 		return html`${itemTemplate}`;
 	}
 
+	_renderSkeleton(){
+		return html`
+			<div class="d2l-consistent-evaluation-submission-list-item-skeleton" >
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-header-title-skeleton"></div>
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-header-body-skeleton"></div>
+			</div>
+			<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-separator-skeleton"></div>
+			<div class="d2l-consistent-evaluation-submission-list-item-skeleton d2l-consistent-evaluation-list-item-submission-skeleton" >
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-image-skeleton"></div>
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-name-skeleton"></div>
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-information-skeleton"></div>
+			</div>
+			<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-separator-skeleton"></div>
+			<div class="d2l-consistent-evaluation-submission-list-item-skeleton d2l-consistent-evaluation-list-item-submission-skeleton">
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-image-skeleton"></div>
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-name-skeleton"></div>
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-information-skeleton"></div>
+			</div>
+			<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-separator-skeleton"></div>
+			<div class="d2l-consistent-evaluation-submission-list-item-skeleton">
+				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-footer-title-skeleton"></div>
+				<p class="d2l-body-compact d2l-skeletize-paragraph-2"></div>
+			</div>
+		`
+	}
+
 	render() {
-		return html`<d2l-list separators="between">
-				${this._renderListItems()}
-				</d2l-list>`;
+		return html`
+			<div id="d2l-consistent-evaluation-submission-list-view-skeleton" class="d2l-consistent-evaluation-submission-list-view-skeleton" aria-hidden="true">
+				${this._renderSkeleton()}
+			</div>
+			<div class="d2l-consistent-evaluation-submission-list-view">
+				<d2l-list separators="between">
+						${this._renderListItems()}
+				</d2l-list>
+			</div>
+		`;
 	}
 }
 
