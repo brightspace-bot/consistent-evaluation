@@ -21,8 +21,19 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 				padding-left: 0.75rem;
 				padding-right: 0.75rem;
 			}
+			.d2l-block-title-only {
+					display: none;
+			}
 			.d2l-label-text {
 				margin-bottom: 0.4rem;
+			}
+			@media(max-width: 750px) {
+				.d2l-block {
+					display: none;
+				}
+				.d2l-block-title-only {
+					display: block;
+				}
 			}
 		`];
 	}
@@ -41,6 +52,9 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 			<div class="d2l-block">
 				${this._getTitle()}
 				<slot></slot>
+			</div>
+			<div class="d2l-block-title-only">
+				${this._getTitle()}
 			</div>
 		`;
 	}
