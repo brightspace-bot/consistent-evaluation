@@ -6,7 +6,8 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 	static get properties() {
 		return {
 			url: { type: String },
-			token: { type: Object }
+			token: { type: Object },
+			_resizing: { type: Boolean, attribute: false }
 		};
 	}
 
@@ -19,21 +20,30 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 				height: calc(100% - var(--d2l-top-bar-height));
 				width: 100%;
 			}
+			iframe[data-resizing] {
+				pointer-events: none;
+			}
 		`;
 	}
 
 	constructor() {
 		super();
 
+		this._resizeStart = this._resizeStart.bind(this);
+		this._resizeEnd = this._resizeEnd.bind(this);
 		this._handleMessage = this._handleMessage.bind(this);
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
+		window.addEventListener('d2l-template-primary-secondary-resize-start', this._resizeStart);
+		window.addEventListener('d2l-template-primary-secondary-resize-end', this._resizeEnd);
 		window.addEventListener('message', this._handleMessage);
 	}
 
 	disconnectedCallback() {
+		window.removeEventListener('d2l-template-primary-secondary-resize-start', this._resizeStart);
+		window.removeEventListener('d2l-template-primary-secondary-resize-end', this._resizeEnd);
 		window.removeEventListener('message', this._handleMessage);
 		super.disconnectedCallback();
 	}
@@ -71,10 +81,18 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 		}));
 	}
 
+	_resizeStart() {
+		this._resizing = true;
+	}
+
+	_resizeEnd() {
+		this._resizing = false;
+	}
+
 	render() {
 		return html`
 			<d2l-consistent-evaluation-evidence-top-bar></d2l-consistent-evaluation-evidence-top-bar>
-			<iframe
+			<iframe ?data-resizing=${this._resizing}
 				src="${this.url}"
 				frameborder="0"
 				scrolling="no"
