@@ -16,6 +16,7 @@ import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
+import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
@@ -526,8 +527,23 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 		this._showScrollbars();
 	}
 
-	async _handleAnnotationsUpdate() {
+	async _handleAnnotationsUpdate(e) {
+		const entity = await this._controller.fetchEvaluationEntity(false);
+		const annotationsEntity = entity.getSubEntityByRel('annotations');
+		const saveAnnotationsAction = annotationsEntity.getActionByName('SaveAnnotations');
 
+		const annotationsData = e.detail;
+		const encodedAnnotationsData = {
+			FileId: this.currentFileId,
+			AnnotationsData: JSON.stringify(annotationsData)
+		};
+
+		const fields = [{
+			name: 'value',
+			value: JSON.stringify(encodedAnnotationsData)
+		}];
+
+		this.evaluationEntity = await performSirenAction(this.token, saveAnnotationsAction, fields, true);
 	}
 
 	connectedCallback() {
