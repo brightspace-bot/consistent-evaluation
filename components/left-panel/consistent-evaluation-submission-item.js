@@ -224,8 +224,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		const downloadHref = e.target.getAttribute('data-href');
 		const event = new CustomEvent('d2l-consistent-evaluation-evidence-file-download', {
 			detail: {
-				fileId: fileId,
-				action: toggleIsReadActionName
+				fileId: fileId
 			},
 			composed: true,
 			bubbles: true

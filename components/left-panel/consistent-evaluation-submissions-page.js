@@ -6,6 +6,7 @@ import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { Classes } from 'd2l-hypermedia-constants';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
+import { toggleIsReadActionName } from '../controllers/constants.js';
 
 export class ConsistentEvaluationSubmissionsPage extends LitElement {
 	static get properties() {
@@ -144,14 +145,13 @@ export class ConsistentEvaluationSubmissionsPage extends LitElement {
 
 	async _downloadAction(e) {
 		const fileId = e.detail.fileId;
-		const actionName = e.detail.action;
 
 		const attachmentEntity = this._getAttachmentEntity(fileId);
 		if (!attachmentEntity) {
 			throw new Error('Invalid entity provided for attachment');
 		}
 
-		const action = attachmentEntity.getActionByName(actionName);
+		const action = attachmentEntity.getActionByName(toggleIsReadActionName);
 		if (action.fields.some(f => f.name === 'isRead' && f.value)) {
 			// If the action value is true it means it can be called to set the IsRead value to true, otherwise it is already read and we dont want to unread it
 			await this._doSirenActionAndRefreshFileStatus(action);
