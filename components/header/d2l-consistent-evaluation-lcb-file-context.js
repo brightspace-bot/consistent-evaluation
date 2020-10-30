@@ -67,10 +67,6 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeConsist
 
 		if (changedProperties.has('submissionInfo')) {
 			this._files = await getSubmissions(this.submissionInfo, this.token);
-			this.dispatchEvent(new Event('d2l-consistent-evaluation-submission-list-ready', {
-				composed: true,
-				bubbles: true
-			}));
 		}
 
 		if ((changedProperties.has('currentFileId') || changedProperties.has('submissionInfo')) && this._files) {

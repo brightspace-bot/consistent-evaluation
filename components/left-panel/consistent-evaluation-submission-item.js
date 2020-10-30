@@ -418,22 +418,12 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		`;
 	}
 
-	_submissionLoaded() {
-		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-submission-loaded', {
-			composed: true,
-			bubbles: true
-		}));
-	}
-
 	render() {
-		let rendered;
 		if (this.submissionType === fileSubmission) {
-			rendered = html`${this._renderFileSubmission()}`;
+			return html`${this._renderFileSubmission()}`;
 		} else if (this.submissionType === textSubmission) {
-			rendered = html`${this._renderTextSubmission()}`;
+			return html`${this._renderTextSubmission()}`;
 		}
-		this._submissionLoaded();
-		return rendered;
 	}
 }
 customElements.define('d2l-consistent-evaluation-submission-item', ConsistentEvaluationSubmissionItem);

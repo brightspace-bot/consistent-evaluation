@@ -34,10 +34,6 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 		};
 	}
 
-	constructor() {
-		super();
-	}
-
 	static get styles() {
 		return [super.styles, css`
 			:host([skeleton]) .skeleton-user-profile-image {
@@ -102,29 +98,12 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 		`];
 	}
 
-	updated(changedProperties) {
-		super.updated();
-		if(changedProperties.has('userHref')){
-			this.skeleton = true;
-		}
-	};
-
 	_getIsExempt() {
 		return this.submissionInfo && this.submissionInfo.isExempt;
 	}
 
 	_getActorHref() {
 		return this.userHref ? this.userHref : this.groupHref;
-	}
-
-	handleComponentReady(e) {
-		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-loading-finished', {
-			composed: true,
-			bubbles: true,
-			detail: {
-				component: 'lcb'
-			}
-		}));
 	}
 
 	render() {
