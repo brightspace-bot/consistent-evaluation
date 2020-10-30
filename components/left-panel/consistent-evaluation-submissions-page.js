@@ -189,7 +189,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 
 	_finishedLoading(e) {
 		this.loadedSubmissions++;
-		console.log("finished " + this.expectedSubmissions);
 
 		if(this.skeleton === true && this.expectedSubmissions === this.loadedSubmissions) {
 			this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-loading-finished', {
@@ -204,13 +203,7 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 
 	_startLoading() {
 		this.loadedSubmissions = 0;
-		this.expectedSubmissions = 8;
-		console.log("expected " + this.expectedSubmissions);
-	}
-
-	updated(changedProperties){
-		super.updated();
-		console.log(changedProperties);
+		this.expectedSubmissions = this._submissionEntities.length;
 	}
 
 	async _updateSubmissionEntity(submissionEntity, submissionSelfLinkHref) {
