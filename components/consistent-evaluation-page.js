@@ -346,6 +346,18 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 		);
 	}
 
+	async _transientSaveAnnotations(e) {
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				const annotationsData = e.detail;
+				const fileId = this.currentFileId;
+
+				this.evaluationEntity = await this._controller.transientSaveAnnotations(entity, annotationsData, fileId);
+			}
+		);
+	}
+
 	async _saveEvaluation() {
 		window.dispatchEvent(new CustomEvent('d2l-flush', {
 			composed: true,
@@ -526,10 +538,6 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 		this._showScrollbars();
 	}
 
-	async _handleAnnotationsUpdate() {
-
-	}
-
 	connectedCallback() {
 		super.connectedCallback();
 		window.addEventListener('beforeunload', this.unsavedChangesHandler);
@@ -574,7 +582,7 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 						.token=${this.token}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
 						.currentFileId=${this.currentFileId}
-						@d2l-consistent-eval-annotations-update=${this._handleAnnotationsUpdate}
+						@d2l-consistent-eval-annotations-update=${this._transientSaveAnnotations}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">
