@@ -45,10 +45,10 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 				padding: 0.5rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-item-skeleton {
-				height:100%;
-				width:100%;
-				display:block;
-				margin-top:0.5rem;
+				display: block;
+				height: 100%;
+				margin-top: 0.5rem;
+				width: 100%;
 			}
 
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-view {
@@ -59,49 +59,50 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 				margin-left: 1rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-title-skeleton {
-				height: 0.65rem;
-				width: 5rem;
-				margin-bottom:0.5rem;
 				float: left;
+				height: 0.65rem;
+				margin-bottom: 0.5rem;
+				width: 5rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-body-skeleton {
-				height: 0.55rem;
-				width: 7rem;
-				margin-top:0.5rem;
 				clear: left;
+				height: 0.55rem;
+				margin-top: 0.5rem;
+				width: 7rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-footer-title-skeleton {
+				display: block;
 				height: 0.65rem;
 				width: 6rem;
-				display: block;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-image-skeleton {
+				bottom: 0.5rem;
+				display: block;
+				float: left;
 				height: 1.8rem;
 				width: 1.8rem;
-				bottom:0.5rem;
-				display: block;
-				float:left;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-name-skeleton {
-				height: 1rem;
-				width: 12rem;
-				bottom:0.5rem;
+				bottom: 0.5rem;
 				display: block;
-				margin: 0rem 0rem 0rem 0.7rem;
-				float:left;
+				float: left;
+				height: 1rem;
+				margin-left: 0.7rem;
+				width: 12rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-information-skeleton {
-				height: .8rem;
-				width: 5rem;
-				bottom:0.5rem;
+				bottom: 0.5rem;
+				clear: left;
 				display: block;
-				margin: 1rem 0rem 0rem 2.5rem;
-				clear:left;
+				height: 0.8rem;
+				margin-left: 2.5rem;
+				margin-top: 1rem;
+				width: 5rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-separator-skeleton {
 				height: 0.1rem;
-				width: 100%%;
-				margin: 0.4rem 0rem 1.0rem 0rem;
+				margin-bottom: 1rem;
+				margin-top: 0.4rem;
 			}
 			:host([skeleton]) {
 				height: 100%;
@@ -199,7 +200,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 		}));
 	}
 
-
 	async _updateSubmissionEntity(submissionEntity, submissionSelfLinkHref) {
 		for (let i = 0;i < this._submissionEntities.length; i++) {
 			const oldSubmissionEntity = await this._submissionEntities[i].entity.getLinkByRel('self');
@@ -254,7 +254,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 				}
 			}
 		}
-
 		return html`${itemTemplate}`;
 	}
 
@@ -281,7 +280,7 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-footer-title-skeleton"></div>
 				<p class="d2l-body-compact d2l-skeletize-paragraph-2"></div>
 			</div>
-		`
+		`;
 	}
 
 	render() {

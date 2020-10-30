@@ -3,7 +3,6 @@ import { css, html, LitElement } from 'lit-element';
 import { ConsistentEvaluationHrefController } from './controllers/ConsistentEvaluationHrefController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 
-
 export class ConsistentEvaluation extends LitElement {
 
 	static get properties() {
@@ -87,7 +86,7 @@ export class ConsistentEvaluation extends LitElement {
 				this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
 			}
 
-			if(!this._submissionInfo || !this._submissionInfo.submissionList) {
+			if (!this._submissionInfo || !this._submissionInfo.submissionList) {
 				this._loadingComponents.submissions = false;
 			}
 
@@ -126,25 +125,24 @@ export class ConsistentEvaluation extends LitElement {
 	}
 
 	_finishedLoading(e) {
-		if(e) {
+		if (e) {
 			this._loadingComponents[e.detail.component] = false;
 		}
 
-		for(var component in this._loadingComponents) {
-			if(this._loadingComponents[component] === true) {
+		for (const component in this._loadingComponents) {
+			if (this._loadingComponents[component] === true) {
 				return;
-			};
+			}
 		}
 		this._loading = false;
 	}
 
 	_setLoading() {
-		for(var component in this._loadingComponents) {
+		for (const component in this._loadingComponents) {
 			this._loadingComponents[component] = true;
 		}
 		this._loading = true;
 	}
-
 
 	render() {
 		return html`
