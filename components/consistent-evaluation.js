@@ -64,7 +64,7 @@ export class ConsistentEvaluation extends LitElement {
 		this.returnHrefText = undefined;
 		this._loading = true;
 		this._loadingComponents = {
-			'lcb' : true,
+			'main' : true,
 			'submissions': true
 		};
 	}
@@ -86,6 +86,13 @@ export class ConsistentEvaluation extends LitElement {
 			if (!stripped) {
 				this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
 			}
+
+			if(!this._submissionInfo || !this._submissionInfo.submissionList) {
+				this._loadingComponents.submissions = false;
+			}
+
+			this._loadingComponents.main = false;
+			this._finishedLoading();
 		}
 	}
 
@@ -119,7 +126,10 @@ export class ConsistentEvaluation extends LitElement {
 	}
 
 	_finishedLoading(e) {
-		this._loadingComponents[e.detail.component] = false;
+		if(e) {
+			this._loadingComponents[e.detail.component] = false;
+		}
+
 		for(var component in this._loadingComponents) {
 			if(this._loadingComponents[component] === true) {
 				return;

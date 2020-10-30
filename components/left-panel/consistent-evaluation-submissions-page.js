@@ -152,6 +152,8 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 					this._submissionEntities.push(submission);
 				}
 			}
+
+			this._finishedLoading();
 		}
 	}
 
@@ -187,24 +189,16 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 		return null;
 	}
 
-	_finishedLoading(e) {
-		this.loadedSubmissions++;
-
-		if(this.skeleton === true && this.expectedSubmissions === this.loadedSubmissions) {
-			this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-loading-finished', {
-				composed: true,
-				bubbles: true,
-				detail: {
-					component: 'submissions'
-				}
-			}));
-		}
+	_finishedLoading() {
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-loading-finished', {
+			composed: true,
+			bubbles: true,
+			detail: {
+				component: 'submissions'
+			}
+		}));
 	}
 
-	_startLoading() {
-		this.loadedSubmissions = 0;
-		this.expectedSubmissions = this._submissionEntities.length;
-	}
 
 	async _updateSubmissionEntity(submissionEntity, submissionSelfLinkHref) {
 		for (let i = 0;i < this._submissionEntities.length; i++) {
@@ -235,7 +229,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 	}
 
 	_renderListItems() {
-		this._startLoading();
 		const itemTemplate = [];
 		for (let i = 0; i < this._submissionEntities.length; i++) {
 			if (this._submissionEntities[i].entity) {
@@ -255,7 +248,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 							.attachments=${this._getAttachments(submissionEntity)}
 							?late=${latenessTimespan !== undefined}
 							@d2l-consistent-evaluation-evidence-toggle-action=${this._toggleAction}
-							@d2l-consistent-evaluation-submission-loaded=${this._finishedLoading}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
 					console.warn('Consistent Evaluation submission date property not found');
