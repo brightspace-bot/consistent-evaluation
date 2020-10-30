@@ -16,10 +16,11 @@ import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
+import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
-export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluation(LitElement) {
+export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeConsistentEvaluation(LitElement)) {
 
 	static get properties() {
 		return {
@@ -511,6 +512,7 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 					.token=${this.token}
 					.currentFileId=${this.currentFileId}
 					.submissionInfo=${this.submissionInfo}
+					?skeleton=${this.skeleton}
 				></d2l-consistent-evaluation-learner-context-bar>
 			`;
 		}
@@ -570,6 +572,7 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
+						?skeleton=${this.skeleton}
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}

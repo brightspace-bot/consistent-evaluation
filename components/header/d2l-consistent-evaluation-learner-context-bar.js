@@ -36,7 +36,6 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 
 	constructor() {
 		super();
-		this.skeleton = true;
 	}
 
 	static get styles() {
@@ -47,7 +46,6 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 				width: 1.8rem;
 				float: left;
 			}
-
 			:host([skeleton]) .skeleton-user-display-name {
 				display: inline;
 				height: 1rem;
@@ -56,7 +54,6 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 				margin-left: 0.5rem;
 				top: 0.4rem;
 			}
-
 			:host([skeleton]) .skeleton-submission-select {
 				display: inline;
 				height: 1rem;
@@ -65,15 +62,12 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 				margin-left: 0.5rem;
 				top: 0.4rem;
 			}
-
 			:host([skeleton]) .consistent-evaluation-learner-context-bar {
 				display:none;
 			}
-
 			.consistent-evaluation-learner-context-bar {
 				display:flex;
 			}
-
 			:host {
 				border-bottom: 0.05rem solid var(--d2l-color-gypsum);
 				display: flex;
@@ -108,6 +102,13 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 		`];
 	}
 
+	updated(changedProperties) {
+		super.updated();
+		if(changedProperties.has('userHref')){
+			this.skeleton = true;
+		}
+	};
+
 	_getIsExempt() {
 		return this.submissionInfo && this.submissionInfo.isExempt;
 	}
@@ -117,12 +118,18 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 	}
 
 	handleComponentReady(e) {
-		this.skeleton = false;
+		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-loading-finished', {
+			composed: true,
+			bubbles: true,
+			detail: {
+				component: 'lcb'
+			}
+		}));
 	}
 
 	render() {
 		return html`
-			<div class="skeleton-learner-context-bar" aria-hidden="true">
+			<div class="skeleton-learner-context-bar" aria-hidden="${!this.skeleton}">
 				<div class="skeleton-user-profile-image d2l-skeletize"></div>
 				<div class="skeleton-user-display-name d2l-skeletize"></div>
 				<div class="skeleton-submission-select d2l-skeletize"></div>
@@ -141,7 +148,7 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 					.currentFileId=${this.currentFileId}
 					.submissionInfo=${this.submissionInfo}
 				></d2l-consistent-evaluation-lcb-file-context>
-			</div>	
+			</div>
 		`;
 	}
 }

@@ -38,18 +38,23 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 				margin: 0.5rem;
 				padding: 0.5rem;
 			}
-			.d2l-consistent-evaluation-submission-list-view-skeleton {
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-view-skeleton {
 				background-color: white;
 				border-radius: 6px;
 				margin: 0.5rem;
 				padding: 0.5rem;
 			}
-			.d2l-consistent-evaluation-submission-list-item-skeleton {
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-item-skeleton {
 				height:100%;
 				width:100%;
 				display:block;
 				margin-top:0.5rem;
 			}
+
+			:host([skeleton]) .d2l-consistent-evaluation-submission-list-view {
+				display: none;
+			}
+
 			:host([skeleton]) .d2l-consistent-evaluation-list-item-submission-skeleton {
 				margin-left: 1rem;
 			}
@@ -109,7 +114,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 		this._submissionList = [];
 		this._token = undefined;
 		this._submissionEntities = [];
-		this.skeleton = true;
 	}
 
 	get submissionList() {
@@ -139,10 +143,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 		}
 	}
 
-	updated() {
-		this.shadowRoot.getElementById('d2l-consistent-evaluation-submission-list-view-skeleton').hidden = !this.skeleton;
-	};
-
 	async _initializeSubmissionEntities() {
 		this._submissionEntities = [];
 		if (this._submissionList !== undefined) {
@@ -150,7 +150,6 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 				if (submissionLink.href) {
 					const submission = await this._getSubmissionEntity(submissionLink.href);
 					this._submissionEntities.push(submission);
-					this.skeleton = false;
 				}
 			}
 		}
@@ -188,6 +187,32 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 		return null;
 	}
 
+	_finishedLoading(e) {
+		this.loadedSubmissions++;
+		console.log("finished " + this.expectedSubmissions);
+
+		if(this.skeleton === true && this.expectedSubmissions === this.loadedSubmissions) {
+			this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-loading-finished', {
+				composed: true,
+				bubbles: true,
+				detail: {
+					component: 'submissions'
+				}
+			}));
+		}
+	}
+
+	_startLoading() {
+		this.loadedSubmissions = 0;
+		this.expectedSubmissions = 8;
+		console.log("expected " + this.expectedSubmissions);
+	}
+
+	updated(changedProperties){
+		super.updated();
+		console.log(changedProperties);
+	}
+
 	async _updateSubmissionEntity(submissionEntity, submissionSelfLinkHref) {
 		for (let i = 0;i < this._submissionEntities.length; i++) {
 			const oldSubmissionEntity = await this._submissionEntities[i].entity.getLinkByRel('self');
@@ -217,6 +242,7 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 	}
 
 	_renderListItems() {
+		this._startLoading();
 		const itemTemplate = [];
 		for (let i = 0; i < this._submissionEntities.length; i++) {
 			if (this._submissionEntities[i].entity) {
@@ -236,16 +262,18 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 							.attachments=${this._getAttachments(submissionEntity)}
 							?late=${latenessTimespan !== undefined}
 							@d2l-consistent-evaluation-evidence-toggle-action=${this._toggleAction}
+							@d2l-consistent-evaluation-submission-loaded=${this._finishedLoading}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
 					console.warn('Consistent Evaluation submission date property not found');
 				}
 			}
 		}
+
 		return html`${itemTemplate}`;
 	}
 
-	_renderSkeleton(){
+	_renderSkeleton() {
 		return html`
 			<div class="d2l-consistent-evaluation-submission-list-item-skeleton" >
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-header-title-skeleton"></div>
@@ -273,7 +301,7 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 
 	render() {
 		return html`
-			<div id="d2l-consistent-evaluation-submission-list-view-skeleton" class="d2l-consistent-evaluation-submission-list-view-skeleton" aria-hidden="true">
+			<div class="d2l-consistent-evaluation-submission-list-view-skeleton" aria-hidden="${!this.skeleton}">
 				${this._renderSkeleton()}
 			</div>
 			<div class="d2l-consistent-evaluation-submission-list-view">

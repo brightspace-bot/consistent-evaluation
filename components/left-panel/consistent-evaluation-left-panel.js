@@ -9,6 +9,7 @@ import { findFile, getSubmissions } from '../helpers/submissionsAndFilesHelpers.
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 import { toggleIsReadActionName } from '../controllers/constants.js';
+import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
 function getSubmissionTypeName(type) {
 	switch (type) {
@@ -25,7 +26,7 @@ function getSubmissionTypeName(type) {
 	}
 }
 
-export class ConsistentEvaluationLeftPanel extends LocalizeConsistentEvaluation(LitElement) {
+export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsistentEvaluation(LitElement)) {
 
 	static get properties() {
 		return {
@@ -179,6 +180,7 @@ export class ConsistentEvaluationLeftPanel extends LocalizeConsistentEvaluation(
 			submission-type=${this.submissionInfo && this.submissionInfo.submissionType}
 			.submissionList=${this.submissionInfo && this.submissionInfo.submissionList}
 			.token=${this.token}
+			?skeleton=${this.skeleton}
 		></d2l-consistent-evaluation-submissions-page>`;
 	}
 
