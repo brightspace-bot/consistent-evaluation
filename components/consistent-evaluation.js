@@ -63,8 +63,8 @@ export class ConsistentEvaluation extends LitElement {
 		this.returnHrefText = undefined;
 		this._loading = true;
 		this._loadingComponents = {
-			'main' : true,
-			'submissions': true
+			main : true,
+			submissions: true
 		};
 	}
 
