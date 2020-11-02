@@ -37,23 +37,30 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 	static get styles() {
 		return [super.styles, css`
 			:host([skeleton]) .d2l-skeleton-user-profile-image {
-				float: left;
-				height: 1.8rem;
-				width: 1.8rem;
+				height: 1.5rem;
+				width: 1.5rem;
 			}
 			:host([skeleton]) .d2l-skeleton-user-display-name {
-				float: left;
 				height: 1rem;
 				margin-left: 0.5rem;
-				top: 0.4rem;
 				width: 7rem;
 			}
 			:host([skeleton]) .d2l-skeleton-submission-select {
-				float: left;
 				height: 1rem;
 				margin-left: 0.5rem;
-				top: 0.4rem;
 				width: 7rem;
+			}
+			@media (max-width: 930px) {
+				:host([skeleton]) .d2l-skeleton-submission-select {
+					display: none;
+				}
+			}
+			:host([skeleton][dir="rtl"]) .d2l-skeleton-user-display-name {
+				margin-right: 0.5rem;
+			}
+			:host([skeleton]) .d2l-skeleton-learner-context-bar {
+				align-items: center;
+				display: flex;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-learner-context-bar {
 				display: none;
@@ -92,6 +99,11 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 					padding-right: 0.9rem;
 				}
 			}
+			@media (min-width: 930px) {
+				:host {
+					min-height: 2.1rem;
+				}
+			}
 		`];
 	}
 
@@ -105,12 +117,12 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 
 	render() {
 		return html`
-			<div class="d2l-skeleton-learner-context-bar" aria-hidden="${!this.skeleton}">
+			<div class="d2l-skeleton-learner-context-bar" aria-hidden="${!this.skeleton}" aria-busy="${this.skeleton}">
 				<div class="d2l-skeleton-user-profile-image d2l-skeletize"></div>
 				<div class="d2l-skeleton-user-display-name d2l-skeletize"></div>
 				<div class="d2l-skeleton-submission-select d2l-skeletize"></div>
 			</div>
-			<div class="d2l-consistent-evaluation-learner-context-bar">
+			<div class="d2l-consistent-evaluation-learner-context-bar" aria-hidden="${this.skeleton}">
 				<d2l-consistent-evaluation-lcb-user-context
 					.href=${this._getActorHref()}
 					.token=${this.token}

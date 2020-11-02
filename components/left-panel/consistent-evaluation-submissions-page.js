@@ -6,9 +6,10 @@ import './consistent-evaluation-submission-item.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
 import { Classes } from 'd2l-hypermedia-constants';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
+import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
-export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElement) {
+export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(LitElement)) {
 	static get properties() {
 		return {
 			submissionList: {
@@ -50,54 +51,57 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 				margin-top: 0.5rem;
 				width: 100%;
 			}
-
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-view {
 				display: none;
 			}
-
 			:host([skeleton]) .d2l-consistent-evaluation-list-item-submission-skeleton {
+				display: flex;
+				flex-flow: row wrap;
 				margin-left: 1rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-title-skeleton {
-				float: left;
 				height: 0.65rem;
 				margin-bottom: 0.5rem;
 				width: 5rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-body-skeleton {
-				clear: left;
 				height: 0.55rem;
 				margin-top: 0.5rem;
 				width: 7rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-footer-title-skeleton {
-				display: block;
 				height: 0.65rem;
 				width: 6rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-image-skeleton {
 				bottom: 0.5rem;
-				display: block;
-				float: left;
 				height: 1.8rem;
 				width: 1.8rem;
 			}
+			:host([skeleton][dir="rtl"]) .d2l-consistent-evaluation-submission-list-file-image-skeleton {
+				margin-left: 0.7rem;
+			}
+			:host([skeleton][dir="rtl"]) .d2l-consistent-evaluation-list-item-submission-skeleton {
+				margin-right: 1rem;
+			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-name-skeleton {
 				bottom: 0.5rem;
-				display: block;
-				float: left;
 				height: 1rem;
 				margin-left: 0.7rem;
 				width: 12rem;
 			}
+			.d2l-consistent-evaluation-list-item-submission-skeleton > br {
+				content: '';
+				width: 100%;
+			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-file-information-skeleton {
 				bottom: 0.5rem;
-				clear: left;
-				display: block;
 				height: 0.8rem;
 				margin-left: 2.5rem;
-				margin-top: 1rem;
 				width: 5rem;
+			}
+			:host([skeleton][dir="rtl"]) .d2l-consistent-evaluation-submission-list-file-information-skeleton {
+				margin-right: 2.5rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-separator-skeleton {
 				height: 0.1rem;
@@ -267,12 +271,14 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 			<div class="d2l-consistent-evaluation-submission-list-item-skeleton d2l-consistent-evaluation-list-item-submission-skeleton" >
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-image-skeleton"></div>
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-name-skeleton"></div>
+				<br />
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-information-skeleton"></div>
 			</div>
 			<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-separator-skeleton"></div>
 			<div class="d2l-consistent-evaluation-submission-list-item-skeleton d2l-consistent-evaluation-list-item-submission-skeleton">
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-image-skeleton"></div>
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-name-skeleton"></div>
+				<br />
 				<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-file-information-skeleton"></div>
 			</div>
 			<div class="d2l-skeletize d2l-consistent-evaluation-submission-list-separator-skeleton"></div>
@@ -285,10 +291,10 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(LitElemen
 
 	render() {
 		return html`
-			<div class="d2l-consistent-evaluation-submission-list-view-skeleton" aria-hidden="${!this.skeleton}">
+			<div class="d2l-consistent-evaluation-submission-list-view-skeleton" aria-hidden="${!this.skeleton}" aria-busy="${this.skeleton}">
 				${this._renderSkeleton()}
 			</div>
-			<div class="d2l-consistent-evaluation-submission-list-view">
+			<div class="d2l-consistent-evaluation-submission-list-view" aria-hidden="${this.skeleton}">
 				<d2l-list separators="between">
 						${this._renderListItems()}
 				</d2l-list>
