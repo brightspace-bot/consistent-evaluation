@@ -16,10 +16,11 @@ import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
+import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 
-export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluation(LitElement) {
+export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeConsistentEvaluation(LitElement)) {
 
 	static get properties() {
 		return {
@@ -346,6 +347,18 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 		);
 	}
 
+	async _transientSaveAnnotations(e) {
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				const annotationsData = e.detail;
+				const fileId = this.currentFileId;
+
+				this.evaluationEntity = await this._controller.transientSaveAnnotations(entity, annotationsData, fileId);
+			}
+		);
+	}
+
 	async _saveEvaluation() {
 		window.dispatchEvent(new CustomEvent('d2l-flush', {
 			composed: true,
@@ -511,6 +524,7 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 					.token=${this.token}
 					.currentFileId=${this.currentFileId}
 					.submissionInfo=${this.submissionInfo}
+					?skeleton=${this.skeleton}
 				></d2l-consistent-evaluation-learner-context-bar>
 			`;
 		}
@@ -524,10 +538,6 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 	_setSubmissionsView() {
 		this.currentFileId = undefined;
 		this._showScrollbars();
-	}
-
-	async _handleAnnotationsUpdate() {
-
 	}
 
 	connectedCallback() {
@@ -570,11 +580,12 @@ export default class ConsistentEvaluationPage extends LocalizeConsistentEvaluati
 				</div>
 				<div slot="primary" class="d2l-consistent-evaluation-page-primary-slot">
 					<d2l-consistent-evaluation-left-panel
+						?skeleton=${this.skeleton}
 						.submissionInfo=${this.submissionInfo}
 						.token=${this.token}
 						user-progress-outcome-href=${ifDefined(this.userProgressOutcomeHref)}
 						.currentFileId=${this.currentFileId}
-						@d2l-consistent-eval-annotations-update=${this._handleAnnotationsUpdate}
+						@d2l-consistent-eval-annotations-update=${this._transientSaveAnnotations}
 					></d2l-consistent-evaluation-left-panel>
 				</div>
 				<div slot="secondary">

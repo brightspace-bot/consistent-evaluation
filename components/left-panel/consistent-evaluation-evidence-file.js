@@ -1,5 +1,7 @@
 import './consistent-evaluation-evidence-top-bar.js';
 import { css, html, LitElement } from 'lit-element';
+import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
 export class ConsistentEvaluationEvidenceFile extends LitElement {
 
@@ -32,6 +34,9 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 		this._resizeStart = this._resizeStart.bind(this);
 		this._resizeEnd = this._resizeEnd.bind(this);
 		this._handleMessage = this._handleMessage.bind(this);
+		this.flush = this.flush.bind(this);
+
+		this._debounceJobs = {};
 	}
 
 	connectedCallback() {
@@ -39,12 +44,14 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 		window.addEventListener('d2l-template-primary-secondary-resize-start', this._resizeStart);
 		window.addEventListener('d2l-template-primary-secondary-resize-end', this._resizeEnd);
 		window.addEventListener('message', this._handleMessage);
+		window.addEventListener('d2l-flush', this.flush);
 	}
 
 	disconnectedCallback() {
 		window.removeEventListener('d2l-template-primary-secondary-resize-start', this._resizeStart);
 		window.removeEventListener('d2l-template-primary-secondary-resize-end', this._resizeEnd);
 		window.removeEventListener('message', this._handleMessage);
+		window.removeEventListener('d2l-flush', this.flush);
 		super.disconnectedCallback();
 	}
 
@@ -74,11 +81,21 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 	}
 
 	_handleAnnotationsUpdate(e) {
-		this.dispatchEvent(new CustomEvent('d2l-consistent-eval-annotations-update', {
-			composed: true,
-			bubbles: true,
-			detail: e.data.value
-		}));
+		this._debounceJobs.annotations = Debouncer.debounce(
+			this._debounceJobs.annotations,
+			timeOut.after(1000),
+			() => this.dispatchEvent(new CustomEvent('d2l-consistent-eval-annotations-update', {
+				composed: true,
+				bubbles: true,
+				detail: e.data.value
+			}))
+		);
+	}
+
+	flush() {
+		if (this._debounceJobs.annotations && this._debounceJobs.annotations.isActive()) {
+			this._debounceJobs.annotations.flush();
+		}
 	}
 
 	_resizeStart() {
