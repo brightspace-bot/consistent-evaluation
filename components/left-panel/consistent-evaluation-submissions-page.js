@@ -8,6 +8,7 @@ import { Classes } from 'd2l-hypermedia-constants';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin.js';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
+import { toggleIsReadActionName } from '../controllers/constants.js';
 
 export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(LitElement)) {
 	static get properties() {
@@ -225,8 +226,26 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(
 		}
 
 		const action = attachmentEntity.getActionByName(actionName);
-		const newSubmissionEntity = await performSirenAction(this.token, action, undefined, true);
+		await this._doSirenActionAndRefreshFileStatus(action);
+	}
 
+	async _downloadAction(e) {
+		const fileId = e.detail.fileId;
+
+		const attachmentEntity = this._getAttachmentEntity(fileId);
+		if (!attachmentEntity) {
+			throw new Error('Invalid entity provided for attachment');
+		}
+
+		const action = attachmentEntity.getActionByName(toggleIsReadActionName);
+		if (action.fields.some(f => f.name === 'isRead' && f.value)) {
+			// If the action value is true it means it can be called to set the IsRead value to true, otherwise it is already read and we dont want to unread it
+			await this._doSirenActionAndRefreshFileStatus(action);
+		}
+	}
+
+	async _doSirenActionAndRefreshFileStatus(action) {
+		const newSubmissionEntity = await performSirenAction(this.token, action, undefined, true);
 		const submissionSelfLink = newSubmissionEntity.getLinkByRel('self');
 		await this._updateSubmissionEntity(newSubmissionEntity, submissionSelfLink.href) ;
 		await this.requestUpdate();
@@ -241,10 +260,11 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(
 					const submissionDate = submissionEntity.getSubEntityByClass(Classes.assignments.submissionDate).properties.date;
 					const evaluationState = submissionEntity.properties.evaluationStatus;
 					const latenessTimespan = submissionEntity.properties.lateTimeSpan;
+					const submissionNumber = submissionEntity.properties.submissionNumber;
 					itemTemplate.push(html`
 						<d2l-consistent-evaluation-submission-item
 							date-str=${submissionDate}
-							display-number=${this._submissionEntities.length - i}
+							display-number=${submissionNumber}
 							evaluation-state=${evaluationState}
 							lateness=${moment.duration(Number(latenessTimespan), 'seconds').humanize()}
 							submission-type=${this.submissionType}
@@ -252,6 +272,7 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(
 							.attachments=${this._getAttachments(submissionEntity)}
 							?late=${latenessTimespan !== undefined}
 							@d2l-consistent-evaluation-evidence-toggle-action=${this._toggleAction}
+							@d2l-consistent-evaluation-evidence-file-download=${this._downloadAction}
 						></d2l-consistent-evaluation-submission-item>`);
 				} else {
 					console.warn('Consistent Evaluation submission date property not found');
