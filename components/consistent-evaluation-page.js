@@ -220,7 +220,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	get _feedbackText() {
 		if (this._feedbackEntity && this._feedbackEntity.properties) {
-			return this._feedbackEntity.properties.text || '';
+			return this._feedbackEntity.properties.html || '';
 		}
 		return undefined;
 	}
