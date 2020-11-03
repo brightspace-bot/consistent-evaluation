@@ -196,6 +196,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		const oldVal = this.evaluationEntity;
 		if (oldVal !== entity) {
 			this._evaluationEntity = entity;
+			this.attachmentsHref = this._controller.getAttachmentsHref(this.evaluationEntity);
 			this.requestUpdate();
 		}
 	}
