@@ -9,13 +9,14 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/button/button.js';
+import { attachmentsRel, draftState, publishActionName, publishedState, retractActionName, saveActionName, updateActionName } from './controllers/constants.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
+import { Rels } from 'd2l-hypermedia-constants';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
@@ -47,14 +48,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			specialAccessHref: {
 				attribute: 'special-access-href',
 				type: String
-			},
-			richTextEditorDisabled: {
-				attribute: 'rich-text-editor-disabled',
-				type: Boolean
-			},
-			richtextEditorConfig: {
-				attribute: false,
-				type: Object
 			},
 			rubricAssessmentHref: {
 				attribute: 'rubric-assessment-href',
@@ -184,7 +177,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._dialogOpened = false;
 		this.allowEvaluationWrite = false;
 		this.allowEvaluationDelete = false;
-		this.attachmentsHref = null;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
 	}
 
@@ -196,7 +188,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		const oldVal = this.evaluationEntity;
 		if (oldVal !== entity) {
 			this._evaluationEntity = entity;
-			this.attachmentsHref = this._controller.getAttachmentsHref(this.evaluationEntity);
 			this.requestUpdate();
 		}
 	}
@@ -275,10 +266,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 		this.evaluationState = this.evaluationEntity.properties.state;
-		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
-		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
-		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
-		this.attachmentsHref = this._controller.getAttachmentsHref(this.evaluationEntity);
 	}
 
 	_noFeedbackComponent() {
@@ -558,6 +545,44 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		}));
 	}
 
+	_getAttachmentsLink() {
+		if (!this.evaluationEntity || !this.evaluationEntity.hasLinkByRel(attachmentsRel)) {
+			return null;
+		}
+
+		return this.evaluationEntity.getLinkByRel(attachmentsRel).href;
+	}
+
+	_allowEvaluationWrite() {
+		if (!this.evaluationEntity) {
+			return null;
+		}
+
+		const hasWritePermission = (this.evaluationEntity.hasActionByName(saveActionName) && this.evaluationEntity.hasActionByName(publishActionName)) ||
+			this.evaluationEntity.hasActionByName(updateActionName);
+
+		return hasWritePermission;
+	}
+
+	_allowEvaluationDelete() {
+		if (!this.evaluationEntity) {
+			return null;
+		}
+
+		return this.evaluationEntity.hasActionByName(retractActionName);
+	}
+
+	_getRichTextEditorConfig() {
+		if (this.evaluationEntity &&
+			this.evaluationEntity.getSubEntityByRel('feedback') &&
+			this.evaluationEntity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig)
+		) {
+			return this.evaluationEntity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig).properties;
+		}
+
+		return null;
+	}
+
 	render() {
 		return html`
 			<d2l-template-primary-secondary
@@ -597,19 +622,18 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
 						outcomes-href=${ifDefined(this.outcomesHref)}
 						coa-eval-override-href=${ifDefined(this.coaDemonstrationHref)}
-						attachments-href=${ifDefined(this.attachmentsHref)}
-						.richTextEditorConfig=${this.richtextEditorConfig}
+						attachments-href=${ifDefined(this._getAttachmentsLink())}
+						.richTextEditorConfig=${this._getRichTextEditorConfig()}
 						.grade=${this._grade}
 						.gradeItemInfo=${this.gradeItemInfo}
 						.token=${this.token}
 						?rubric-read-only=${this.rubricReadOnly}
-						?rich-text-editor-disabled=${this.richTextEditorDisabled}
 						?hide-rubric=${this.rubricHref === undefined}
 						?hide-grade=${this._noGradeComponent()}
 						?hide-outcomes=${this.outcomesHref === undefined}
 						?hide-feedback=${this._noFeedbackComponent()}
 						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
-						?allow-evaluation-write=${this.allowEvaluationWrite}
+						?allow-evaluation-write=${this._allowEvaluationWrite()}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
 					></consistent-evaluation-right-panel>
@@ -619,8 +643,8 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					<d2l-consistent-evaluation-footer-presentational
 						?show-next-student=${this.nextStudentHref}
 						?published=${this._isEvaluationPublished()}
-						?allow-evaluation-write=${this.allowEvaluationWrite}
-						?allow-evaluation-delete=${this.allowEvaluationDelete}
+						?allow-evaluation-write=${this._allowEvaluationWrite()}
+						?allow-evaluation-delete=${this._allowEvaluationDelete()}
 						@d2l-consistent-evaluation-on-publish=${this._publishEvaluation}
 						@d2l-consistent-evaluation-on-save-draft=${this._saveEvaluation}
 						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}

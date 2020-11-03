@@ -55,10 +55,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 				attribute: 'outcomes-href',
 				type: String
 			},
-			richTextEditorDisabled: {
-				attribute: 'rich-text-editor-disabled',
-				type: Boolean
-			},
 			richtextEditorConfig: {
 				attribute: false,
 				type: Object
