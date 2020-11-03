@@ -175,8 +175,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._scrollbarStatus = 'default';
 		this._mutex = new Awaiter();
 		this._dialogOpened = false;
-		this.allowEvaluationWrite = false;
-		this.allowEvaluationDelete = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
 	}
 
@@ -407,7 +405,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					this._showToast(this.localize('publishError'));
 				}
 				this.submissionInfo.evaluationState = publishedState;
-				this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 			}
 		);
 	}
@@ -430,7 +427,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				}
 				this.evaluationState = this.evaluationEntity.properties.state;
 				this.submissionInfo.evaluationState = draftState;
-				this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 			}
 		);
 	}
