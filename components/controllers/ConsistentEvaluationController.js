@@ -1,8 +1,7 @@
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
-import { attachmentsRel, publishActionName, retractActionName, saveActionName, saveFeedbackActionName, saveFeedbackFieldName, saveGradeActionName, saveGradeFieldName, updateActionName } from './constants.js';
+import { publishActionName, retractActionName, saveActionName, saveFeedbackActionName, saveFeedbackFieldName, saveGradeActionName, saveGradeFieldName, updateActionName } from './constants.js';
 import { Grade } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { performSirenAction } from 'siren-sdk/src/es6/SirenAction.js';
-import { Rels } from 'd2l-hypermedia-constants';
 
 export const ConsistentEvaluationControllerErrors = {
 	INVALID_EVALUATION_HREF: 'evaluationHref was not defined when initializing ConsistentEvaluationController',
@@ -157,48 +156,5 @@ export class ConsistentEvaluationController {
 		}
 
 		return await this._performAction(evaluationEntity, retractActionName);
-	}
-
-	getAttachmentsHref(entity) {
-		if (!entity) {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
-		}
-
-		if (!entity.hasLinkByRel(attachmentsRel)) {
-			return null;
-		}
-
-		return entity.getLinkByRel(attachmentsRel).href;
-	}
-
-	getRichTextEditorConfig(entity) {
-		if (!entity) {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
-		}
-
-		if (entity.getSubEntityByRel('feedback') && entity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig)) {
-			return entity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig).properties;
-		}
-
-		return null;
-	}
-
-	userHasWritePermission(entity) {
-		if (!entity) {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
-		}
-
-		const hasWritePermission = (entity.hasActionByName(saveActionName) && entity.hasActionByName(publishActionName)) ||
-			entity.hasActionByName(updateActionName);
-
-		return hasWritePermission;
-	}
-
-	userHasDeletePermission(entity) {
-		if (!entity) {
-			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
-		}
-
-		return entity.hasActionByName(retractActionName);
 	}
 }
