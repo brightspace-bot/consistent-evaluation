@@ -127,6 +127,12 @@ export class ConsistentEvaluationController {
 		return await performSirenAction(this.token, saveAnnotationsAction, fields, true);
 	}
 
+	async transientDiscardAnnotations(evaluationEntity) {
+		const annotationsEntity = evaluationEntity.getSubEntityByRel('annotations');
+
+		return await this._performAction(annotationsEntity, 'RemoveAnnotations', 'value', '');
+	}
+
 	async save(evaluationEntity) {
 		if (!evaluationEntity) {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
