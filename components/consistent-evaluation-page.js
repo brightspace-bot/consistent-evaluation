@@ -357,7 +357,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
 				const feedbackEntity = entity.getSubEntityByRel('feedback');
-				const feedbackVal = feedbackEntity.properties.text;
+				const feedbackVal = feedbackEntity.properties.html;
 				this.evaluationEntity = await this._controller.transientSaveFeedback(entity, feedbackVal);
 			}
 		);
