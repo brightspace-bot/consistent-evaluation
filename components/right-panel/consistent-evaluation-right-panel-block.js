@@ -4,7 +4,9 @@ import '@brightspace-ui/core/components/list/list-item-content.js';
 import '@brightspace-ui/core/components/dialog/dialog-fullscreen.js';
 
 import { css, html, LitElement } from 'lit-element';
-import { heading4Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
+
+const MOBILE_WINDOW_THRESHHOLD = 768;
 
 class ConsistentEvaluationRightPanelBlock extends LitElement {
 	static get properties() {
@@ -29,14 +31,14 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	static get styles() {
-		return [labelStyles, heading4Styles, css`
+		return [labelStyles, css`
 			.d2l-block {
 				margin-top: 1.35rem;
 				padding-left: 0.75rem;
 				padding-right: 0.75rem;
 			}
 			.d2l-label-text {
-				margin-bottom: 0.0rem;
+				margin-bottom: 0 rem;
 			}
 			.d2l-list-item {
 				padding-left: 0.75rem;
@@ -49,12 +51,12 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		super();
 		this._dialogOpened = false;
 		this.noTitle = false;
-		this._isMobile = (window.innerWidth <= 768);
+		this._isMobile = (window.innerWidth <= MOBILE_WINDOW_THRESHHOLD);
 		window.addEventListener('resize', this._handleResize.bind(this));
 	}
 
 	_handleResize() {
-		this._isMobile = (window.innerWidth <= 768);
+		this._isMobile = (window.innerWidth <= MOBILE_WINDOW_THRESHHOLD);
 		if (!this._isMobile && this._dialogOpened) {
 			this._toggleOpenDialog();
 		}
