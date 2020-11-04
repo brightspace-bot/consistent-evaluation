@@ -7,6 +7,10 @@ export class ConsistentEvaluation extends LitElement {
 
 	static get properties() {
 		return {
+			_loading: {
+				type: Boolean,
+				attribute: false
+			},
 			href: { type: String },
 			token: { type: Object },
 			returnHref: {
@@ -57,6 +61,11 @@ export class ConsistentEvaluation extends LitElement {
 		this._gradeItemInfo = undefined;
 		this.returnHref = undefined;
 		this.returnHrefText = undefined;
+		this._loading = true;
+		this._loadingComponents = {
+			main : true,
+			submissions: true
+		};
 	}
 
 	async updated(changedProperties) {
@@ -76,6 +85,13 @@ export class ConsistentEvaluation extends LitElement {
 			if (!stripped) {
 				this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
 			}
+
+			if (!this._submissionInfo || !this._submissionInfo.submissionList) {
+				this._loadingComponents.submissions = false;
+			}
+
+			this._loadingComponents.main = false;
+			this._finishedLoading();
 		}
 	}
 
@@ -96,19 +112,42 @@ export class ConsistentEvaluation extends LitElement {
 
 	_onNextStudentClick() {
 		this.href = this._childHrefs?.nextHref;
+		this._setLoading();
 	}
 
 	_onPreviousStudentClick() {
 		this.href = this._childHrefs?.previousHref;
+		this._setLoading();
 	}
 
 	_shouldHideLearnerContextBar() {
 		return this._childHrefs && this._childHrefs.userProgressOutcomeHref;
 	}
 
+	_finishedLoading(e) {
+		if (e) {
+			this._loadingComponents[e.detail.component] = false;
+		}
+
+		for (const component in this._loadingComponents) {
+			if (this._loadingComponents[component] === true) {
+				return;
+			}
+		}
+		this._loading = false;
+	}
+
+	_setLoading() {
+		for (const component in this._loadingComponents) {
+			this._loadingComponents[component] = true;
+		}
+		this._loading = true;
+	}
+
 	render() {
 		return html`
 			<d2l-consistent-evaluation-page
+				?skeleton=${this._loading}
 				rubric-href=${ifDefined(this._childHrefs && this._childHrefs.rubricHref)}
 				rubric-assessment-href=${ifDefined(this._childHrefs && this._childHrefs.rubricAssessmentHref)}
 				outcomes-href=${ifDefined(this._childHrefs && this._childHrefs.alignmentsHref)}
@@ -135,6 +174,7 @@ export class ConsistentEvaluation extends LitElement {
 				?hide-learner-context-bar=${this._shouldHideLearnerContextBar()}
 				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
 				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
+				@d2l-consistent-evaluation-loading-finished=${this._finishedLoading}
 			></d2l-consistent-evaluation-page>
 		`;
 	}

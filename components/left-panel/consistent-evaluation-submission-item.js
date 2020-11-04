@@ -219,6 +219,21 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		this.dispatchEvent(event);
 	}
 
+	_dispatchDownloadEvent(e) {
+		const fileId = e.target.getAttribute('data-key');
+		const downloadHref = e.target.getAttribute('data-href');
+		const event = new CustomEvent('d2l-consistent-evaluation-evidence-file-download', {
+			detail: {
+				fileId: fileId
+			},
+			composed: true,
+			bubbles: true
+		});
+		this.dispatchEvent(event);
+
+		window.location = downloadHref;
+	}
+
 	_formatDateTime() {
 		const date = this.dateStr ? new Date(this.dateStr) : undefined;
 
@@ -370,7 +385,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 							@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchFileSelectedEvent(id)}"></d2l-menu-item-link>` : null}
-					<d2l-menu-item-link text="${this.localize('download')}" href="${downloadHref}"></d2l-menu-item-link>
+					<d2l-menu-item text="${this.localize('download')}" data-key="${id}" data-href="${downloadHref}" @d2l-menu-item-select="${this._dispatchDownloadEvent}"></d2l-menu-item>
 					<d2l-menu-item text="${oppositeReadState}" data-action="${toggleIsReadActionName}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleEvent}"></d2l-menu-item>
 					<d2l-menu-item text="${oppositeFlagState}" data-action="${toggleFlagActionName}" data-key="${id}" @d2l-menu-item-select="${this._dispatchToggleEvent}"></d2l-menu-item>
 				</d2l-menu>

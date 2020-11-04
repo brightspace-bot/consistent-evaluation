@@ -1,12 +1,15 @@
 import './consistent-evaluation-evidence-top-bar.js';
 import { css, html, LitElement } from 'lit-element';
+import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
 export class ConsistentEvaluationEvidenceFile extends LitElement {
 
 	static get properties() {
 		return {
 			url: { type: String },
-			token: { type: Object }
+			token: { type: Object },
+			_resizing: { type: Boolean, attribute: false }
 		};
 	}
 
@@ -19,22 +22,36 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 				height: calc(100% - var(--d2l-top-bar-height));
 				width: 100%;
 			}
+			iframe[data-resizing] {
+				pointer-events: none;
+			}
 		`;
 	}
 
 	constructor() {
 		super();
 
+		this._resizeStart = this._resizeStart.bind(this);
+		this._resizeEnd = this._resizeEnd.bind(this);
 		this._handleMessage = this._handleMessage.bind(this);
+		this.flush = this.flush.bind(this);
+
+		this._debounceJobs = {};
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
+		window.addEventListener('d2l-template-primary-secondary-resize-start', this._resizeStart);
+		window.addEventListener('d2l-template-primary-secondary-resize-end', this._resizeEnd);
 		window.addEventListener('message', this._handleMessage);
+		window.addEventListener('d2l-flush', this.flush);
 	}
 
 	disconnectedCallback() {
+		window.removeEventListener('d2l-template-primary-secondary-resize-start', this._resizeStart);
+		window.removeEventListener('d2l-template-primary-secondary-resize-end', this._resizeEnd);
 		window.removeEventListener('message', this._handleMessage);
+		window.removeEventListener('d2l-flush', this.flush);
 		super.disconnectedCallback();
 	}
 
@@ -64,17 +81,35 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 	}
 
 	_handleAnnotationsUpdate(e) {
-		this.dispatchEvent(new CustomEvent('d2l-consistent-eval-annotations-update', {
-			composed: true,
-			bubbles: true,
-			detail: e.data.value
-		}));
+		this._debounceJobs.annotations = Debouncer.debounce(
+			this._debounceJobs.annotations,
+			timeOut.after(1000),
+			() => this.dispatchEvent(new CustomEvent('d2l-consistent-eval-annotations-update', {
+				composed: true,
+				bubbles: true,
+				detail: e.data.value
+			}))
+		);
+	}
+
+	flush() {
+		if (this._debounceJobs.annotations && this._debounceJobs.annotations.isActive()) {
+			this._debounceJobs.annotations.flush();
+		}
+	}
+
+	_resizeStart() {
+		this._resizing = true;
+	}
+
+	_resizeEnd() {
+		this._resizing = false;
 	}
 
 	render() {
 		return html`
 			<d2l-consistent-evaluation-evidence-top-bar></d2l-consistent-evaluation-evidence-top-bar>
-			<iframe
+			<iframe ?data-resizing=${this._resizing}
 				src="${this.url}"
 				frameborder="0"
 				scrolling="no"
