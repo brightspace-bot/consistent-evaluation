@@ -164,7 +164,7 @@ export class ConsistentEvaluationController {
 			return;
 		}
 
-		const sirenActions = Object.values(saveActions).map(async (action) => {
+		const sirenActions = Object.values(saveActions).map(async(action) => {
 			if (action) {
 				return this._performSirenAction(action);
 			}
