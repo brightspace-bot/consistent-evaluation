@@ -543,7 +543,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	_getAttachmentsLink() {
 		if (!this.evaluationEntity || !this.evaluationEntity.hasLinkByRel(attachmentsRel)) {
-			return null;
+			return undefined;
 		}
 
 		return this.evaluationEntity.getLinkByRel(attachmentsRel).href;
@@ -551,7 +551,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	_allowEvaluationWrite() {
 		if (!this.evaluationEntity) {
-			return null;
+			return undefined;
 		}
 
 		const hasWritePermission = (this.evaluationEntity.hasActionByName(saveActionName) && this.evaluationEntity.hasActionByName(publishActionName)) ||
@@ -562,7 +562,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	_allowEvaluationDelete() {
 		if (!this.evaluationEntity) {
-			return null;
+			return undefined;
 		}
 
 		return this.evaluationEntity.hasActionByName(retractActionName);
@@ -576,7 +576,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			return this.evaluationEntity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig).properties;
 		}
 
-		return null;
+		return undefined;
 	}
 
 	render() {
