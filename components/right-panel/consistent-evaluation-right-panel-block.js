@@ -51,6 +51,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		super();
 		this._dialogOpened = false;
 		this.noTitle = false;
+		this.supportingInfo = undefined;
 		this._isMobile = (window.innerWidth <= MOBILE_WINDOW_THRESHHOLD);
 		window.addEventListener('resize', this._handleResize.bind(this));
 	}
@@ -76,7 +77,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 				@click=${this._toggleOpenDialog}>
 				<d2l-list-item-content class="no-border">
 					${this._getTitle()}
-					<div slot="supporting-info"> supporting info for ${this.title}</div>
+					<div slot="supporting-info">${this.supportingInfo}</div>
 				</d2l-list-item-content>
 			</d2l-list-item>
 		`;
