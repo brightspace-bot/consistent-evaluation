@@ -112,7 +112,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 	}
 
 	render() {
-		if (this.href && this.token) {
+		if (this.href && this.token && this.richTextEditorConfig) {
 			const attachments = this.attachmentsHref !== null
 				? html`
 					<div>

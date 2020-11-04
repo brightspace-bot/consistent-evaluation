@@ -22,7 +22,6 @@ export class ConsistentEvaluation extends LitElement {
 				type: String
 			},
 			_rubricReadOnly: { type: Boolean },
-			_richTextEditorDisabled: { type: Boolean },
 			_childHrefs: { type: Object },
 			_submissionInfo: { type: Object },
 			_gradeItemInfo: { type: Object },
@@ -170,7 +169,6 @@ export class ConsistentEvaluation extends LitElement {
 				.iteratorIndex=${this._iteratorIndex}
 				.token=${this.token}
 				?rubric-read-only=${this._rubricReadOnly}
-				?rich-text-editor-disabled=${this._richTextEditorDisabled}
 				?hide-learner-context-bar=${this._shouldHideLearnerContextBar()}
 				@d2l-consistent-evaluation-previous-student-click=${this._onPreviousStudentClick}
 				@d2l-consistent-evaluation-next-student-click=${this._onNextStudentClick}
