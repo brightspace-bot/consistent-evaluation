@@ -159,6 +159,20 @@ export class ConsistentEvaluationController {
 		return await this._performAction(evaluationEntity, retractActionName);
 	}
 
+	async performSaveActions(saveActions) {
+		if (!saveActions) {
+			return;
+		}
+
+		const sirenActions = Object.values(saveActions).map(async (action) => {
+			if (action) {
+				return this._performSirenAction(action);
+			}
+		});
+
+		return await Promise.all(sirenActions);
+	}
+
 	getAttachmentsHref(entity) {
 		if (!entity) {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
