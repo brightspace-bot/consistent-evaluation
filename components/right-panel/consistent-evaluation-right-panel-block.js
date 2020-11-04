@@ -1,4 +1,3 @@
-import '@brightspace-ui/core/components/colors/colors.js';
 import '@brightspace-ui/core/components/list/list-item.js';
 import '@brightspace-ui/core/components/list/list-item-content.js';
 import '@brightspace-ui/core/components/dialog/dialog-fullscreen.js';
@@ -51,7 +50,6 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		super();
 		this._dialogOpened = false;
 		this.noTitle = false;
-		this.supportingInfo = undefined;
 		this._isMobile = (window.innerWidth <= MOBILE_WINDOW_THRESHHOLD);
 		window.addEventListener('resize', this._handleResize.bind(this));
 	}
@@ -87,8 +85,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		if (this._isMobile) {
 			return html`
 				${this._renderListItems()}
-				<d2l-dialog-fullscreen ?opened=${this._dialogOpened} title-text=${this.title}
-				@d2l-dialog-close=${this._onListItemClick}>
+				<d2l-dialog-fullscreen ?opened=${this._dialogOpened} title-text=${this.title}>
 					<slot></slot>
 				</d2l-dialog-fullscreen>
 			`;
