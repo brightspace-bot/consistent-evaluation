@@ -224,7 +224,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	get _feedbackText() {
 		if (this._feedbackEntity && this._feedbackEntity.properties) {
-			return this._feedbackEntity.properties.html || '';
+			return this._feedbackEntity.properties.html || this._feedbackEntity.properties.text || '';
 		}
 		return undefined;
 	}
@@ -352,13 +352,11 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	async _transientSaveCoaEvalOverride(e) {
 		const action = e.detail.action;
 		this._pendingSaveActions.coaEvalOverride = action.name === 'select' ? e.detail.action : undefined;
-		// Call transientSaveFeedback for the evaluation to be unsaved
+		// Call transientSaveFeedback to 'unsave' the evaluation
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
-				const feedbackEntity = entity.getSubEntityByRel('feedback');
-				const feedbackVal = feedbackEntity.properties.html;
-				this.evaluationEntity = await this._controller.transientSaveFeedback(entity, feedbackVal);
+				this.evaluationEntity = await this._controller.transientSaveFeedback(entity, this._feedbackText);
 			}
 		);
 	}
