@@ -35,7 +35,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 				padding-right: 0.75rem;
 			}
 			.d2l-label-text {
-				margin-bottom: 0 rem;
+				margin-bottom: 0.4rem;
 			}
 			.d2l-list-item {
 				padding-left: 0.75rem;
