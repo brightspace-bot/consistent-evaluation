@@ -5,8 +5,6 @@ import '@brightspace-ui/core/components/dialog/dialog-fullscreen.js';
 import { css, html, LitElement } from 'lit-element';
 import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 
-const MOBILE_WINDOW_THRESHHOLD = 768;
-
 class ConsistentEvaluationRightPanelBlock extends LitElement {
 	static get properties() {
 		return {
@@ -50,13 +48,26 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		super();
 		this._dialogOpened = false;
 		this.noTitle = false;
-		this._isMobile = (window.innerWidth <= MOBILE_WINDOW_THRESHHOLD);
-		window.addEventListener('resize', this._handleResize.bind(this));
+		this.mobileMediaQuery = window.matchMedia('(max-width: 767px)');
+		this._handleResize(this.mobileMediaQuery.matches);
+		this._handleResize = this._handleResize.bind(this);
 	}
 
-	_handleResize() {
-		this._isMobile = (window.innerWidth <= MOBILE_WINDOW_THRESHHOLD);
-		if (!this._isMobile && this._dialogOpened) {
+	connectedCallback() {
+		super.connectedCallback();
+		this.mobileMediaQuery.addEventListener('change', this._handleResize);
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback();
+		this.mobileMediaQuery.removeEventListener('change', this._handleResize);
+	}
+
+	_handleResize(e) {
+		this._isMobile = e.matches;
+
+		if (!e.matches && this._dialogOpened)
+		{
 			this._toggleOpenDialog();
 		}
 	}
