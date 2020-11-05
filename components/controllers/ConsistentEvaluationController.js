@@ -17,7 +17,7 @@ export const ConsistentEvaluationControllerErrors = {
 };
 
 export class ConsistentEvaluationController {
-	constructor(evaluationHref, coaDemonstrationHref, token) {
+	constructor(evaluationHref, token, coaDemonstrationHref = undefined) {
 		if (!evaluationHref) {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_HREF);
 		}

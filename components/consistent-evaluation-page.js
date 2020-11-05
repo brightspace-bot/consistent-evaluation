@@ -275,7 +275,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	async _initializeController() {
-		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._coaDemonstrationHref, this._token);
+		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token, this._coaDemonstrationHref);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 		this.evaluationState = this.evaluationEntity.properties.state;
