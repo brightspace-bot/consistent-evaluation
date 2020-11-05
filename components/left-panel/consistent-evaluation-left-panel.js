@@ -132,12 +132,19 @@ export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsist
 		}
 
 		if (this.submissionInfo.submissionType === fileSubmission) {
-			this.fileEvidenceUrl = currentFile.properties.fileViewer;
 			this.textEvidence = undefined;
-			this.fileNonViewable = {
-				title: currentFile.properties.name,
-				downloadUrl: currentFile.properties.href
-			};
+			if (currentFile.properties.fileViewer) {
+				// file is viewable
+				this.fileEvidenceUrl = currentFile.properties.fileViewer;
+				this.fileNonViewable = undefined;
+			} else {
+				// file is unviewable
+				this.fileEvidenceUrl = undefined;
+				this.fileNonViewable = {
+					title: currentFile.properties.name,
+					downloadUrl: currentFile.properties.href
+				};
+			}
 		} else if (this.submissionInfo.submissionType === textSubmission) {
 			this.fileEvidenceUrl = undefined;
 			this.textEvidence = {
