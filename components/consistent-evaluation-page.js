@@ -570,7 +570,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	_checkUnsavedAnnotations(newFileId) {
-		// add mutex??
 		if (this.currentFileId !== undefined) {
 			const annotationsEntity = this.evaluationEntity.getSubEntityByRel('annotations');
 			const unsavedAnnotations = annotationsEntity.hasClass('unsaved');
@@ -601,7 +600,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
-
 				this.evaluationEntity = await this._controller.transientDiscardAnnotations(entity);
 			}
 		);
@@ -704,11 +702,11 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
 			</d2l-dialog-confirm>
 			<d2l-dialog-confirm
-				title-text="Unsaved annotation changes"
-				text="Are you sure you want to leave without saving your annotations changes?"
+				title-text=${this.localize('unsavedAnnotationsTitle')}
+				text=${this.localize('unsavedAnnotationsBody')}
 				?opened=${this._unsavedAnnotationsDialogOpened}
 				@d2l-dialog-close=${this._onUnsavedAnnotationsDialogClosed}>
-					<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_DISCARD}>Discard annotation changes</d2l-button>
+					<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_DISCARD}>${this.localize('unsavedAnnotationsDiscardButton')}</d2l-button>
 					<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
 			</d2l-dialog-confirm>
 		`;

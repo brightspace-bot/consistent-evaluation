@@ -130,6 +130,7 @@ export class ConsistentEvaluationController {
 	async transientDiscardAnnotations(evaluationEntity) {
 		const annotationsEntity = evaluationEntity.getSubEntityByRel('annotations');
 
+		// explicitly send `value` as empty string to avoid 400 missing param
 		return await this._performAction(annotationsEntity, 'RemoveAnnotations', 'value', '');
 	}
 
