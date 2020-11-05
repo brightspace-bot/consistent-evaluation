@@ -179,6 +179,20 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
 	}
 
+	get coaDemonstrationHref() {
+		return this._coaDemonstrationHref;
+	}
+
+	set coaDemonstrationHref(val) {
+		const oldVal = this.coaDemonstrationHref;
+		if (oldVal !== val) {
+			this._coaDemonstrationHref = val;
+			if (this._coaDemonstrationHref && this._token) {
+				this._initializeController();
+			}
+		}
+	}
+
 	get evaluationEntity() {
 		return this._evaluationEntity;
 	}
@@ -201,20 +215,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			this._evaluationHref = val;
 			if (this._evaluationHref && this._token) {
 				this._initializeController().then(() => this.requestUpdate());
-			}
-		}
-	}
-
-	get coaDemonstrationHref() {
-		return this._coaDemonstrationHref;
-	}
-
-	set coaDemonstrationHref(val) {
-		const oldVal = this.coaDemonstrationHref;
-		if (oldVal !== val) {
-			this._coaDemonstrationHref = val;
-			if (this._coaDemonstrationHref && this._token) {
-				this._initializeController();
 			}
 		}
 	}
@@ -360,7 +360,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		);
 	}
 
-	async _transientSaveCoaEvalOverride(e) {
+	async _transientSaveCoaEvalOverride() {
 		// Call transientSaveFeedback to 'unsave' the evaluation
 		await this._mutex.dispatch(
 			async() => {
