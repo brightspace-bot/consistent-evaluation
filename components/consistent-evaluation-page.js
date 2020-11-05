@@ -139,9 +139,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			},
 			_dialogOpened: {
 				attribute: false
-			},
-			_pendingSaveActions: {
-				attribute: false
 			}
 		};
 	}
@@ -170,6 +167,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		moment.relativeTimeRounding(Math.floor);
 
 		this._evaluationHref = undefined;
+		this._coaDemonstrationHref = undefined;
 		this._token = undefined;
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
@@ -178,7 +176,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._scrollbarStatus = 'default';
 		this._mutex = new Awaiter();
 		this._dialogOpened = false;
-		this._pendingSaveActions = {};
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
 	}
 
@@ -208,6 +205,20 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		}
 	}
 
+	get coaDemonstrationHref() {
+		return this._coaDemonstrationHref;
+	}
+
+	set coaDemonstrationHref(val) {
+		const oldVal = this.coaDemonstrationHref;
+		if (oldVal !== val) {
+			this._coaDemonstrationHref = val;
+			if (this._coaDemonstrationHref && this._token) {
+				this._initializeController();
+			}
+		}
+	}
+
 	get token() {
 		return this._token;
 	}
@@ -224,7 +235,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	get _feedbackText() {
 		if (this._feedbackEntity && this._feedbackEntity.properties) {
-			return this._feedbackEntity.properties.html || this._feedbackEntity.properties.text || '';
+			return this._feedbackEntity.properties.html || '';
 		}
 		return undefined;
 	}
@@ -264,7 +275,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	async _initializeController() {
-		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
+		this._controller = new ConsistentEvaluationController(this._evaluationHref, this.coaDemonstrationHref, this._token);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 		this.evaluationState = this.evaluationEntity.properties.state;
@@ -350,8 +361,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	async _transientSaveCoaEvalOverride(e) {
-		const action = e.detail.action;
-		this._pendingSaveActions.coaEvalOverride = action.name === 'select' ? e.detail.action : undefined;
 		// Call transientSaveFeedback to 'unsave' the evaluation
 		await this._mutex.dispatch(
 			async() => {
@@ -369,7 +378,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 		await this._mutex.dispatch(
 			async() => {
-				await this._controller.performSaveActions(this._pendingSaveActions);
 				const entity = await this._controller.fetchEvaluationEntity(false);
 				this.evaluationEntity = await this._controller.save(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
@@ -379,7 +387,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					this._showToast(this.localize('saveError'));
 				}
 				this.evaluationState = this.evaluationEntity.properties.state;
-				this._pendingSaveActions = {};
 			}
 		);
 	}
@@ -392,7 +399,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 		await this._mutex.dispatch(
 			async() => {
-				await this._controller.performSaveActions(this._pendingSaveActions);
 				const entity = await this._controller.fetchEvaluationEntity(false);
 				this.evaluationEntity = await this._controller.update(entity);
 				if (!(this.evaluationEntity instanceof Error)) {
@@ -402,7 +408,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					this._showToast(this.localize('updatedError'));
 				}
 				this.evaluationState = this.evaluationEntity.properties.state;
-				this._pendingSaveActions = {};
 			}
 		);
 	}
@@ -415,7 +420,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 		await this._mutex.dispatch(
 			async() => {
-				await this._controller.performSaveActions(this._pendingSaveActions);
 				const entity = await this._controller.fetchEvaluationEntity(false);
 				this.evaluationEntity = await this._controller.publish(entity);
 				this.evaluationState = this.evaluationEntity.properties.state;
@@ -426,7 +430,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					this._showToast(this.localize('publishError'));
 				}
 				this.submissionInfo.evaluationState = publishedState;
-				this._pendingSaveActions = {};
 			}
 		);
 	}
