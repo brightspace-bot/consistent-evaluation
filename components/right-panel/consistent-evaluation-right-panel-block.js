@@ -49,23 +49,30 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		this._dialogOpened = false;
 		this.noTitle = false;
 		this.mobileMediaQuery = window.matchMedia('(max-width: 767px)');
-		this._handleResize(this.mobileMediaQuery.matches);
+		this._handleResize(this.mobileMediaQuery);
 		this._handleResize = this._handleResize.bind(this);
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
-		this.mobileMediaQuery.addEventListener('change', this._handleResize);
+		if (this.mobileMediaQuery.addEventListener) {
+			this.mobileMediaQuery.addEventListener('change', this._handleResize);
+		} else {
+			this.mobileMediaQuery.addListener('change', this._handleResize);
+		}
 	}
 
 	disconnectedCallback() {
 		super.disconnectedCallback();
-		this.mobileMediaQuery.removeEventListener('change', this._handleResize);
+		if (this.mobileMediaQuery.removeEventListener) {
+			this.mobileMediaQuery.removeEventListener('change', this._handleResize);
+		} else {
+			this.mobileMediaQuery.removeListener('change', this._handleResize);
+		}
 	}
 
 	_handleResize(e) {
 		this._isMobile = e.matches;
-
 		if (!e.matches && this._dialogOpened)
 		{
 			this._toggleOpenDialog();
