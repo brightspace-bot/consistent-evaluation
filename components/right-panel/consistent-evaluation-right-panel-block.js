@@ -58,7 +58,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		if (this.mobileMediaQuery.addEventListener) {
 			this.mobileMediaQuery.addEventListener('change', this._handleResize);
 		} else {
-			this.mobileMediaQuery.addListener('change', this._handleResize);
+			this.mobileMediaQuery.addListener(this._handleResize);
 		}
 	}
 
@@ -67,7 +67,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		if (this.mobileMediaQuery.removeEventListener) {
 			this.mobileMediaQuery.removeEventListener('change', this._handleResize);
 		} else {
-			this.mobileMediaQuery.removeListener('change', this._handleResize);
+			this.mobileMediaQuery.removeListener(this._handleResize);
 		}
 	}
 
