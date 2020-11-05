@@ -91,7 +91,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 				margin: 1.5rem 1.2rem 0 1.2rem;
 			}
 		`;
-
 	}
 
 	constructor() {
