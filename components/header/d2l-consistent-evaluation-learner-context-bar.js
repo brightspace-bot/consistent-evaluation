@@ -83,20 +83,20 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 			}
 			@media (max-width: 929px) and (min-width: 768px) {
 				:host {
-					padding-left: 1.2rem;
+					padding-left: 1.55rem;
 				}
 				:host([dir="rtl"]) {
 					padding-left: 0;
-					padding-right: 1.2rem;
+					padding-right: 1.55rem;
 				}
 			}
 			@media (max-width: 767px) {
 				:host {
-					padding-left: 0.9rem;
+					padding-left: 1.25rem;
 				}
 				:host([dir="rtl"]) {
 					padding-left: 0;
-					padding-right: 0.9rem;
+					padding-right: 1.25rem;
 				}
 			}
 			@media (min-width: 930px) {

@@ -84,6 +84,18 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 				}
 			}
 
+			@media (max-width: 929px) and (min-width: 768px) {
+				.d2l-consistent-evaluation-immersive-navigation {
+					margin: 0 1.2rem;
+				}
+			}
+
+			@media (max-width: 767px) {
+				.d2l-consistent-evaluation-immersive-navigation {
+					margin: 0 0.9rem;
+				}
+			}
+
 		`];
 	}
 
@@ -152,23 +164,23 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 
 	render() {
 		return html`
-			<d2l-navigation-immersive
-				width-type="fullscreen">
+			<div  class="d2l-consistent-evaluation-immersive-navigation">
+				<d2l-navigation-immersive width-type="fullscreen">
+					<div slot="left">
+						${this._renderBackButton()}
+					</div>
 
-				<div slot="left">
-					${this._renderBackButton()}
-				</div>
+					<div slot="middle">
+						<div id="titleName" class="d2l-heading-3 d2l-truncate">${this.titleName}</div>
+						<div id="subtitleName" class="d2l-label-text d2l-truncate">${this.subtitleName}</div>
+						<d2l-tooltip for="titleName"> ${this.titleName}</d2l-tooltip>
+						<d2l-tooltip for="subtitleName">${this.subtitleName}</d2l-tooltip>
+					</div>
 
-				<div slot="middle">
-					<div id="titleName" class="d2l-heading-3 d2l-truncate">${this.titleName}</div>
-					<div id="subtitleName" class="d2l-label-text d2l-truncate">${this.subtitleName}</div>
-					<d2l-tooltip for="titleName"> ${this.titleName}</d2l-tooltip>
-					<d2l-tooltip for="subtitleName">${this.subtitleName}</d2l-tooltip>
-				</div>
+					${this._renderIteratorButtons()}
 
-				${this._renderIteratorButtons()}
-
-			</d2l-navigation-immersive>
+				</d2l-navigation-immersive>
+			</div>
 		`;
 	}
 }

@@ -36,13 +36,13 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(
 			:host([hidden]) {
 				display: none;
 			}
-			d2l-consistent-evaluation-submission-item {
-				margin: 0.5rem;
-				padding: 0.5rem;
+			.d2l-consistent-evaluation-submission-list-view-skeleton {
+				display: none;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-view-skeleton {
 				background-color: white;
 				border-radius: 6px;
+				display: block;
 				margin: 0.5rem;
 				padding: 0.5rem;
 			}
