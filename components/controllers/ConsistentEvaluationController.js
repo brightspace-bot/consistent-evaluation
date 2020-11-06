@@ -146,7 +146,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
-		if (this.coaDemonstrationHref) await this.saveCoaDemonstration();
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, saveActionName);
 	}
 
@@ -155,7 +157,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
-		if (this.coaDemonstrationHref) await this.saveCoaDemonstration();
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, updateActionName);
 	}
 
@@ -164,7 +168,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
-		if (this.coaDemonstrationHref) await this.saveCoaDemonstration();
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, publishActionName);
 	}
 
@@ -173,7 +179,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
-		if (this.coaDemonstrationHref) await this.saveCoaDemonstration();
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, retractActionName);
 	}
 

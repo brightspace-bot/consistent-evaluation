@@ -187,8 +187,8 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		const oldVal = this.coaDemonstrationHref;
 		if (oldVal !== val) {
 			this._coaDemonstrationHref = val;
-			if (this._coaDemonstrationHref && this._token) {
-				this._initializeController();
+			if (this._evaluationHref && this._coaDemonstrationHref && this._token) {
+				this._initializeController().then(() => this.requestUpdate());
 			}
 		}
 	}
