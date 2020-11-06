@@ -64,7 +64,7 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-title-skeleton {
 				height: 0.65rem;
 				margin-bottom: 1rem;
-				margin-top: 1.0rem;
+				margin-top: 1rem;
 				width: 5rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-body-skeleton {
