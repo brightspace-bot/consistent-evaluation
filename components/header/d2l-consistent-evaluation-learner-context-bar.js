@@ -72,7 +72,7 @@ export class ConsistentEvaluationLearnerContextBar extends SkeletonMixin(RtlMixi
 				border-bottom: 0.05rem solid var(--d2l-color-gypsum);
 				display: flex;
 				height: 100%;
-				padding: 0.75rem 0 0.75rem 1.5rem;
+				padding: 0.75rem 0 0.75rem 1.85rem;
 			}
 			:host([hidden]) {
 				display: none;

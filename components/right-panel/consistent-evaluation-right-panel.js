@@ -87,7 +87,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 
 	static get styles() {
 		return  css`
-			:host {
+			.d2l-consistent-evaluation-right-panel {
 				margin: 1.5rem 1.2rem 0 1.2rem;
 			}
 		`;
@@ -184,11 +184,13 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 
 	render() {
 		return html`
-			${this._renderRubric()}
-			${this._renderGrade()}
-			${this._renderCoaOverride()}
-			${this._renderFeedback()}
-			${this._renderOutcome()}
+			<div class="d2l-consistent-evaluation-right-panel">
+				${this._renderRubric()}
+				${this._renderGrade()}
+				${this._renderCoaOverride()}
+				${this._renderFeedback()}
+				${this._renderOutcome()}
+			</div>
 		`;
 	}
 
