@@ -96,7 +96,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 		this.hideCoaOverride = false;
 		this.allowEvaluationWrite = false;
 		this.rubricOpen = false;
-		this.attachmentsHref = null;
 		window.D2L.DialogMixin.preferNative = false;
 	}
 
