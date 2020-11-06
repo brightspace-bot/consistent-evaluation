@@ -1,4 +1,5 @@
 import './consistent-evaluation-evidence-file.js';
+import './consistent-evaluation-evidence-non-viewable.js';
 import './consistent-evaluation-evidence-text.js';
 import './consistent-evaluation-submissions-page.js';
 import './consistent-evaluation-outcomes-overall-achievement.js';
@@ -40,6 +41,10 @@ export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsist
 				type: String
 			},
 			textEvidence: {
+				attribute: false,
+				type: Object
+			},
+			fileNonViewable: {
 				attribute: false,
 				type: Object
 			},
@@ -106,6 +111,7 @@ export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsist
 		} else if (changedProperties.has('currentFileId') && !this.currentFileId) {
 			this.textEvidence = undefined;
 			this.fileEvidenceUrl = undefined;
+			this.fileNonViewable = undefined;
 		}
 
 	}
@@ -126,8 +132,19 @@ export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsist
 		}
 
 		if (this.submissionInfo.submissionType === fileSubmission) {
-			this.fileEvidenceUrl = currentFile.properties.fileViewer;
 			this.textEvidence = undefined;
+			if (currentFile.properties.fileViewer) {
+				// file is viewable
+				this.fileEvidenceUrl = currentFile.properties.fileViewer;
+				this.fileNonViewable = undefined;
+			} else {
+				// file is unviewable
+				this.fileEvidenceUrl = undefined;
+				this.fileNonViewable = {
+					title: currentFile.properties.name,
+					downloadUrl: currentFile.properties.href
+				};
+			}
 		} else if (this.submissionInfo.submissionType === textSubmission) {
 			this.fileEvidenceUrl = undefined;
 			this.textEvidence = {
@@ -136,9 +153,11 @@ export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsist
 				downloadUrl: currentFile.properties.href,
 				content: currentFile.properties.comment
 			};
+			this.fileNonViewable = undefined;
 		} else {
 			this.textEvidence = undefined;
 			this.fileEvidenceUrl = undefined;
+			this.fileNonViewable = undefined;
 		}
 	}
 
@@ -194,6 +213,14 @@ export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsist
 		></d2l-consistent-evaluation-evidence-text>`;
 	}
 
+	_renderNonViewableFile() {
+		return html`
+		<d2l-consistent-evaluation-evidence-non-viewable
+			title=${this.fileNonViewable.title}
+			download-url=${this.fileNonViewable.downloadUrl}
+		></d2l-consistent-evaluation-evidence-non-viewable>`;
+	}
+
 	render() {
 		if (this.userProgressOutcomeHref) {
 			return this._renderOverallAchievement();
@@ -215,6 +242,10 @@ export class ConsistentEvaluationLeftPanel extends SkeletonMixin(LocalizeConsist
 
 		if (this.textEvidence) {
 			return this._renderTextEvidence();
+		}
+
+		if (this.fileNonViewable) {
+			return this._renderNonViewableFile();
 		}
 
 		return this._renderSubmissionList();
