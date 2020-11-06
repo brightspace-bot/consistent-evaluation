@@ -657,7 +657,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						?allow-evaluation-write=${this._allowEvaluationWrite()}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
-						@d2l-outcomes-coa-eval-override-item-selected=${this._transientSaveCoaEvalOverride}
+						@d2l-outcomes-coa-eval-override-change=${this._transientSaveCoaEvalOverride}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
