@@ -134,9 +134,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			_gradeEntity: {
 				attribute: false
 			},
-			_scrollbarStatus: {
-				attribute: false
-			},
 			_dialogOpened: {
 				attribute: false
 			}
@@ -152,7 +149,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				display: none;
 			}
 			.d2l-consistent-evaluation-page-primary-slot {
-				height: 100%;
+				height: auto;
 			}
 		`;
 	}
@@ -173,7 +170,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._evaluationEntity = undefined;
 		this._displayToast = false;
 		this._toastMessage = '';
-		this._scrollbarStatus = 'default';
 		this._mutex = new Awaiter();
 		this._dialogOpened = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
@@ -310,14 +306,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			composed: true,
 			bubbles: true
 		}));
-	}
-
-	_hideScrollbars() {
-		this._scrollbarStatus = 'hidden';
-	}
-
-	_showScrollbars() {
-		this._scrollbarStatus = 'default';
 	}
 
 	async _transientSaveFeedback(e) {
@@ -541,12 +529,10 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	_selectFile(e) {
 		this.currentFileId = e.detail.fileId;
-		this._hideScrollbars();
 	}
 
 	_setSubmissionsView() {
 		this.currentFileId = undefined;
-		this._showScrollbars();
 	}
 
 	connectedCallback() {
@@ -608,7 +594,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		return html`
 			<d2l-template-primary-secondary
 				resizable
-				primary-overflow="${this._scrollbarStatus}"
 				@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
 				@d2l-consistent-evaluation-file-selected=${this._selectFile}
 			>
