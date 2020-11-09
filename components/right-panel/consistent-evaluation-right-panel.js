@@ -3,8 +3,8 @@ import './consistent-evaluation-outcomes.js';
 import './consistent-evaluation-rubric.js';
 import './consistent-evaluation-grade-result.js';
 import './consistent-evaluation-coa-eval-override.js';
+import { css, html, LitElement } from 'lit-element';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
-import { html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
@@ -83,6 +83,20 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 				type: Object
 			}
 		};
+	}
+
+	static get styles() {
+		return  css`
+			.d2l-consistent-evaluation-right-panel {
+				margin: 1.5rem 1.2rem 0 1.2rem;
+			}
+
+			@media (max-width: 767px) {
+				.d2l-consistent-evaluation-right-panel {
+					margin: 1.5rem 0.9rem 0 0.9rem;
+				}
+			}
+		`;
 	}
 
 	constructor() {
@@ -176,11 +190,13 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 
 	render() {
 		return html`
-			${this._renderRubric()}
-			${this._renderGrade()}
-			${this._renderCoaOverride()}
-			${this._renderFeedback()}
-			${this._renderOutcome()}
+			<div class="d2l-consistent-evaluation-right-panel">
+				${this._renderRubric()}
+				${this._renderGrade()}
+				${this._renderCoaOverride()}
+				${this._renderFeedback()}
+				${this._renderOutcome()}
+			</div>
 		`;
 	}
 

@@ -36,13 +36,13 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(
 			:host([hidden]) {
 				display: none;
 			}
-			d2l-consistent-evaluation-submission-item {
-				margin: 0.5rem;
-				padding: 0.5rem;
+			.d2l-consistent-evaluation-submission-list-view-skeleton {
+				display: none;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-view-skeleton {
 				background-color: white;
 				border-radius: 6px;
+				display: block;
 				margin: 0.5rem;
 				padding: 0.5rem;
 			}
@@ -59,14 +59,17 @@ export class ConsistentEvaluationSubmissionsPage extends SkeletonMixin(RtlMixin(
 				display: flex;
 				flex-flow: row wrap;
 				margin-left: 1rem;
+				margin-top: 1.3rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-title-skeleton {
 				height: 0.65rem;
-				margin-bottom: 0.5rem;
+				margin-bottom: 1rem;
+				margin-top: 1rem;
 				width: 5rem;
 			}
 			:host([skeleton]) .d2l-consistent-evaluation-submission-list-header-body-skeleton {
 				height: 0.55rem;
+				margin-bottom: 0.8rem;
 				margin-top: 0.5rem;
 				width: 7rem;
 			}
