@@ -65,7 +65,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 			display: flex;
 			flex-direction: column;
 			margin: 0.5rem 0.65rem;
-			padding: 0.75rem 1.2rem;
+			padding: 0 1.2rem 0.75rem 1.2rem;
 			position: relative;
 		}
 		d2l-list-item, d2l-list-item:hover {
@@ -134,13 +134,13 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		@media (max-width: 929px) and (min-width: 768px) {
 			:host {
 				margin: 0.5rem 0.6rem;
-				padding: 0.75rem 0.9rem;
+				padding: 0 0.9rem 0.75rem 0.9rem;
 			}
 		}
 		@media (max-width: 767px) {
 			:host {
 				margin: 0.5rem 0.35rem;
-				padding: 0.5rem 0.85rem;
+				padding: 0 0.85rem 0.5rem 0.85rem;
 			}
 		}
 	`];
