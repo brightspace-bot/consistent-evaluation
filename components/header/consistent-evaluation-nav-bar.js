@@ -54,7 +54,6 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 			}
 			.d2l-heading-3 {
 				padding-top: 0.25rem;
-				font-style: normal !important;
 			}
 			.d2l-truncate {
 				overflow: hidden;
