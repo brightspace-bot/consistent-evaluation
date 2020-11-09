@@ -167,6 +167,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		moment.relativeTimeRounding(Math.floor);
 
 		this._evaluationHref = undefined;
+		this._coaDemonstrationHref = undefined;
 		this._token = undefined;
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
@@ -176,6 +177,20 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._mutex = new Awaiter();
 		this._dialogOpened = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
+	}
+
+	get coaDemonstrationHref() {
+		return this._coaDemonstrationHref;
+	}
+
+	set coaDemonstrationHref(val) {
+		const oldVal = this.coaDemonstrationHref;
+		if (oldVal !== val) {
+			this._coaDemonstrationHref = val;
+			if (this._evaluationHref && this._coaDemonstrationHref && this._token) {
+				this._initializeController().then(() => this.requestUpdate());
+			}
+		}
 	}
 
 	get evaluationEntity() {
@@ -260,7 +275,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	async _initializeController() {
-		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
+		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token, this._coaDemonstrationHref);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 		this.evaluationState = this.evaluationEntity.properties.state;
@@ -341,6 +356,16 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				const fileId = this.currentFileId;
 
 				this.evaluationEntity = await this._controller.transientSaveAnnotations(entity, annotationsData, fileId);
+			}
+		);
+	}
+
+	async _transientSaveCoaEvalOverride() {
+		// Call transientSaveFeedback to 'unsave' the evaluation
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.transientSaveFeedback(entity, this._feedbackText);
 			}
 		);
 	}
@@ -632,6 +657,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						?allow-evaluation-write=${this._allowEvaluationWrite()}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
+						@d2l-outcomes-coa-eval-override-change=${this._transientSaveCoaEvalOverride}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">

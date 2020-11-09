@@ -6,7 +6,7 @@ import '@brightspace-ui/core/components/tooltip/tooltip.js';
 
 import { css, html, LitElement } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
-import { labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
 class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement) {
@@ -44,7 +44,7 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 	}
 
 	static get styles() {
-		return [labelStyles, css`
+		return [labelStyles, heading3Styles, css`
 			.d2l-short-back {
 				display: none;
 			}
@@ -60,6 +60,10 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 				overflow-wrap: break-word;
 				text-overflow: ellipsis;
 				white-space: nowrap;
+			}
+
+			h1 {
+				margin: 0rem !important;
 			}
 
 			@media (max-width: 929px) {
@@ -171,7 +175,7 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 					</div>
 
 					<div slot="middle">
-						<div id="titleName" class="d2l-heading-3 d2l-truncate">${this.titleName}</div>
+						<h1 id="titleName" class="d2l-heading-3 d2l-truncate">${this.titleName}</h1>
 						<div id="subtitleName" class="d2l-label-text d2l-truncate">${this.subtitleName}</div>
 						<d2l-tooltip for="titleName"> ${this.titleName}</d2l-tooltip>
 						<d2l-tooltip for="subtitleName">${this.subtitleName}</d2l-tooltip>
