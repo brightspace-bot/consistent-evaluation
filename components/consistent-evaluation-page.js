@@ -149,7 +149,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				display: none;
 			}
 			.d2l-consistent-evaluation-page-primary-slot {
-				height: auto;
+				height: 100%;
 			}
 		`;
 	}
