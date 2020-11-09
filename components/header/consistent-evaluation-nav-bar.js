@@ -5,8 +5,8 @@ import 'd2l-navigation/d2l-navigation-link-back.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
 
 import { css, html, LitElement } from 'lit-element';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
 class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement) {
@@ -63,7 +63,7 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 			}
 
 			h1 {
-				margin: 0rem !important;
+				margin: 0 !important;
 			}
 
 			@media (max-width: 929px) {
