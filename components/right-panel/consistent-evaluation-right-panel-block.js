@@ -91,7 +91,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		return html`
 			<d2l-list-item class="d2l-list-item"
 				@click=${this._toggleOpenDialog}>
-				<d2l-list-item-content class="no-border">
+				<d2l-list-item-content>
 					${this._getTitle()}
 					<div slot="supporting-info">${this.supportingInfo}</div>
 				</d2l-list-item-content>
@@ -103,8 +103,11 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		if (this._isMobile) {
 			return html`
 				${this._renderListItems()}
-				<d2l-dialog-fullscreen ?opened=${this._dialogOpened} title-text=${this.title}>
-					<slot></slot>
+				<d2l-dialog-fullscreen
+					?opened=${this._dialogOpened}
+					title-text=${this.title}
+					@d2l-dialog-close=${this._toggleOpenDialog}>
+						<slot></slot>
 				</d2l-dialog-fullscreen>
 			`;
 		}
