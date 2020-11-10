@@ -31,8 +31,6 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		return [labelStyles, css`
 			.d2l-block {
 				margin-top: 1.35rem;
-				padding-left: 0.75rem;
-				padding-right: 0.75rem;
 			}
 			.d2l-label-text {
 				margin-bottom: 0.4rem;
