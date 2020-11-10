@@ -5,8 +5,8 @@ import 'd2l-navigation/d2l-navigation-link-back.js';
 import '@brightspace-ui/core/components/tooltip/tooltip.js';
 
 import { css, html, LitElement } from 'lit-element';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { heading3Styles, labelStyles } from '@brightspace-ui/core/components/typography/styles.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
 class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement) {
@@ -61,9 +61,9 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
-			
+
 			h1 {
-				margin: 0rem !important;
+				margin: 0 !important;
 			}
 
 			@media (max-width: 929px) {
@@ -85,6 +85,18 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 				}
 				.d2l-full-back {
 					display: none;
+				}
+			}
+
+			@media (max-width: 929px) and (min-width: 768px) {
+				.d2l-consistent-evaluation-immersive-navigation {
+					margin: 0 1.2rem;
+				}
+			}
+
+			@media (max-width: 767px) {
+				.d2l-consistent-evaluation-immersive-navigation {
+					margin: 0 0.9rem;
 				}
 			}
 
@@ -156,23 +168,23 @@ class ConsistentEvaluationNavBar extends LocalizeConsistentEvaluation(LitElement
 
 	render() {
 		return html`
-			<d2l-navigation-immersive
-				width-type="fullscreen">
+			<div  class="d2l-consistent-evaluation-immersive-navigation">
+				<d2l-navigation-immersive width-type="fullscreen">
+					<div slot="left">
+						${this._renderBackButton()}
+					</div>
 
-				<div slot="left">
-					${this._renderBackButton()}
-				</div>
+					<div slot="middle">
+						<h1 id="titleName" class="d2l-heading-3 d2l-truncate">${this.titleName}</h1>
+						<div id="subtitleName" class="d2l-label-text d2l-truncate">${this.subtitleName}</div>
+						<d2l-tooltip for="titleName"> ${this.titleName}</d2l-tooltip>
+						<d2l-tooltip for="subtitleName">${this.subtitleName}</d2l-tooltip>
+					</div>
 
-				<div slot="middle">
-					<h1 id="titleName" class="d2l-heading-3 d2l-truncate">${this.titleName}</h1>
-					<div id="subtitleName" class="d2l-label-text d2l-truncate">${this.subtitleName}</div>
-					<d2l-tooltip for="titleName"> ${this.titleName}</d2l-tooltip>
-					<d2l-tooltip for="subtitleName">${this.subtitleName}</d2l-tooltip>
-				</div>
+					${this._renderIteratorButtons()}
 
-				${this._renderIteratorButtons()}
-
-			</d2l-navigation-immersive>
+				</d2l-navigation-immersive>
+			</div>
 		`;
 	}
 }
