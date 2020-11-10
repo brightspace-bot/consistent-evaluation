@@ -83,6 +83,8 @@ export class ConsistentEvaluation extends LitElement {
 			const stripped = this._stripFileIdFromUrl();
 			if (!stripped) {
 				this.shadowRoot.querySelector('d2l-consistent-evaluation-page')._setSubmissionsView();
+			} else {
+				this._loadingComponents.submissions = false;
 			}
 
 			if (!this._submissionInfo || !this._submissionInfo.submissionList) {
