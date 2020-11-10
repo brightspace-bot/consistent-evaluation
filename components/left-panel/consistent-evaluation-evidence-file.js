@@ -16,10 +16,11 @@ export class ConsistentEvaluationEvidenceFile extends LitElement {
 	static get styles() {
 		return css`
 			:host {
-				--d2l-top-bar-height: 2.7rem;
+				--d2l-top-bar-height: 2.73rem;
 			}
 			iframe {
 				height: calc(100% - var(--d2l-top-bar-height));
+				margin-bottom: -0.5rem;
 				width: 100%;
 			}
 			iframe[data-resizing] {
