@@ -9,13 +9,14 @@ import '@brightspace-ui/core/components/inputs/input-text.js';
 import '@brightspace-ui/core/templates/primary-secondary/primary-secondary.js';
 import '@brightspace-ui/core/components/dialog/dialog-confirm.js';
 import '@brightspace-ui/core/components/button/button.js';
+import { attachmentsRel, draftState, publishActionName, publishedState, retractActionName, saveActionName, updateActionName } from './controllers/constants.js';
 import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { draftState, publishedState } from './controllers/constants.js';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { Awaiter } from './awaiter.js';
 import { ConsistentEvaluationController } from './controllers/ConsistentEvaluationController.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
+import { Rels } from 'd2l-hypermedia-constants';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
@@ -48,14 +49,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			specialAccessHref: {
 				attribute: 'special-access-href',
 				type: String
-			},
-			richTextEditorDisabled: {
-				attribute: 'rich-text-editor-disabled',
-				type: Boolean
-			},
-			richtextEditorConfig: {
-				attribute: false,
-				type: Object
 			},
 			rubricAssessmentHref: {
 				attribute: 'rubric-assessment-href',
@@ -142,9 +135,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			_gradeEntity: {
 				attribute: false
 			},
-			_scrollbarStatus: {
-				attribute: false
-			},
 			_dialogOpened: {
 				attribute: false
 			},
@@ -178,18 +168,29 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		moment.relativeTimeRounding(Math.floor);
 
 		this._evaluationHref = undefined;
+		this._coaDemonstrationHref = undefined;
 		this._token = undefined;
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
 		this._displayToast = false;
 		this._toastMessage = '';
-		this._scrollbarStatus = 'default';
 		this._mutex = new Awaiter();
 		this._dialogOpened = false;
-		this.allowEvaluationWrite = false;
-		this.allowEvaluationDelete = false;
-		this.attachmentsHref = null;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
+	}
+
+	get coaDemonstrationHref() {
+		return this._coaDemonstrationHref;
+	}
+
+	set coaDemonstrationHref(val) {
+		const oldVal = this.coaDemonstrationHref;
+		if (oldVal !== val) {
+			this._coaDemonstrationHref = val;
+			if (this._evaluationHref && this._coaDemonstrationHref && this._token) {
+				this._initializeController().then(() => this.requestUpdate());
+			}
+		}
 	}
 
 	get evaluationEntity() {
@@ -234,7 +235,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	get _feedbackText() {
 		if (this._feedbackEntity && this._feedbackEntity.properties) {
-			return this._feedbackEntity.properties.text || '';
+			return this._feedbackEntity.properties.html || '';
 		}
 		return undefined;
 	}
@@ -274,14 +275,10 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	async _initializeController() {
-		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
+		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token, this._coaDemonstrationHref);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 		this.evaluationState = this.evaluationEntity.properties.state;
-		this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
-		this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
-		this.richtextEditorConfig = this._controller.getRichTextEditorConfig(this.evaluationEntity);
-		this.attachmentsHref = this._controller.getAttachmentsHref(this.evaluationEntity);
 	}
 
 	_noFeedbackComponent() {
@@ -313,14 +310,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			composed: true,
 			bubbles: true
 		}));
-	}
-
-	_hideScrollbars() {
-		this._scrollbarStatus = 'hidden';
-	}
-
-	_showScrollbars() {
-		this._scrollbarStatus = 'default';
 	}
 
 	async _transientSaveFeedback(e) {
@@ -359,6 +348,16 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				const fileId = this.currentFileId;
 
 				this.evaluationEntity = await this._controller.transientSaveAnnotations(entity, annotationsData, fileId);
+			}
+		);
+	}
+
+	async _transientSaveCoaEvalOverride() {
+		// Call transientSaveFeedback to 'unsave' the evaluation
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.transientSaveFeedback(entity, this._feedbackText);
 			}
 		);
 	}
@@ -423,7 +422,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					this._showToast(this.localize('publishError'));
 				}
 				this.submissionInfo.evaluationState = publishedState;
-				this.allowEvaluationDelete = this._controller.userHasDeletePermission(this.evaluationEntity);
 			}
 		);
 	}
@@ -446,7 +444,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				}
 				this.evaluationState = this.evaluationEntity.properties.state;
 				this.submissionInfo.evaluationState = draftState;
-				this.allowEvaluationWrite = this._controller.userHasWritePermission(this.evaluationEntity);
 			}
 		);
 	}
@@ -549,7 +546,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	_changeFile(newFileId) {
 		this.currentFileId = newFileId;
-		this._hideScrollbars();
 	}
 
 	async _setSubmissionsView() {
@@ -567,7 +563,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	displaySubmissions() {
 		this.currentFileId = undefined;
-		this._showScrollbars();
 	}
 
 	async _checkUnsavedAnnotations(newFileId) {
@@ -627,11 +622,48 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		}));
 	}
 
+	_getAttachmentsLink() {
+		if (!this.evaluationEntity || !this.evaluationEntity.hasLinkByRel(attachmentsRel)) {
+			return undefined;
+		}
+
+		return this.evaluationEntity.getLinkByRel(attachmentsRel).href;
+	}
+
+	_allowEvaluationWrite() {
+		if (!this.evaluationEntity) {
+			return undefined;
+		}
+
+		const hasWritePermission = (this.evaluationEntity.hasActionByName(saveActionName) && this.evaluationEntity.hasActionByName(publishActionName)) ||
+			this.evaluationEntity.hasActionByName(updateActionName);
+
+		return hasWritePermission;
+	}
+
+	_allowEvaluationDelete() {
+		if (!this.evaluationEntity) {
+			return undefined;
+		}
+
+		return this.evaluationEntity.hasActionByName(retractActionName);
+	}
+
+	_getRichTextEditorConfig() {
+		if (this.evaluationEntity &&
+			this.evaluationEntity.getSubEntityByRel('feedback') &&
+			this.evaluationEntity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig)
+		) {
+			return this.evaluationEntity.getSubEntityByRel('feedback').getSubEntityByRel(Rels.richTextEditorConfig).properties;
+		}
+
+		return undefined;
+	}
+
 	render() {
 		return html`
 			<d2l-template-primary-secondary
 				resizable
-				primary-overflow="${this._scrollbarStatus}"
 				@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
 				@d2l-consistent-evaluation-file-selected=${this._selectFile}
 			>
@@ -666,21 +698,21 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
 						outcomes-href=${ifDefined(this.outcomesHref)}
 						coa-eval-override-href=${ifDefined(this.coaDemonstrationHref)}
-						attachments-href=${ifDefined(this.attachmentsHref)}
-						.richTextEditorConfig=${this.richtextEditorConfig}
+						attachments-href=${ifDefined(this._getAttachmentsLink())}
+						.richTextEditorConfig=${this._getRichTextEditorConfig()}
 						.grade=${this._grade}
 						.gradeItemInfo=${this.gradeItemInfo}
 						.token=${this.token}
 						?rubric-read-only=${this.rubricReadOnly}
-						?rich-text-editor-disabled=${this.richTextEditorDisabled}
 						?hide-rubric=${this.rubricHref === undefined}
 						?hide-grade=${this._noGradeComponent()}
 						?hide-outcomes=${this.outcomesHref === undefined}
 						?hide-feedback=${this._noFeedbackComponent()}
 						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
-						?allow-evaluation-write=${this.allowEvaluationWrite}
+						?allow-evaluation-write=${this._allowEvaluationWrite()}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
+						@d2l-outcomes-coa-eval-override-change=${this._transientSaveCoaEvalOverride}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
@@ -688,8 +720,8 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					<d2l-consistent-evaluation-footer-presentational
 						?show-next-student=${this.nextStudentHref}
 						?published=${this._isEvaluationPublished()}
-						?allow-evaluation-write=${this.allowEvaluationWrite}
-						?allow-evaluation-delete=${this.allowEvaluationDelete}
+						?allow-evaluation-write=${this._allowEvaluationWrite()}
+						?allow-evaluation-delete=${this._allowEvaluationDelete()}
 						@d2l-consistent-evaluation-on-publish=${this._publishEvaluation}
 						@d2l-consistent-evaluation-on-save-draft=${this._saveEvaluation}
 						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}

@@ -67,7 +67,7 @@ class ConsistentEvaluationAttachmentsEditor extends LitElement {
 	async _init(href, token) {
 		const tempAttachments = [];
 		let promises = [];
-		const entity = await window.D2L.Siren.EntityStore.fetch(href, token);
+		const entity = await window.D2L.Siren.EntityStore.fetch(href, token, true);
 		if (entity && entity.entity && entity.entity.entities) {
 			const entities = entity.entity.entities;
 			promises = entities.map(attachmentEntity => {
