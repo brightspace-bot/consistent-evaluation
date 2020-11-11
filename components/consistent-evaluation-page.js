@@ -139,6 +139,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				attribute: false
 			},
 			_unsavedAnnotationsDialogOpened: {
+				type: Boolean,
 				attribute: false
 			}
 		};
