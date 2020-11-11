@@ -3,6 +3,7 @@ import './consistent-evaluation-right-panel-block';
 import { Grade, GradeType } from '@brightspace-ui-labs/grade-result/src/controller/Grade';
 import { html, LitElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
@@ -127,7 +128,7 @@ export class ConsistentEvaluationGradeResult extends LocalizeConsistentEvaluatio
 
 		return html`
 			<d2l-consistent-evaluation-right-panel-block
-				supportingInfo=${this._gradeSummaryInfo}
+				supportingInfo=${ifDefined(this._gradeSummaryInfo)}
 				title="${this.localize('overallGrade')}">
 					<d2l-labs-d2l-grade-result-presentational
 						.gradeType=${gradeType}

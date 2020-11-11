@@ -4,6 +4,7 @@ import './consistent-evaluation-attachments-editor.js';
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import { html, LitElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
@@ -134,7 +135,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 			this._setFeedbackSummaryInfo();
 			return html`
 				<d2l-consistent-evaluation-right-panel-block
-					supportingInfo=${this._feedbackSummaryInfo}
+					supportingInfo=${ifDefined(this._feedbackSummaryInfo)}
 					title="${this.localize('overallFeedback')}">
 						<d2l-activity-text-editor
 							.key="${this._key}"
