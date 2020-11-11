@@ -41,6 +41,12 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 				padding-left: 0.75rem;
 				padding-right: 0.75rem;
 			}
+			.d2l-truncate {
+				overflow: hidden;
+				overflow-wrap: break-word;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
 		`];
 	}
 
@@ -93,7 +99,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 				@click=${this._toggleOpenDialog}>
 				<d2l-list-item-content>
 					${this._getTitle()}
-					<div slot="supporting-info">${this.supportingInfo}</div>
+					<div class="d2l-truncate" slot="supporting-info">${this.supportingInfo}</div>
 				</d2l-list-item-content>
 			</d2l-list-item>
 		`;

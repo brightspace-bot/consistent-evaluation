@@ -109,7 +109,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 	_setFeedbackSummaryInfo() {
 		let summary = '';
 		if (this.feedbackText === null || this.feedbackText === '') {
-			summary = 'No feedback entered';
+			summary = this.localize('noFeedbackSummary');
 		} else {
 			const tmpDiv = document.createElement('div');
 			tmpDiv.innerHTML = this.feedbackText;

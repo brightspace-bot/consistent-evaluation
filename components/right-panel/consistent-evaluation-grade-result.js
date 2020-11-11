@@ -103,11 +103,11 @@ export class ConsistentEvaluationGradeResult extends LocalizeConsistentEvaluatio
 	_setGradeSummaryInfo(gradeType, score, scoreOutOf) {
 		let summary = '';
 		if (score === null || score === '') {
-			summary = 'No grade entered';
+			summary = this.localize('noGradeSummary');
 		} else if (gradeType === GradeType.Letter) {
 			summary = score;
 		} else {
-			summary = `${score} out of ${scoreOutOf}`;
+			summary = this.localize('gradeSummary', { grade: score, outOf: scoreOutOf });
 		}
 		this._gradeSummaryInfo = summary;
 	}
