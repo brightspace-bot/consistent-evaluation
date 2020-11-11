@@ -65,7 +65,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 			display: flex;
 			flex-direction: column;
 			margin: 0.5rem 0.65rem;
-			padding: 0 1.2rem 0.75rem 1.2rem;
+			padding: 1px 1.2rem 0.75rem 1.2rem;
 			position: relative;
 		}
 		d2l-list-item, d2l-list-item:hover {
