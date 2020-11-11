@@ -552,12 +552,13 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._hideScrollbars();
 	}
 
-	_setSubmissionsView() {
+	async _setSubmissionsView() {
 		window.dispatchEvent(new CustomEvent('d2l-flush', {
 			composed: true,
 			bubbles: true
 		}));
-		const shouldShowSubmissions = this._checkUnsavedAnnotations();
+
+		const shouldShowSubmissions = await this._checkUnsavedAnnotations();
 		if (!shouldShowSubmissions) {
 			return;
 		}
@@ -569,17 +570,21 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._showScrollbars();
 	}
 
-	_checkUnsavedAnnotations(newFileId) {
-		if (this.currentFileId !== undefined) {
-			const annotationsEntity = this.evaluationEntity.getSubEntityByRel('annotations');
-			const unsavedAnnotations = annotationsEntity.hasClass('unsaved');
-			if (unsavedAnnotations) {
-				this.nextFileId = newFileId;
-				this._unsavedAnnotationsDialogOpened = true;
-				return false;
+	async _checkUnsavedAnnotations(newFileId) {
+		return await this._mutex.dispatch(
+			async() => {
+				if (this.currentFileId !== undefined) {
+					const annotationsEntity = this.evaluationEntity.getSubEntityByRel('annotations');
+					const unsavedAnnotations = annotationsEntity.hasClass('unsaved');
+					if (unsavedAnnotations) {
+						this.nextFileId = newFileId;
+						this._unsavedAnnotationsDialogOpened = true;
+						return false;
+					}
+				}
+				return true;
 			}
-		}
-		return true;
+		);
 	}
 
 	async _onUnsavedAnnotationsDialogClosed(e) {
