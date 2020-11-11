@@ -188,6 +188,8 @@ export class ConsistentEvaluationController {
 	async saveCoaDemonstration() {
 		const coaDemonstrationEntity = await this.fetchCoaDemonstrationEntity(false);
 		const publishAction = coaDemonstrationEntity.getActionByName('publish');
-		return await this._performSirenAction(publishAction);
+		if (publishAction) {
+			return await this._performSirenAction(publishAction);
+		}
 	}
 }
