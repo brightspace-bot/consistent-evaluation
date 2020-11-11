@@ -1,8 +1,9 @@
 import 'd2l-rubric/d2l-rubric.js';
 import './consistent-evaluation-right-panel-block';
 import { html, LitElement } from 'lit-element';
+import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 
-class ConsistentEvaluationRubric extends LitElement {
+class ConsistentEvaluationRubric extends LocalizeConsistentEvaluation(LitElement) {
 	static get properties() {
 		return {
 			header: {
@@ -27,16 +28,17 @@ class ConsistentEvaluationRubric extends LitElement {
 
 	render() {
 		return html`
-			<d2l-consistent-evaluation-right-panel-block title="${this.header}">
-				<d2l-rubric
-					href=${this.href}
-					assessment-href=${this.assessmentHref}
-					.token=${this.token}
-					?read-only=${this.readonly}
-					force-Compact
-					overall-score-flag
-				>
-				</d2l-rubric>
+			<d2l-consistent-evaluation-right-panel-block
+				supportingInfo="${this.localize('rubricSummary')}"
+				title="${this.header}">
+					<d2l-rubric
+						href=${this.href}
+						assessment-href=${this.assessmentHref}
+						.token=${this.token}
+						?read-only=${this.readonly}
+						force-Compact
+						overall-score-flag
+					></d2l-rubric>
 			</d2l-consistent-evaluation-right-panel-block>
 		`;
 	}
