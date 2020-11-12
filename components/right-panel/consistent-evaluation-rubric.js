@@ -29,7 +29,7 @@ class ConsistentEvaluationRubric extends LocalizeConsistentEvaluation(LitElement
 	render() {
 		return html`
 			<d2l-consistent-evaluation-right-panel-block
-				supportingInfo="${this.localize('rubricSummary')}"
+				supportingInfo="${this.localize('rubricSummary', {num: 1})}"
 				title="${this.header}">
 					<d2l-rubric
 						href=${this.href}

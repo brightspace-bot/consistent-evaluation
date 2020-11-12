@@ -48,7 +48,7 @@ export default {
 	"retract": "Retract",
 	"retracted":   "Evaluation retracted",
 	"rubrics": "Rubrics",
-	"rubricSummary": "1 rubric attached",
+	"rubricSummary": "{num} rubric attached",
 	"saveBtn": "Save",
 	"saveDraft": "Save Draft",
 	"saved":  "Evaluation saved as draft",
