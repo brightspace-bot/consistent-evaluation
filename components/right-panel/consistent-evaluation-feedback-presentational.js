@@ -4,6 +4,7 @@ import './consistent-evaluation-attachments-editor.js';
 import 'd2l-polymer-siren-behaviors/store/entity-store.js';
 import { html, LitElement } from 'lit-element';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../../lang/localize-consistent-evaluation.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 
@@ -32,6 +33,9 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 				type: Object
 			},
 			_key: {
+				type: String
+			},
+			_feedbackSummaryInfo: {
 				type: String
 			}
 		};
@@ -103,6 +107,18 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 		}
 	}
 
+	_setFeedbackSummaryInfo() {
+		let summary = '';
+		if (this.feedbackText === null || this.feedbackText === '') {
+			summary = this.localize('noFeedbackSummary');
+		} else {
+			const tmpDiv = document.createElement('div');
+			tmpDiv.innerHTML = this.feedbackText;
+			summary = tmpDiv.textContent || tmpDiv.innerText || '';
+		}
+		this._feedbackSummaryInfo = summary;
+	}
+
 	render() {
 		if (this.href && this.token && this.richTextEditorConfig) {
 			const attachments = this.attachmentsHref !== null
@@ -116,17 +132,19 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 						</d2l-consistent-evaluation-attachments-editor>
 					</div>`
 				: null;
-
+			this._setFeedbackSummaryInfo();
 			return html`
-				<d2l-consistent-evaluation-right-panel-block title="${this.localize('overallFeedback')}">
-					<d2l-activity-text-editor
-						.key="${this._key}"
-						.value="${this.feedbackText}"
-						.richtextEditorConfig="${this.richTextEditorConfig}"
-						@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
-						ariaLabel="${this.localize('overallFeedback')}">
-					</d2l-activity-text-editor>
-					${attachments}
+				<d2l-consistent-evaluation-right-panel-block
+					supportingInfo=${ifDefined(this._feedbackSummaryInfo)}
+					title="${this.localize('overallFeedback')}">
+						<d2l-activity-text-editor
+							.key="${this._key}"
+							.value="${this.feedbackText}"
+							.richtextEditorConfig="${this.richTextEditorConfig}"
+							@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
+							ariaLabel="${this.localize('overallFeedback')}">
+						</d2l-activity-text-editor>
+						${attachments}
 				</d2l-consistent-evaluation-right-panel-block>
 			`;
 		} else {
