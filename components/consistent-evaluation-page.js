@@ -135,7 +135,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			_gradeEntity: {
 				attribute: false
 			},
-			_dialogOpened: {
+			_unsavedChangesDialogOpened: {
 				attribute: false
 			},
 			_unsavedAnnotationsDialogOpened: {
@@ -176,7 +176,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._mutex = new Awaiter();
-		this._dialogOpened = false;
+		this._unsavedChangesDialogOpened = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
 	}
 
@@ -279,7 +279,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token, this._coaDemonstrationHref);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
-		this.evaluationState = this.evaluationEntity.properties.state;
 	}
 
 	_noFeedbackComponent() {
@@ -379,7 +378,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				} else {
 					this._showToast(this.localize('saveError'));
 				}
-				this.evaluationState = this.evaluationEntity.properties.state;
 			}
 		);
 	}
@@ -400,7 +398,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				} else {
 					this._showToast(this.localize('updatedError'));
 				}
-				this.evaluationState = this.evaluationEntity.properties.state;
 			}
 		);
 	}
@@ -415,7 +412,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
 				this.evaluationEntity = await this._controller.publish(entity);
-				this.evaluationState = this.evaluationEntity.properties.state;
 				if (!(this.evaluationEntity instanceof Error)) {
 					this._showToast(this.localize('published'));
 					this._fireSaveEvaluationEvent();
@@ -443,7 +439,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				} else {
 					this._showToast(this.localize('retractError'));
 				}
-				this.evaluationState = this.evaluationEntity.properties.state;
 				this.submissionInfo.evaluationState = draftState;
 			}
 		);
@@ -458,7 +453,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._displayToast = false;
 	}
 
-	async _showDialog(e) {
+	async _showUnsavedChangesDialog(e) {
 		window.dispatchEvent(new CustomEvent('d2l-flush', {
 			composed: true,
 			bubbles: true
@@ -469,7 +464,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				const entity = await this._controller.fetchEvaluationEntity(false);
 				this.navigationTarget = e.detail.key;
 				if (entity.hasClass('unsaved')) {
-					this._dialogOpened = true;
+					this._unsavedChangesDialogOpened = true;
 				} else {
 					this._navigate();
 				}
@@ -477,8 +472,8 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		);
 	}
 
-	_onDialogClose(e) {
-		this._dialogOpened = false;
+	_onUnsavedChangesDialogClose(e) {
+		this._unsavedChangesDialogOpened = false;
 		if (e.detail.action === DIALOG_ACTION_LEAVE) {
 			this._navigate();
 		}
@@ -570,7 +565,8 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		return await this._mutex.dispatch(
 			async() => {
 				if (this.currentFileId !== undefined) {
-					const annotationsEntity = this.evaluationEntity.getSubEntityByRel('annotations');
+					const entity = await this._controller.fetchEvaluationEntity(false);
+					const annotationsEntity = entity.getSubEntityByRel('annotations');
 					if (!annotationsEntity) {
 						return true;
 					}
@@ -681,7 +677,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						.iteratorIndex=${this.iteratorIndex}
 						.iteratorTotal=${this.iteratorTotal}
 						?is-group-activity="${this.groupHref}"
-						@d2l-consistent-evaluation-navigate=${this._showDialog}
+						@d2l-consistent-evaluation-navigate=${this._showUnsavedChangesDialog}
 					></d2l-consistent-evaluation-nav-bar>
 					${this._renderLearnerContextBar()}
 				</div>
@@ -731,15 +727,15 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						@d2l-consistent-evaluation-on-save-draft=${this._saveEvaluation}
 						@d2l-consistent-evaluation-on-retract=${this._retractEvaluation}
 						@d2l-consistent-evaluation-on-update=${this._updateEvaluation}
-						@d2l-consistent-evaluation-navigate=${this._showDialog}
+						@d2l-consistent-evaluation-navigate=${this._showUnsavedChangesDialog}
 					></d2l-consistent-evaluation-footer-presentational>
 				</div>
 			</d2l-template-primary-secondary>
 			<d2l-dialog-confirm
 				title-text=${this.localize('unsavedChangesTitle')}
 				text=${this.localize('unsavedChangesBody')}
-				?opened=${this._dialogOpened}
-				@d2l-dialog-close=${this._onDialogClose}>
+				?opened=${this._unsavedChangesDialogOpened}
+				@d2l-dialog-close=${this._onUnsavedChangesDialogClose}>
 					<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_LEAVE}>${this.localize('leaveBtn')}</d2l-button>
 					<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
 			</d2l-dialog-confirm>
