@@ -20,6 +20,7 @@ import { Rels } from 'd2l-hypermedia-constants';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
+const DIALOG_ACTION_DISCARD = 'discard';
 
 export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeConsistentEvaluation(LitElement)) {
 
@@ -135,6 +136,10 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				attribute: false
 			},
 			_dialogOpened: {
+				attribute: false
+			},
+			_unsavedAnnotationsDialogOpened: {
+				type: Boolean,
 				attribute: false
 			}
 		};
@@ -528,11 +533,81 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	_selectFile(e) {
-		this.currentFileId = e.detail.fileId;
+		window.dispatchEvent(new CustomEvent('d2l-flush', {
+			composed: true,
+			bubbles: true
+		}));
+		const newFileId = e.detail.fileId;
+		const shouldSelectFile = this._checkUnsavedAnnotations(newFileId);
+		if (!shouldSelectFile) {
+			return;
+		}
+		this._changeFile(newFileId);
 	}
 
-	_setSubmissionsView() {
+	_changeFile(newFileId) {
+		this.currentFileId = newFileId;
+	}
+
+	async _setSubmissionsView() {
+		window.dispatchEvent(new CustomEvent('d2l-flush', {
+			composed: true,
+			bubbles: true
+		}));
+
+		const shouldShowSubmissions = await this._checkUnsavedAnnotations();
+		if (!shouldShowSubmissions) {
+			return;
+		}
+		this.displaySubmissions();
+	}
+
+	displaySubmissions() {
 		this.currentFileId = undefined;
+	}
+
+	async _checkUnsavedAnnotations(newFileId) {
+		return await this._mutex.dispatch(
+			async() => {
+				if (this.currentFileId !== undefined) {
+					const annotationsEntity = this.evaluationEntity.getSubEntityByRel('annotations');
+					if (!annotationsEntity) {
+						return true;
+					}
+
+					const unsavedAnnotations = annotationsEntity.hasClass('unsaved');
+					if (unsavedAnnotations) {
+						this.nextFileId = newFileId;
+						this._unsavedAnnotationsDialogOpened = true;
+						return false;
+					}
+				}
+				return true;
+			}
+		);
+	}
+
+	async _onUnsavedAnnotationsDialogClosed(e) {
+		this._unsavedAnnotationsDialogOpened = false;
+		if (e.detail.action === DIALOG_ACTION_DISCARD) {
+			await this._discardAnnotationsChanges();
+			if (this.nextFileId) {
+				this._changeFile(this.nextFileId);
+			} else {
+				this.displaySubmissions();
+			}
+		} else {
+			// need to reset the file selector
+		}
+	}
+
+	async _discardAnnotationsChanges() {
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.transientDiscardAnnotations(entity);
+			}
+		);
 	}
 
 	connectedCallback() {
@@ -664,10 +739,17 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				title-text=${this.localize('unsavedChangesTitle')}
 				text=${this.localize('unsavedChangesBody')}
 				?opened=${this._dialogOpened}
-				@d2l-dialog-close=${this._onDialogClose}
-			>
-				<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_LEAVE}>${this.localize('leaveBtn')}</d2l-button>
-				<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
+				@d2l-dialog-close=${this._onDialogClose}>
+					<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_LEAVE}>${this.localize('leaveBtn')}</d2l-button>
+					<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
+			</d2l-dialog-confirm>
+			<d2l-dialog-confirm
+				title-text=${this.localize('unsavedAnnotationsTitle')}
+				text=${this.localize('unsavedAnnotationsBody')}
+				?opened=${this._unsavedAnnotationsDialogOpened}
+				@d2l-dialog-close=${this._onUnsavedAnnotationsDialogClosed}>
+					<d2l-button slot="footer" primary data-dialog-action=${DIALOG_ACTION_DISCARD}>${this.localize('unsavedAnnotationsDiscardButton')}</d2l-button>
+					<d2l-button slot="footer" data-dialog-action>${this.localize('cancelBtn')}</d2l-button>
 			</d2l-dialog-confirm>
 		`;
 	}
