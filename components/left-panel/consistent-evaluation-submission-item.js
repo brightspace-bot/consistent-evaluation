@@ -208,6 +208,20 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
 	}
 
+	_dispatchFileSelectedKeyboardEvent(e) {
+		const fileId = e.target.getAttribute('file-id');
+
+		if (e.key === 'Enter' || e.key === ' ') {
+			this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-file-selected', {
+				detail: {
+					fileId: fileId
+				},
+				composed: true,
+				bubbles: true
+			}));
+		}
+	}
+
 	_dispatchFileSelectedEvent(fileId) {
 		this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-file-selected', {
 			detail: {
@@ -354,16 +368,19 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 					${this._renderReadStatus(read)}
 				</div>
 				<d2l-list-item-content
-				@click="${
+					file-id="${id}"
+					tabindex=0
+					@keydown=${this._dispatchFileSelectedKeyboardEvent}
+					@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchFileSelectedEvent(id)}">
-					<div class="truncate" aria-label="heading">${this._getFileTitle(name)}</div>
-					<div slot="supporting-info">
-						${this._renderFlaggedStatus(flagged)}
-						${extension.toUpperCase()}
-						<d2l-icon class="d2l-separator-icon" aria-hidden="true" icon="tier1:dot"></d2l-icon>
-						${this._getReadableFileSizeString(size)}
-					</div>
+						<div class="truncate" aria-label="heading">${this._getFileTitle(name)}</div>
+						<div slot="supporting-info">
+							${this._renderFlaggedStatus(flagged)}
+							${extension.toUpperCase()}
+							<d2l-icon class="d2l-separator-icon" aria-hidden="true" icon="tier1:dot"></d2l-icon>
+							${this._getReadableFileSizeString(size)}
+						</div>
 				</d2l-list-item-content>
 				${this._addMenuOptions(read, flagged, href, id)}
 			</d2l-list-item>`;
