@@ -17,7 +17,7 @@ export const ConsistentEvaluationControllerErrors = {
 };
 
 export class ConsistentEvaluationController {
-	constructor(evaluationHref, token) {
+	constructor(evaluationHref, token, coaDemonstrationHref = undefined) {
 		if (!evaluationHref) {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_HREF);
 		}
@@ -27,6 +27,7 @@ export class ConsistentEvaluationController {
 		}
 
 		this.evaluationHref = evaluationHref;
+		this.coaDemonstrationHref = coaDemonstrationHref;
 		this.token = token;
 	}
 
@@ -42,6 +43,20 @@ export class ConsistentEvaluationController {
 		const evaluationEntity = evaluationResource.entity;
 
 		return evaluationEntity;
+	}
+
+	async _fetchCoaDemonstrationEntity(bypassCache) {
+		return await window.D2L.Siren.EntityStore.fetch(this.coaDemonstrationHref, this.token, bypassCache);
+	}
+
+	async fetchCoaDemonstrationEntity(bypassCache = false) {
+		const coaDemonstrationResource = await this._fetchCoaDemonstrationEntity(bypassCache);
+		if (!coaDemonstrationResource || !coaDemonstrationResource.entity) {
+			throw new Error(ConsistentEvaluationControllerErrors.ERROR_FETCHING_ENTITY);
+		}
+		const coaDemonstrationEntity = coaDemonstrationResource.entity;
+
+		return coaDemonstrationEntity;
 	}
 
 	async _performSirenAction(action, field = null) {
@@ -131,6 +146,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, saveActionName);
 	}
 
@@ -139,6 +157,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, updateActionName);
 	}
 
@@ -147,6 +168,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, publishActionName);
 	}
 
@@ -155,6 +179,17 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.INVALID_EVALUATION_ENTITY);
 		}
 
+		if (this.coaDemonstrationHref) {
+			await this.saveCoaDemonstration();
+		}
 		return await this._performAction(evaluationEntity, retractActionName);
+	}
+
+	async saveCoaDemonstration() {
+		const coaDemonstrationEntity = await this.fetchCoaDemonstrationEntity(false);
+		const publishAction = coaDemonstrationEntity.getActionByName('publish');
+		if (publishAction) {
+			return await this._performSirenAction(publishAction);
+		}
 	}
 }

@@ -134,9 +134,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			_gradeEntity: {
 				attribute: false
 			},
-			_scrollbarStatus: {
-				attribute: false
-			},
 			_dialogOpened: {
 				attribute: false
 			}
@@ -167,15 +164,29 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		moment.relativeTimeRounding(Math.floor);
 
 		this._evaluationHref = undefined;
+		this._coaDemonstrationHref = undefined;
 		this._token = undefined;
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
 		this._displayToast = false;
 		this._toastMessage = '';
-		this._scrollbarStatus = 'default';
 		this._mutex = new Awaiter();
 		this._dialogOpened = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
+	}
+
+	get coaDemonstrationHref() {
+		return this._coaDemonstrationHref;
+	}
+
+	set coaDemonstrationHref(val) {
+		const oldVal = this.coaDemonstrationHref;
+		if (oldVal !== val) {
+			this._coaDemonstrationHref = val;
+			if (this._evaluationHref && this._coaDemonstrationHref && this._token) {
+				this._initializeController().then(() => this.requestUpdate());
+			}
+		}
 	}
 
 	get evaluationEntity() {
@@ -260,7 +271,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	async _initializeController() {
-		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
+		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token, this._coaDemonstrationHref);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 		this.evaluationState = this.evaluationEntity.properties.state;
@@ -295,14 +306,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			composed: true,
 			bubbles: true
 		}));
-	}
-
-	_hideScrollbars() {
-		this._scrollbarStatus = 'hidden';
-	}
-
-	_showScrollbars() {
-		this._scrollbarStatus = 'default';
 	}
 
 	async _transientSaveFeedback(e) {
@@ -341,6 +344,16 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				const fileId = this.currentFileId;
 
 				this.evaluationEntity = await this._controller.transientSaveAnnotations(entity, annotationsData, fileId);
+			}
+		);
+	}
+
+	async _transientSaveCoaEvalOverride() {
+		// Call transientSaveFeedback to 'unsave' the evaluation
+		await this._mutex.dispatch(
+			async() => {
+				const entity = await this._controller.fetchEvaluationEntity(false);
+				this.evaluationEntity = await this._controller.transientSaveFeedback(entity, this._feedbackText);
 			}
 		);
 	}
@@ -516,12 +529,10 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 
 	_selectFile(e) {
 		this.currentFileId = e.detail.fileId;
-		this._hideScrollbars();
 	}
 
 	_setSubmissionsView() {
 		this.currentFileId = undefined;
-		this._showScrollbars();
 	}
 
 	connectedCallback() {
@@ -583,7 +594,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		return html`
 			<d2l-template-primary-secondary
 				resizable
-				primary-overflow="${this._scrollbarStatus}"
 				@d2l-consistent-evaluation-evidence-back-to-user-submissions=${this._setSubmissionsView}
 				@d2l-consistent-evaluation-file-selected=${this._selectFile}
 			>
@@ -632,6 +642,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						?allow-evaluation-write=${this._allowEvaluationWrite()}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-grade-changed=${this._transientSaveGrade}
+						@d2l-outcomes-coa-eval-override-change=${this._transientSaveCoaEvalOverride}
 					></consistent-evaluation-right-panel>
 				</div>
 				<div slot="footer">
