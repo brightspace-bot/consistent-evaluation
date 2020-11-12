@@ -571,6 +571,10 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			async() => {
 				if (this.currentFileId !== undefined) {
 					const annotationsEntity = this.evaluationEntity.getSubEntityByRel('annotations');
+					if (!annotationsEntity) {
+						return true;
+					}
+
 					const unsavedAnnotations = annotationsEntity.hasClass('unsaved');
 					if (unsavedAnnotations) {
 						this.nextFileId = newFileId;
