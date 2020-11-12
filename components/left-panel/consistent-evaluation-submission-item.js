@@ -71,6 +71,11 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		d2l-list-item, d2l-list-item:hover {
 			--d2l-list-item-content-text-color: var(--d2l-color-ferrite);
 		}
+		d2l-list-item-content:focus {
+			border: 2px solid var(--d2l-color-celestine);
+			border-radius: 6px;
+			outline: none 0;
+		}
 		.d2l-heading-3 {
 			margin: 0;
 			padding-right: 0.5rem;
