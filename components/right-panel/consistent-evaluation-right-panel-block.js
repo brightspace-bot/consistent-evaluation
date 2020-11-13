@@ -90,7 +90,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	_getTitle() {
-		return this.noTitle ? html`` : html`<div class="d2l-label-text">${this.title}</div>`;
+		return this.noTitle ? html`` : html`<h2 class="d2l-label-text">${this.title}</h2>`;
 	}
 
 	_toggleOpenDialog() {
