@@ -71,6 +71,11 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		d2l-list-item, d2l-list-item:hover {
 			--d2l-list-item-content-text-color: var(--d2l-color-ferrite);
 		}
+		d2l-list-item-content:focus {
+			border: 2px solid var(--d2l-color-celestine);
+			border-radius: 6px;
+			outline: none 0;
+		}
 		.d2l-heading-3 {
 			margin: 0;
 			padding-right: 0.5rem;
@@ -94,6 +99,9 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 			margin: 0.5rem;
 			position: relative;
 			top: 0;
+		}
+		.d2l-submission-attachment-list-item-content:hover {
+			cursor: pointer;
 		}
 		.d2l-attachment-read-status {
 			color: var(--d2l-color-carnelian);
@@ -206,6 +214,20 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 		} while (fileSizeBytes > 1024);
 		const unit = this.localize(byteUnits[i]);
 		return Math.max(fileSizeBytes, 0.1).toFixed(1) + unit;
+	}
+
+	_dispatchFileSelectedKeyboardEvent(e) {
+		const fileId = e.target.getAttribute('file-id');
+
+		if (e.key === 'Enter' || e.key === ' ') {
+			this.dispatchEvent(new CustomEvent('d2l-consistent-evaluation-file-selected', {
+				detail: {
+					fileId: fileId
+				},
+				composed: true,
+				bubbles: true
+			}));
+		}
 	}
 
 	_dispatchFileSelectedEvent(fileId) {
@@ -354,7 +376,11 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 					${this._renderReadStatus(read)}
 				</div>
 				<d2l-list-item-content
-				@click="${
+					class="d2l-submission-attachment-list-item-content"
+					file-id="${id}"
+					tabindex=0
+					@keydown=${this._dispatchFileSelectedKeyboardEvent}
+					@click="${
 	// eslint-disable-next-line lit/no-template-arrow
 	() => this._dispatchFileSelectedEvent(id)}">
 					<div class="truncate" aria-label="heading">${this._getFileTitle(name)}</div>
