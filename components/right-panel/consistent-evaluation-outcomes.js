@@ -29,7 +29,7 @@ class ConsistentEvaluationOutcomes extends LocalizeConsistentEvaluation(LitEleme
 	render() {
 		return html`
 			<d2l-consistent-evaluation-right-panel-block
-				summaryInfo=${this.localize('outcomesSummary')}
+				supportingInfo=${this.localize('outcomesSummary')}
 				title=${this.header}>
 					<d2l-activity-alignments
 						href=${this.href}
