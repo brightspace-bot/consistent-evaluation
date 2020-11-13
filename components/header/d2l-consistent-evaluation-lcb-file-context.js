@@ -163,6 +163,10 @@ export class ConsistentEvaluationLcbFileContext extends RtlMixin(LocalizeConsist
 		return  `${fileName.substring(0, maxFileLength)}…${ext}`;
 	}
 
+	refreshSelect() {
+		this.shadowRoot.querySelector('select').value = this.currentFileId;
+	}
+
 	render() {
 		if (!this._files || this._files.length === 0) {
 			return html ``;
