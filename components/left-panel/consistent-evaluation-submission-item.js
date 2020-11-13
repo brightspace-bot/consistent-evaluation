@@ -100,6 +100,9 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 			position: relative;
 			top: 0;
 		}
+		.d2l-submission-attachment-list-item-content:hover {
+			cursor: pointer;
+		}
 		.d2l-attachment-read-status {
 			color: var(--d2l-color-carnelian);
 			position: absolute;
@@ -373,6 +376,7 @@ export class ConsistentEvaluationSubmissionItem extends RtlMixin(LocalizeConsist
 					${this._renderReadStatus(read)}
 				</div>
 				<d2l-list-item-content
+					class="d2l-submission-attachment-list-item-content"
 					file-id="${id}"
 					tabindex=0
 					@keydown=${this._dispatchFileSelectedKeyboardEvent}
