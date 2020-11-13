@@ -53,7 +53,7 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 				margin-right: 0.5rem;
 			}
 			h2:focus {
-				outline:none;
+				outline: none;
 			}
 		`];
 	}

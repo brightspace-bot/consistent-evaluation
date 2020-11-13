@@ -482,11 +482,11 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	_resetFocusToUser() {
-		try{
+		try {
 			this.shadowRoot.querySelector('d2l-consistent-evaluation-learner-context-bar')
-			.shadowRoot.querySelector('d2l-consistent-evaluation-lcb-user-context')
-			.shadowRoot.querySelector('h2').focus();
-		} catch {
+				.shadowRoot.querySelector('d2l-consistent-evaluation-lcb-user-context')
+				.shadowRoot.querySelector('h2').focus();
+		} catch (e) {
 			console.warn('Unable to reset focus');
 		}
 	}
