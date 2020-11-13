@@ -41,7 +41,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 			.d2l-list-item-content {
 				padding-left: 1.25rem;
 			}
-			.d2l-list-item-content([dir="rtl"]) {
+			:host([dir="rtl"]) .d2l-list-item-content {
 				padding-left: 0;
 				padding-right: 1.25rem;
 			}
