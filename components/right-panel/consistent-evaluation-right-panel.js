@@ -93,7 +93,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 
 			@media (max-width: 767px) {
 				.d2l-consistent-evaluation-right-panel {
-					margin: 0 0 0 0;
+					margin: 0;
 				}
 			}
 		`;
