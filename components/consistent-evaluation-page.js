@@ -594,6 +594,9 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			}
 		} else {
 			// need to reset the file selector
+			await this.shadowRoot.querySelector('d2l-consistent-evaluation-learner-context-bar')
+				.shadowRoot.querySelector('d2l-consistent-evaluation-lcb-file-context')
+				.refreshSelect();
 		}
 	}
 
