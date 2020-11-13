@@ -52,6 +52,9 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 				margin-left: 0;
 				margin-right: 0.5rem;
 			}
+			h2:focus {
+				outline: none;
+			}
 		`];
 	}
 
@@ -100,7 +103,7 @@ export class ConsistentEvaluationLcbUserContext extends EntityMixinLit(RtlMixin(
 	render() {
 		return html`
 			${this._renderProfileImage()}
-			<h2 class="d2l-body-compact d2l-consistent-evaluation-lcb-user-name">${ifDefined(this._displayName)}</h2>
+			<h2 tabindex="0" class="d2l-body-compact d2l-consistent-evaluation-lcb-user-name">${ifDefined(this._displayName)}</h2>
 			${this._getExemptText()}
 		`;
 	}
