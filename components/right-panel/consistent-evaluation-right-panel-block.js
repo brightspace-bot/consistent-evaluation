@@ -36,8 +36,14 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 				margin-bottom: 0.4rem;
 			}
 			.d2l-list-item {
-				padding-left: 0.75rem;
-				padding-right: 0.75rem;
+				overflow: hidden;
+			}
+			.d2l-list-item-content {
+				padding-left: 1.25rem;
+			}
+			:host([dir="rtl"]) .d2l-list-item-content {
+				padding-left: 0;
+				padding-right: 1.25rem;
 			}
 			.d2l-truncate {
 				overflow: hidden;
@@ -84,7 +90,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 	}
 
 	_getTitle() {
-		return this.noTitle ? html`` : html`<div class="d2l-label-text">${this.title}</div>`;
+		return this.noTitle ? html`` : html`<h2 class="d2l-label-text">${this.title}</h2>`;
 	}
 
 	_toggleOpenDialog() {
@@ -95,7 +101,7 @@ class ConsistentEvaluationRightPanelBlock extends LitElement {
 		return html`
 			<d2l-list-item class="d2l-list-item"
 				@click=${this._toggleOpenDialog}>
-				<d2l-list-item-content>
+				<d2l-list-item-content class="d2l-list-item-content">
 					${this._getTitle()}
 					<div class="d2l-truncate" slot="supporting-info">${this.supportingInfo}</div>
 				</d2l-list-item-content>
