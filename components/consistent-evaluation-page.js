@@ -539,13 +539,13 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		}
 	}
 
-	_selectFile(e) {
+	async _selectFile(e) {
 		window.dispatchEvent(new CustomEvent('d2l-flush', {
 			composed: true,
 			bubbles: true
 		}));
 		const newFileId = e.detail.fileId;
-		const shouldSelectFile = this._checkUnsavedAnnotations(newFileId);
+		const shouldSelectFile = await this._checkUnsavedAnnotations(newFileId);
 		if (!shouldSelectFile) {
 			return;
 		}
