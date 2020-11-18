@@ -169,7 +169,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		moment.relativeTimeRounding(Math.floor);
 
 		this._evaluationHref = undefined;
-		this._coaDemonstrationHref = undefined;
 		this._token = undefined;
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
@@ -178,20 +177,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._mutex = new Awaiter();
 		this._unsavedChangesDialogOpened = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
-	}
-
-	get coaDemonstrationHref() {
-		return this._coaDemonstrationHref;
-	}
-
-	set coaDemonstrationHref(val) {
-		const oldVal = this.coaDemonstrationHref;
-		if (oldVal !== val) {
-			this._coaDemonstrationHref = val;
-			if (this._evaluationHref && this._coaDemonstrationHref && this._token) {
-				this._initializeController().then(() => this.requestUpdate());
-			}
-		}
 	}
 
 	get evaluationEntity() {
@@ -276,7 +261,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	async _initializeController() {
-		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token, this._coaDemonstrationHref);
+		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
 	}
@@ -631,10 +616,14 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		super.disconnectedCallback();
 	}
 
-	_fireSaveEvaluationEvent() {
+	async _fireSaveEvaluationEvent() {
+		const entity = await this._controller.fetchEvaluationEntity(false);
 		window.dispatchEvent(new CustomEvent('d2l-save-evaluation', {
 			composed: true,
-			bubbles: true
+			bubbles: true,
+			detail: {
+				evaluationEntity: entity
+			}
 		}));
 	}
 
