@@ -18,7 +18,7 @@ describe('d2l-consistent-evaluation', () => {
 
 	after(async() => await browser.close());
 
-	it.skip('renders nav-bar', async function() {
+	it('renders nav-bar', async function() {
 		const rect = await visualDiff.getRect(page, '#default');
 		await visualDiff.screenshotAndCompare(page, this.test.fullTitle(), { clip: rect });
 	});
