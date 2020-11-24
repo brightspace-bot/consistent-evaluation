@@ -177,6 +177,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._mutex = new Awaiter();
 		this._unsavedChangesDialogOpened = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
+		this._savePromises = [];
 	}
 
 	get evaluationEntity() {
@@ -339,8 +340,12 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		);
 	}
 
-	async _transientSaveCoaEvalOverride() {
+	async _transientSaveCoaEvalOverride(e) {
 		// Call transientSaveFeedback to 'unsave' the evaluation
+		if (e.detail && e.detail.sirenActionPromise) {
+			this._addSavePromise(e.detail.sirenActionPromise);
+		}
+
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -355,6 +360,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
+		await this._awaitAllSavePromises();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -375,6 +381,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
+		await this._awaitAllSavePromises();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -395,6 +402,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
+		await this._awaitAllSavePromises();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -416,6 +424,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
+		await this._awaitAllSavePromises();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -429,6 +438,15 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				this.submissionInfo.evaluationState = draftState;
 			}
 		);
+	}
+
+	_addSavePromise(promise) {
+		this._savePromises.push(promise);
+	}
+
+	async _awaitAllSavePromises() {
+		await Promise.all(this._savePromises);
+		this._savePromises = [];
 	}
 
 	_showToast(message) {
