@@ -18,6 +18,7 @@ import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { LocalizeConsistentEvaluation } from '../lang/localize-consistent-evaluation.js';
 import { Rels } from 'd2l-hypermedia-constants';
 import { SkeletonMixin } from '@brightspace-ui/core/components/skeleton/skeleton-mixin.js';
+import { TransientSaveAwaiter } from './transient-save-awaiter.js';
 
 const DIALOG_ACTION_LEAVE = 'leave';
 const DIALOG_ACTION_DISCARD = 'discard';
@@ -177,7 +178,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._mutex = new Awaiter();
 		this._unsavedChangesDialogOpened = false;
 		this.unsavedChangesHandler = this._confirmUnsavedChangesBeforeUnload.bind(this);
-		this._savePromises = [];
+		this._transientSaveAwaiter = new TransientSaveAwaiter();
 	}
 
 	get evaluationEntity() {
@@ -343,7 +344,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	async _transientSaveCoaEvalOverride(e) {
 		// Call transientSaveFeedback to 'unsave' the evaluation
 		if (e.detail && e.detail.sirenActionPromise) {
-			this._addSavePromise(e.detail.sirenActionPromise);
+			this._transientSaveAwaiter.addTransientSave(e.detail.sirenActionPromise);
 		}
 
 		await this._mutex.dispatch(
@@ -360,7 +361,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
-		await this._awaitAllSavePromises();
+		await this._transientSaveAwaiter.awaitAllTransientSaves();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -381,7 +382,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
-		await this._awaitAllSavePromises();
+		await this._transientSaveAwaiter.awaitAllTransientSaves();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -402,7 +403,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
-		await this._awaitAllSavePromises();
+		await this._transientSaveAwaiter.awaitAllTransientSaves();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -424,7 +425,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			bubbles: true
 		}));
 
-		await this._awaitAllSavePromises();
+		await this._transientSaveAwaiter.awaitAllTransientSaves();
 		await this._mutex.dispatch(
 			async() => {
 				const entity = await this._controller.fetchEvaluationEntity(false);
@@ -438,15 +439,6 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				this.submissionInfo.evaluationState = draftState;
 			}
 		);
-	}
-
-	_addSavePromise(promise) {
-		this._savePromises.push(promise);
-	}
-
-	async _awaitAllSavePromises() {
-		await Promise.all(this._savePromises);
-		this._savePromises = [];
 	}
 
 	_showToast(message) {
