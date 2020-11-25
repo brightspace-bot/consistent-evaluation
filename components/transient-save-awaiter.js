@@ -3,13 +3,19 @@ export class TransientSaveAwaiter {
 		this._pendingTransientSaves = [];
 	}
 
-	addTransientSave(promise) {
-		this._pendingTransientSaves.push(promise);
+	addTransientSave(transientSave) {
+		this._pendingTransientSaves.push(transientSave);
 		return this._pendingTransientSaves;
 	}
 
 	async awaitAllTransientSaves() {
-		const resolvedSaves = await Promise.all(this._pendingTransientSaves);
+		let resolvedSaves;
+		try {
+			resolvedSaves = await Promise.all(this._pendingTransientSaves);
+		} catch (err) {
+			this._pendingTransientSaves = [];
+			throw err;
+		}
 		this._pendingTransientSaves = [];
 		return resolvedSaves;
 	}
