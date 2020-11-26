@@ -23,6 +23,9 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 			feedbackText: {
 				attribute: false
 			},
+			feedbackAttachments: {
+				attribute: false
+			},
 			grade: {
 				attribute: false,
 				type: Object
@@ -163,6 +166,7 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 					.token=${this.token}
 					?can-edit-feedback=${this.allowEvaluationWrite}
 					.feedbackText=${this.feedbackText}
+					.attachments=${this.feedbackAttachments}
 					.richTextEditorConfig=${this.richTextEditorConfig}
 					attachments-href=${ifDefined(this.attachmentsHref)}
 				></d2l-consistent-evaluation-feedback-presentational>
@@ -170,7 +174,6 @@ export class ConsistentEvaluationRightPanel extends LocalizeConsistentEvaluation
 		}
 
 		return html``;
-
 	}
 
 	_renderOutcome() {

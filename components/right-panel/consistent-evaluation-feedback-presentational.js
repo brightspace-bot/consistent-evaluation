@@ -22,6 +22,9 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 			feedbackText: {
 				attribute: false
 			},
+			attachments: {
+				attribute: false
+			},
 			href: {
 				type: String
 			},
@@ -121,11 +124,12 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 
 	render() {
 		if (this.href && this.token && this.richTextEditorConfig) {
-			const attachments = this.attachmentsHref !== null
+			const attachmentsComponent = this.attachmentsHref !== null
 				? html`
 					<div>
 						<d2l-consistent-evaluation-attachments-editor
 							href=${this.attachmentsHref}
+							.attachments=${this.attachments}
 							.token="${this.token}"
 							destinationHref="${this.href}"
 							.canEditFeedback="${this.canEditFeedback}">
@@ -144,7 +148,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 							@d2l-activity-text-editor-change="${this._saveOnFeedbackChange}"
 							ariaLabel="${this.localize('overallFeedback')}">
 						</d2l-activity-text-editor>
-						${attachments}
+						${attachmentsComponent}
 				</d2l-consistent-evaluation-right-panel-block>
 			`;
 		} else {
