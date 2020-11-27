@@ -131,6 +131,15 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 				attribute: false,
 				type: Array
 			},
+			_canAddFeedbackFile: {
+				attribute: false
+			},
+			_canRecordFeedbackVideo: {
+				attribute: false
+			},
+			_canRecordFeedbackAudio: {
+				attribute: false
+			},
 			_grade: {
 				attribute: false
 			},
@@ -178,6 +187,9 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
 		this._attachments = [];
+		this._canAddFeedbackFile = false;
+		this._canRecordFeedbackVideo = false;
+		this._canRecordFeedbackAudio = false;
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._mutex = new Awaiter();
@@ -271,7 +283,11 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
-		this._attachments = await this._controller.fetchAttachments(this.evaluationEntity);
+		const attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
+		this._canAddFeedbackFile = attachmentsInfo.canAddFeedbackFile;
+		this._canRecordFeedbackVideo = attachmentsInfo.canRecordFeedbackVideo;
+		this._canRecordFeedbackAudio = attachmentsInfo.canRecordFeedbackAudio;
+		this._attachments = attachmentsInfo.attachments;
 	}
 
 	_noFeedbackComponent() {
@@ -328,7 +344,8 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			}
 		);
 
-		this._attachments = await this._controller.fetchAttachments(this.evaluationEntity);
+		const attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
+		this._attachments = attachmentsInfo.attachments;
 	}
 
 	async _transientRemoveAttachment(e) {
@@ -341,7 +358,8 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			}
 		);
 
-		this._attachments = await this._controller.fetchAttachments(this.evaluationEntity);
+		const attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
+		this._attachments = attachmentsInfo.attachments;
 	}
 
 	async _transientSaveGrade(e) {
@@ -758,6 +776,9 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						?hide-feedback=${this._noFeedbackComponent()}
 						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
 						?allow-evaluation-write=${this._allowEvaluationWrite()}
+						?allow-add-file=${this._canAddFeedbackFile}
+						?allow-record-video=${this._canRecordFeedbackVideo}
+						?allow-record-audio=${this._canRecordFeedbackAudio}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-feedback-attachments-add=${this._transientAddAttachment}
 						@on-d2l-consistent-eval-feedback-attachments-remove=${this._transientRemoveAttachment}

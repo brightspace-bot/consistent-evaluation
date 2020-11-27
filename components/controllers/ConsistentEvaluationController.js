@@ -60,6 +60,9 @@ export class ConsistentEvaluationController {
 			throw new Error(ConsistentEvaluationControllerErrors.ERROR_FETCHING_ATTACHMENTS_ENTITY);
 		}
 
+		const canAddFeedbackFile = attachmentsEntity.hasActionByName('add-file');
+		const canRecordFeedbackVideo = attachmentsEntity.hasActionByName('add-video-note');
+		const canRecordFeedbackAudio = attachmentsEntity.hasActionByName('add-audio-note');
 		const attachments = [];
 		if (attachmentsEntity.entities) {
 			attachmentsEntity.entities.map(a => {
@@ -78,7 +81,12 @@ export class ConsistentEvaluationController {
 			});
 		}
 
-		return attachments;
+		return {
+			canAddFeedbackFile,
+			canRecordFeedbackVideo,
+			canRecordFeedbackAudio,
+			attachments
+		};
 	}
 
 	async _performSirenAction(action, field = null) {

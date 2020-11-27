@@ -19,6 +19,18 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 				attribute: 'can-edit-feedback',
 				type: Boolean
 			},
+			canAddFile: {
+				attribute: 'can-add-file',
+				type: Boolean
+			},
+			canRecordVideo: {
+				attribute: 'can-record-video',
+				type: Boolean
+			},
+			canRecordAudio: {
+				attribute: 'can-record-audio',
+				type: Boolean
+			},
 			feedbackText: {
 				attribute: false
 			},
@@ -48,6 +60,9 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 		super();
 
 		this.canEditFeedback = false;
+		this.canAddFile = false;
+		this.canRecordVideo = false;
+		this.canRecordAudio = false;
 		this._debounceJobs = {};
 		this.flush = this.flush.bind(this);
 		this.attachmentsHref = null;
@@ -132,7 +147,10 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 							.attachments=${this.attachments}
 							.token="${this.token}"
 							destinationHref="${this.href}"
-							.canEditFeedback="${this.canEditFeedback}">
+							.canEditFeedback="${this.canEditFeedback}"
+							.canAddFile="${this.canAddFile}"
+							.canRecordVideo="${this.canRecordVideo}"
+							.canRecordAudio="${this.canRecordAudio}">
 						</d2l-consistent-evaluation-attachments-editor>
 					</div>`
 				: null;

@@ -16,6 +16,18 @@ class ConsistentEvaluationAttachmentsEditor extends LitElement {
 				attribute: 'can-edit-feedback',
 				type: Boolean
 			},
+			canAddFile: {
+				attribute: 'can-add-file',
+				type: Boolean
+			},
+			canRecordVideo: {
+				attribute: 'can-record-video',
+				type: Boolean
+			},
+			canRecordAudio: {
+				attribute: 'can-record-audio',
+				type: Boolean
+			}
 		};
 	}
 
@@ -68,13 +80,14 @@ class ConsistentEvaluationAttachmentsEditor extends LitElement {
 				${attachmentComponents}
 			</d2l-labs-attachment-list>
 			<div ?hidden="${!this.canEditFeedback}">
-				<d2l-activity-attachments-picker
-					href="${this.href}"
-					.token="${this.token}"
+				<d2l-activity-attachments-picker-presentational
+					?can-add-file="${this.canAddFile}"
+					?can-record-video="${this.canRecordVideo}"
+					?can-record-audio="${this.canRecordAudio}"
 					@d2l-activity-attachments-picker-files-uploaded="${this._dispatchAddAttachmentEvent}"
 					@d2l-activity-attachments-picker-video-uploaded="${this._dispatchAddAttachmentEvent}"
 					@d2l-activity-attachments-picker-audio-uploaded="${this._dispatchAddAttachmentEvent}">
-				</d2l-activity-attachments-picker>
+				</d2l-activity-attachments-picker-presentational>
 			</div>
 `;
 	}
