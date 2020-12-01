@@ -143,10 +143,7 @@ class ConsistentEvaluationFeedbackPresentational extends LocalizeConsistentEvalu
 				? html`
 					<div>
 						<d2l-consistent-evaluation-attachments-editor
-							href=${this.attachmentsHref}
 							.attachments=${this.attachments}
-							.token="${this.token}"
-							destinationHref="${this.href}"
 							.canEditFeedback="${this.canEditFeedback}"
 							.canAddFile="${this.canAddFile}"
 							.canRecordVideo="${this.canRecordVideo}"

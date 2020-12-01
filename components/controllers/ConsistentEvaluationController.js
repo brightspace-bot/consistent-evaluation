@@ -65,7 +65,7 @@ export class ConsistentEvaluationController {
 		const canRecordFeedbackAudio = attachmentsEntity.hasActionByName('add-audio-note');
 		const attachments = [];
 		if (attachmentsEntity.entities) {
-			attachmentsEntity.entities.map(a => {
+			attachmentsEntity.entities.forEach(a => {
 				const self = a.hasLinkByRel('self') && a.getLinkByRel('self').href;
 				const name = a.properties && a.properties.name;
 				const href = a.hasLinkByRel('alternate') && a.getLinkByRel('alternate').href;

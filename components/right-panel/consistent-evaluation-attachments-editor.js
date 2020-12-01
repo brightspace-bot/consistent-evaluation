@@ -6,9 +6,6 @@ import { css, html, LitElement } from 'lit-element/lit-element';
 class ConsistentEvaluationAttachmentsEditor extends LitElement {
 	static get properties() {
 		return {
-			href: { type: String },
-			destinationHref: { type: String },
-			token: { type: String },
 			attachments: {
 				attribute: false
 			},

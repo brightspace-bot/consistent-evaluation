@@ -127,17 +127,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			_feedbackText: {
 				attribute: false
 			},
-			_attachments: {
-				attribute: false,
-				type: Array
-			},
-			_canAddFeedbackFile: {
-				attribute: false
-			},
-			_canRecordFeedbackVideo: {
-				attribute: false
-			},
-			_canRecordFeedbackAudio: {
+			_attachmentsInfo: {
 				attribute: false
 			},
 			_grade: {
@@ -186,10 +176,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._token = undefined;
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
-		this._attachments = [];
-		this._canAddFeedbackFile = false;
-		this._canRecordFeedbackVideo = false;
-		this._canRecordFeedbackAudio = false;
+		this._attachmentsInfo = undefined;
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._mutex = new Awaiter();
@@ -283,11 +270,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._controller = new ConsistentEvaluationController(this._evaluationHref, this._token);
 		const bypassCache = true;
 		this.evaluationEntity = await this._controller.fetchEvaluationEntity(bypassCache);
-		const attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
-		this._canAddFeedbackFile = attachmentsInfo.canAddFeedbackFile;
-		this._canRecordFeedbackVideo = attachmentsInfo.canRecordFeedbackVideo;
-		this._canRecordFeedbackAudio = attachmentsInfo.canRecordFeedbackAudio;
-		this._attachments = attachmentsInfo.attachments;
+		this._attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
 	}
 
 	_noFeedbackComponent() {
@@ -726,6 +709,11 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 	}
 
 	render() {
+		const canAddFeedbackFile = this._attachmentsInfo.canAddFeedbackFile;
+		const canRecordFeedbackVideo = this._attachmentsInfo.canRecordFeedbackVideo;
+		const canRecordFeedbackAudio = this._attachmentsInfo.canRecordFeedbackAudio;
+		const attachments = this._attachmentsInfo.attachments;
+
 		return html`
 			<d2l-template-primary-secondary
 				resizable
@@ -759,7 +747,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 					<consistent-evaluation-right-panel
 						evaluation-href=${ifDefined(this.evaluationHref)}
 						.feedbackText=${this._feedbackText}
-						.feedbackAttachments=${this._attachments}
+						.feedbackAttachments=${attachments}
 						rubric-href=${ifDefined(this.rubricHref)}
 						rubric-assessment-href=${ifDefined(this.rubricAssessmentHref)}
 						outcomes-href=${ifDefined(this.outcomesHref)}
@@ -776,9 +764,9 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 						?hide-feedback=${this._noFeedbackComponent()}
 						?hide-coa-eval-override=${this.coaDemonstrationHref === undefined}
 						?allow-evaluation-write=${this._allowEvaluationWrite()}
-						?allow-add-file=${this._canAddFeedbackFile}
-						?allow-record-video=${this._canRecordFeedbackVideo}
-						?allow-record-audio=${this._canRecordFeedbackAudio}
+						?allow-add-file=${canAddFeedbackFile}
+						?allow-record-video=${canRecordFeedbackVideo}
+						?allow-record-audio=${canRecordFeedbackAudio}
 						@on-d2l-consistent-eval-feedback-edit=${this._transientSaveFeedback}
 						@on-d2l-consistent-eval-feedback-attachments-add=${this._transientAddAttachment}
 						@on-d2l-consistent-eval-feedback-attachments-remove=${this._transientRemoveAttachment}
