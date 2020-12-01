@@ -327,8 +327,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			}
 		);
 
-		const attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
-		this._attachments = attachmentsInfo.attachments;
+		this._attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
 	}
 
 	async _transientRemoveAttachment(e) {
@@ -341,8 +340,7 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 			}
 		);
 
-		const attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
-		this._attachments = attachmentsInfo.attachments;
+		this._attachmentsInfo = await this._controller.fetchAttachments(this.evaluationEntity);
 	}
 
 	async _transientSaveGrade(e) {
