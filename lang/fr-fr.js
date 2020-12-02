@@ -68,6 +68,6 @@ export default {
 	"update": "Mettre à jour",
 	"updated":  "Évaluation mise à jour",
 	"userIteratorText": "Utilisateur {num} sur {total}",
-	"userSubmissions": "Soumission de l\'utilisateur",
+	"userSubmissions": "Soumission de l'utilisateur",
 	"viewFullSubmission": "Afficher la soumission intégrale"
 };
