@@ -176,7 +176,12 @@ export default class ConsistentEvaluationPage extends SkeletonMixin(LocalizeCons
 		this._token = undefined;
 		this._controller = undefined;
 		this._evaluationEntity = undefined;
-		this._attachmentsInfo = undefined;
+		this._attachmentsInfo = {
+			canAddFeedbackFile: false,
+			canRecordFeedbackVideo: false,
+			canRecordFeedbackAudio: false,
+			attachments: []
+		};
 		this._displayToast = false;
 		this._toastMessage = '';
 		this._mutex = new Awaiter();
